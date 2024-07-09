@@ -69,13 +69,13 @@ endFunction
 
 Event OnUpdate()
 
-	debug.trace("Blood meter OnUpdate called")
+;	debug.trace("Blood meter OnUpdate called")
 	
-	debug.Trace("EnableVampireBloodPool value is: " + EnableVampireBloodPool.GetValue())
-	debug.Trace("EnableVampireBloodMeter value is: " + EnableVampireBloodMeter.GetValue())
+;	debug.Trace("EnableVampireBloodPool value is: " + EnableVampireBloodPool.GetValue())
+;	debug.Trace("EnableVampireBloodMeter value is: " + EnableVampireBloodMeter.GetValue())
 
 	if EnableVampireBloodPool.GetValue() == 0 || EnableVampireBloodMeter.GetValue() == 0
-	debug.trace("Blood meter is hidden now")
+;	debug.trace("Blood meter is hidden now")
 		ExposureMeter.Alpha = 0.0
 		;UnRegisterForUpdate()
 	else
@@ -83,7 +83,7 @@ Event OnUpdate()
 	endif
 
 	if EnableVampireBloodPool.GetValue() != 0
-		debug.trace("Blood meter registred for update")
+;		debug.trace("Blood meter registred for update")
 		RegisterForSingleUpdate(2)
 	endif
 	
@@ -96,15 +96,15 @@ endEvent
 
 function UpdateMeter(bool bSkipDisplayHandling = false)
 
-	debug.trace("Blood meter UpdateMeter called")
+;	debug.trace("Blood meter UpdateMeter called")
 	
 	fThisBloodPoolValue = PlayerRef.GetActorValue("Variable08")
 	fMaxBloodPoolValue = VampireBloodPoolMax.GetValue()
 	fMeterPercent = ((fThisBloodPoolValue)/(fMaxBloodPoolValue))
 	
-	debug.Trace("fThisBloodPoolValue value is: " + fThisBloodPoolValue)
-	debug.Trace("fMaxBloodPoolValue value is: " + fMaxBloodPoolValue)
-	debug.Trace("fMeterPercent value is: " + fMeterPercent)
+;	debug.Trace("fThisBloodPoolValue value is: " + fThisBloodPoolValue)
+;	debug.Trace("fMaxBloodPoolValue value is: " + fMaxBloodPoolValue)
+;	debug.Trace("fMeterPercent value is: " + fMeterPercent)
 	
 	
 	UpdateBlood(fMeterPercent, bSkipDisplayHandling)
@@ -133,7 +133,7 @@ endFunction
 
 function UpdateBlood(float meterPercent, bool bSkipDisplayHandling = false)
 
-	debug.trace("Blood meter UpdateBlood called")
+;	debug.trace("Blood meter UpdateBlood called")
 	ExposureMeter.Alpha = ED_BloodMeter_Opacity.GetValue()
 	
 	;if BetterVampiresBloodMeterDisplay_Contextual.GetValueInt() == 1
