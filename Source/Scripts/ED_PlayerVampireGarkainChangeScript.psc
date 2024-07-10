@@ -1,23 +1,13 @@
 Scriptname ED_PlayerVampireGarkainChangeScript extends Quest
 
-
-VisualEffect property FeedBloodVFX auto
-{Visual Effect on Wolf for Feeding Blood}
-
 Race Property ED_VampireGarkainBeastRace auto
-Perk Property PlayerWerewolfFeed auto
 
-Faction Property PlayerWerewolfFaction auto
-Faction Property WerewolfFaction auto
-
-Message Property PlayerWerewolfExpirationWarning auto
 Message Property PlayerWerewolfFeedMessage auto
 
 ImageSpaceModifier Property WerewolfWarn auto
 ImageSpaceModifier Property WerewolfChange auto
 
 Sound Property WerewolfIMODSound auto
-Idle Property WerewolfTransformBack auto
 Idle Property SpecialFeeding auto
 
 Spell Property PlayerWerewolfLvl10AndBelowAbility auto
@@ -41,6 +31,35 @@ Quest Property DLC1TrackingQuest auto
 bool Property Untimed auto
 
 FormList Property CrimeFactions auto
+
+spell property SCS_VampireSpells_Vanilla_Power_Spell_Obfuscate auto
+globalvariable property SCS_Mechanics_Global_DisableHate auto
+location property DLC1VampireCastleLocation auto
+location property DLC1VampireCastleGuildhallLocation auto
+location property DLC1VampireCastleDungeonLocation auto
+faction property DLC1PlayerVampireLordFaction auto
+formlist property DLC1VampireHateFactions auto
+faction property HunterFaction auto
+spell property SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage1 auto
+spell property SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage2 auto
+spell property SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage3 auto
+spell property SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage4 auto
+spell property SCS_Abilities_VampireLord_Spell_Ab_VampireLordSunDamage auto
+spell property ED_VampirePowers_GarkainBeast_Change auto
+spell property ED_VampirePowers_GarkainBeast_Revert auto
+globalvariable property DLC1VampireMaxPerks auto
+playervampirequestscript property PlayerVampireQuest auto
+spell property SCS_Abilities_Reward_Spell_NoHate auto
+perk property DLC1VampireActivationBlocker auto
+
+imagespacemodifier property VampireChange auto
+sound property VampireIMODSound auto
+effectshader property DLC1VampireChangeBackFXS auto
+effectshader property DLC1VampireChangeBack02FXS auto
+
+
+spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc auto
+
 
 bool __tryingToShiftBack = false
 bool __shiftingBack = false
@@ -119,33 +138,51 @@ Function StartTracking()
     __trackingStarted = true
 
     Debug.Trace("EVERDAMNED: GARKAIN: Race swap done; starting tracking and effects.")
+	
+	; TODO: vampire rings and trinkets
+	
+	;if PlayerActor.IsEquipped(beastRing as form)
+	;	pDLC1nVampireRingBeast.SetValue(1 as Float)
+	;endIf
+	;if PlayerActor.IsEquipped(eruditeRing as form)
+	;	pDLC1nVampireRingErudite.SetValue(1 as Float)
+	;endIf
+	;if PlayerActor.IsEquipped(batNecklace as form)
+	;	pDLC1nVampireNecklaceBats.SetValue(1 as Float)
+	;endIf
+	;if PlayerActor.IsEquipped(gargNecklace as form)
+	;	pDLC1nVampireNecklaceGargoyle.SetValue(1 as Float)
+	;endIf 
     
+	Actor PlayerActor = Game.GetPlayer()
 
     Game.GetPlayer().UnequipAll()
-    Game.GetPlayer().EquipItem(WolfSkinFXArmor, False, True)
-
-    ;Add Blood Effects
-    ;FeedBloodVFX.Play(Game.GetPlayer())
-
-    ; make everyone hate you
-    Game.GetPlayer().SetAttackActorOnSight(true)
-
-    ; alert anyone nearby that they should now know the player is a werewolf
-    Game.SendWereWolfTransformation()
-
-    Game.GetPlayer().AddToFaction(PlayerWerewolfFaction)
-    Game.GetPlayer().AddToFaction(WerewolfFaction)
-    int cfIndex = 0
-    while (cfIndex < CrimeFactions.GetSize())
-;         Debug.Trace("EVERDAMNED: GARKAIN:Setting enemy flag on " + CrimeFactions.GetAt(cfIndex))
-        (CrimeFactions.GetAt(cfIndex) as Faction).SetPlayerEnemy()
-        cfIndex += 1
-    endwhile
-
-    ; but they also don't know that it's you
-    Game.SetPlayerReportCrime(false)
-
-
+    ;Game.GetPlayer().EquipItem(WolfSkinFXArmor, False, True)
+	
+	PlayerActor.DispelSpell(SCS_VampireSpells_Vanilla_Power_Spell_Obfuscate)
+	
+	if SCS_Mechanics_Global_DisableHate.GetValue() == 0 as Float
+		if !PlayerActor.IsInLocation(DLC1VampireCastleLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleGuildhallLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleDungeonLocation)
+			PlayerActor.SetAttackActorOnSight(true)
+			game.SendWereWolfTransformation()
+		endIf
+		PlayerActor.AddToFaction(DLC1PlayerVampireLordFaction)
+		Int i = 0
+		while i < DLC1VampireHateFactions.GetSize()
+			(DLC1VampireHateFactions.GetAt(i) as faction).SetPlayerEnemy(true)
+			i += 1
+		endWhile
+		HunterFaction.SetPlayerEnemy(true)
+	endIf
+	game.SetPlayerReportCrime(false)
+	
+	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage1)
+	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage2)
+	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage3)
+	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage4)
+	PlayerActor.AddSpell(SCS_Abilities_VampireLord_Spell_Ab_VampireLordSunDamage, false)
+	PlayerActor.DispelSpell(ED_VampirePowers_GarkainBeast_Change)
+	PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_Revert, false)
 
     ; unequip magic
     Spell left = Game.GetPlayer().GetEquippedSpell(0)
@@ -159,16 +196,11 @@ Function StartTracking()
         Game.GetPlayer().UnequipSpell(right, 1)
     endif
     if (power != None)
-        ; some players are overly clever and sneak a power equip between casting
-        ;  beast form and when we rejigger them there. this will teach them.
-;         Debug.Trace("EVERDAMNED: GARKAIN:" + power + " was equipped; removing.")
         Game.GetPlayer().UnequipSpell(power, 2)
     else
 ;         Debug.Trace("EVERDAMNED: GARKAIN:No power equipped.")
     endif
     if (voice != None)
-        ; same deal here, but for shouts
-;         Debug.Trace("EVERDAMNED: GARKAIN:" + voice + " was equipped; removing.")
         Game.GetPlayer().UnequipShout(voice)
     else
 ;         Debug.Trace("EVERDAMNED: GARKAIN:No shout equipped.")
@@ -233,6 +265,16 @@ Function Feed(Actor victim)
     SetStage(10)
 EndFunction
 
+function Revert()
+
+	Debug.Trace("EVERDAMNED: GARKAIN: Garkain quest REVERT got called.")
+	
+	if game.QueryStat("NumVampirePerks") as Float >= DLC1VampireMaxPerks.value
+		game.AddAchievement(58)
+	endIf
+	self.UnregisterForUpdate()
+	self.SetStage(100)
+endFunction
 
 ; called from stage 20
 Function WarnPlayer()
@@ -270,8 +312,17 @@ Function ActuallyShiftBackIfNecessary()
     __shiftingBack = true
 
     Debug.Trace("EVERDAMNED: GARKAIN: Player returning to normal.")
-
+	
+	Actor PlayerActor = Game.GetPlayer()
+	
+	; screen effect
+    ;WerewolfChange.Apply()
+    ;WerewolfIMODSound.Play(PlayerActor)
+	 
+	PlayerActor.GetActorBase().SetInvulnerable(true)
+	PlayerActor.SetGhost(true)
     Game.SetInCharGen(true, true, false)
+	
 
     UnRegisterForAnimationEvent(Game.GetPlayer(), "TransformToHuman")
     UnRegisterForUpdate() ; just in case
@@ -280,26 +331,19 @@ Function ActuallyShiftBackIfNecessary()
         Debug.Trace("EVERDAMNED: GARKAIN: Player is dead; bailing out.")
         return
     endif
-
-    ;Remove Blood Effects
-    ;FeedBloodVFX.Stop(Game.GetPlayer())
-
-    ; imod
-    WerewolfChange.Apply()
-    WerewolfIMODSound.Play(Game.GetPlayer())
-
-    ; make sure the transition armor is gone. We RemoveItem here, because the SetRace stored all equipped items
-    ; at that time, and we equip this armor prior to setting the player to a beast race. When we switch back,
-    ; if this were still in the player's inventory it would be re-equipped.
-    Game.GetPlayer().RemoveItem(WolfSkinFXArmor, 1, True)
-
-    ; clear out perks/abilities
-    ;  (don't need to do this anymore since it's on from gamestart)
-    ; Game.GetPlayer().RemovePerk(PlayerWerewolfFeed)
+	
+	VampireChange.Apply(1.00000)
+	VampireIMODSound.Play(PlayerActor as objectreference)
+	;DLC1VampireChangeBackFXS.Play(PlayerActor as objectreference, 5.0000)
+	
+	;;; REMOVE SPELLS	
+	playerActor.RemoveSpell(PlayerWerewolfLvl50AndOverAbility)
+	PlayerActor.DispelSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc)
+	;PlayerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_Revert)
+	;PlayerActor.DispelSpell(ED_VampirePowers_GarkainBeast_Revert)
+    ;Game.GetPlayer().RemoveItem(WolfSkinFXArmor, 1, True)
 
     ; make sure your health is reasonable before turning you back
-    ; Game.GetPlayer().GetActorBase().SetInvulnerable(true)
-    Game.GetPlayer().SetGhost()
     float currHealth = Game.GetPlayer().GetAV("health")
     if (currHealth <= 101)
         Debug.Trace("EVERDAMNED: GARKAIN: Player's health is only " + currHealth + "; restoring.")
@@ -307,52 +351,34 @@ Function ActuallyShiftBackIfNecessary()
     endif
 
     ; change you back
-	
 	DLC1VampireTrackingQuest vts = (DLC1TrackingQuest as DLC1VampireTrackingQuest)
 	Race originalRace = vts.PlayerRace
-	Actor playerRef = Game.GetPlayer()
+    Debug.Trace("EVERDAMNED: GARKAIN: Setting race " + originalRace + " on " + PlayerActor)
+	utility.Wait(3)
+    PlayerActor.SetRace(originalRace)
 	
-    Debug.Trace("EVERDAMNED: GARKAIN: Setting race " + originalRace + " on " + playerRef)
-    playerRef.SetRace(originalRace)
-     ; release the player controls
-;     Debug.Trace("EVERDAMNED: GARKAIN:Restoring camera controls")
-    Game.EnablePlayerControls(abMovement = false, abFighting = false, abCamSwitch = true, abLooking = false, abSneaking = false, abMenu = false, abActivate = false, abJournalTabs = false, aiDisablePOVType = 1)
-    Game.ShowFirstPersonGeometry(true)
-
-    ; no more howling for you
-    ;playerRef.UnequipShout(CurrentHowl)
-    ;playerRef.RemoveShout(CurrentHowl)
-
-    ; or those claws
-    ;playerRef.RemoveSpell(PlayerWerewolfLvl10AndBelowAbility)
-    ;playerRef.RemoveSpell(PlayerWerewolfLvl15AndBelowAbility)
-    ;playerRef.RemoveSpell(PlayerWerewolfLvl20AndBelowAbility)
-    ;playerRef.RemoveSpell(PlayerWerewolfLvl25AndBelowAbility)
-    ;playerRef.RemoveSpell(PlayerWerewolfLvl30AndBelowAbility)
-    ;playerRef.RemoveSpell(PlayerWerewolfLvl35AndBelowAbility)
-    ;playerRef.RemoveSpell(PlayerWerewolfLvl40AndBelowAbility)
-    ;playerRef.RemoveSpell(PlayerWerewolfLvl45AndBelowAbility)
-    playerRef.RemoveSpell(PlayerWerewolfLvl50AndOverAbility)
-
-    ; gimme back mah stuff
-    ; LycanStash.RemoveAllItems(Game.GetPlayer())
-
-    ; people don't hate you no more
-    playerRef.SetAttackActorOnSight(false)
-    playerRef.RemoveFromFaction(PlayerWerewolfFaction)
-    playerRef.RemoveFromFaction(WerewolfFaction)
-    int cfIndex = 0
-    while (cfIndex < CrimeFactions.GetSize())
-;         Debug.Trace("EVERDAMNED: GARKAIN:Removing enemy flag from " + CrimeFactions.GetAt(cfIndex))
-        (CrimeFactions.GetAt(cfIndex) as Faction).SetPlayerEnemy(false)
-        cfIndex += 1
-    endwhile
-
+	PlayerVampireQuest.VampireProgression(PlayerActor, PlayerVampireQuest.VampireStatus)
+	;DLC1VampireChangeBackFXS.Stop(PlayerActor as objectreference)
+	;DLC1VampireChangeBack02FXS.Play(PlayerActor as objectreference, 0.100000)
+	
+	PlayerActor.RemoveFromFaction(DLC1PlayerVampireLordFaction)
+	HunterFaction.SetPlayerEnemy(false)
+	if !PlayerActor.IsInLocation(DLC1VampireCastleLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleGuildhallLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleDungeonLocation)
+		game.SendWereWolfTransformation()
+	endIf
+	
+	if PlayerVampireQuest.VampireStatus < 4 || SCS_Mechanics_Global_DisableHate.GetValue() == 1 as Float || PlayerActor.HasSpell(SCS_Abilities_Reward_Spell_NoHate as form)
+		PlayerActor.SetAttackActorOnSight(false)
+		Int i = 0
+		while i < DLC1VampireHateFactions.GetSize()
+			(DLC1VampireHateFactions.GetAt(i) as faction).SetPlayerEnemy(false)
+			i += 1
+		endWhile
+	endIf
+	
     ; and you're now recognized
     Game.SetPlayerReportCrime(true)
-
-    ; alert anyone nearby that they should now know the player is a werewolf
-    Game.SendWereWolfTransformation()
+	
 
     ; give the set race event a chance to come back, otherwise shut us down
     Utility.Wait(5)
@@ -370,11 +396,13 @@ Function Shutdown()
 
     playerRef.GetActorBase().SetInvulnerable(false)
     playerRef.SetGhost(false)
-
     Game.SetBeastForm(False)
     Game.EnableFastTravel(True)
+	Game.EnablePlayerControls(abMovement = false, abFighting = false, abCamSwitch = true, abLooking = false, abSneaking = false, abMenu = false, abActivate = false, abJournalTabs = false, aiDisablePOVType = 1)
+    Game.ShowFirstPersonGeometry(true)
+	Game.SetInCharGen(false, false, false)
 
-    Game.SetInCharGen(false, false, false)
-
+	playerRef.RemovePerk(DLC1VampireActivationBlocker)
+	
     Stop()
 EndFunction
