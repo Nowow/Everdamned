@@ -1,6 +1,7 @@
 Scriptname ED_PlayerVampireGarkainChangeScript extends Quest
 
 Race Property ED_VampireGarkainBeastRace auto
+Race Property DLC1VampireBeastRace auto
 
 Message Property PlayerWerewolfFeedMessage auto
 
@@ -57,6 +58,10 @@ sound property VampireIMODSound auto
 effectshader property DLC1VampireChangeBackFXS auto
 effectshader property DLC1VampireChangeBack02FXS auto
 
+formlist property ED_VampirePowers_GarkainBeast_Powers_List auto
+formlist property DLC1VampireSpellsPowers auto
+
+DefaultObjectManager kDefObjMan
 
 spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc auto
 
@@ -66,6 +71,11 @@ bool __shiftingBack = false
 bool __shuttingDown = false
 bool __trackingStarted = false
 
+Event OnInit()
+	kDefObjMan = Game.GetFormFromFile(0x00000031, "Skyrim.esm") as DefaultObjectManager
+endEvent
+
+Function SetForm(string key, Form newForm) native
 
 Function PrepShift()
 
@@ -155,6 +165,9 @@ Function StartTracking()
 	;endIf 
     
 	Actor PlayerActor = Game.GetPlayer()
+	
+	kDefObjMan.SetForm("RIVR", ED_VampireGarkainBeastRace)
+	kDefObjMan.SetForm("RIVS", ED_VampirePowers_GarkainBeast_Powers_List)
 
     Game.GetPlayer().UnequipAll()
     ;Game.GetPlayer().EquipItem(WolfSkinFXArmor, False, True)
@@ -393,6 +406,9 @@ Function Shutdown()
     __shuttingDown = true
 	
 	Actor playerRef = Game.GetPlayer()
+	
+	kDefObjMan.SetForm("RIVR", DLC1VampireBeastRace)
+	kDefObjMan.SetForm("RIVS", DLC1VampireSpellsPowers)
 
     playerRef.GetActorBase().SetInvulnerable(false)
     playerRef.SetGhost(false)
