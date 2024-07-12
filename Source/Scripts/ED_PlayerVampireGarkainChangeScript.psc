@@ -1,4 +1,4 @@
-Scriptname ED_PlayerVampireGarkainChangeScript extends Quest
+ Scriptname ED_PlayerVampireGarkainChangeScript extends Quest
 
 Race Property ED_VampireGarkainBeastRace auto
 Race Property DLC1VampireBeastRace auto
@@ -11,15 +11,16 @@ ImageSpaceModifier Property WerewolfChange auto
 Sound Property WerewolfIMODSound auto
 Idle Property SpecialFeeding auto
 
-Spell Property PlayerWerewolfLvl10AndBelowAbility auto
-Spell Property PlayerWerewolfLvl15AndBelowAbility auto
-Spell Property PlayerWerewolfLvl20AndBelowAbility auto
-Spell Property PlayerWerewolfLvl25AndBelowAbility auto
-Spell Property PlayerWerewolfLvl30AndBelowAbility auto
-Spell Property PlayerWerewolfLvl35AndBelowAbility auto
-Spell Property PlayerWerewolfLvl40AndBelowAbility auto
-Spell Property PlayerWerewolfLvl45AndBelowAbility auto
-Spell Property PlayerWerewolfLvl50AndOverAbility auto
+Spell Property ED_VampirePowers_GarkainBeast_lvl10_Ab auto
+Spell Property ED_VampirePowers_GarkainBeast_lvl15_Ab auto
+Spell Property ED_VampirePowers_GarkainBeast_lvl20_Ab auto
+Spell Property ED_VampirePowers_GarkainBeast_lvl25_Ab auto
+Spell Property ED_VampirePowers_GarkainBeast_lvl30_Ab auto
+Spell Property ED_VampirePowers_GarkainBeast_lvl35_Ab auto
+Spell Property ED_VampirePowers_GarkainBeast_lvl40_Ab auto
+Spell Property ED_VampirePowers_GarkainBeast_lvl45_Ab auto
+Spell Property ED_VampirePowers_GarkainBeast_lvl50Plus_Ab auto
+
 
 Spell Property FeedBoost auto
 Spell property BleedingFXSpell auto
@@ -203,18 +204,18 @@ Function StartTracking()
     Spell power = Game.GetPlayer().GetEquippedSpell(2)
     Shout voice = Game.GetPlayer().GetEquippedShout()
     if (left != None)
-        Game.GetPlayer().UnequipSpell(left, 0)
+        PlayerActor.UnequipSpell(left, 0)
     endif
     if (right != None)
-        Game.GetPlayer().UnequipSpell(right, 1)
+        PlayerActor.UnequipSpell(right, 1)
     endif
     if (power != None)
-        Game.GetPlayer().UnequipSpell(power, 2)
+        PlayerActor.UnequipSpell(power, 2)
     else
 ;         Debug.Trace("EVERDAMNED: GARKAIN:No power equipped.")
     endif
     if (voice != None)
-        Game.GetPlayer().UnequipShout(voice)
+        PlayerActor.UnequipShout(voice)
     else
 ;         Debug.Trace("EVERDAMNED: GARKAIN:No shout equipped.")
     endif
@@ -222,29 +223,26 @@ Function StartTracking()
 
 
     ; and some rad claws
-	
-	Game.GetPlayer().AddSpell(PlayerWerewolfLvl50AndOverAbility, false)
-	
-    ;int playerLevel = Game.GetPlayer().GetLevel()
-    ;if     (playerLevel <= 10)
-    ;    Game.GetPlayer().AddSpell(PlayerWerewolfLvl10AndBelowAbility, false)
-    ;elseif (playerLevel <= 15)
-    ;    Game.GetPlayer().AddSpell(PlayerWerewolfLvl15AndBelowAbility, false)
-    ;elseif (playerLevel <= 20)
-    ;    Game.GetPlayer().AddSpell(PlayerWerewolfLvl20AndBelowAbility, false)
-    ;elseif (playerLevel <= 25)
-    ;    Game.GetPlayer().AddSpell(PlayerWerewolfLvl25AndBelowAbility, false)
-    ;elseif (playerLevel <= 30)
-    ;    Game.GetPlayer().AddSpell(PlayerWerewolfLvl30AndBelowAbility, false)
-    ;elseif (playerLevel <= 35)
-    ;    Game.GetPlayer().AddSpell(PlayerWerewolfLvl35AndBelowAbility, false)
-    ;elseif (playerLevel <= 40)
-    ;    Game.GetPlayer().AddSpell(PlayerWerewolfLvl40AndBelowAbility, false)
-    ;elseif (playerLevel <= 45)
-    ;    Game.GetPlayer().AddSpell(PlayerWerewolfLvl45AndBelowAbility, false)
-    ;else
-    ;    Game.GetPlayer().AddSpell(PlayerWerewolfLvl50AndOverAbility, false)
-    ;endif
+    int playerLevel = PlayerActor.GetLevel()
+    if     (playerLevel <= 10)
+        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl10_Ab, false)
+    elseif (playerLevel <= 15)
+        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl15_Ab, false)
+    elseif (playerLevel <= 20)
+        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl20_Ab, false)
+    elseif (playerLevel <= 25)
+        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl25_Ab, false)
+    elseif (playerLevel <= 30)
+        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl30_Ab, false)
+    elseif (playerLevel <= 35)
+        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl35_Ab, false)
+    elseif (playerLevel <= 40)
+        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl40_Ab, false)
+    elseif (playerLevel <= 45)
+        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl45_Ab, false)
+    else
+        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl50Plus_Ab, false)
+    endif
 
 
 
@@ -265,14 +263,15 @@ Function Feed(Actor victim)
 ;     Debug.Trace("EVERDAMNED: GARKAIN:start newShiftTime = " + GameTimeDaysToRealTimeSeconds(PlayerWerewolfShiftBackTime.GetValue()) + ", __feedExtensionTime = " + GameTimeDaysToRealTimeSeconds(__feedExtensionTime))
     
 ;     Debug.Trace("EVERDAMNED: GARKAIN:default newShiftTime = " + GameTimeDaysToRealTimeSeconds(newShiftTime) + ", __feedExtensionTime = " + GameTimeDaysToRealTimeSeconds(__feedExtensionTime))
-    
+    Debug.Trace("EVERDAMNED: GARKAIN: FEEEEEEEED")
     Game.GetPlayer().PlayIdle(SpecialFeeding)
     
     ;This is for adding a spell that simulates bleeding
     BleedingFXSpell.Cast(victim,victim)
+	Debug.Notification("This is FEED func from quest!")
     
-	PlayerWerewolfFeedMessage.Show()
-	FeedBoost.Cast(Game.GetPlayer())
+	;PlayerWerewolfFeedMessage.Show()
+	;FeedBoost.Cast(Game.GetPlayer())
 	; victim.SetActorValue("Variable08", 100)
 
     SetStage(10)
@@ -349,8 +348,16 @@ Function ActuallyShiftBackIfNecessary()
 	VampireIMODSound.Play(PlayerActor as objectreference)
 	;DLC1VampireChangeBackFXS.Play(PlayerActor as objectreference, 5.0000)
 	
-	;;; REMOVE SPELLS	
-	playerActor.RemoveSpell(PlayerWerewolfLvl50AndOverAbility)
+	;;; REMOVE SPELLS
+	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl10_Ab)
+	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl15_Ab)
+	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl20_Ab)
+	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl25_Ab)
+	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl30_Ab)
+	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl35_Ab)
+	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl40_Ab)
+	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl45_Ab)
+	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl50Plus_Ab)
 	PlayerActor.DispelSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc)
 	;PlayerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_Revert)
 	;PlayerActor.DispelSpell(ED_VampirePowers_GarkainBeast_Revert)
