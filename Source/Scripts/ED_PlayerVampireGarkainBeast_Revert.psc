@@ -7,9 +7,7 @@ GLOBALVARIABLE PROPERTY pDLC1nVampireRingErudite Auto
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 
-	Debug.Trace("EVERDAMNED: GARKAIN: Garkain REVERT FORM spell used.")
 	Game.GetPlayer().RemoveSpell(ED_VampirePowers_GarkainBeast_Revert)
-	Debug.Trace("EVERDAMNED: GARKAIN: Garkain REVERT FORM spell used 2.")
 	
 	;turn off all the vampire necklace/ring variables when we change back
     pDLC1nVampireNecklaceBats.setValue(0)

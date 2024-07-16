@@ -54,6 +54,7 @@ playervampirequestscript property PlayerVampireQuest auto
 spell property SCS_Abilities_Reward_Spell_NoHate auto
 perk property DLC1VampireActivationBlocker auto
 
+
 imagespacemodifier property VampireChange auto
 sound property VampireIMODSound auto
 effectshader property DLC1VampireChangeBackFXS auto
@@ -71,6 +72,7 @@ bool __tryingToShiftBack = false
 bool __shiftingBack = false
 bool __shuttingDown = false
 bool __trackingStarted = false
+bool __killmoveStarted = false
 
 Event OnInit()
 	kDefObjMan = Game.GetFormFromFile(0x00000031, "Skyrim.esm") as DefaultObjectManager
@@ -147,6 +149,7 @@ Function StartTracking()
     endif
 
     __trackingStarted = true
+	__killmoveStarted = false
 
     Debug.Trace("EVERDAMNED: GARKAIN: Race swap done; starting tracking and effects.")
 	
@@ -254,7 +257,11 @@ Function StartTracking()
 
     ; set us up to check when we turn back
     ;RegisterForUpdate(5)
-
+	
+	; to catch Brutalize execution, because not all button activation do actually play the animation
+	RegisterForAnimationEvent(PlayerActor, "KillMoveStart")
+	RegisterForAnimationEvent(PlayerActor, "SoundPlay.NPCWerewolfFeedingKill")
+	
     SetStage(10) ; we're done with the transformation handling
 EndFunction
 
@@ -310,12 +317,6 @@ Function ShiftBack()
     ActuallyShiftBackIfNecessary()
 EndFunction
 
-Event OnAnimationEvent(ObjectReference akSource, string asEventName)
-    if (asEventName == "TransformToHuman")
-        ActuallyShiftBackIfNecessary()
-    endif
-EndEvent
-
 Function ActuallyShiftBackIfNecessary()
     if (__shiftingBack)
         return
@@ -336,7 +337,7 @@ Function ActuallyShiftBackIfNecessary()
     Game.SetInCharGen(true, true, false)
 	
 
-    UnRegisterForAnimationEvent(Game.GetPlayer(), "TransformToHuman")
+    UnRegisterForAnimationEvent(PlayerActor, "KillMoveStart")
     UnRegisterForUpdate() ; just in case
 
     if (Game.GetPlayer().IsDead())
@@ -429,3 +430,31 @@ Function Shutdown()
 	
     Stop()
 EndFunction
+
+Event OnAnimationEvent(ObjectReference akSource, string asEventName)
+    if (asEventName == "KillMoveStart")
+		;debug.Notification("Triggered KillMoveStart animation event!")
+		__killmoveStarted = true
+		
+		; so that if there is no followup for some reason we invalidate
+		RegisterForSingleUpdate(10)
+	elseif (asEventName == "SoundPlay.NPCWerewolfFeedingKill")
+		if !__killmoveStarted
+			return
+		endif
+		;debug.Notification("Now we know its the right one!")
+		__killmoveStarted = false
+		utility.wait(2)
+		UnregisterForUpdate()
+		ED_Mechanics_GarkainBeast_EatenCloak.Cast((akSource as Actor), (akSource as Actor))
+		ED_Mechanics_GarkainBeast_CombatFeed.Cast((akSource as Actor), (akSource as Actor))
+		PlayerVampireQuest.VampireFeed()
+    endif
+EndEvent
+
+Event OnUpdate()
+	__killmoveStarted = false
+EndEvent
+
+Spell Property ED_Mechanics_GarkainBeast_CombatFeed Auto
+Spell Property ED_Mechanics_GarkainBeast_EatenCloak Auto
