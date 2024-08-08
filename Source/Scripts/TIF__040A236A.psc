@@ -6,17 +6,7 @@ Scriptname TIF__040A236A Extends TopicInfo Hidden
 Function Fragment_5(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-akSpeaker = akSpeakerRef as Actor
-if akSpeaker.GetSitState() == 3
-	debug.notification("Actor is sitting!")
-	;FeedVictimRefAlias.ForceRefTo(akSpeakerRef)
-	;FeedVictimRefAlias.TryToEvaluatePackage()
-
-
-	;akSpeaker.PlayIdle(IdleFurnitureExit)
-	;akSpeaker.EvaluatePackage()
-	;debug.SendAnimationEvent(akSpeakerRef, "GetUp")
-endif
+;
 ;END CODE
 EndFunction
 ;END FRAGMENT
