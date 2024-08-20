@@ -19,3 +19,19 @@
 ' so it's a good idea use mod specific abbrevioations for all our names
 
 b -a ed_seduction_aroused1 ed_seduction_aroused1.hkx 
+b -a ed_seduction_flirt_touchHair ed_seduction_flirt_touchHair.hkx
+
+s -a ed_seduction_flirt_touchHairSeq ed_seduction_flirt_touchHair.hkx
++ -a ed_seduction_flirt_playfulStart ed_seduction_playful_start.hkx
++ ed_seduction_flirt_playfulIdle ed_seduction_playful_idle.hkx
++ -a ed_seduction_flirt_playfulEnd ed_seduction_playful_end.hkx
+
+b -a ed_seduction_flirt_openDismissive ed_seduction_open_dismissive.hkx
+s -a ed_seduction_flirt_openStart ed_seduction_open_start.hkx
++ ed_seduction_flirt_openIdle ed_seduction_open_idle.hkx
++ -a ed_seduction_flirt_openEnd ed_seduction_open_end.hkx
+
+b -a ed_seduction_flirt_guardedDismissive ed_seduction_guarded_dismissive.hkx
+s -a ed_seduction_flirt_guardedStart ed_seduction_guarded_start.hkx
++ ed_seduction_flirt_guardedIdle ed_seduction_guarded_idle.hkx
++ -a ed_seduction_flirt_guardedEnd ed_seduction_guarded_end.hkx

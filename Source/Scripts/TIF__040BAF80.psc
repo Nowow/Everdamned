@@ -2,6 +2,15 @@
 ;NEXT FRAGMENT INDEX 2
 Scriptname TIF__040BAF80 Extends TopicInfo Hidden
 
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+;
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
@@ -9,15 +18,6 @@ Actor akSpeaker = akSpeakerRef as Actor
 Actor akSpeakerA = akSpeakerRef as Actor
 akSpeakerA.SetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac, 0)
 debug.notification("Victim added to seduced fac")
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
-ED_VampireAbilities_Seduction_VictimVFX_Spell.Cast(akSpeakerRef, akSpeakerRef)
 ;END CODE
 EndFunction
 ;END FRAGMENT

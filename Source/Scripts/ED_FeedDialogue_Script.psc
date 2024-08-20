@@ -411,12 +411,40 @@ Function CalculateScoreAndDiffuculty(Actor akSeducer, Actor akSeduced)
 	CalculateScore(akSeducer, akSeduced)
 	CalculateDifficulty(akSeducer, akSeduced)
 	
-	ED_Mechanics_FeedDialogue_SeductionScore.SetValue(Seduction_Score)
-	ED_Mechanics_FeedDialogue_SeductionDifficulty.SetValue(Seduction_Difficulty_Score)
-	ED_Mechanics_FeedDialogue_IntimidationScore.SetValue(Intimidation_Score)
-	ED_Mechanics_FeedDialogue_IntimidationDifficulty.SetValue(Intimidation_Difficulty_Score)
-	ED_Mechanics_FeedDialogue_RevealScore.SetValue(Reveal_Score)
-	ED_Mechanics_FeedDialogue_RevealDifficulty.SetValue(Reveal_Difficulty_Score)
+	;debug.notification("Scores got calculated")
+	debug.Trace("Seduction score is: " + Seduction_Score)
+	debug.Trace("Seduction difficulty is: " + Seduction_Difficulty_Score)
+	debug.Trace("Intimidation score is: " + Intimidation_Score)
+	debug.Trace("Intimidation difficulty is: " + Intimidation_Difficulty_Score)
+	debug.Trace("Reveal score is: " + Reveal_Score)
+	debug.Trace("Reveal difficulty is: " + Reveal_Difficulty_Score)
+	
+	if Seduction_Score >= Seduction_Difficulty_Score
+		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
+	else
+		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(0)
+	endif
+	
+	if Intimidation_score >= Intimidation_Difficulty_Score
+		ED_Mechanics_FeedDialogue_IntimidationResult.SetValue(1)
+	elseif Intimidation_Difficulty_Score - Intimidation_score > 30.0
+		; you failed in intimidation so bad you are a laughing stock, no assault
+		ED_Mechanics_FeedDialogue_IntimidationResult.SetValue(0)
+	else
+		; target feels assaulted
+		ED_Mechanics_FeedDialogue_IntimidationResult.SetValue(-1)
+	endif
+	
+	if Reveal_Score >= Reveal_Difficulty_Score
+		ED_Mechanics_FeedDialogue_RevealResult.SetValue(1)
+	elseif akSeduced.GetRelationshipRank(akSeducer) >= 2 && Reveal_Difficulty_Score - Reveal_Score <= 30.0
+		; target does not feel comfortable with you being a vampire, but they are your close friend and not gonna tell on you
+		ED_Mechanics_FeedDialogue_RevealResult.SetValue(0)
+	else
+		; you were totally unconvincing, target is scared of you and calls for help
+		ED_Mechanics_FeedDialogue_RevealResult.SetValue(-1)
+	endif
+	
 	
 Endfunction
 
@@ -433,9 +461,6 @@ Keyword Property ClothingRich Auto
 Keyword Property ClothingPoor Auto
 Keyword Property VampireKeyword Auto
 
-GlobalVariable Property ED_Mechanics_FeedDialogue_SeductionScore Auto
-GlobalVariable Property ED_Mechanics_FeedDialogue_SeductionDifficulty Auto
-GlobalVariable Property ED_Mechanics_FeedDialogue_IntimidationScore Auto
-GlobalVariable Property ED_Mechanics_FeedDialogue_IntimidationDifficulty Auto
-GlobalVariable Property ED_Mechanics_FeedDialogue_RevealScore Auto
-GlobalVariable Property ED_Mechanics_FeedDialogue_RevealDifficulty Auto
+GlobalVariable Property ED_Mechanics_FeedDialogue_SeductionResult Auto
+GlobalVariable Property ED_Mechanics_FeedDialogue_IntimidationResult Auto
+GlobalVariable Property ED_Mechanics_FeedDialogue_RevealResult Auto
