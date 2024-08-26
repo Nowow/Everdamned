@@ -18,3 +18,7 @@ EndFunction
 Faction Property ED_Mechanics_FeedDialogue_Fail_Fac  Auto  
 
 SPELL Property ED_Mechanics_FeedDialogue_Cooldown3d_Spell  Auto  
+
+Idle Property ED_Idle_Seduction_PlayfulEnd  Auto
+
+MagicEffect Property ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect  Auto  

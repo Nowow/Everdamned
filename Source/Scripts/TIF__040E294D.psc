@@ -26,3 +26,7 @@ EndFunction
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 Faction Property ED_Mechanics_FeedDialogue_Seduced_Fac  Auto  
+
+MagicEffect Property ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect  Auto
+
+Idle Property ED_Idle_Seduction_PlayfulEnd  Auto  

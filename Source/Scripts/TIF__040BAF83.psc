@@ -2,15 +2,6 @@
 ;NEXT FRAGMENT INDEX 3
 Scriptname TIF__040BAF83 Extends TopicInfo Hidden
 
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
-;
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_2
 Function Fragment_2(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
@@ -25,9 +16,18 @@ utility.wait(1)
 if akSpeaker.IsInFaction(DLC1PotentialVampireFaction) && akSpeaker.IsInFaction(DLC1PlayerTurnedVampire) == False
 	DLC1VampireTurn.PlayerBitesMe(akSpeaker)
 endif
-
+Game.GetPlayer().PlayIdle(ResetRoot)
 Game.GetPlayer().PlayIdleWithTarget(FeedDialogueIdle, akSpeaker)
 PlayerVampireQuest.VampireFeed()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+;
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -52,3 +52,5 @@ Sound Property ED_Mechanics_FeedDialogue_HeartPalpitations_SoundM  Auto
 Sound Property ED_Mechanics_FeedDialogue_BreathFemale_SoundM  Auto  
 
 SPELL Property ED_Mechanics_FeedDialogue_FeedExpression_Spell  Auto  
+
+Idle Property ResetRoot  Auto  

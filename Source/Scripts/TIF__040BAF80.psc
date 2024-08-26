@@ -27,3 +27,7 @@ EndFunction
 Faction Property ED_Mechanics_FeedDialogue_Seduced_Fac  Auto  
 
 SPELL Property ED_VampireAbilities_Seduction_VictimVFX_Spell  Auto  
+
+MagicEffect Property ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect  Auto
+
+Idle Property ED_Idle_Seduction_PlayfulEnd  Auto  

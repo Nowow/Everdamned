@@ -419,6 +419,11 @@ Function CalculateScoreAndDiffuculty(Actor akSeducer, Actor akSeduced)
 	debug.Trace("Reveal score is: " + Reveal_Score)
 	debug.Trace("Reveal difficulty is: " + Reveal_Difficulty_Score)
 	
+	if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
+		debug.trace("Feed dialogue score override engaged, not actually changing results")
+		return
+	endif
+	
 	if Seduction_Score >= Seduction_Difficulty_Score
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
 	else
@@ -445,6 +450,7 @@ Function CalculateScoreAndDiffuculty(Actor akSeducer, Actor akSeduced)
 		ED_Mechanics_FeedDialogue_RevealResult.SetValue(-1)
 	endif
 	
+	debug.Notification("Feed dialogue score calc finished")
 	
 Endfunction
 
@@ -464,3 +470,4 @@ Keyword Property VampireKeyword Auto
 GlobalVariable Property ED_Mechanics_FeedDialogue_SeductionResult Auto
 GlobalVariable Property ED_Mechanics_FeedDialogue_IntimidationResult Auto
 GlobalVariable Property ED_Mechanics_FeedDialogue_RevealResult Auto
+GlobalVariable Property ED_Mechanics_FeedDialogue_CalculateScoreOverride Auto
