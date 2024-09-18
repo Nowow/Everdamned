@@ -88,3 +88,7 @@ s -a ed_seduction_flirt_playfulInterested ed_seduction_playful_interested.hkx
 ' Successfull seduction, 4+ times
 s -a ed_seduction_flirt_warmGreeting ed_seduction_warmgreeting.hkx
 + -a,Ted_seduction_flirtCustAnimFin/-1.0 ed_seduction_flirt_warmComeover ed_seduction_warmcomeover.hkx
+
+' Blow kiss inhale
+b -a,Ted_seduction_flirtCustAnimFin/-1.0 ed_seduction_blowkissStrart ed_seduction_blowkiss.hkx
+
