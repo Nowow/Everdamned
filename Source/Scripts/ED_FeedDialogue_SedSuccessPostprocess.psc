@@ -7,6 +7,9 @@ Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 int _cntr
+ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
+ED_MesmerizeSafe_Scene_FeedDialogue.Start()
+
 actor PlayerRef = Game.GetPlayer()
 while _cntr < 20
 	if !(akSpeakerRef.IsInDialogueWithPlayer())	|| !(akSpeaker.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect))
@@ -51,7 +54,6 @@ elseif currentFactionRank < 2
 	akSpeaker.SetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac, (currentFactionRank + 1))
 	debug.trace("Victim seduced fac is now to seduced fac at rank " + (currentFactionRank + 1))
 endif
-
 PlayerVampireQuest.VampireFeed()
 ;END CODE
 EndFunction
@@ -86,3 +88,7 @@ Sound Property ED_Mechanics_FeedDialogue_BreathFemale_SoundM  Auto
 SPELL Property ED_Mechanics_FeedDialogue_FeedExpression_Spell  Auto  
 
 Idle Property ResetRoot  Auto 
+
+Scene Property ED_MesmerizeSafe_Scene_FeedDialogue  Auto  
+
+ReferenceAlias Property ED_FeedDialogue_Target  Auto  
