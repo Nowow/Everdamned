@@ -9,20 +9,16 @@ Actor akSpeaker = akSpeakerRef as Actor
 int _cntr
 
 actor PlayerRef = Game.GetPlayer()
-;while _cntr < 20
-;	if !(akSpeakerRef.IsInDialogueWithPlayer())	|| !(akSpeaker.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect))
-;		_cntr = 20
-;	else
-;		_cntr = _cntr + 1
-;		utility.wait(0.5)
-;	endif
-;endwhile
-PlayerRef.PlayIdle(ED_Idle_Seduction_PlayfulEnd)
 
+; for walk-away type situations
 if !(akSpeakerRef.IsInDialogueWithPlayer())
+	debug.Trace("Everdamned: First check determined player didnt wait to feed, calling ResetRoot")
+	playerRef.PlayIdle(ResetRoot)
+	akSpeaker.PlayIdle(ResetRoot)
 	return
 endif
 
+; race/gender specific sfx
 bool isFemale
 race speakerRace
 isFemale = akSpeaker.GetActorBase().GetSex() == 1
@@ -54,30 +50,29 @@ else
 
 endif
 
+;make em feel good
 ED_Mechanics_FeedDialogue_FeedExpression_Spell.Cast(akSpeakerRef, akSpeakerRef)
-;ED_Mechanics_FeedDialogue_HeartPalpitations_Imod.Apply()
-;ED_Mechanics_FeedDialogue_HeartPalpitations_SoundM.Play(akSpeakerRef)
-;utility.wait(2)
 
 utility.wait(1)
+
+;recheck, if player cant wait 1 sec
+if !(akSpeakerRef.IsInDialogueWithPlayer())
+	debug.Trace("Everdamned: Second check determined player didnt wait to feed, calling ResetRoot")
+	playerRef.PlayIdle(ResetRoot)
+	akSpeaker.PlayIdle(ResetRoot)
+	;maybe wave?
+	return
+endif
+
+bool _pairedPlayed = playerRef.PlayIdleWithTarget(FeedDialogueIdle, akSpeaker)
+debug.Trace("Everdamned: paired anim was played: " + _pairedPlayed)
+
 if akSpeaker.IsInFaction(DLC1PotentialVampireFaction) && akSpeaker.IsInFaction(DLC1PlayerTurnedVampire) == False
 	DLC1VampireTurn.PlayerBitesMe(akSpeaker)
 endif
-
-if playerRef.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect)
-	debug.trace("Player had Anim Trigger ME")
-	playerRef.PlayIdle(ResetRoot)
-endif
-
-if akSpeaker.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect)
-	debug.trace("Speaker had Anim Trigger ME")
-	akSpeaker.PlayIdle(ResetRoot)
-endif
-
-playerRef.PlayIdleWithTarget(FeedDialogueIdle, akSpeaker)
 ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
+;will enable when figure out how to ensure Mesmerize idle will play, also need to add headtrack-off mesmerized idle
 ;ED_MesmerizeSafe_Scene_FeedDialogue.Start()
-
 
 int currentFactionRank = akSpeaker.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac)
 if currentFactionRank < 0
@@ -88,6 +83,13 @@ elseif currentFactionRank < 2
 	debug.trace("Victim seduced fac is now to seduced fac at rank " + (currentFactionRank + 1))
 endif
 PlayerVampireQuest.VampireFeed()
+FeedDialogue_Cooldown_Spell.Cast(akSpeaker, akSpeaker)
+
+if !_pairedPlayed
+	;failsafe, not sure if needed
+	playerRef.PlayIdle(ResetRoot)
+	akSpeaker.PlayIdle(ResetRoot)
+endif
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -95,12 +97,6 @@ EndFunction
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 Faction Property ED_Mechanics_FeedDialogue_Seduced_Fac  Auto  
-
-SPELL Property ED_VampireAbilities_Seduction_VictimVFX_Spell  Auto  
-
-MagicEffect Property ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect  Auto
-
-Idle Property ED_Idle_Seduction_PlayfulEnd  Auto  
 
 PlayerVampireQuestScript Property PlayerVampireQuest  Auto  
 
@@ -111,10 +107,6 @@ Faction Property DLC1PotentialVampireFaction  Auto
 Faction Property DLC1PlayerTurnedVampire  Auto  
 
 Idle Property FeedDialogueIdle  Auto  
-
-ImageSpaceModifier Property ED_Mechanics_FeedDialogue_HeartPalpitations_Imod  Auto  
-
-Sound Property ED_Mechanics_FeedDialogue_HeartPalpitations_SoundM  Auto  
 
 Sound Property ED_Mechanics_FeedDialogue_BreathFemale_SoundM  Auto
 Sound Property ED_Mechanics_FeedDialogue_BreathFemaleKhajiit_SoundM  Auto 
@@ -135,3 +127,5 @@ Race Property KhajiitRace Auto
 Race Property KhajiitRaceVampire Auto 
 Race Property OrcRace Auto 
 Race Property OrcRaceVampire Auto 
+
+SPELL Property FeedDialogue_Cooldown_Spell  Auto  
