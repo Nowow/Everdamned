@@ -10,7 +10,7 @@
                     "condition": "HasMagicEffect",
                     "requiredVersion": "1.0.0.0",
                     "Magic effect": {
-                        "pluginName": "ED_SacrosanctTweaks.esp",
+                        "pluginName": "Everdamned.esp",
                         "formID": "10049C"
                     },
                     "Active effects only": false

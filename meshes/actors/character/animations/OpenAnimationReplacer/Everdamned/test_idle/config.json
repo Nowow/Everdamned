@@ -4,7 +4,7 @@
     "replacementAnimDatas": [
         {
             "projectName": "DefaultMale",
-            "path": "data\\meshes\\actors\\character\\animations\\OpenAnimationReplacer\\Everdamned\\test_idle\\ED_SacrosanctTweaks\\_variants_ed_test",
+            "path": "data\\meshes\\actors\\character\\animations\\OpenAnimationReplacer\\Everdamned\\test_idle\\Everdamned\\_variants_ed_test",
             "variantMode": 0,
             "variantStateScope": 1,
             "blendBetweenVariants": true,
@@ -47,7 +47,7 @@
         },
         {
             "projectName": "DefaultFemale",
-            "path": "data\\meshes\\actors\\character\\animations\\OpenAnimationReplacer\\Everdamned\\test_idle\\ED_SacrosanctTweaks\\_variants_ed_test",
+            "path": "data\\meshes\\actors\\character\\animations\\OpenAnimationReplacer\\Everdamned\\test_idle\\Everdamned\\_variants_ed_test",
             "variantMode": 1,
             "variantStateScope": 1,
             "blendBetweenVariants": true,
