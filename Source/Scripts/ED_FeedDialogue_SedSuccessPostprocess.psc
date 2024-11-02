@@ -7,29 +7,58 @@ Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 int _cntr
-ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
-ED_MesmerizeSafe_Scene_FeedDialogue.Start()
 
 actor PlayerRef = Game.GetPlayer()
-while _cntr < 20
-	if !(akSpeakerRef.IsInDialogueWithPlayer())	|| !(akSpeaker.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect))
-		_cntr = 20
-	else
-		_cntr = _cntr + 1
-		utility.wait(0.5)
-	endif
-endwhile
+;while _cntr < 20
+;	if !(akSpeakerRef.IsInDialogueWithPlayer())	|| !(akSpeaker.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect))
+;		_cntr = 20
+;	else
+;		_cntr = _cntr + 1
+;		utility.wait(0.5)
+;	endif
+;endwhile
 PlayerRef.PlayIdle(ED_Idle_Seduction_PlayfulEnd)
 
 if !(akSpeakerRef.IsInDialogueWithPlayer())
 	return
 endif
 
+bool isFemale
+race speakerRace
+isFemale = akSpeaker.GetActorBase().GetSex() == 1
+speakerRace = akSpeaker.GetActorBase().GetRace()
+
+if (speakerRace == KhajiitRace || speakerRace == KhajiitRaceVampire)
+
+	if isFemale == true
+		ED_Mechanics_FeedDialogue_BreathFemaleKhajiit_SoundM.Play(akSpeakerRef)
+	else
+		ED_Mechanics_FeedDialogue_BreathMaleKhajiit_SoundM.Play(akSpeakerRef)
+	endif 
+
+elseif (speakerRace == OrcRace || speakerRace == OrcRaceVampire)
+
+	if isFemale == true
+		ED_Mechanics_FeedDialogue_BreathFemaleOrc_SoundM.Play(akSpeakerRef)
+	else
+		ED_Mechanics_FeedDialogue_BreathMaleOrc_SoundM.Play(akSpeakerRef)
+	endif
+	
+else
+	
+	if isFemale == true
+		ED_Mechanics_FeedDialogue_BreathFemale_SoundM.Play(akSpeakerRef)
+	else
+		ED_Mechanics_FeedDialogue_BreathMale_SoundM.Play(akSpeakerRef)
+	endif
+
+endif
+
 ED_Mechanics_FeedDialogue_FeedExpression_Spell.Cast(akSpeakerRef, akSpeakerRef)
-ED_Mechanics_FeedDialogue_HeartPalpitations_Imod.Apply()
-ED_Mechanics_FeedDialogue_HeartPalpitations_SoundM.Play(akSpeakerRef)
-utility.wait(2)
-ED_Mechanics_FeedDialogue_BreathFemale_SoundM.Play(akSpeakerRef)
+;ED_Mechanics_FeedDialogue_HeartPalpitations_Imod.Apply()
+;ED_Mechanics_FeedDialogue_HeartPalpitations_SoundM.Play(akSpeakerRef)
+;utility.wait(2)
+
 utility.wait(1)
 if akSpeaker.IsInFaction(DLC1PotentialVampireFaction) && akSpeaker.IsInFaction(DLC1PlayerTurnedVampire) == False
 	DLC1VampireTurn.PlayerBitesMe(akSpeaker)
@@ -44,7 +73,11 @@ if akSpeaker.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect)
 	debug.trace("Speaker had Anim Trigger ME")
 	akSpeaker.PlayIdle(ResetRoot)
 endif
+
 playerRef.PlayIdleWithTarget(FeedDialogueIdle, akSpeaker)
+ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
+;ED_MesmerizeSafe_Scene_FeedDialogue.Start()
+
 
 int currentFactionRank = akSpeaker.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac)
 if currentFactionRank < 0
@@ -83,7 +116,12 @@ ImageSpaceModifier Property ED_Mechanics_FeedDialogue_HeartPalpitations_Imod  Au
 
 Sound Property ED_Mechanics_FeedDialogue_HeartPalpitations_SoundM  Auto  
 
-Sound Property ED_Mechanics_FeedDialogue_BreathFemale_SoundM  Auto  
+Sound Property ED_Mechanics_FeedDialogue_BreathFemale_SoundM  Auto
+Sound Property ED_Mechanics_FeedDialogue_BreathFemaleKhajiit_SoundM  Auto 
+Sound Property ED_Mechanics_FeedDialogue_BreathFemaleOrc_SoundM  Auto 
+Sound Property ED_Mechanics_FeedDialogue_BreathMale_SoundM  Auto 
+Sound Property ED_Mechanics_FeedDialogue_BreathMaleKhajiit_SoundM  Auto 
+Sound Property ED_Mechanics_FeedDialogue_BreathMaleOrc_SoundM  Auto 
 
 SPELL Property ED_Mechanics_FeedDialogue_FeedExpression_Spell  Auto  
 
@@ -92,3 +130,8 @@ Idle Property ResetRoot  Auto
 Scene Property ED_MesmerizeSafe_Scene_FeedDialogue  Auto  
 
 ReferenceAlias Property ED_FeedDialogue_Target  Auto  
+
+Race Property KhajiitRace Auto 
+Race Property KhajiitRaceVampire Auto 
+Race Property OrcRace Auto 
+Race Property OrcRaceVampire Auto 

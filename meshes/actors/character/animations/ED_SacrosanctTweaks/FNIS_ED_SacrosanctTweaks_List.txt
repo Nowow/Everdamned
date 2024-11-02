@@ -20,74 +20,141 @@
 
 b -a ed_test_idle ed_test.hkx 
 
-b -a,Ted_seduction_flirtCustAnimFin/-0.3 ed_seduction_aroused1 ed_seduction_aroused1.hkx 
-b -a ed_seduction_flirt_touchHair ed_seduction_flirt_touchHair.hkx
 
-s -a ed_seduction_flirt_touchHairSeq ed_seduction_flirt_touchHair.hkx
-+ -a ed_seduction_flirt_playfulStart ed_seduction_playful_start.hkx
-'+ -a ed_seduction_flirt_playfulIdle ed_seduction_playful_idle.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/0.1 ed_seduction_flirt_playfulEnd ed_seduction_playful_end.hkx
+' ----------------- SEDUCTION ------------------
 
-b -a ed_seduction_flirt_openDismissive ed_seduction_open_dismissive.hkx
-s -a ed_seduction_flirt_openStart ed_seduction_open_start.hkx
-+ ed_seduction_flirt_openIdle ed_seduction_open_idle.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/0.1 ed_seduction_flirt_openEnd ed_seduction_open_end.hkx
+' Player sequence, contents controlled by OAR
+s -a,h ed_seduction_playerSeq_start ed_seduction_playerseq_start.hkx
++ -a,h ed_seduction_playerSeq_talk1 ed_seduction_playerseq_talk.hkx
++ -a,h ed_seduction_playerSeq_idle1 ed_seduction_playerseq_idle.hkx
++ -a,h ed_seduction_playerSeq_talk2 ed_seduction_playerseq_talk.hkx
++ -a,h ed_seduction_playerSeq_idle2 ed_seduction_playerseq_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_playerSeq_end ed_seduction_playerseq_end.hkx
 
-s -a ed_seduction_flirt_guardedStart ed_seduction_guarded_start.hkx
-+ ed_seduction_flirt_guardedIdle ed_seduction_guarded_idle.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/0.1 ed_seduction_flirt_guardedEnd ed_seduction_guarded_end.hkx
+' Aroused
+s -a,h ed_seduction_aroused_start ed_empty.hkx 
++ -a,h ed_seduction_aroused_aroused ed_seduction_aroused1.hkx 
++ -a,h ed_seduction_aroused_warmComeover ed_seduction_warmcomeover.hkx
++ -a,h ed_seduction_aroused_guardedIdle ed_seduction_guarded_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_aroused_guardedEnd ed_seduction_guarded_end.hkx
+
+' Open plain
+s -a,h ed_seduction_open_start ed_empty.hkx 
++ -a,h ed_seduction_open_openStart ed_seduction_open_start.hkx
++ -a,h ed_seduction_open_openTalk ed_open_talk.hkx
++ -a,h ed_seduction_open_openIdle ed_seduction_open_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/0.1 ed_seduction_open_openEnd ed_seduction_open_end.hkx
+
+' Guarded plain
+s -a,h ed_seduction_guarded_start ed_empty.hkx 
++ -a,h ed_seduction_guarded_guardedStart ed_seduction_guarded_start.hkx
++ -a,h ed_seduction_guarded_guardedTalk ed_playful_talk.hkx
++ -a,h ed_seduction_guarded_guardedIdle ed_seduction_guarded_idle.hkx
++ -a,Ted_seduction_customAnimFin/0.1 ed_seduction_guarded_guardedEnd ed_seduction_guarded_end.hkx
+
+' Playful plain 
+s -a,h ed_seduction_playful_start ed_empty.hkx 
++ -a,h ed_seduction_playful_playfulStart ed_seduction_playful_start.hkx
++ -a,h ed_seduction_playful_playfulTalk ed_playful_talk.hkx
++ -a,h ed_seduction_playful_playfulIdle ed_seduction_playful_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/0.1 ed_seduction_playful_playfulEnd ed_seduction_playful_end.hkx
+
+' Serious plain
+s -a,h ed_seduction_serious_start ed_empty.hkx 
++ -a,h ed_seduction_serious_seriousStart ed_serious_start.hkx
++ -a,h ed_seduction_serious_seriousTalk ed_serious_talk.hkx
++ -a,h ed_seduction_serious_seriousIdle ed_serious_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/0.1 ed_seduction_serioust_seriousEnd ed_serious_end.hkx
+
+' Touch hair + playful
+s -a,h ed_seduction_touchHair_start ed_empty.hkx
++ -a,h ed_seduction_touchHair_playfulInt ed_seduction_playful_interested.hkx
++ -a,h,Ted_seduction_touchHair_trigger/2.8 ed_seduction_touchHair_touchHair ed_seduction_flirt_touchHair.hkx
++ -a,h ed_seduction_touchHair_forceNext ed_seduction_playful_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/0.1 ed_seduction_touchHair_playfulEnd ed_seduction_playful_end.hkx
+
+' Warm greeting
+s -a,h ed_seduction_warmGreeting_start ed_empty.hkx
++ -a,h ed_seduction_warmGreeting_playfulStart ed_seduction_playful_start.hkx
++ -a,h ed_seduction_warmGreeting_warmGreeting ed_seduction_warmgreeting.hkx
++ -a,h ed_seduction_warmGreeting_warmComeover ed_seduction_warmcomeover.hkx
++ -a,h ed_seduction_warmGreeting_playfulIdle ed_seduction_playful_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/0.1 ed_seduction_warmGreeting_playfulEnd ed_seduction_playful_end.hkx
+
+' Laugh + playful
+s -a,h ed_seduction_laugh_start ed_empty.hkx
++ -a,h ed_seduction_laugh_playfulStart ed_seduction_playful_start.hkx
++ -a,h ed_seduction_laugh_laugh ed_seduction_sarcastic_laugh.hkx
++ -a,h ed_seduction_laugh_playfulIdle ed_seduction_playful_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/0.1 ed_seduction_laugh_playfulEnd ed_seduction_playful_end.hkx
+
+' Blow kiss
+s -a,h ed_seduction_blowkiss_start ed_empty.hkx
++ -a,h ed_seduction_blowkiss_playfulStart ed_seduction_playful_start.hkx
++ -a,h ed_seduction_blowkiss_blowkiss ed_seduction_blowkiss.hkx
++ -a,h ed_seduction_blowkiss_warmComeover ed_seduction_warmcomeover.hkx
++ -a,h ed_seduction_blowkiss_playfulIdle ed_seduction_playful_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/0.1 ed_seduction_blowkiss_playfulEnd ed_seduction_playful_end.hkx
+
+' Surprised, then iterested
+s -a,h ed_seduction_surpInterested_start ed_empty.hkx
++ -a,h ed_seduction_surpInterested_seriousStart ed_serious_start.hkx
++ -a,h ed_seduction_surpInterested_seriousSurprised ed_serious_surprised.hkx
++ -a,h ed_seduction_surpInterested_seriousInterested ed_serious_interested.hkx
++ -a,h ed_seduction_surpInterested_seriousTalk ed_serious_talk.hkx
++ -a,h ed_seduction_surpInterested_seriousIdle ed_serious_idle.hkx
++ -a,h,Ted_seduction_customAnimFin/0.1 ed_seduction_surpInterested_seriousEnd ed_serious_end.hkx
+
+' Unsuccessfull seduction
+s -a,h ed_seduction_failExpressive_start ed_empty.hkx
++ -a,h ed_seduction_failExpressive_seriousStart ed_serious_start.hkx
++ -a,h ed_seduction_failExpressive_playfulInt ed_seduction_playful_interested.hkx
++ -a,h ed_seduction_failExpressive_playfulThrowhands ed_seduction_playful_throwhands.hkx
++ -a,h,Ted_seduction_customAnimFin/-1.0 ed_seduction_failExpressive_playfulDismissive ed_seduction_playful_dismissive.hkx
+
+
+' ----------------- INTIMIDATION ------------------
 
 ' Unsuccessfull Reveal with panic and assault
 s -a ed_seduction_flirt_guardedInterested ed_seduction_guarded_interested.hkx
 + -a ed_seduction_flirt_guardedFlinch ed_seduction_guarded_shockFlinch.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/-0.3 ed_seduction_flirt_guardedThrowhandsup ed_seduction_guarded_throwhandsup.hkx
++ -a,Ted_seduction_customAnimFin/-0.3 ed_seduction_flirt_guardedThrowhandsup ed_seduction_guarded_throwhandsup.hkx
 + -a ed_seduction_flirt_guardedEnd2 ed_seduction_guarded_end.hkx
 
 ' Unsuccessfull Reveal with no panic and no assault
 s -a ed_seduction_flirt_guardedInterested2 ed_seduction_guarded_interested.hkx
 + -a ed_seduction_flirt_guardedScratch ed_seduction_guarded_shockScratch.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/-0.3 ed_seduction_flirt_guardedDismissive ed_seduction_guarded_dismissive.hkx
++ -a,Ted_seduction_customAnimFin/-0.3 ed_seduction_flirt_guardedDismissive ed_seduction_guarded_dismissive.hkx
 + -a ed_seduction_flirt_guardedEnd3 ed_seduction_guarded_end.hkx
-
-' Player being playful
-s -a ed_seduction_flirt_playfulStartSeq ed_seduction_playful_start.hkx
-+ ed_seduction_flirt_playfulIdle2 ed_seduction_playful_idle.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/0.1 ed_seduction_flirt_playfulEnd2 ed_seduction_playful_end.hkx
 
 ' Player persuades when Reveal
 s -a ed_seduction_flirt_seriousPersuadeSeq ed_seduction_serious_start.hkx
 + -a ed_seduction_flirt_seriousExplain ed_seduction_serious_talkExplainPersuade.hkx
 + -a ed_seduction_flirt_seriousGestureForward ed_seduction_serious_talkGestureForward.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/-0.3 ed_seduction_flirt_seriousShakeHead ed_seduction_serious_talkShakeHead.hkx
++ -a,Ted_seduction_customAnimFin/-0.3 ed_seduction_flirt_seriousShakeHead ed_seduction_serious_talkShakeHead.hkx
 + ed_seduction_flirt_seriousIdle ed_seduction_serious_idle.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/0.1 ed_seduction_flirt_seriousEnd ed_seduction_serious_end.hkx
++ -a,Ted_seduction_customAnimFin/0.1 ed_seduction_flirt_seriousEnd ed_seduction_serious_end.hkx
 
 ' Unsuccessfull intimidation, no assault
 s -a ed_seduction_flirt_sarcasticShock ed_seduction_sarcastic_shock.hkx
 + -a ed_seduction_flirt_sarcasticLaugh ed_seduction_sarcastic_laugh.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/-0.3 ed_seduction_flirt_sarcasticApplaud ed_seduction_sarcastic_applaud.hkx
++ -a,Ted_seduction_customAnimFin/-0.3 ed_seduction_flirt_sarcasticApplaud ed_seduction_sarcastic_applaud.hkx
 
 ' Unsuccessfull intimidation, assault, fight
 s -a ed_seduction_flirt_angryExplain ed_seduction_angry_Explain.hkx
 + -a ed_seduction_flirt_angryFlailArms ed_seduction_angry_FlailArms.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/-1.0 ed_seduction_flirt_angry_Point ed_seduction_angry_Point.hkx
++ -a,Ted_seduction_customAnimFin/-1.0 ed_seduction_flirt_angry_Point ed_seduction_angry_Point.hkx
 
 ' Unsuccessfull intimidation, assault, flee
 s -a ed_seduction_flirt_nervousLookAround ed_seduction_nervous_lookaround.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/-0.3 ed_seduction_flirt_getAttention ed_seduction_nervous_getattention.hkx
++ -a,Ted_seduction_customAnimFin/-0.3 ed_seduction_flirt_getAttention ed_seduction_nervous_getattention.hkx
 
 ' Successful intimidation, assault, flee
 s -a ed_seduction_flirt_nervousLookAround2 ed_seduction_nervous_lookaround.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/-0.3 ed_seduction_flirt_defensiveGesture ed_seduction_nervous_defensiveGesture.hkx
++ -a,Ted_seduction_customAnimFin/-0.3 ed_seduction_flirt_defensiveGesture ed_seduction_nervous_defensiveGesture.hkx
 
-' Unsuccessfull seduction
-s -a ed_seduction_flirt_playfulInterested ed_seduction_playful_interested.hkx
-+ -a ed_seduction_flirt_playfulThrowhands ed_seduction_playful_throwhands.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/-1.0 ed_seduction_flirt_playfulDismissive ed_seduction_playful_dismissive.hkx
 
-' Successfull seduction, 4+ times
-s -a ed_seduction_flirt_warmGreeting ed_seduction_warmgreeting.hkx
-+ -a,Ted_seduction_flirtCustAnimFin/-1.0 ed_seduction_flirt_warmComeover ed_seduction_warmcomeover.hkx
+'Feed killmove with jump
+km -ac,D8.000000,Ted_seduction_speakerBitten/2.0,TNPCSoundPlay.npcvampirelordfeed/2.555 ed_km_vampirefeed_jump ed_km_vampirefeed_jump.HKX
 
-' Blow kiss inhale
-b -a,Ted_seduction_flirtCustAnimFin/-1.0 ed_seduction_blowkissStrart ed_seduction_blowkiss.hkx
+'km '-D21.00,TNPCKillMoveStart/0.0,T2_KillMoveStart/0.1,TNPCpairedStop/21.00,TNPCKillMoveEnd/21.00,TPairEnd/21.00,T2_PairEnd/21.00,T2_pairedSto'p/21.00,T2_KillMoveEnd/21.00 ZaZSensualKiss ed_kiss.hkx
