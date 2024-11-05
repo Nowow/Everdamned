@@ -105,7 +105,7 @@ s -a,h ed_seduction_surpInterested_start ed_empty.hkx
 + -a,h ed_seduction_surpInterested_seriousIdle ed_serious_idle.hkx
 + -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_surpInterested_seriousEnd ed_serious_end.hkx
 
------- FAILS ------
+'------ FAILS ------
 
 ' Expressive rejection
 s -a,h ed_seduction_failExpressive_start ed_empty.hkx

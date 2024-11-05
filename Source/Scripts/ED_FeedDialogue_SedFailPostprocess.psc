@@ -6,31 +6,15 @@ Scriptname ED_FeedDialogue_SedFailPostprocess Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-debug.trace("Adding to dialogue Fail faction with rank 0 that means a temporary block for dialogue")
-akSpeaker.SetFactionRank(ED_Mechanics_FeedDialogue_Fail_Fac, 0)
 ED_Mechanics_FeedDialogue_Cooldown3d_Spell.Cast(akSpeaker, akSpeaker)
 
-int _cntr
 actor PlayerRef = Game.GetPlayer()
-while _cntr < 20
-	if !(akSpeakerRef.IsInDialogueWithPlayer())	|| !(akSpeaker.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect))
-		_cntr = 20
-	else
-		_cntr = _cntr + 1
-		utility.wait(0.5)
-	endif
-endwhile
-PlayerRef.PlayIdle(ED_Idle_Seduction_PlayfulEnd)
 
-
-if playerRef.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect)
-	debug.trace("Player had Anim Trigger ME")
+if !(akSpeakerRef.IsInDialogueWithPlayer())
+	debug.Trace("Everdamned: Player failed seduction check and left dialogue, calling ResetRoot for him")
 	playerRef.PlayIdle(ResetRoot)
-endif
-
-if akSpeaker.HasMagicEffect(ED_Mechanics_FeedDialogue_AnimFinishTrigger_Effect)
-	debug.trace("Speaker had Anim Trigger ME")
-	akSpeaker.PlayIdle(ResetRoot)
+	;akSpeaker.PlayIdle(ResetRoot)
+	return
 endif
 ;END CODE
 EndFunction
