@@ -10,7 +10,6 @@ ED_BloodMeter property ExposureMeter auto
 GlobalVariable Property EnableVampireBloodPool Auto
 GlobalVariable Property EnableVampireBloodMeter Auto
 
-GlobalVariable Property VampireDynamicStages Auto
 GlobalVariable property ED_BloodMeterDisplay_Contextual auto
 GlobalVariable property ED_BloodMeter_Opacity auto
 GlobalVariable Property ED_BloodMeterScale Auto
@@ -155,6 +154,7 @@ function UpdateBlood(float meterPercent, bool bSkipDisplayHandling = false)
 	ExposureMeter.Y = ED_BloodMeterY.GetValue() ; Default is 640
 	ExposureMeter.Height = 25.2
 	ExposureMeter.Width = 292.8
+	ExposureMeter.FillDirection = "right"
 	;Exposuremeter.Height = ((BetterVampiresBloodMeterScale.GetValue()/100)*25.2) ; Default Scale is 100 with Height of 25.2
 	;Exposuremeter.Width = ((BetterVampiresBloodMeterScale.GetValue()/100)*292.8) ; Default Scale is 100 with Width of 292.8
 	

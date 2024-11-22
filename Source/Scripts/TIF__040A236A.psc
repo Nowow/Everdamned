@@ -20,6 +20,8 @@ actor _player = Game.GetPlayer()
 ED_Mechanics_FeedDialogue_AnimFinishTrigger_Spell.Cast(_player, _player)
 _player.PlayIdle(ED_Idle_Seduction_PlayerSeqStart)
 ED_Mechanics_FeedDialogue_AnimFinishTrigger_Spell.Cast(akSpeaker, akSpeaker)
+
+;debug.SendAnimationEvent(akSpeaker, "IdleChairExitStart")
 ;END CODE
 EndFunction
 ;END FRAGMENT
