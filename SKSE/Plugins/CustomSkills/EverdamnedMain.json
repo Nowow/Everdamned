@@ -11,7 +11,7 @@
   "skills": [
     {
       "id": "EverdamnedMain",
-      "name": "Vampire Curse",
+      "name": "Vampiric Curse",
       "description": "Unleashed upon this world by the Molag Bal itself, the power of cursed blood is now growing within you. Weild it to fullfill your destiny, or carve one for yourself...",
       "level": "Everdamned.esp|1D7A9E",
       "ratio": "Everdamned.esp|1D7A9F",
@@ -27,11 +27,174 @@
       },
       "nodes": [
         {
-          "id": "perk01",
-          "perk": "Everdamned.esp|BD720",
+          "id": "RootPerk",
+          "perk": "Everdamned.esp|250FEB",
           "x": 0,
-          "y": 0
-        }        
+          "y": 0,
+		  "links": [ "FeedDialogue", "BloodSeed", "VigorMortis" ]
+        },
+		{
+          "id": "BloodSeed",
+          "perk": "Everdamned.esp|1FCCBB",
+          "x": 0,
+          "y": 0.5,
+		  "links": [ "Chef" ]
+        },
+		{
+          "id": "Chef",
+          "perk": "Everdamned.esp|24E840",
+          "x": 0,
+          "y": 1,
+		  "links": [ "AdeptHemomancy" ]
+        },
+		{
+          "id": "AdeptHemomancy",
+          "perk": "Everdamned.esp|24E839",
+          "x": 0,
+          "y": 1.5,
+		  "links": [ "MultiDrain", "Exsanguinate", ]
+        },
+		{
+          "id": "MultiDrain",
+          "perk": "Everdamned.esp|24E83A",
+          "x": 0,
+          "y": 2,
+		  "links": [ "ExpertHemomancy" ]
+        },
+		{
+          "id": "Exsanguinate",
+          "perk": "Everdamned.esp|1FF45B",
+          "x": 0,
+          "y": 2,
+		  "links": [ "ExpertHemomancy" ]
+        },
+		{
+          "id": "ExpertHemomancy",
+          "perk": "Everdamned.esp|24E83B",
+          "x": 0,
+          "y": 2.5,
+		  "links": [ "Vicissitude", "ToothAndNail" ]
+        },
+		{
+          "id": "Vicissitude",
+          "perk": "Everdamned.esp|24E83C",
+          "x": 0,
+          "y": 3,
+		  "links": [ "MasterHemomancy" ]
+        },
+		{
+          "id": "MasterHemomancy",
+          "perk": "Everdamned.esp|24E83D",
+          "x": 0,
+          "y": 4.5,
+		  "links": [ "LamaesPyre" ]
+        },
+		{
+          "id": "LamaesPyre",
+          "perk": "Everdamned.esp|24E83E",
+          "x": 0,
+          "y": 5
+        },
+		{
+          "id": "FeedDialogue",
+          "perk": "Everdamned.esp|24E845",
+          "x": 1,
+          "y": 0.5,
+		  "links": [ "VampiresWill" ]
+        },
+		{
+          "id": "VampiresWill",
+          "perk": "Everdamned.esp|24E846",
+          "x": 1,
+          "y": 1,
+		  "links": [ "InstinctiveCharm" ]
+        },
+		{
+          "id": "InstinctiveCharm",
+          "perk": "Everdamned.esp|24E847",
+          "x": 1,
+          "y": 1.5,
+		  "links": [ "Obfuscate" ]
+        },
+		{
+          "id": "Obfuscate",
+          "perk": "Everdamned.esp|24E848",
+          "x": 1,
+          "y": 2,
+		  "links": [ "Mesmerize" ]
+        },
+		{
+          "id": "Mesmerize",
+          "perk": "Everdamned.esp|24E8489",
+          "x": 1,
+          "y": 2.5,
+		  "links": [ "VampiresCommand" ]
+        },
+		{
+          "id": "VampiresCommand",
+          "perk": "Everdamned.esp|24E843",
+          "x": 1,
+          "y": 3
+        },
+		{
+          "id": "VigorMortis",
+          "perk": "Everdamned.esp|250FE7",
+          "x": -1.5,
+          "y": 0.5,
+		  "links": [ "DeadlyStrength" ]
+        },
+		{
+          "id": "DeadlyStrength",
+          "perk": "Everdamned.esp|250FE8",
+          "x": -1,
+          "y": 1,
+		  "links": [ "ExtendedPerception", "Backstab", "ToothAndNail" ]
+        },
+		{
+          "id": "ExtendedPerception",
+          "perk": "Everdamned.esp|250FE3",
+          "x": -2,
+          "y": 1.5,
+		  "links": [ "NecroticFlesh" ]
+        },
+		{
+          "id": "NecroticFlesh",
+          "perk": "Everdamned.esp|250FE9",
+          "x": -1.5,
+          "y": 2,
+		  "links": [ "Celerity" ]
+        },
+		{
+          "id": "Celerity",
+          "perk": "Everdamned.esp|250FE4",
+          "x": -2,
+          "y": 2.5,
+		  "links": [ "Backstab", "FerociousSurge", "WickedWind" ]
+        },
+		{
+          "id": "ToothAndNail",
+          "perk": "Everdamned.esp|250FEC",
+          "x": -1,
+          "y": 3.0
+        },
+		{
+          "id": "Backstab",
+          "perk": "Everdamned.esp|250FE5",
+          "x": -1,
+          "y": 3.0
+        },
+		{
+          "id": "FerociousSurge",
+          "perk": "Everdamned.esp|250FEA",
+          "x": -1,
+          "y": 3.5
+        },
+		{
+          "id": "WickedWind",
+          "perk": "Everdamned.esp|250FE6",
+          "x": -2,
+          "y": 3.5
+        }
       ]
     }
   ]
