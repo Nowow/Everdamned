@@ -3,18 +3,19 @@ Scriptname ED_Potence_DeadlyStrength extends ActiveMagicEffect
 import math
 import debug
 
-float originalJumpHeight
-float JumpBon
+float property originalJumpHeight auto
+float property JumpBon auto
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 	originalJumpHeight = Game.GetGameSettingFloat("fJumpHeightMin")
-	JumpBon = -30.0 + (math.log(800.0*VampireAge.Value)*10.0) + (VampireAge.Value*7.0)
+	JumpBon = 17.5 + ((VampireAge.value as int)*22.5)
+	
 	;debug.notification("Jump Bon is: " + JumpBon)
 	Game.SetGameSettingFloat("fJumpHeightMin", 76+JumpBon)
 Endevent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
-	JumpBon = -30.0 + (math.log(800.0*VampireAge.Value)*10.0) + (VampireAge.Value*7.0)
+	JumpBon = 17.5 + ((VampireAge.value as int)*22.5)
 	;debug.notification("Jump Bon is: " + JumpBon)
 	if Game.GetGameSettingFloat("fJumpHeightMin") == 76+JumpBon
 		Game.SetGameSettingFloat("fJumpHeightMin", originalJumpHeight)
@@ -22,7 +23,7 @@ Event OnEffectFinish(Actor akTarget, Actor akCaster)
 Endevent
 
 Event OnPlayerLoadGame()
-	JumpBon = -30.0 + (math.log(800.0*VampireAge.Value)*10.0) + (VampireAge.Value*7.0)
+	JumpBon = 17.5 + ((VampireAge.value as int)*22.5)
 	;debug.notification("Jump Bon is: " + JumpBon)
 	if Game.GetGameSettingFloat("fJumpHeightMin") == originalJumpHeight
 		Game.SetGameSettingFloat("fJumpHeightMin", 76+JumpBon)
@@ -30,4 +31,3 @@ Event OnPlayerLoadGame()
 EndEvent
 
 GlobalVariable Property VampireAge Auto
-Float Property JumpBonus Auto

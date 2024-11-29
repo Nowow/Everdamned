@@ -13,7 +13,8 @@ globalvariable property ED_Mechanics_VampireAgeCurrentExp auto
 globalvariable property ED_Mechanics_VampireAgeCurrentLvlUpThreshold auto
 globalvariable property ED_Mechanics_VampireAgeLvlUpExpIncrement auto
 
-spell[] property Age_Scaling_Display_Spell_List auto
+;spell[] property Age_Scaling_Display_Spell_List auto
+perk[] property Age_Scaling_Perk_List auto
 
 message property ED_Mechanics_Message_AgeLvlUpNotification auto
 message[] property Age_Message_List auto
@@ -82,12 +83,16 @@ function SetUpAgeAppropriateRewards()
 	
 	int i = 0
 	while i < 5 ; max age
-		spell _ageDisplaySpell = Age_Scaling_Display_Spell_List[_currentAgeIndex]
+		;spell _ageDisplaySpell = AgeScaling_Display_Spell_List[_currentAgeIndex]
+		;spells are now attached to perk
+		perk _agePerk = Age_Scaling_Perk_List[_currentAgeIndex]
 		
 		if i == _currentAgeIndex
-			playerRef.addspell(_ageDisplaySpell)
+			playerRef.addperk(_agePerk)
+			;playerRef.addspell(_ageDisplaySpell)
 		else
-			playerRef.removespell(_ageDisplaySpell)
+			playerRef.removeperk(_agePerk)
+			;playerRef.removespell(_ageDisplaySpell)
 		endif
 		
 		i += 1

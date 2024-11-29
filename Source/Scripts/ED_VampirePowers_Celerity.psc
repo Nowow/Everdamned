@@ -3,28 +3,29 @@ Scriptname ED_VampirePowers_Celerity extends ActiveMagicEffect
 Bool Property ActiveEP Auto
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
-	;ActiveEP = FALSE
+	ActiveEP = FALSE
 
-	;If akTarget.HasSpell(ExtendedPerceptionSP)
-	;	ActiveEP = TRUE
-	;	akTarget.RemoveSpell(ExtendedPerceptionSP)
-	;Endif
+	If akTarget.HasMagicEffect(ExtendedPerceptionME)
+		ActiveEP = TRUE
+		akTarget.RemoveSpell(ExtendedPerceptionSP)
+	Endif
 	
 	utility.wait(0.1)
-	akTarget.AddSpell(CeleritySP, false)
+	CeleritySP.cast(akTarget,akTarget)
 
 Endevent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
-	akTarget.RemoveSpell(CeleritySP)
 	akTarget.DispelSpell(CeleritySP)
+	;akTarget.RemoveSpell(CeleritySP)
 	
-	;utility.wait(0.1)
-	;If ActiveEP == TRUE
-	;	akTarget.AddSpell(ExtendedPerceptionSP, false)
-	;Endif
+	utility.wait(0.1)
+	If ActiveEP == TRUE
+		akTarget.AddSpell(ExtendedPerceptionSP, false)
+	Endif
 Endevent
 
 SPELL Property ExtendedPerceptionSP  Auto  
+MagicEffect Property ExtendedPerceptionME  Auto  
 SPELL Property CeleritySP  Auto  
 
