@@ -13,20 +13,21 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	;TheOrb.SetScale(4.0)
 	TheOrb.PlaceAtMe(ED_Art_Explosion_VampireAbsorb, 1, false, false)
 	TheOrb.Enable(true)
-	ED_Art_VFX_BatsCloak.Play(TheOrb)
-	if 
-	ED_BloodVortex.ForceRefTo(TheOrb)
+	ED_Art_VFX_BatsCloak.Play(TheOrb, 29.0)
+	ED_BloodVortexAlias.FillVortex(TheOrb)
 	
 endFunction
 
 function OnEffectFinish(Actor akTarget, Actor akCaster)
-	; command finish 
+	if TheOrb && !(TheOrb.IsDeleted())
+		ED_BloodVortexAlias.TerminateVortex(TheOrb)
+	endif
 endFunction
 
 
 activator property ED_Art_BloodVortex auto
 
-ReferenceAlias Property ED_BloodVortex  Auto 
+ED_BloodVortexAlias_Script Property ED_BloodVortexAlias Auto
 
 Explosion Property ED_Art_Explosion_VampireAbsorb auto
 

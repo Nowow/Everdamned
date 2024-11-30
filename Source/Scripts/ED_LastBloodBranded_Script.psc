@@ -1,0 +1,1 @@
+Scriptname ED_LastBloodBranded_Script extends ReferenceAlias  
