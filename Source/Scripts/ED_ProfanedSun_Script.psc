@@ -18,7 +18,7 @@ function OnUpdate()
 		TheOrb.TranslateToRef(_target, 200.0, 0.000000)
 		;SCS_VampireSpells_Blood_Spell_100_ProfanedSun_Proc.RemoteCast(TheOrb, TheCaster, none)
 	endif
-	
+	RegisterForSingleUpdate(1.0)
 endFunction
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
@@ -30,10 +30,11 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	TheOrb.SetAngle(0 as Float, 0 as Float, 0 as Float)
 	TheOrb.MoveTo(_vortex, 0.0, 0.0, -100.0, false)
 	TheOrb.Enable(true)
+	playerRef.dispelspell(ED_VampireSpells_BloodVortex_Spell)
 	;ED_Art_VFX_WellingBlood.Play(TheOrb, 15.0)
-	ED_VampireSpells_ProfanedSun_Cloak_Spell.Cast(TheOrb, akCaster)
+	ED_VampireSpells_ProfanedSun_Cloak_Spell.Cast(TheOrb)
 	utility.Wait(0.100000)
-	RegisterForUpdate(1.0)
+	RegisterForSingleUpdate(1.0)
 	
 	objectreference _target = ED_LastBloodBrandedActor.GetReference()
 	if _target != none
@@ -41,9 +42,10 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	endif
 endFunction
 
-
+actor property playerRef auto
 ED_BloodVortexAlias_Script Property ED_BloodVortexAlias Auto
 light property ED_Art_Light_ProfanedSun_Projectile auto
 ReferenceAlias property ED_LastBloodBrandedActor auto
 VisualEffect property ED_Art_VFX_WellingBlood auto
 Spell property ED_VampireSpells_ProfanedSun_Cloak_Spell auto
+spell property ED_VampireSpells_BloodVortex_Spell auto
