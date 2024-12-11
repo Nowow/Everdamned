@@ -1,0 +1,23 @@
+[Properties]
+
+playerVampireSkill = "Object: Everdamned.esp::0x1D7A9E"
+
+[VampireSkill]
+type = "Functional"
+alias = "Variable06"
+get = "(GetKeywordString('PlayerKeyword') != 0) * GetGlobalValueParam(playerVampireSkill)"
+
+[EdTestVar]
+type = "Adaptive"
+alias = "Variable05"
+
+[ED_IcyWindsSelf]
+type = "Adaptive"
+alias = "Variable01"
+
+[ED_IcyWindsTarget]
+type = "Adaptive"
+alias = "Variable02"
+
+[Include]
+"Everdamned.esp" = ["VampireSkill", "EdTestVar", "ED_IcyWindsSelf", "ED_IcyWindsTarget"]
