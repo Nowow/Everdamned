@@ -14,6 +14,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	;RegisterForSingleUpdate(2.0)
 	PSGD.apply(FadeInTime)
+	ScaleNode("NPC Head [Head]", 3.0)
 	
 	
 endFunction
@@ -29,6 +30,11 @@ function OnEffectFinish(Actor akTarget, Actor akCaster)
 	;Debug.Trace("VampireSkill value at end: " + akCaster.getactorvalue("VampireSkill"))
 	
 	PSGD.remove(FadeOutTime)
+	ScaleNode("NPC Head [Head]", 1.0)
 endFunction
 
 
+Function ScaleNode(String spellNode, Float scale)
+	NetImmerse.SetNodeScale(_player, spellNode, scale, false)
+	NetImmerse.SetNodeScale(_player, spellNode, scale, true)
+EndFunction
