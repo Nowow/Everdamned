@@ -1,40 +1,64 @@
 Scriptname DONOTINCLIDEed_test_me_script extends ActiveMagicEffect  
 
 ShaderParticleGeometry property PSGD auto
-float property FadeInTime = 1.0 auto
-float property FadeOutTime = 1.0 auto
+
+activator property FXEmptyActivator auto
+spell property ConjureFlameAtronach auto
+idle property WolfIdleWarn auto
+visualeffect property ED_Art_VFX_SummonUndead auto
 
 
 actor _player
+actor _dog
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
 	_player = akCaster
+	ScaleNode(akTarget, "NPC Head [Head]", 3.0)
 	;Debug.Trace("EdTestVar value at start: " + akCaster.getactorvalue("EdTestVar"))
 	;Debug.Trace("VampireSkill value at start: " + akCaster.getactorvalue("VampireSkill"))
 	
 	;RegisterForSingleUpdate(2.0)
-	PSGD.apply(FadeInTime)
-	ScaleNode("NPC Head [Head]", 3.0)
+	;PSGD.apply(FadeInTime)
 	
+	;_activator = _player.placeatme(FXEmptyActivator, 1)
+	;utility.wait(0.2)
+	;ConjureFlameAtronach.cast(_activator, _activator)
 	
+	;akTarget.playidle(WolfIdleWarn)
+	
+	ED_Art_VFX_SummonUndead.play(akTarget, 3.5)
+	
+	;RegisterForSingleUpdate(2.0)
 endFunction
 
 event OnUpdate()
 	;Debug.Trace("EdTestVar value at during: " + _player.getactorvalue("EdTestVar"))
 	;Debug.Trace("VampireSkill value at during: " + _player.getactorvalue("VampireSkill"))
+	
+	;debug.Trace("Everdamned TEST: activator can see player: " + _activator.haslos	)
+
 endevent
 
 
 function OnEffectFinish(Actor akTarget, Actor akCaster)
+	ScaleNode(akTarget, "NPC Head [Head]", 1.0)
 	;Debug.Trace("EdTestVar value at end: " + akCaster.getactorvalue("EdTestVar"))
 	;Debug.Trace("VampireSkill value at end: " + akCaster.getactorvalue("VampireSkill"))
 	
-	PSGD.remove(FadeOutTime)
-	ScaleNode("NPC Head [Head]", 1.0)
+	;PSGD.remove(FadeOutTime)
+	
+	;_activator.disable()
+	;_activator.delete()
+	
+	
 endFunction
 
 
-Function ScaleNode(String spellNode, Float scale)
-	NetImmerse.SetNodeScale(_player, spellNode, scale, false)
-	NetImmerse.SetNodeScale(_player, spellNode, scale, true)
+Function ScaleNode(actor akTarget, String spellNode, Float scale)
+	NetImmerse.SetNodeScale(akTarget, spellNode, scale, false)
+	NetImmerse.SetNodeScale(akTarget, spellNode, scale, true)
 EndFunction
+
+
+float property FadeInTime = 1.0 auto
+float property FadeOutTime = 1.0 auto
