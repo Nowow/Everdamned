@@ -4,6 +4,7 @@ actorbase property ED_Actor_RoyalGuardian_DeathHound auto
 referencealias Property ED_Attacker auto
 actor property playerRef auto
 spell Property ED_VampirePowersVL_RoyalGuardian_SummonDummy_Spell auto
+spell Property ED_Misc_Spell_DogAmbushKnockbackEnabled auto
 effectshader Property UnsummonDeathFXS auto
 
 ;activator property FXEmptyActivator auto
@@ -37,6 +38,7 @@ function HandleDogPlaced()
 	;utility.wait(0.1)
 	_dog.SetAngle(_dog.GetAngleX(), _dog.GetAngleY(), _dog.GetAngleZ() + _dog.GetHeadingAngle(_attacker))
 	_dog.StartCombat(_attacker)
+	_dog.DoCombatSpellApply(ED_Misc_Spell_DogAmbushKnockbackEnabled, _dog)
 	_dog.SetRestrained(false)
 	
 endfunction

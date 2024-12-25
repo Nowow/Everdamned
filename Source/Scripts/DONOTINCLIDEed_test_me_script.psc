@@ -5,15 +5,21 @@ ShaderParticleGeometry property PSGD auto
 activator property FXEmptyActivator auto
 spell property ConjureFlameAtronach auto
 idle property WolfIdleWarn auto
-visualeffect property ED_Art_VFX_SummonUndead auto
-
+visualeffect property ED_TEST_Vfx auto
+idle property ed_testidle auto
 
 actor _player
 actor _dog
 
+actor _summonedActor
+
 function OnEffectStart(Actor akTarget, Actor akCaster)
 	_player = akCaster
-	ScaleNode(akTarget, "NPC Head [Head]", 3.0)
+	debug.Trace("Test Effect started")
+	
+	SendModEvent("ed_RefreshCommandEffectDuration", "", akTarget.GetFormID() as float)
+	
+	;ScaleNode(akTarget, "NPC Head [Head]", 3.0)
 	;Debug.Trace("EdTestVar value at start: " + akCaster.getactorvalue("EdTestVar"))
 	;Debug.Trace("VampireSkill value at start: " + akCaster.getactorvalue("VampireSkill"))
 	
@@ -26,7 +32,28 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	;akTarget.playidle(WolfIdleWarn)
 	
-	ED_Art_VFX_SummonUndead.play(akTarget, 3.5)
+	
+	;ConjureFlameAtronach.Cast(_player,_player)
+
+	;debug.MessageBox(ED_SKSEnativebindings.GetProvidedSpellName(ConjureFlameAtronach))
+	;debug.MessageBox(ED_SKSEnativebindings.PapyrusNativeFunctionBinding(22233))
+	
+	;_summonedActor = ED_SKSEnativebindings.GetActiveEffectCommandedActor(self)
+	;debug.Trace("Summoned actor was the guy: " + _summonedActor)
+	;debug.Trace("Caster actor, from the oven: " + GetCasterActor())
+	;debug.Trace("Target actor, from the oven: " + GetTargetActor())
+	
+	;utility.wait(5.0)
+	;debug.Trace("WAIT FINISHED")
+	
+	;_summonedActor = ED_SKSEnativebindings.GetActiveEffectCommandedActor(self)
+	;debug.Trace("Caster actor, from the oven: " + GetCasterActor())
+	;debug.Trace("Target actor, from the oven: " + GetTargetActor())
+	;debug.Trace("Summoned actor was the guy: " + _summonedActor)
+	
+	;ED_SKSEnativebindings.IncreaseActiveEffectDuration(self, 100.0)
+	;debug.MessageBox(ED_SKSEnativebindings.GetActiveEffectCommandedActor(self))
+	
 	
 	;RegisterForSingleUpdate(2.0)
 endFunction
@@ -36,12 +63,17 @@ event OnUpdate()
 	;Debug.Trace("VampireSkill value at during: " + _player.getactorvalue("VampireSkill"))
 	
 	;debug.Trace("Everdamned TEST: activator can see player: " + _activator.haslos	)
+	debug.Trace("Current duration   : " + self.GetDuration())
+	debug.Trace("Curent time elapsed: " + self.GetTimeElapsed())
+	RegisterForSingleUpdate(2.0)
 
 endevent
 
 
 function OnEffectFinish(Actor akTarget, Actor akCaster)
-	ScaleNode(akTarget, "NPC Head [Head]", 1.0)
+
+	debug.Trace("Test Effect ended")
+	;ScaleNode(akTarget, "NPC Head [Head]", 1.0)
 	;Debug.Trace("EdTestVar value at end: " + akCaster.getactorvalue("EdTestVar"))
 	;Debug.Trace("VampireSkill value at end: " + akCaster.getactorvalue("VampireSkill"))
 	

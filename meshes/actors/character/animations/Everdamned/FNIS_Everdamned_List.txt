@@ -19,6 +19,7 @@
 ' so it's a good idea use mod specific abbrevioations for all our names
 
 b -a ed_test_idle ed_test.hkx 
+b -a ed_reanimate ed_reanimate.hkx
 
 
 ' ----------------- SEDUCTION ------------------
