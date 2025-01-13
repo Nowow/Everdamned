@@ -53,7 +53,7 @@ message property PlayerVampireFeedMessage auto
 race property VampireLordRace auto
 perk property SCS_Maelstrom_Perk auto
 formlist property VampireDiSpellist auto
-spell property SCS_VampireSpells_Vanilla_Power_Spell_VampiresSight auto
+spell property ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell auto
 armor property DLC1VampireLordArmor auto
 String property BiteStart = "BiteStart" auto
 String property TransformToHuman = "TransformToHuman" auto
@@ -190,7 +190,8 @@ function Shutdown()
 	game.EnableFastTravel(true)
 	game.SetInCharGen(false, false, false)
 	PlayerActor.RemovePerk(DLC1VampireActivationBlocker)
-	PlayerActor.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresSight)
+	
+	PlayerActor.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
 	self.UnloadSpells()
 	game.EnablePlayerControls(false, false, true, true, true, false, false, false, 1)
 	self.Stop()
@@ -238,7 +239,8 @@ function HandlePlayerLoadGame()
 endFunction
 
 function PreloadSpells()
-
+	
+	; TODO: replace with Everdamned spells, remember that they will not be levelled
 	LeveledDrainSpell.Preload()
 	LeveledRaiseDeadSpell.Preload()
 	DLC1VampiresGrip.Preload()
@@ -290,13 +292,19 @@ function StartTracking()
 	endIf
 	self.RegisterForEvents()
 	DCL1VampireLevitateStateGlobal.SetValue(1 as Float)
+	; TODO: not need dispel this spell because no such spell will be? idk
 	PlayerActor.DispelSpell(SCS_VampireSpells_Vanilla_Power_Spell_Obfuscate)
 	PlayerActor.UnequipAll()
+	
+	; TODO: when decided on DragonAtMidnight perk
 	if PlayerActor.HasPerk(SCS_PerkTree_380_Perk_VampireLord_DragonAtMidnight)
 		PlayerActor.EquipItem(DLC1ClothesVampireLordRoyalArmor as form, false, true)
 	else
 		PlayerActor.EquipItem(DLC1VampireLordArmor as form, false, true)
 	endIf
+	
+	
+	; TODO: decide whether disable hate would be a thing
 	if SCS_Mechanics_Global_DisableHate.GetValue() == 0 as Float
 		if !PlayerActor.IsInLocation(DLC1VampireCastleLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleGuildhallLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleDungeonLocation)
 			PlayerActor.SetAttackActorOnSight(true)
@@ -311,31 +319,43 @@ function StartTracking()
 		HunterFaction.SetPlayerEnemy(true)
 	endIf
 	game.SetPlayerReportCrime(false)
+	; TODO: do we need that?
 	__durationWarningTime = self.RealTimeSecondsToGameTimeDays(DurationWarningTimeSeconds)
 	__UnearthlyWillExtensionTime = self.RealTimeSecondsToGameTimeDays(UnearthlyWillExtensionTimeSeconds)
+	
 	PlayerActor.RestoreActorValue("Health", 100 as Float)
+	; TODO: part where change mortal form passives to VL passives
 	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage1)
 	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage2)
 	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage3)
 	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage4)
+	; TODO: convert levelled passives
 	PlayerActor.AddSpell(LeveledAbility, false)
+	; TODO: create vampire lord sun damage and replace it here
 	PlayerActor.AddSpell(SCS_Abilities_VampireLord_Spell_Ab_VampireLordSunDamage, false)
-	PlayerActor.AddSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresSight, false)
+	; TODO: ?? probably should already be available since vampire
+	PlayerActor.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
 	PlayerActor.AddSpell(DLC1Revert, false)
+	; TODO: convert bats
 	PlayerActor.AddSpell(DLC1VampireBats, false)
 	PlayerActor.EquipSpell((DialogueGenericVampire as vampirequestscript).LastPower, 2)
+	; TODO: main action goes here, add all new spells and perks that 
 	self.CheckPerkSpells()
+
 	if PlayerActor.HasPerk(LightFoot)
 		DLC1HasLightfoot = true
 	else
 		DLC1HasLightfoot = false
 		PlayerActor.AddPerk(LightFoot)
 	endIf
+	
 	Float currentTime = GameDaysPassed.GetValue()
+	; TODO: ??? needed?
 	Float regressTime = currentTime + self.RealTimeSecondsToGameTimeDays(StandardDurationSeconds)
 	if PlayerActor.HasPerk(DLC1UnearthlyWill)
 		regressTime += __UnearthlyWillExtensionTime
 	endIf
+	
 	PlayerVampireShiftBackTime.SetValue(regressTime)
 	PlayerActor.DispelSpell(DLC1VampireChange)
 	self.RegisterForUpdate(3.00000)
@@ -348,11 +368,13 @@ function PrepShift()
 	VampireChange.Apply(1.00000)
 	VampireIMODSound.Play(PlayerActor as objectreference)
 	game.SetInCharGen(true, true, false)
+	; TODO: activation blocker converted, check if no more work necessary
 	PlayerActor.AddPerk(DLC1VampireActivationBlocker)
 	game.SetBeastForm(true)
 	game.EnableFastTravel(false)
 	PlayerActor.SetActorValue("GrabActorOffset", 70 as Float)
 	Int Count = 0
+	; TODO: dispells werewolf and regular summons (atronachs and dead thralls). seems like unwanted behavior
 	while Count < VampireDiSpellist.GetSize()
 		spell Gone = VampireDiSpellist.GetAt(Count) as spell
 		if Gone != none
@@ -360,6 +382,7 @@ function PrepShift()
 		endIf
 		Count += 1
 	endWhile
+	
 	game.DisablePlayerControls(false, false, true, false, false, false, false, false, 1)
 	game.ForceThirdPerson()
 	game.ShowFirstPersonGeometry(false)
@@ -450,6 +473,7 @@ function EstablishLeveledSpells()
 		endIf
 		LeveledRaiseDeadSpell = SCS_VampireSpells_VampireLord_Spell_Spell00_LordsServant_05
 	endIf
+	; TODO: convert levelled passive
 	if PlayerLevel <= 10
 		LeveledAbility = DLC1PlayerVampireLvl10AndBelowAbility
 	elseIf PlayerLevel <= 15
