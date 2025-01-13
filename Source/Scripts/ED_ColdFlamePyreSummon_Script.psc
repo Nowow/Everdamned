@@ -1,9 +1,10 @@
 Scriptname ED_ColdFlamePyreSummon_Script extends activemagiceffect  
 
-spell property ED_ColdFlame_ConjureAtronach_Spell auto
 effectshader property ED_Art_Shader_ColdFlameBodyPyreDisintegrate3 auto
 effectshader property ED_Art_Shader_ColdFlameAtronachFlameDeath auto
 activator property DefaultAshPile1 auto
+
+spell[] property SummonSpells auto
 
 event oneffectstart(actor akTarget, actor akCaster)
 	
@@ -23,7 +24,10 @@ event oneffectstart(actor akTarget, actor akCaster)
 	
 	utility.wait(2.1)
 	
-	akCaster.DoCombatSpellApply(ED_ColdFlame_ConjureAtronach_Spell, akCaster)
+	spell SummonToCast = SummonSpells[utility.randomint(0, SummonSpells.length - 1)]
+	akCaster.DoCombatSpellApply(SummonToCast, akCaster)
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateEnd)
 endevent
 
+;spell property ED_ColdFlame_ConjureAtronach_Spell auto
+;spell property ED_VampireSpellsVL_ConjureGargoyleUncap_Spell auto
