@@ -1,12 +1,15 @@
 Scriptname DONOTINCLIDEed_test_me_script extends ActiveMagicEffect  
 
 ShaderParticleGeometry property PSGD auto
+String property LandStart = "LandStart" auto
 
 activator property FXEmptyActivator auto
 spell property ConjureFlameAtronach auto
 idle property WolfIdleWarn auto
 visualeffect property ED_TEST_Vfx auto
 idle property ed_testidle auto
+spell property SCS_VampireSpells_VampireLord_Spell_Power04_Tremble auto
+actor property playerRef auto
 
 actor _player
 actor _dog
@@ -17,7 +20,9 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	_player = akCaster
 	debug.Trace("Test Effect started")
 	
-	SendModEvent("ed_RefreshCommandEffectDuration", "", akTarget.GetFormID() as float)
+	;SendModEvent("ed_RefreshCommandEffectDuration", "", akTarget.GetFormID() as float)
+	RegisterForSingleUpdate(10.0)
+	
 	
 	;ScaleNode(akTarget, "NPC Head [Head]", 3.0)
 	;Debug.Trace("EdTestVar value at start: " + akCaster.getactorvalue("EdTestVar"))
@@ -58,6 +63,16 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	;RegisterForSingleUpdate(2.0)
 endFunction
 
+function OnAnimationEvent(objectreference akActor, String akEventName)
+
+	debug.Trace("Everdamned DEBUG: test effect script caught animevent")
+	if akEventName == LandStart
+		SCS_VampireSpells_VampireLord_Spell_Power04_Tremble.Cast(playerRef, playerRef)
+	endif
+		
+		
+endfunction
+
 event OnUpdate()
 	;Debug.Trace("EdTestVar value at during: " + _player.getactorvalue("EdTestVar"))
 	;Debug.Trace("VampireSkill value at during: " + _player.getactorvalue("VampireSkill"))
@@ -65,7 +80,9 @@ event OnUpdate()
 	;debug.Trace("Everdamned TEST: activator can see player: " + _activator.haslos	)
 	debug.Trace("Current duration   : " + self.GetDuration())
 	debug.Trace("Curent time elapsed: " + self.GetTimeElapsed())
-	RegisterForSingleUpdate(2.0)
+	;RegisterForSingleUpdate(2.0)
+	
+	self.RegisterForAnimationEvent(playerRef, LandStart)
 
 endevent
 
