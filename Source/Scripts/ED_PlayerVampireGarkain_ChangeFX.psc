@@ -17,10 +17,12 @@ Event OnEffectStart(Actor Target, Actor Caster)
 		; Add the tranformation wolf skin Armor effect 
 		; Target.equipitem(VampireSkinFXArmor,False,True)
 		
-        RegisterForAnimationEvent(Target, "SetRace")
-        Target.PlayIdle(IdleVampireTransformation)
-        Utility.Wait(10)
-        TransformIfNecessary(Target)
+			
+			RegisterForAnimationEvent(Target, "SetRace")
+			Target.PlayIdle(IdleVampireTransformation)
+			Utility.Wait(10)
+			TransformIfNecessary(Target)
+        
     endif
 EndEvent
 

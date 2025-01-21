@@ -18,7 +18,7 @@ Event OnInit()
 endevent
 
 Event OnPlayerLoadGame()
-	Debug.Trace("Everdamned INFO: Tremble Cooldown alias script OnPlayerLoadGame() called ")
+	;Debug.Trace("Everdamned INFO: Tremble Cooldown alias script OnPlayerLoadGame() called ")
 	self.RegisterForAnimationEvent(casterRef, LandStart)
 	if casterRef.GetRace() == DLC1VampireBeastRace
 		Debug.Trace("Everdamned DEBUG: detected race after load was Vampire Lord")
@@ -27,7 +27,7 @@ Event OnPlayerLoadGame()
 EndEvent
 
 Event OnRaceSwitchComplete()
- 	Debug.Trace("Everdamned INFO: Tremble Cooldown alias script OnRaceSwitchComplete() called ")
+ 	;Debug.Trace("Everdamned INFO: Tremble Cooldown alias script OnRaceSwitchComplete() called ")
 	if casterRef.GetRace() == DLC1VampireBeastRace
 		Debug.Trace("Everdamned DEBUG: detected race after race switch was Vampire Lord")
 		self.RegisterForAnimationEvent(casterRef, LandStart)
@@ -36,9 +36,9 @@ EndEvent
 
 function OnAnimationEvent(objectreference akActor, String akEventName)
 
-	debug.Trace("Everdamned DEBUG: Tremble Cooldown alias script caught animevent")
-	debug.Trace(akEventName)
-	debug.Trace(casterRef.hasperk(ED_PerkTreeVL_Tremble_Perk))
+	;debug.Trace("Everdamned DEBUG: Tremble Cooldown alias script caught animevent")
+	;debug.Trace(akEventName)
+	;debug.Trace(casterRef.hasperk(ED_PerkTreeVL_Tremble_Perk))
 	
 	;This function is unreliable the first time it is called after a certain amount of time has passed
 	casterRef.GetCombatState()
