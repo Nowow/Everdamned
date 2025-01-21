@@ -6,12 +6,12 @@ endevent
 
 Event OnPlayerLoadGame()
 	Debug.Trace("Everdamned INFO: Feed Manager player alias OnPlayerLoadGame() called ")
-	ED_FeedManager_Quest.RegisterFeedEvents()
+	(GetOwningQuest() as ED_FeedManager_Script).RegisterFeedEvents()
 EndEvent
 
 Event OnRaceSwitchComplete()
  	Debug.Trace("Everdamned INFO: Feed Manager player alias OnRaceSwitchComplete() called ")
-	ED_FeedManager_Quest.RegisterFeedEvents()
+	(GetOwningQuest() as ED_FeedManager_Script).RegisterFeedEvents()
 EndEvent
 
 actor _killTarget

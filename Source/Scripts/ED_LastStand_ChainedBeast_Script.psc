@@ -35,7 +35,7 @@ function OnEnterBleedout()
 		ED_RezSound.Play(PlayerRef)
 		ED_BeingVampire_Ab_LastStandFrenzy_Message.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
 		;SCS_Imod.Apply(1.00000)
-		
+		PlayerVampireQuest.VampireStatus = 4
 		PlayerVampireQuest.VampireProgression(PlayerRef, 4)
 		
 		PlayerRef.DispelSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell)

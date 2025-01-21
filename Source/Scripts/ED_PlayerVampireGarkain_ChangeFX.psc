@@ -8,6 +8,7 @@ Explosion Property FXVampChangeExplosion auto
 
 Quest Property ED_PlayerVampireGarkainQuest auto
 
+bool __transforming
 
 Event OnEffectStart(Actor Target, Actor Caster)
 ;     Debug.Trace("VAMPIRE: Starting change anim...")
@@ -31,6 +32,11 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 EndEvent
 
 Function TransformIfNecessary(Actor Target)
+	if __transforming
+		return
+	endif
+	__transforming = true
+	
 	if (Target == None)
 ; 		Debug.Trace("VAMPIRE: Trying to transform something that's not an actor; bailing out.", 2)
 		return

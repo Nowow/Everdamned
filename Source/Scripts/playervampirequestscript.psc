@@ -31,33 +31,40 @@ imagespacemodifier property VampireTransformDecreaseISMD auto
 
 spell property ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell auto
 spell property SCS_Abilities_Reward_Spell_SlowerHunger auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc auto
-spell property SCS_VampireSpells_Vanilla_Power_Spell_BloodCauldron auto
-spell property SCS_VampireSpells_Reward_Power_Spell_VampiresCall auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage3 auto
-spell property SCS_VampireSpells_Reward_Power_Spell_LamaesShroud auto
-spell property SCS_Abilities_Reward_Spell_UltimatePredator_Ab auto
-spell property SCS_VampireSpells_Vanilla_Power_Spell_BloodIsPower auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage5 auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2 auto
-spell property SCS_VampireSpells_Vanilla_Power_Spell_Flaywind auto
-spell property SCS_VampireSpells_Vanilla_Power_Spell_VampiresCommand2 auto
-spell property SCS_Abilities_StrongBlood_Spell_04_Ab auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage1 auto
-spell property SCS_VampireSpells_Vanilla_Power_Spell_NewObfuscate auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage4 auto
-spell property SCS_VampireSpells_Vanilla_Power_Spell_VampiresWill auto
-spell property SCS_VampireSpells_Vanilla_Power_Spell_VampiresSight auto
-spell property SCS_VampireSpells_Vanilla_Power_Spell_Nightwalk2 auto
 
+;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N auto
+;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc auto
+;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2 auto
+;spell property SCS_VampireSpells_Vanilla_Power_Spell_BloodCauldron auto
+
+;spell property SCS_VampireSpells_Reward_Power_Spell_VampiresCall auto
+;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage3 auto
+;spell property SCS_VampireSpells_Reward_Power_Spell_LamaesShroud auto
+;spell property SCS_Abilities_Reward_Spell_UltimatePredator_Ab auto
+;spell property SCS_VampireSpells_Vanilla_Power_Spell_BloodIsPower auto
+
+;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage5 auto
+
+;spell property SCS_VampireSpells_Vanilla_Power_Spell_Flaywind auto
+;spell property SCS_VampireSpells_Vanilla_Power_Spell_VampiresCommand2 auto
+
+;spell property SCS_Abilities_StrongBlood_Spell_04_Ab auto
+;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage1 auto
+
+;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage4 auto
+spell property ED_VampirePowers_Pw_Obfuscate_Spell auto
+
+spell property ED_VampirePowers_Pw_VampiresWill_Spell auto
+spell property ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell auto
+;spell property SCS_VampireSpells_Vanilla_Power_Spell_Nightwalk2 auto
+
+; TODO: add hunger drop message
 message property SCS_Help_HungerStage2 auto
 message property SCS_Mechanics_Message_VampireProgression auto
+; TODO: add feed message
 message property SCS_Mechanics_Message_VampireFeed auto
 
-globalvariable property SCS_Mechanics_Global_HasLiftAndDrop auto
-globalvariable property SCS_Mechanics_Global_Wassail_NerfAmount auto
-globalvariable property SCS_Mechanics_Global_Wassail_Current auto
+;globalvariable property SCS_Mechanics_Global_HasLiftAndDrop auto
 
 scs_futil_script property SCS_Main500_Quest auto
 
@@ -85,8 +92,8 @@ function OnUpdateGameTime()
 endFunction
 
 ; this function exists because dont want to change VampireFeed() interface to avoid compatibility issues
-float _defaultHPtoBeEaten = 100.0 ; for compatibility, a default amount for feeds that do not know feed target
-float _hpToBeEaten = 100.0
+float _defaultHPtoBeEaten = 20.0 ; for compatibility, a default amount for feeds that do not know feed target
+float _hpToBeEaten = 0.0
 float _hpCacheVal
 float property hpToBeEaten hidden
 	
@@ -190,21 +197,21 @@ function VampireCure(actor Player)
 	Player.RemoveSpell(ED_BeingVampire_Ab_Status_Stage4_Spell)
 	
 	Player.RemoveSpell(ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell)
-	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresWill)
-	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_Flaywind)
-	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_NewObfuscate)
-	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_BloodIsPower)
-	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresCommand2)
-	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_Nightwalk2)
-	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_BloodCauldron)
+	Player.RemoveSpell(ED_VampirePowers_Pw_VampiresWill_Spell)
+	;Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_Flaywind)
+	Player.RemoveSpell(ED_VampirePowers_Pw_Obfuscate_Spell)
+	;Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_BloodIsPower)
+	;Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresCommand2)
+	;Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_Nightwalk2)
+	;Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_BloodCauldron)
 	if !CureRace
 		Player.SetRace(NordRace)
 	else
 		Player.SetRace(CureRace)
 	endIf
 	PlayerIsVampire.SetValue(0 as Float)
-	Player.DispelSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresSight)
-	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresSight)
+	Player.DispelSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
+	Player.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
 	
 	;SCS_Main500_Quest.TearDownRewardSpells()
 	
@@ -306,6 +313,8 @@ endFunction
 
 function VampireProgression(actor Player, Int VampireStage)
 
+	; TODO: move all that somewhere out of here. maybe leave abilities and move spells elsewhere
+	; TODO: make it so AgeOrStageChange only triggers when actually stages are changed, not when called on the same stage
 	;removing permanent passives for some reason, maybe because of the way progession is used in vanilla scripts
 	Player.RemoveSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell)
 	Player.RemoveSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell)
@@ -313,6 +322,7 @@ function VampireProgression(actor Player, Int VampireStage)
 	; for reference if need apply same mechanic
 	;Bool GiveBackMyth = false
 	
+	debug.Trace("Everdamned DEBUG: VampireProgression was called for stage " + VampireStage)
 	
 	if VampireStage == 2
 		if VampireStatus == 0
@@ -336,10 +346,12 @@ function VampireProgression(actor Player, Int VampireStage)
 		Player.RemoveSpell(ED_BeingVampire_Ab_Status_Stage1_Spell)
 		Player.AddSpell(ED_BeingVampire_Ab_Status_Stage2_Spell, false)
 		
+		Player.RemoveSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell)
+		
 		ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage, ED_VampireAge.GetValue() as int, 0.0)
 		
 		;Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
-		;Player.AddSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresWill, false)
+		;Player.AddSpell(ED_VampirePowers_Pw_VampiresWill_Spell, false)
 		;Player.RemoveSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell
 		; wassail
 		;Player.AddSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N, false)
@@ -377,10 +389,6 @@ function VampireProgression(actor Player, Int VampireStage)
 		ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage, ED_VampireAge.GetValue() as int, 0.0)
 		
 		;Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
-		
-		
-		
-		
 		
 		
 	elseIf VampireStage == 4
@@ -427,7 +435,9 @@ function VampireProgression(actor Player, Int VampireStage)
 		Player.AddSpell(ED_BeingVampire_Vanilla_Ab_StillHeart_Spell_WasNightstalkersFootsteps, false)
 		Player.AddSpell(ED_BeingVampire_Ab_Stalker_Spell, false)
 		Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
+		Player.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
 		Player.AddSpell(ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell, true)
+		
 		
 		;;
 		
@@ -453,6 +463,7 @@ function VampireProgression(actor Player, Int VampireStage)
 		
 		Player.AddSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell, false)
 		
+		; i dont remember why do I do that here and not in VampireFeed but there was some reason
 		ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage, ED_VampireAge.GetValue() as int, hpToBeEaten)
 		
 
@@ -460,14 +471,14 @@ function VampireProgression(actor Player, Int VampireStage)
 		; now a perk
 		;Player.AddSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage1, false)
 
-		;Player.AddSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresWill, false)		
+		;Player.AddSpell(ED_VampirePowers_Pw_VampiresWill_Spell, false)		
 		;Player.AddSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2, false)
 		;Player.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N)
 		;Player.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage3)
 		;Player.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage4)
 		;if !Player.HasSpell(SCS_Abilities_Reward_Spell_UltimatePredator_Ab as form)
 		;	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_BloodIsPower)
-		;	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_NewObfuscate)
+		;	Player.RemoveSpell(ED_VampirePowers_Pw_Obfuscate_Spell)
 		;	Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_Flaywind)
 		;endIf
 		

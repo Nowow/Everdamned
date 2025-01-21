@@ -21,7 +21,6 @@ Spell Property ED_VampirePowers_GarkainBeast_lvl40_Ab auto
 Spell Property ED_VampirePowers_GarkainBeast_lvl45_Ab auto
 Spell Property ED_VampirePowers_GarkainBeast_lvl50Plus_Ab auto
 
-
 Spell Property FeedBoost auto
 Spell property BleedingFXSpell auto
 {This Spell is for making the target of feeding bleed.}
@@ -35,18 +34,18 @@ bool Property Untimed auto
 FormList Property CrimeFactions auto
 
 spell property SCS_VampireSpells_Vanilla_Power_Spell_Obfuscate auto
-globalvariable property SCS_Mechanics_Global_DisableHate auto
+globalvariable property ED_Mechanics_Global_DisableHate auto
 location property DLC1VampireCastleLocation auto
 location property DLC1VampireCastleGuildhallLocation auto
 location property DLC1VampireCastleDungeonLocation auto
 faction property DLC1PlayerVampireLordFaction auto
 formlist property DLC1VampireHateFactions auto
 faction property HunterFaction auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage1 auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage2 auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage3 auto
-spell property SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage4 auto
-spell property SCS_Abilities_VampireLord_Spell_Ab_VampireLordSunDamage auto
+spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage1_Spell auto
+spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage2_Spell auto
+spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell auto
+spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell auto
+spell property ED_BeingVampireVL_Vanilla_Ab_SunDamage auto
 spell property ED_VampirePowers_GarkainBeast_Change auto
 spell property ED_VampirePowers_GarkainBeast_Revert auto
 globalvariable property DLC1VampireMaxPerks auto
@@ -62,11 +61,22 @@ effectshader property DLC1VampireChangeBack02FXS auto
 
 formlist property ED_VampirePowers_GarkainBeast_Powers_List auto
 formlist property DLC1VampireSpellsPowers auto
+perk property ED_PerkTree_General_40_EmbraceTheBeast_Perk auto
+message property ED_Mechanics_Garkain_ThirstQuenched_Message auto
+
+globalvariable property pDLC1nVampireRingBeast auto
+globalvariable property pDLC1nVampireRingErudite auto
+globalvariable property pDLC1nVampireNecklaceBats auto
+globalvariable property pDLC1nVampireNecklaceGargoyle auto
+armor property gargNecklace auto
+armor property batNecklace auto
+armor property beastRing auto
+armor property eruditeRing auto
+
+actor property playerRef auto
+
 
 DefaultObjectManager kDefObjMan
-
-spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc auto
-
 
 bool __tryingToShiftBack = false
 bool __shiftingBack = false
@@ -83,7 +93,7 @@ Function SetForm(string key, Form newForm) native
 Function PrepShift()
 
     Debug.Trace("EVERDAMNED: GARKAIN: Prepping shift...")
-    Actor player = Game.GetPlayer()
+    
 
     ; sets up the UI restrictions
     Game.SetBeastForm(True)
@@ -91,7 +101,7 @@ Function PrepShift()
 
     ; screen effect
     WerewolfChange.Apply()
-    WerewolfIMODSound.Play(player)
+    WerewolfIMODSound.Play(playerRef)
 
     ; get rid of your summons
     ;int count = 0
@@ -121,8 +131,8 @@ Function InitialShift()
 	
 	; using Vampire Lord setup to track player original race
 	
-	Actor PlayerRef = Game.GetPlayer()
-	Race currRace = PlayerRef.GetRace()
+	
+	Race currRace = playerRef.GetRace()
 	
 	if (currRace != ED_VampireGarkainBeastRace)
 		Debug.Trace("EVERDAMNED: GARKAIN: Setting original player race before transform.")
@@ -140,7 +150,7 @@ Function InitialShift()
 	endif
    
     ; actual switch
-    PlayerRef.SetRace(ED_VampireGarkainBeastRace)
+    playerRef.SetRace(ED_VampireGarkainBeastRace)
 EndFunction
 
 Function StartTracking()
@@ -155,35 +165,33 @@ Function StartTracking()
 	
 	; TODO: vampire rings and trinkets
 	
-	;if PlayerActor.IsEquipped(beastRing as form)
-	;	pDLC1nVampireRingBeast.SetValue(1 as Float)
-	;endIf
-	;if PlayerActor.IsEquipped(eruditeRing as form)
-	;	pDLC1nVampireRingErudite.SetValue(1 as Float)
-	;endIf
-	;if PlayerActor.IsEquipped(batNecklace as form)
-	;	pDLC1nVampireNecklaceBats.SetValue(1 as Float)
-	;endIf
-	;if PlayerActor.IsEquipped(gargNecklace as form)
-	;	pDLC1nVampireNecklaceGargoyle.SetValue(1 as Float)
-	;endIf 
-    
-	Actor PlayerActor = Game.GetPlayer()
+	if playerRef.IsEquipped(beastRing as form)
+		pDLC1nVampireRingBeast.SetValue(1 as Float)
+	endIf
+	if playerRef.IsEquipped(eruditeRing as form)
+		pDLC1nVampireRingErudite.SetValue(1 as Float)
+	endIf
+	if playerRef.IsEquipped(batNecklace as form)
+		pDLC1nVampireNecklaceBats.SetValue(1 as Float)
+	endIf
+	if playerRef.IsEquipped(gargNecklace as form)
+		pDLC1nVampireNecklaceGargoyle.SetValue(1 as Float)
+	endIf 
 	
-	kDefObjMan.SetForm("RIVR", ED_VampireGarkainBeastRace)
-	kDefObjMan.SetForm("RIVS", ED_VampirePowers_GarkainBeast_Powers_List)
+	if playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)
+		debug.Trace("Everdamned DEBUG: player has EmbraceTheBeast perk, changing default objects to allow perk menu and power selection")
+		kDefObjMan.SetForm("RIVR", ED_VampireGarkainBeastRace)
+		kDefObjMan.SetForm("RIVS", ED_VampirePowers_GarkainBeast_Powers_List)
+	endif
 
     Game.GetPlayer().UnequipAll()
-    ;Game.GetPlayer().EquipItem(WolfSkinFXArmor, False, True)
 	
-	PlayerActor.DispelSpell(SCS_VampireSpells_Vanilla_Power_Spell_Obfuscate)
-	
-	if SCS_Mechanics_Global_DisableHate.GetValue() == 0 as Float
-		if !PlayerActor.IsInLocation(DLC1VampireCastleLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleGuildhallLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleDungeonLocation)
-			PlayerActor.SetAttackActorOnSight(true)
+	if ED_Mechanics_Global_DisableHate.GetValue() == 0 as Float
+		if !playerRef.IsInLocation(DLC1VampireCastleLocation) && !playerRef.IsInLocation(DLC1VampireCastleGuildhallLocation) && !playerRef.IsInLocation(DLC1VampireCastleDungeonLocation)
+			playerRef.SetAttackActorOnSight(true)
 			game.SendWereWolfTransformation()
 		endIf
-		PlayerActor.AddToFaction(DLC1PlayerVampireLordFaction)
+		playerRef.AddToFaction(DLC1PlayerVampireLordFaction)
 		Int i = 0
 		while i < DLC1VampireHateFactions.GetSize()
 			(DLC1VampireHateFactions.GetAt(i) as faction).SetPlayerEnemy(true)
@@ -193,13 +201,14 @@ Function StartTracking()
 	endIf
 	game.SetPlayerReportCrime(false)
 	
-	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage1)
-	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage2)
-	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage3)
-	PlayerActor.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_SunDamage_Stage4)
-	PlayerActor.AddSpell(SCS_Abilities_VampireLord_Spell_Ab_VampireLordSunDamage, false)
-	PlayerActor.DispelSpell(ED_VampirePowers_GarkainBeast_Change)
-	PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_Revert, false)
+	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage1_Spell)
+	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage2_Spell)
+	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell)
+	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell)
+	playerRef.AddSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage, false)
+	
+	playerRef.DispelSpell(ED_VampirePowers_GarkainBeast_Change)
+	playerRef.AddSpell(ED_VampirePowers_GarkainBeast_Revert, false)
 
     ; unequip magic
     Spell left = Game.GetPlayer().GetEquippedSpell(0)
@@ -207,18 +216,18 @@ Function StartTracking()
     Spell power = Game.GetPlayer().GetEquippedSpell(2)
     Shout voice = Game.GetPlayer().GetEquippedShout()
     if (left != None)
-        PlayerActor.UnequipSpell(left, 0)
+        playerRef.UnequipSpell(left, 0)
     endif
     if (right != None)
-        PlayerActor.UnequipSpell(right, 1)
+        playerRef.UnequipSpell(right, 1)
     endif
     if (power != None)
-        PlayerActor.UnequipSpell(power, 2)
+        playerRef.UnequipSpell(power, 2)
     else
 ;         Debug.Trace("EVERDAMNED: GARKAIN:No power equipped.")
     endif
     if (voice != None)
-        PlayerActor.UnequipShout(voice)
+        playerRef.UnequipShout(voice)
     else
 ;         Debug.Trace("EVERDAMNED: GARKAIN:No shout equipped.")
     endif
@@ -226,41 +235,31 @@ Function StartTracking()
 
 
     ; and some rad claws
-    int playerLevel = PlayerActor.GetLevel()
+    int playerLevel = playerRef.GetLevel()
     if     (playerLevel <= 10)
-        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl10_Ab, false)
+        playerRef.AddSpell(ED_VampirePowers_GarkainBeast_lvl10_Ab, false)
     elseif (playerLevel <= 15)
-        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl15_Ab, false)
+        playerRef.AddSpell(ED_VampirePowers_GarkainBeast_lvl15_Ab, false)
     elseif (playerLevel <= 20)
-        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl20_Ab, false)
+        playerRef.AddSpell(ED_VampirePowers_GarkainBeast_lvl20_Ab, false)
     elseif (playerLevel <= 25)
-        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl25_Ab, false)
+        playerRef.AddSpell(ED_VampirePowers_GarkainBeast_lvl25_Ab, false)
     elseif (playerLevel <= 30)
-        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl30_Ab, false)
+        playerRef.AddSpell(ED_VampirePowers_GarkainBeast_lvl30_Ab, false)
     elseif (playerLevel <= 35)
-        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl35_Ab, false)
+        playerRef.AddSpell(ED_VampirePowers_GarkainBeast_lvl35_Ab, false)
     elseif (playerLevel <= 40)
-        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl40_Ab, false)
+        playerRef.AddSpell(ED_VampirePowers_GarkainBeast_lvl40_Ab, false)
     elseif (playerLevel <= 45)
-        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl45_Ab, false)
+        playerRef.AddSpell(ED_VampirePowers_GarkainBeast_lvl45_Ab, false)
     else
-        PlayerActor.AddSpell(ED_VampirePowers_GarkainBeast_lvl50Plus_Ab, false)
+        playerRef.AddSpell(ED_VampirePowers_GarkainBeast_lvl50Plus_Ab, false)
     endif
 
-
-
-;     Debug.Trace("EVERDAMNED: GARKAIN:Current day -- " + currentTime)
-;     Debug.Trace("EVERDAMNED: GARKAIN:Player will turn back at day " + regressTime)
-
-    ; increment stats
-    ;Game.IncrementStat("Werewolf Transformations")
-
-    ; set us up to check when we turn back
-    ;RegisterForUpdate(5)
 	
 	; to catch Brutalize execution, because not all button activation do actually play the animation
-	RegisterForAnimationEvent(PlayerActor, "KillMoveStart")
-	RegisterForAnimationEvent(PlayerActor, "SoundPlay.NPCWerewolfFeedingKill")
+	;RegisterForAnimationEvent(playerRef, "KillMoveStart")
+	RegisterForAnimationEvent(playerRef, "SoundPlay.NPCWerewolfFeedingKill")
 	
     SetStage(10) ; we're done with the transformation handling
 EndFunction
@@ -271,7 +270,7 @@ Function Feed(Actor victim)
     
 ;     Debug.Trace("EVERDAMNED: GARKAIN:default newShiftTime = " + GameTimeDaysToRealTimeSeconds(newShiftTime) + ", __feedExtensionTime = " + GameTimeDaysToRealTimeSeconds(__feedExtensionTime))
     Debug.Trace("EVERDAMNED: GARKAIN: FEEEEEEEED")
-    Game.GetPlayer().PlayIdle(SpecialFeeding)
+    playerRef.PlayIdle(SpecialFeeding)
     
     ;This is for adding a spell that simulates bleeding
     BleedingFXSpell.Cast(victim,victim)
@@ -280,13 +279,36 @@ Function Feed(Actor victim)
 	;PlayerWerewolfFeedMessage.Show()
 	;FeedBoost.Cast(Game.GetPlayer())
 	; victim.SetActorValue("Variable08", 100)
-
-    SetStage(10)
+	if !(playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)) && GetStage() < 80
+		debug.Trace("Everdamned INFO: Untamed Garkain just fed on corpse, reverting to mortal when out of combat")
+		Message.ResetHelpMessage("ed_garkain_thirstquenched")
+		ED_Mechanics_Garkain_ThirstQuenched_Message.ShowAsHelpMessage("ed_garkain_thirstquenched", 3.0, 1.0, 1)
+		SetStage(80)
+	else
+		SetStage(10)
+	endif
 EndFunction
+
+; called from stage 80
+function ShiftBackWhenOutOfCombat()
+	if !(playerRef.isincombat())
+		debug.Trace("Everdamned DEBUG: ShiftBackWhenOutOfCombat called to revert from Garkain, but player in combat")
+		ED_VampirePowers_GarkainBeast_Revert.Cast(playerRef, playerRef)
+	else
+		debug.Trace("Everdamned INFO: ShiftBackWhenOutOfCombat called to revert from Garkain, out of combat, commencing revert")
+		RegisterForSingleUpdate(10.0)
+	endif 
+endfunction
+
+Event OnUpdate()
+	if GetStage() == 80
+		ShiftBackWhenOutOfCombat()
+	endif
+EndEvent
 
 function Revert()
 
-	Debug.Trace("EVERDAMNED: GARKAIN: Garkain quest REVERT got called.")
+	Debug.Trace("Everdamned DEBUG: Garkain quest REVERT got called.")
 	
 	if game.QueryStat("NumVampirePerks") as Float >= DLC1VampireMaxPerks.value
 		game.AddAchievement(58)
@@ -297,7 +319,7 @@ endFunction
 
 ; called from stage 20
 Function WarnPlayer()
-    Debug.Trace("EVERDAMNED: GARKAIN: Player about to transform back.")
+    Debug.Trace("Everdamned DEBUG: Player about to transform back.")
     WerewolfWarn.Apply()
 EndFunction
 
@@ -326,18 +348,17 @@ Function ActuallyShiftBackIfNecessary()
 
     Debug.Trace("EVERDAMNED: GARKAIN: Player returning to normal.")
 	
-	Actor PlayerActor = Game.GetPlayer()
-	
 	; screen effect
     ;WerewolfChange.Apply()
-    ;WerewolfIMODSound.Play(PlayerActor)
+    ;WerewolfIMODSound.Play(playerRef)
 	 
-	PlayerActor.GetActorBase().SetInvulnerable(true)
-	PlayerActor.SetGhost(true)
+	playerRef.GetActorBase().SetInvulnerable(true)
+	playerRef.SetGhost(true)
     Game.SetInCharGen(true, true, false)
 	
 
-    UnRegisterForAnimationEvent(PlayerActor, "KillMoveStart")
+    UnRegisterForAnimationEvent(playerRef, "KillMoveStart")
+	UnRegisterForAnimationEvent(playerRef, "SoundPlay.NPCWerewolfFeedingKill")
     UnRegisterForUpdate() ; just in case
 
     if (Game.GetPlayer().IsDead())
@@ -346,23 +367,21 @@ Function ActuallyShiftBackIfNecessary()
     endif
 	
 	VampireChange.Apply(1.00000)
-	VampireIMODSound.Play(PlayerActor as objectreference)
-	;DLC1VampireChangeBackFXS.Play(PlayerActor as objectreference, 5.0000)
+	VampireIMODSound.Play(playerRef as objectreference)
+	;DLC1VampireChangeBackFXS.Play(playerRef as objectreference, 5.0000)
 	
 	;;; REMOVE SPELLS
-	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl10_Ab)
-	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl15_Ab)
-	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl20_Ab)
-	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl25_Ab)
-	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl30_Ab)
-	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl35_Ab)
-	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl40_Ab)
-	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl45_Ab)
-	playerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl50Plus_Ab)
-	PlayerActor.DispelSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc)
-	;PlayerActor.RemoveSpell(ED_VampirePowers_GarkainBeast_Revert)
-	;PlayerActor.DispelSpell(ED_VampirePowers_GarkainBeast_Revert)
-    ;Game.GetPlayer().RemoveItem(WolfSkinFXArmor, 1, True)
+	playerRef.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl10_Ab)
+	playerRef.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl15_Ab)
+	playerRef.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl20_Ab)
+	playerRef.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl25_Ab)
+	playerRef.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl30_Ab)
+	playerRef.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl35_Ab)
+	playerRef.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl40_Ab)
+	playerRef.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl45_Ab)
+	playerRef.RemoveSpell(ED_VampirePowers_GarkainBeast_lvl50Plus_Ab)
+	
+	playerRef.RemoveSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage)
 
     ; make sure your health is reasonable before turning you back
     float currHealth = Game.GetPlayer().GetAV("health")
@@ -374,22 +393,22 @@ Function ActuallyShiftBackIfNecessary()
     ; change you back
 	DLC1VampireTrackingQuest vts = (DLC1TrackingQuest as DLC1VampireTrackingQuest)
 	Race originalRace = vts.PlayerRace
-    Debug.Trace("EVERDAMNED: GARKAIN: Setting race " + originalRace + " on " + PlayerActor)
+    Debug.Trace("EVERDAMNED: GARKAIN: Setting race " + originalRace + " on " + playerRef)
 	utility.Wait(3)
-    PlayerActor.SetRace(originalRace)
+    playerRef.SetRace(originalRace)
 	
-	PlayerVampireQuest.VampireProgression(PlayerActor, PlayerVampireQuest.VampireStatus)
-	;DLC1VampireChangeBackFXS.Stop(PlayerActor as objectreference)
-	;DLC1VampireChangeBack02FXS.Play(PlayerActor as objectreference, 0.100000)
+	PlayerVampireQuest.VampireProgression(playerRef, PlayerVampireQuest.VampireStatus)
+	;DLC1VampireChangeBackFXS.Stop(playerRef as objectreference)
+	;DLC1VampireChangeBack02FXS.Play(playerRef as objectreference, 0.100000)
 	
-	PlayerActor.RemoveFromFaction(DLC1PlayerVampireLordFaction)
+	playerRef.RemoveFromFaction(DLC1PlayerVampireLordFaction)
 	HunterFaction.SetPlayerEnemy(false)
-	if !PlayerActor.IsInLocation(DLC1VampireCastleLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleGuildhallLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleDungeonLocation)
+	if !playerRef.IsInLocation(DLC1VampireCastleLocation) && !playerRef.IsInLocation(DLC1VampireCastleGuildhallLocation) && !playerRef.IsInLocation(DLC1VampireCastleDungeonLocation)
 		game.SendWereWolfTransformation()
 	endIf
 	
-	if PlayerVampireQuest.VampireStatus < 4 || SCS_Mechanics_Global_DisableHate.GetValue() == 1 as Float || PlayerActor.HasSpell(SCS_Abilities_Reward_Spell_NoHate as form)
-		PlayerActor.SetAttackActorOnSight(false)
+	if PlayerVampireQuest.VampireStatus < 4 || ED_Mechanics_Global_DisableHate.GetValue() == 1 as Float || playerRef.HasSpell(SCS_Abilities_Reward_Spell_NoHate as form)
+		playerRef.SetAttackActorOnSight(false)
 		Int i = 0
 		while i < DLC1VampireHateFactions.GetSize()
 			(DLC1VampireHateFactions.GetAt(i) as faction).SetPlayerEnemy(false)
@@ -399,7 +418,6 @@ Function ActuallyShiftBackIfNecessary()
 	
     ; and you're now recognized
     Game.SetPlayerReportCrime(true)
-	
 
     ; give the set race event a chance to come back, otherwise shut us down
     Utility.Wait(5)
@@ -412,8 +430,6 @@ Function Shutdown()
     endif
 
     __shuttingDown = true
-	
-	Actor playerRef = Game.GetPlayer()
 	
 	kDefObjMan.SetForm("RIVR", DLC1VampireBeastRace)
 	kDefObjMan.SetForm("RIVS", DLC1VampireSpellsPowers)
@@ -432,29 +448,32 @@ Function Shutdown()
 EndFunction
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
-    if (asEventName == "KillMoveStart")
+    ;if (asEventName == "KillMoveStart")
 		;debug.Notification("Triggered KillMoveStart animation event!")
-		__killmoveStarted = true
+		;__killmoveStarted = true
 		
 		; so that if there is no followup for some reason we invalidate
-		RegisterForSingleUpdate(10)
-	elseif (asEventName == "SoundPlay.NPCWerewolfFeedingKill")
-		if !__killmoveStarted
+		;RegisterForSingleUpdate(10)
+	if (asEventName == "SoundPlay.NPCWerewolfFeedingKill")
+		if __killmoveStarted || !(playerRef.IsInKillMove())
 			return
 		endif
-		;debug.Notification("Now we know its the right one!")
-		__killmoveStarted = false
+		__killmoveStarted = true
 		utility.wait(2)
-		UnregisterForUpdate()
-		ED_Mechanics_GarkainBeast_EatenCloak.Cast((akSource as Actor), (akSource as Actor))
-		ED_Mechanics_GarkainBeast_CombatFeed.Cast((akSource as Actor), (akSource as Actor))
+		;UnregisterForUpdate()
+		ED_Mechanics_GarkainBeast_EatenCloak.Cast(playerRef, playerRef)
+		ED_Mechanics_GarkainBeast_CombatFeed.Cast(playerRef, playerRef)
 		PlayerVampireQuest.VampireFeed()
+		if !(playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)) && GetStage() < 80
+			debug.Trace("Everdamned INFO: Untamed Garkain just Brutalized/killfed on an actor, reverting to mortal when out of combat")
+			Message.ResetHelpMessage("ed_garkain_thirstquenched")
+			ED_Mechanics_Garkain_ThirstQuenched_Message.ShowAsHelpMessage("ed_garkain_thirstquenched", 3.0, 1.0, 1)
+			SetStage(80)
+		endif
+		__killmoveStarted = false
     endif
 EndEvent
 
-Event OnUpdate()
-	__killmoveStarted = false
-EndEvent
 
 Spell Property ED_Mechanics_GarkainBeast_CombatFeed Auto
 Spell Property ED_Mechanics_GarkainBeast_EatenCloak Auto

@@ -168,7 +168,12 @@ visualeffect property FeedBloodVFX auto
 {Visual Effect on Wolf for Feeding Blood}
 
 playervampirequestscript property PlayerVampireQuest auto
+formlist property DLC1VampireSpellsPowers auto
 
+DefaultObjectManager kDefObjMan
+Event OnInit()
+	kDefObjMan = Game.GetFormFromFile(0x00000031, "Skyrim.esm") as DefaultObjectManager
+endEvent
 
 ;-- Variables ---------------------------------------
 Float __UnearthlyWillExtensionTime = -1.00000
@@ -179,7 +184,7 @@ Bool __prepped = false
 Bool __shiftingBack = false
 Bool __shuttingDown = false
 
-;-- Functions ---------------------------------------
+
 
 function OnUpdate()
 
@@ -304,6 +309,10 @@ function StartTracking()
 		return 
 	endIf
 	__trackingStarted = true
+	
+	kDefObjMan.SetForm("RIVR", VampireLordRace)
+	kDefObjMan.SetForm("RIVS", DLC1VampireSpellsPowers)
+	
 	if PlayerActor.IsEquipped(beastRing as form)
 		pDLC1nVampireRingBeast.SetValue(1 as Float)
 	endIf

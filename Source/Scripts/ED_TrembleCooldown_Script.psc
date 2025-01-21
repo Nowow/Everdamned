@@ -13,7 +13,7 @@ message property ED_Mechanics_Message_Tremble_Ready auto
 
 
 Event OnInit()
-	Debug.Trace("Everdamned DEBUG: Tremble Cooldown alias script initiated")
+	;Debug.Trace("Everdamned DEBUG: Tremble Cooldown alias script initiated")
 	ED_Mechanics_Global_TrembleCount.value = 0.0
 endevent
 

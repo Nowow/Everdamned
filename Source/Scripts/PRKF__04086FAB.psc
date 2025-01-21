@@ -1,9 +1,17 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 7
+;NEXT FRAGMENT INDEX 10
 Scriptname PRKF__04086FAB Extends Perk Hidden
 
 ;BEGIN FRAGMENT Fragment_3
 Function Fragment_3(ObjectReference akTargetRef, Actor akActor)
+;BEGIN CODE
+ED_Mechanics_GarkainBeast_FeedOnCorpse.Cast(akActor as Actor, akActor as Actor)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_7
+Function Fragment_7(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
 ED_Mechanics_GarkainBeast_FeedOnCorpse.Cast(akActor as Actor, akActor as Actor)
 ;END CODE

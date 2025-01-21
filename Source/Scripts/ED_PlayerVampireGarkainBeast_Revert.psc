@@ -7,15 +7,16 @@ GLOBALVARIABLE PROPERTY pDLC1nVampireRingErudite Auto
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 
-	Game.GetPlayer().RemoveSpell(ED_VampirePowers_GarkainBeast_Revert)
 	
-	;turn off all the vampire necklace/ring variables when we change back
-    pDLC1nVampireNecklaceBats.setValue(0)
-	pDLC1nVampireNecklaceGargoyle.setValue(0)
-	pDLC1nVampireRingBeast.setValue(0)
-	pDLC1nVampireRingErudite.setValue(0)
 
 	If !Game.GetPlayer().IsInKillMove()
+		Game.GetPlayer().RemoveSpell(ED_VampirePowers_GarkainBeast_Revert)
+		
+		;turn off all the vampire necklace/ring variables when we change back
+		pDLC1nVampireNecklaceBats.setValue(0)
+		pDLC1nVampireNecklaceGargoyle.setValue(0)
+		pDLC1nVampireRingBeast.setValue(0)
+		pDLC1nVampireRingErudite.setValue(0)
 		ED_PlayerVampireGarkainQuest.Revert()
 	endif
 EndEvent
