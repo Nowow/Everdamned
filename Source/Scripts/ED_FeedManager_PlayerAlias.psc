@@ -1,5 +1,8 @@
 Scriptname ED_FeedManager_PlayerAlias extends ReferenceAlias  
 
+
+bool property bFeedAnimRequiredForSuccess auto
+
 Event OnInit()
 	Debug.Trace("Everdamned DEBUG: Feed Manager player alias initialized")
 endevent
@@ -21,10 +24,22 @@ Event OnVampireFeed(actor akTarget)
 	
 	; to check if player in animation here use playerRef.GetPlayerControls(), works with no utility.wait()
 	
-	if playerRef.GetPlayerControls() == false
-		Game.ForceThirdPerson()
-;		_killTarget = akTarget
-;		RegisterForAnimationEvent(playerRef, "KillMoveEnd")
+	if bFeedAnimRequiredForSuccess == true
+		debug.Trace("Everdamned DEBUG: bFeedAnimRequiredForSuccess is true in this feed on" + akTarget)
+		if playerRef.GetPlayerControls() == false
+			debug.Trace("Everdamned DEBUG: playerRef.GetPlayerControls() is true, means player did play the anim, proceeding with feed effects")
+			Game.ForceThirdPerson()
+			return
+			
+	;		_killTarget = akTarget
+	;		RegisterForAnimationEvent(playerRef, "KillMoveEnd")
+		else
+			debug.Trace("Everdamned DEBUG: but playerRef.GetPlayerControls() is false, anim didnt play, do nothing")
+			return
+		endif
+	else
+		debug.Trace("Everdamned DEBUG: bFeedAnimRequiredForSuccess is false, proceed with feed things regardless")
+		
 	endif
 	
 	

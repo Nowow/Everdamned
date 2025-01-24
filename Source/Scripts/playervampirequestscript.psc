@@ -98,7 +98,7 @@ float _hpCacheVal
 float property hpToBeEaten hidden
 	
 	function Set(float newValue)
-		if newValue > 0
+		if newValue >= 0.0
 			_hpToBeEaten = newValue
 		endif
 	EndFunction
