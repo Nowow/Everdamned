@@ -2,15 +2,6 @@
 ;NEXT FRAGMENT INDEX 3
 Scriptname ED_FeedDialogue_SedSuccessPostprocess Extends TopicInfo Hidden
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
-SendModEvent("feedDialogue_last_scene_started")
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
@@ -76,9 +67,7 @@ endif
 bool _pairedPlayed = playerRef.PlayIdleWithTarget(FeedDialogueIdle, akSpeaker)
 debug.Trace("Everdamned: paired anim was played: " + _pairedPlayed)
 
-if akSpeaker.IsInFaction(DLC1PotentialVampireFaction) && akSpeaker.IsInFaction(DLC1PlayerTurnedVampire) == False
-	DLC1VampireTurn.PlayerBitesMe(akSpeaker)
-endif
+ED_FeedManager_Script_Quest.HandleDialogueFeed(akSpeaker)
 ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
 ;will enable when figure out how to ensure Mesmerize idle will play, also need to add headtrack-off mesmerized idle
 ;ED_MesmerizeSafe_Scene_FeedDialogue.Start()
@@ -91,7 +80,7 @@ elseif currentFactionRank < 2
 	akSpeaker.SetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac, (currentFactionRank + 1))
 	debug.trace("Victim seduced fac is now to seduced fac at rank " + (currentFactionRank + 1))
 endif
-PlayerVampireQuest.VampireFeed()
+
 FeedDialogue_Cooldown_Spell.Cast(akSpeaker, akSpeaker)
 
 if !_pairedPlayed
@@ -103,13 +92,24 @@ endif
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+SendModEvent("feedDialogue_last_scene_started")
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 Faction Property ED_Mechanics_FeedDialogue_Seduced_Fac  Auto  
 
 PlayerVampireQuestScript Property PlayerVampireQuest  Auto  
 
-dlc1vampireturnscript Property DLC1VampireTurn  Auto  
+dlc1vampireturnscript Property DLC1VampireTurn  Auto
+
+ED_FeedManager_Script property ED_FeedManager_Script_Quest auto
 
 Faction Property DLC1PotentialVampireFaction  Auto  
 

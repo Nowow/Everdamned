@@ -12,7 +12,7 @@
     {
       "id": "EverdamnedMain",
       "name": "Vampiric Curse",
-      "description": "Unleashed upon this world by the Molag Bal itself, the power of cursed blood is now growing within you. Weild it to fullfill your destiny, or carve one for yourself...",
+      "description": "Unleashed upon this world by the Molag Bal itself, the power of cursed blood is now growing within you. Weild it to fullfill your destiny, or carve one yourself...",
       "level": "Everdamned.esp|1D7A9E",
       "ratio": "Everdamned.esp|1D7A9F",
       "legendary": "Everdamned.esp|1D7AA0",
@@ -23,7 +23,7 @@
         "useOffset": 0.0,
         "improveMult": 2.0,
         "improveOffset": 0.0,
-        "enableXPPerRank": true
+        "enableXPPerRank": false
       },
       "nodes": [
         {

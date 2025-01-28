@@ -20,8 +20,20 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	_player = akCaster
 	debug.Trace("Test Effect started")
 	
+	int level = akTarget.getlevel()
+	int skillPerLevel = game.GetGameSettingInt("iAVDskillsLevelUp") as int
+	int baseSkill = game.GetGameSettingInt("iAVDSkillStart") as int
+	debug.Trace(level)
+	debug.Trace(skillPerLevel)
+	debug.Trace(baseSkill)
+	int[] adjustedAV = ED_SKSEnativebindings.GetAdjustedAvForComparison(akTarget, level, skillPerLevel, baseSkill)
+	
+	debug.Trace(adjustedAV[1])
+	debug.Trace(adjustedAV[0])
+	debug.Trace(adjustedAV)
+	
 	;SendModEvent("ed_RefreshCommandEffectDuration", "", akTarget.GetFormID() as float)
-	RegisterForSingleUpdate(10.0)
+	;RegisterForSingleUpdate(10.0)
 	
 	
 	;ScaleNode(akTarget, "NPC Head [Head]", 3.0)
@@ -59,7 +71,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	;ED_SKSEnativebindings.IncreaseActiveEffectDuration(self, 100.0)
 	;debug.MessageBox(ED_SKSEnativebindings.GetActiveEffectCommandedActor(self))
 	
-	
+
 	;RegisterForSingleUpdate(2.0)
 endFunction
 

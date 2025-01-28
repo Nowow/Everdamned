@@ -98,7 +98,7 @@ float _hpCacheVal
 float property hpToBeEaten hidden
 	
 	function Set(float newValue)
-		if newValue >= 0.0
+		if newValue >= 0.0	
 			_hpToBeEaten = newValue
 		endif
 	EndFunction
@@ -111,13 +111,12 @@ float property hpToBeEaten hidden
 
 EndProperty
 
-function EatThisActor(actor Target, int mode = 0)
+function EatThisActor(actor Target, float percentToDigest = 0.2)
 	
-	; get % of actor base health
-	if mode == 0
-		debug.Trace("Everdamned Info: actor to be eaten at 20% of base hp")
-		hpToBeEaten = Target.getbaseav("health") * 0.2
-	endif
+
+	debug.Trace("Everdamned Info: actor to be eaten at 20% of base hp")
+	hpToBeEaten = Target.getbaseav("health") * 0.2
+	
 	VampireFeed()
 endFunction
 

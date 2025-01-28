@@ -7,6 +7,10 @@ type = "Functional"
 alias = "Variable06"
 get = "(GetKeywordString('PlayerKeyword') != 0) * GetGlobalValueParam(playerVampireSkill)"
 
+[ED_BloodPool]
+type = "Adaptive"
+alias = "Variable08"
+
 [EdTestVar]
 type = "Adaptive"
 alias = "Variable05"
@@ -20,4 +24,4 @@ type = "Adaptive"
 alias = "Variable02"
 
 [Include]
-"Everdamned.esp" = ["VampireSkill", "EdTestVar", "ED_IcyWindsSelf", "ED_IcyWindsTarget"]
+"Everdamned.esp" = ["VampireSkill", "ED_BloodPool", "EdTestVar", "ED_IcyWindsSelf", "ED_IcyWindsTarget"]

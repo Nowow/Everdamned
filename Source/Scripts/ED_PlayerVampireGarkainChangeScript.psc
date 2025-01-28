@@ -455,6 +455,13 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		; so that if there is no followup for some reason we invalidate
 		;RegisterForSingleUpdate(10)
 	if (asEventName == "SoundPlay.NPCWerewolfFeedingKill")
+		
+		; TODO: capture killmove target somehow
+		; probaby should use a new quest that will find "closest" target that is in pairedanim
+		; in worst case we end up using a different actor to calcuate HpEaten
+		
+		; do the same for Vampire Lord
+	
 		if __killmoveStarted || !(playerRef.IsInKillMove())
 			return
 		endif

@@ -12,3 +12,5 @@ Scriptname ED_SKSEnativebindings hidden
 actor function GetActiveEffectCommandedActor(activemagiceffect AMEffect) global native
 
 function IncreaseActiveEffectDuration(activemagiceffect AMEffect, float delta) global native
+
+int[] function GetAdjustedAvForComparison(actor thisActor, int playerLevel, int skillsPerLevelSetting, int skillBaseSetting) global native
