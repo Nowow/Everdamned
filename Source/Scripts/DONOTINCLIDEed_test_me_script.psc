@@ -16,21 +16,42 @@ actor _dog
 
 actor _summonedActor
 
+formlist property ED_TEST_formlist auto
+
 function OnEffectStart(Actor akTarget, Actor akCaster)
 	_player = akCaster
 	debug.Trace("Test Effect started")
 	
-	int level = akTarget.getlevel()
-	int skillPerLevel = game.GetGameSettingInt("iAVDskillsLevelUp") as int
-	int baseSkill = game.GetGameSettingInt("iAVDSkillStart") as int
-	debug.Trace(level)
-	debug.Trace(skillPerLevel)
-	debug.Trace(baseSkill)
-	int[] adjustedAV = ED_SKSEnativebindings.GetAdjustedAvForComparison(akTarget, level, skillPerLevel, baseSkill)
+	ED_TEST_formlist.addform(FXEmptyActivator)
+	ED_TEST_formlist.addform(ConjureFlameAtronach)
+	ED_TEST_formlist.addform(ED_TEST_Vfx)
+	ED_TEST_formlist.addform(playerRef)
 	
-	debug.Trace(adjustedAV[1])
-	debug.Trace(adjustedAV[0])
-	debug.Trace(adjustedAV)
+	debug.Trace("Test form list has size:" + ED_TEST_formlist.GetSize())
+	
+	
+	int i = 0
+	while i < ED_TEST_formlist.GetSize()
+		
+		debug.Trace("Test form is: " + ED_TEST_formlist.GetAt(i))
+
+		i += 1
+	endWhile
+	
+	ED_TEST_formlist.removeaddedform(ED_TEST_Vfx)
+	
+	utility.wait(2)
+	
+	debug.Trace("Test form list has size:" + ED_TEST_formlist.GetSize())
+	
+	i = 0
+	while i < ED_TEST_formlist.GetSize()
+		
+		debug.Trace("Test form is: " + ED_TEST_formlist.GetAt(i))
+
+		i += 1
+	endWhile
+	
 	
 	;SendModEvent("ed_RefreshCommandEffectDuration", "", akTarget.GetFormID() as float)
 	;RegisterForSingleUpdate(10.0)
