@@ -12,7 +12,7 @@ spell property SCS_VampireSpells_VampireLord_Spell_Power04_Tremble auto
 actor property playerRef auto
 
 actor _player
-actor _dog
+actor _target
 
 actor _summonedActor
 
@@ -20,38 +20,7 @@ formlist property ED_TEST_formlist auto
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
 	_player = akCaster
-	debug.Trace("Test Effect started")
-	
-	ED_TEST_formlist.addform(FXEmptyActivator)
-	ED_TEST_formlist.addform(ConjureFlameAtronach)
-	ED_TEST_formlist.addform(ED_TEST_Vfx)
-	ED_TEST_formlist.addform(playerRef)
-	
-	debug.Trace("Test form list has size:" + ED_TEST_formlist.GetSize())
-	
-	
-	int i = 0
-	while i < ED_TEST_formlist.GetSize()
-		
-		debug.Trace("Test form is: " + ED_TEST_formlist.GetAt(i))
-
-		i += 1
-	endWhile
-	
-	ED_TEST_formlist.removeaddedform(ED_TEST_Vfx)
-	
-	utility.wait(2)
-	
-	debug.Trace("Test form list has size:" + ED_TEST_formlist.GetSize())
-	
-	i = 0
-	while i < ED_TEST_formlist.GetSize()
-		
-		debug.Trace("Test form is: " + ED_TEST_formlist.GetAt(i))
-
-		i += 1
-	endWhile
-	
+	_target = akTarget
 	
 	;SendModEvent("ed_RefreshCommandEffectDuration", "", akTarget.GetFormID() as float)
 	;RegisterForSingleUpdate(10.0)
@@ -93,7 +62,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	;debug.MessageBox(ED_SKSEnativebindings.GetActiveEffectCommandedActor(self))
 	
 
-	;RegisterForSingleUpdate(2.0)
+	RegisterForSingleUpdate(2.0)
 endFunction
 
 function OnAnimationEvent(objectreference akActor, String akEventName)
@@ -107,15 +76,20 @@ function OnAnimationEvent(objectreference akActor, String akEventName)
 endfunction
 
 event OnUpdate()
+	
+	;_player.modactorvalue("EdTestVar", 10.0)
+	;_player.setactorvalue("VampireSkill", 10.0)
 	;Debug.Trace("EdTestVar value at during: " + _player.getactorvalue("EdTestVar"))
 	;Debug.Trace("VampireSkill value at during: " + _player.getactorvalue("VampireSkill"))
 	
-	;debug.Trace("Everdamned TEST: activator can see player: " + _activator.haslos	)
-	debug.Trace("Current duration   : " + self.GetDuration())
-	debug.Trace("Curent time elapsed: " + self.GetTimeElapsed())
-	;RegisterForSingleUpdate(2.0)
+	Debug.Trace("Target has LOS of player: " + _target.HasLOS(_player))
 	
-	self.RegisterForAnimationEvent(playerRef, LandStart)
+	;debug.Trace("Everdamned TEST: activator can see player: " + _activator.haslos	)
+	;debug.Trace("Current duration   : " + self.GetDuration())
+	;debug.Trace("Curent time elapsed: " + self.GetTimeElapsed())
+	RegisterForSingleUpdate(2.0)
+	
+	;self.RegisterForAnimationEvent(playerRef, LandStart)
 
 endevent
 

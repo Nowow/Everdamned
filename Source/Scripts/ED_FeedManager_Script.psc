@@ -28,7 +28,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	endif
 endevent
 
-function HandleFeed(actor FeedTarget, bool isDiablerie = false)
+function HandleFeed(actor FeedTarget)
 
 	debug.Trace("Everdamned DEBUG: Player feeds on target " + FeedTarget)
 	
@@ -101,7 +101,10 @@ function HandleDrain(actor FeedTarget, bool isDiablerie = false)
 	
 	;TODO: Vamp XP
 	
-	;TODO: Trigger hemomancy advance
+	;start hemomancy studies tracker and giff blood seed
+	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
+		ED_Mechanics_Hemomancy_Quest.start()
+	endif
 	
 	;TODO: diablerie 
 	
@@ -164,6 +167,16 @@ function HandleDialogueFeed(actor FeedTarget)
 endfunction
 
 state CombatDrain
+	;handles should do nothing till state is released
+	function HandleDialogueFeed(actor FeedTarget)
+	endfunction
+	function HandleCombatDrain(actor FeedTarget, bool isDiablerie = false)
+	endfunction
+	function HandleDrain(actor FeedTarget, bool isDiablerie = false)
+	endfunction
+	function HandleFeed(actor FeedTarget)
+	endfunction
+	
 	event OnBeginState()
 		debug.Trace("Everdamned DEBUG: Feed Manager entered CombatDrain state, bFeedAnimRequiredForSuccess = true")
 		bFeedAnimRequiredForSuccess = true
@@ -209,7 +222,12 @@ state CombatDrain
 			
 			;TODO: Vamp XP
 			
-			;TODO: Trigger hemomancy advance
+			;start hemomancy studies tracker and giff blood seed
+			if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
+				ED_Mechanics_Hemomancy_Quest.start()
+			endif
+			;TODO: maybe advance hemomancy with drains?
+			;maybe require use of hemomancy skills and then drain will advance?
 			
 			;Blue Blood
 			actorbase TargetBase = aFeedTarget.GetActorBase()
@@ -219,6 +237,8 @@ state CombatDrain
 				ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 				ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 			endIf
+			
+			
 		else
 			debug.Trace("Everdamned DEBUG: Feed Manager callback was called in CombatDrain state, feed anim WAS NOT played, do nothing")
 		endif
@@ -241,6 +261,7 @@ GlobalVariable Property PlayerIsVampire  Auto
 sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
 formlist property ED_Mechanics_BlueBlood_Track_FormList auto
 spell property ED_Mechanics_PsychicVampire_Spell auto
+quest property ED_Mechanics_Hemomancy_Quest auto
 
 playerVampireQuestScript property PlayerVampireQuest auto
 dlc1vampireturnscript property DLC1VampireTurn auto

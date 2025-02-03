@@ -1,6 +1,5 @@
-Scriptname ED_MainPlayerAlias_Script extends ReferenceAlias  
+Scriptname ED_HemomancyStudies_Quest extends ReferenceAlias
 
-; TO BE DELETED - replaced by Hemomancy quest
 
 ;Event OnPlayerLoadGame()
 ;	Debug.Trace("Everdamned INFO: Feed Manager player alias OnPlayerLoadGame() called ")
@@ -56,13 +55,14 @@ function AdvanceHemomancy()
 endfunction
 
 state LearningAdept
+	event OnBeginState()
+		debug.Trace("Everdamned INFO: Started learning Adept Hemomancy")
+		__HemomancyXPneededToAdvance = 15
+	endevent
+	
 	function StartLearningHemomancy()
 		debug.Trace("Everdamned ERROR: StartLearningHemomancy was called in an non-empty state, should not have happened")
 	endfunction
-	
-	event OnBeginState()
-		debug.Trace("Everdamned INFO: Started learning Adept Hemomancy")
-	endevent
 	
 	function AdvanceHemomancy()
 		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")
@@ -95,7 +95,7 @@ state LearningAdept
 			__learnLock = false
 			return
 		endif
-		
+		__HemomancyXPneededToAdvance = 15
 		AdvanceHemomancy()
 		
 		__learnLock = false
@@ -105,6 +105,7 @@ endstate
 state LearningExpert
 	event OnBeginState()
 		debug.Trace("Everdamned INFO: Started learning Expert Hemomancy")
+		__HemomancyXPneededToAdvance = 30
 	endevent
 	
 	function StartLearningHemomancy()
@@ -142,6 +143,7 @@ state LearningExpert
 			__learnLock = false
 			return
 		endif
+		__HemomancyXPneededToAdvance = 30
 		
 		AdvanceHemomancy()
 		
@@ -152,6 +154,7 @@ endstate
 state LearningMaster
 	event OnBeginState()
 		debug.Trace("Everdamned INFO: Started learning Master Hemomancy")
+		__HemomancyXPneededToAdvance = 50
 	endevent
 	
 	function StartLearningHemomancy()
@@ -168,7 +171,6 @@ state LearningMaster
 		if MasterHemomancyLearned >= MasterHemomancySpells.length
 			debug.Trace("Everdamned INFO: Player just learned all Master Hemomancy spells, thus concluding learning, goto empty state")
 			GoToState("")
-			__allHemomancyLearned = true
 		endif
 	endfunction
 	
@@ -190,9 +192,11 @@ state LearningMaster
 			__learnLock = false
 			return
 		endif
+		__HemomancyXPneededToAdvance = 50
 		
 		AdvanceHemomancy()
 		
+		__allHemomancyLearned = true
 		__learnLock = false
 	endevent
 endstate
