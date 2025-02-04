@@ -273,11 +273,12 @@ function PreloadSpells()
 	LeveledRaiseDeadSpell.Preload()
 	DLC1VampiresGrip.Preload()
 	DLC1ConjureGargoyleLeftHand.Preload()
-	;DLC1CorpseCurse.Preload()
+	DLC1CorpseCurse.Preload()
 	ED_VampireSpellsVL_Maelstrom_Spell.Preload()
 	
-	ED_VampireSpellsVL_FlamesOfColdharbour_Spell.Unload()
-	ED_VampireSpellsVL_ShamblingHordes_Spell.Unload()
+	ED_VampireSpellsVL_FlamesOfColdharbour_Spell.Preload()
+	ED_VampireSpellsVL_ShamblingHordes_Spell.Preload()
+	ED_VampireSpellsVL_IcyWinds_Spell.Preload()
 endFunction
 
 function RegisterForEvents()
@@ -436,6 +437,7 @@ function UnloadSpells()
 	
 	ED_VampireSpellsVL_FlamesOfColdharbour_Spell.Unload()
 	ED_VampireSpellsVL_ShamblingHordes_Spell.Unload()
+	ED_VampireSpellsVL_IcyWinds_Spell.Unload()
 endFunction
 
 function CheckPerkSpells()
@@ -633,9 +635,6 @@ function ActuallyShiftBackIfNecessary()
 	
 	PlayerActor.RemoveSpell(DLC1CorpseCurse)
 	;PlayerActor.RemoveSpell(DLC1SupernaturalReflexes)
-	;PlayerActor.RemoveSpell(SCS_Tremble_Spell)
-	;PlayerActor.DispelSpell(DLC1SupernaturalReflexes)
-	;PlayerActor.DispelSpell(DLC1ConjureGargoyleLeftHand)
 	
 	PlayerActor.DispelSpell(DLC1VampireDetectLife)
 	PlayerActor.DispelSpell(DLC1VampireMistform)
