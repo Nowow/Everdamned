@@ -182,6 +182,7 @@ state CombatDrain
 		bFeedAnimRequiredForSuccess = true
 		debug.Trace("Everdamned DEBUG: Feed Manager starts Vampire Feed with aFeedTarget")
 		PlayerRef.StartVampireFeed(aFeedTarget)
+		;TODO: add a failsafe, like RegisterForSingleUpdate(5.0)
 	
 	endevent
 	event OnEndState()

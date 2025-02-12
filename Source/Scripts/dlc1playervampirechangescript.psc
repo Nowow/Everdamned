@@ -1,13 +1,7 @@
-;/ Decompiled by Champollion V1.0.1
-Source   : DLC1PlayerVampireChangeScript.psc
-Modified : 2020-12-09 01:31:39
-Compiled : 2020-12-09 01:31:41
-User     : maxim
-Computer : CANOPUS
-/;
 scriptName DLC1PlayerVampireChangeScript extends Quest
 
-;-- Properties --------------------------------------
+; EVERDAMNED script, remove this comment later
+
 idle property SpecialFeeding auto
 
 ;globalvariable property SCS_PowerBite auto
@@ -219,8 +213,9 @@ function Shutdown()
 	game.SetInCharGen(false, false, false)
 	PlayerActor.RemovePerk(DLC1VampireActivationBlocker)
 	
-	; TODO: ?
-	;PlayerActor.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
+	; adding here because it is attached to mortal vampire races, but not to VL
+	; consider adding it to VL to not do this
+	PlayerActor.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
 	self.UnloadSpells()
 	game.EnablePlayerControls(false, false, true, true, true, false, false, false, 1)
 	self.Stop()
@@ -370,7 +365,9 @@ function StartTracking()
 	PlayerActor.AddSpell(LeveledAbility, false)
 	PlayerActor.AddSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage, false)
 	
-	;PlayerActor.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
+	; adding here because it is attached to mortal vampire races, but not to VL
+	; consider adding it to VL to not do this
+	PlayerActor.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
 	PlayerActor.AddSpell(DLC1Revert, false)
 	PlayerActor.AddSpell(DLC1VampireBats, false)
 	PlayerActor.EquipSpell((DialogueGenericVampire as vampirequestscript).LastPower, 2)

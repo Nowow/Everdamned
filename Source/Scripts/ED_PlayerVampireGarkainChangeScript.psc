@@ -33,7 +33,6 @@ bool Property Untimed auto
 
 FormList Property CrimeFactions auto
 
-spell property SCS_VampireSpells_Vanilla_Power_Spell_Obfuscate auto
 globalvariable property ED_Mechanics_Global_DisableHate auto
 location property DLC1VampireCastleLocation auto
 location property DLC1VampireCastleGuildhallLocation auto
@@ -45,6 +44,8 @@ spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage1_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage2_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell auto
+; trying adding it to the race
+;spell property ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell auto
 spell property ED_BeingVampireVL_Vanilla_Ab_SunDamage auto
 spell property ED_VampirePowers_GarkainBeast_Change auto
 spell property ED_VampirePowers_GarkainBeast_Revert auto

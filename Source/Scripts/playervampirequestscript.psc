@@ -74,10 +74,9 @@ String property SCS_Stat2 auto
 
 function OnUpdateGameTime()
 
-	actor Player = game.GetPlayer()
 	ED_BloodPoolManager_Quest.ProcessBonuses()
 	FeedTimer = (GameDaysPassed.value - LastFeedTime) * 24.0100 / ED_Mechanics_Global_DelayBetweenStages.GetValue()
-	if game.IsMovementControlsEnabled() && game.IsFightingControlsEnabled() && Player.GetCombatState() == 0 && !Player.HasMagicEffect(DLC1VampireChangeEffect) && !Player.HasMagicEffect(DLC1VampireChangeFXEffect)
+	if game.IsMovementControlsEnabled() && game.IsFightingControlsEnabled() && playerRef.GetCombatState() == 0 && !playerRef.HasMagicEffect(DLC1VampireChangeEffect) && !playerRef.HasMagicEffect(DLC1VampireChangeFXEffect)
 		Float Chance
 		;if Player.HasSpell(SCS_Abilities_Reward_Spell_SlowerHunger as form)
 		;	Chance = ED_HungerChance
@@ -94,7 +93,7 @@ endFunction
 ; this function exists because dont want to change VampireFeed() interface to avoid compatibility issues
 float _defaultHPtoBeEaten = 20.0 ; for compatibility, a default amount for feeds that do not know feed target
 float _hpToBeEaten = 0.0
-float _hpCacheVal
+float __hpCacheVal
 float property hpToBeEaten hidden
 	
 	function Set(float newValue)
@@ -104,9 +103,9 @@ float property hpToBeEaten hidden
 	EndFunction
   
 	float function Get()
-		_hpCacheVal = _hpToBeEaten
+		__hpCacheVal = _hpToBeEaten
 		_hpToBeEaten = _defaultHPtoBeEaten
-		return _hpCacheVal
+		return __hpCacheVal
 	EndFunction
 
 EndProperty
@@ -129,8 +128,8 @@ function VampireFeed()
 	SCS_Mechanics_Message_VampireFeed.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
 	VampireFeedReady.SetValue(0 as Float)
 	LastFeedTime = GameDaysPassed.value
-	VampireStatus = 1
 	self.VampireProgression(playerRef, 1)
+	VampireStatus = 1
 	self.StopHate(playerRef, false)
 	self.UnregisterforUpdateGameTime()
 	self.RegisterForUpdateGameTime(3 as Float)
@@ -242,7 +241,7 @@ endFunction
 
 function VampireChange(actor Target)
 
-	actor Player = game.GetPlayer()
+	
 	game.DisablePlayerControls(true, true, false, false, false, true, true, false, 0)
 	VampireChangeFX.play(Target as objectreference, -1.00000)
 	VampireTransformIncreaseISMD.applyCrossFade(2.00000)
@@ -258,12 +257,12 @@ function VampireChange(actor Target)
 	if RaceID >= 0
 		Target.SetRace(ED_RacesVampire.GetAt(RaceID) as race)
 	else
-		ED_Mechanics_Message_RaceBroken.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
+		ED_Mechanics_Message_RaceBroken.Show()
 		Target.SetRace(NordRaceVampire)
 	endIf
 	VampireCureDisease.Cast(Target as objectreference, none)
 	VampireStatus = 1
-	self.VampireProgression(Player, 1)
+	self.VampireProgression(playerRef, 1)
 	self.RegisterForUpdateGameTime(3 as Float)
 	LastFeedTime = GameDaysPassed.value
 	PlayerIsVampire.SetValue(1 as Float)
@@ -271,7 +270,6 @@ function VampireChange(actor Target)
 	utility.Wait(1.00000)
 	ED_FeedManager_Quest.RegisterFeedEvents()
 	ED_MainQuest.GainAgeExpirience(0.0)
-	ED_MainQuest.SetUpAgeAppropriateRewards()
 	game.EnablePlayerControls(true, true, true, true, true, true, true, true, 0)
 	if VC01.GetStageDone(200) == 1 as Bool
 		VC01.SetStage(25)
@@ -425,18 +423,30 @@ function VampireProgression(actor Player, Int VampireStage)
 		self.StartHate(Player)
 	elseIf VampireStage == 1
 
+		; -----------------------------------------------------------------------------------------------
 		; adding all general vampire passives here each time, for reasons i'm not going to look into
 		; but probably due to other vanilla/modded scripts having a tendency to call VampireProgression
 		; even if thats not their business
 		
+		; waterwalking+waterbreathing
 		Player.AddSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell, false)
+		; dampen healing, probably should be redone
+		; vampire feed perk holder
+		; resist poison and disease
 		Player.AddSpell(ED_BeingVampire_Vanilla_Ab_PassivesHolder_Spell_WasChampionOfTheNight, false)
-		Player.AddSpell(ED_BeingVampire_Vanilla_Ab_StillHeart_Spell_WasNightstalkersFootsteps, false)
-		Player.AddSpell(ED_BeingVampire_Ab_Stalker_Spell, false)
-		Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
-		Player.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
-		Player.AddSpell(ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell, true)
 		
+		; deprecated in favor of PassivesHolder
+		;Player.AddSpell(ED_BeingVampire_Vanilla_Ab_StillHeart_Spell_WasNightstalkersFootsteps, false)
+		; movspeed increase, amount controlled by age perks
+		Player.AddSpell(ED_BeingVampire_Ab_Stalker_Spell, false)
+		
+		; is attached to vampire races, do not need to be added
+		; will be added for vampire transformations
+		;Player.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
+		
+		Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
+		Player.AddSpell(ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell, true)
+		; -----------------------------------------------------------------------------------------------
 		
 		;;
 		
@@ -522,7 +532,8 @@ spell property ED_BeingVampire_Ab_Status_Stage4_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_ResistFrost_Stage2_Spell auto
 spell property ED_BeingVampire_Vanilla_VampiricDrain auto
 spell property ED_BeingVampire_Vanilla_Ab_PassivesHolder_Spell_WasChampionOfTheNight auto
-spell property ED_BeingVampire_Vanilla_Ab_StillHeart_Spell_WasNightstalkersFootsteps auto
+; deprecated in favor of PassivesHolder
+;spell property ED_BeingVampire_Vanilla_Ab_StillHeart_Spell_WasNightstalkersFootsteps auto
 spell property ED_BeingVampire_Ab_Stalker_Spell auto
 
 Float property ED_HungerChanceSlower auto

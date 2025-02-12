@@ -42,6 +42,7 @@ function GainAgeExpirience(float amountToAge = 0.0)
 		; called for first time since becoming vamp (again)
 		; giving Fledgling stuff
 		debug.Trace("Everdamned INFO: Player vampire starts aging, current age is " + ED_Mechanics_VampireAge.value + ", max age is " + MaxAge)
+		SetUpAgeAppropriateRewards()
 		isAging = true
 		; give 
 		RegisterforSingleUpdateGameTime(ED_Mechanics_VampireAgeRate.value)
