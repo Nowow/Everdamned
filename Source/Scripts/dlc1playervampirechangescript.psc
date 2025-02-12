@@ -311,6 +311,7 @@ function StartTracking()
 	endIf
 	__trackingStarted = true
 	
+	debug.Trace("Everdamned DEBUG: Vampire Lord StartTracking()")
 	kDefObjMan.SetForm("RIVR", VampireLordRace)
 	kDefObjMan.SetForm("RIVS", DLC1VampireSpellsPowers)
 	
@@ -408,7 +409,7 @@ function PrepShift()
 	PlayerActor.SetActorValue("GrabActorOffset", 70 as Float)
 	Int Count = 0
 	
-	;dispells werewolf and certain VL summon/reanimate spells
+	;dispells werewolf and certain VL summon/reanimate spells, all of that probably obsolete
 	while Count < ED_Mechanics_FormList_VLDispelList.GetSize()
 		spell Gone = ED_Mechanics_FormList_VLDispelList.GetAt(Count) as spell
 		if Gone != none
@@ -599,6 +600,12 @@ function ActuallyShiftBackIfNecessary()
 		Count += 1
 	endWhile
 	
+	; if player does not have the perk, spell ends.
+	; if player has, reanimated undead is stored until he transforms back
+	if !(playerRef.HasPerk(ED_PerkTreeVL_UndyingLoyalty_Perk))
+		playerRef.DispelSpell(ED_VampireSpellsVL_LordsServant_Spell)
+	endif
+	
 	;wassail
 	;PlayerActor.DispelSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc)
 	
@@ -754,3 +761,8 @@ function OnAnimationEvent(objectreference akActor, String akEventName)
 		endIf
 	endIf
 endFunction
+
+actor property playerRef auto
+
+perk property ED_PerkTreeVL_UndyingLoyalty_Perk auto
+

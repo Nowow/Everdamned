@@ -1,5 +1,7 @@
 Scriptname DONOTINCLIDEed_test_me_script extends ActiveMagicEffect  
 
+import ED_SKSEnativebindings
+
 ShaderParticleGeometry property PSGD auto
 String property LandStart = "LandStart" auto
 
@@ -21,6 +23,8 @@ formlist property ED_TEST_formlist auto
 function OnEffectStart(Actor akTarget, Actor akCaster)
 	_player = akCaster
 	_target = akTarget
+
+	akTarget.Disable(true)
 	
 	;SendModEvent("ed_RefreshCommandEffectDuration", "", akTarget.GetFormID() as float)
 	;RegisterForSingleUpdate(10.0)
@@ -62,7 +66,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	;debug.MessageBox(ED_SKSEnativebindings.GetActiveEffectCommandedActor(self))
 	
 
-	RegisterForSingleUpdate(2.0)
+	;RegisterForSingleUpdate(2.0)
 endFunction
 
 function OnAnimationEvent(objectreference akActor, String akEventName)

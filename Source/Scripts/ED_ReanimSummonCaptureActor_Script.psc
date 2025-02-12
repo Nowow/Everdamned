@@ -33,6 +33,22 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		debug.Trace("Registring for mod event: " + _modEventName) 
 		RegisterForModEvent(_modEventName, "OnEDRefreshCommandEffectDuration")
 		
+		actor currentServant = ED_UndyingLoyaltyServant1.GetReference() as actor
+		if currentServant != None
+			debug.Trace("Everdamned DEBUG: But Undying Servant reference is currently occupied")
+			if currentServant.isDisabled()
+				debug.Trace("Everdamned DEBUG: Previous Undying Servant was disabled, enabling and moving to player")
+				currentServant.moveto(playerRef)
+				currentServant.enable(true)
+			endif
+			if !(currentServant.isDead())
+				debug.Trace("Everdamned DEBUG: Previous Undying Servant was not dead, killing it")
+				currentServant.Kill()
+			endif
+		endif
+		
+		ED_UndyingLoyaltyServant1.ForceRefTo(_commandedActor)
+		
 		
 	else
 		debug.Trace("Summon or reanimate spell failed to capture commanded actor")
@@ -58,3 +74,6 @@ function OnEffectFinish(Actor akTarget, Actor akCaster)
 	_effectFinished = true
 	;debug.Trace("Marching Flesh target effect finished on target: " + akTarget)
 endFunction
+
+ReferenceAlias Property ED_UndyingLoyaltyServant1  Auto  
+actor property playerRef auto

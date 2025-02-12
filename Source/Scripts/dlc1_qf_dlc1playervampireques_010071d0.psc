@@ -2,19 +2,14 @@
 ;NEXT FRAGMENT INDEX 13
 Scriptname DLC1_QF_DLC1PlayerVampireQues_010071D0 Extends Quest Hidden
 
-;BEGIN ALIAS PROPERTY ED_PlayerTremble
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ED_PlayerTremble Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY PlayerReflexes
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_PlayerReflexes Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY ED_UndyingLoyaltyServant1
+;BEGIN ALIAS PROPERTY Player
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ED_UndyingLoyaltyServant1 Auto
+ReferenceAlias Property Alias_Player Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY PlayerMistform
@@ -22,9 +17,9 @@ ReferenceAlias Property Alias_ED_UndyingLoyaltyServant1 Auto
 ReferenceAlias Property Alias_PlayerMistform Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY Player
+;BEGIN ALIAS PROPERTY ED_PlayerTremble
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_Player Auto
+ReferenceAlias Property Alias_ED_PlayerTremble Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_11
@@ -39,18 +34,6 @@ DLC1PlayerVampireChangeScript kmyQuest = __temp as DLC1PlayerVampireChangeScript
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN AUTOCAST TYPE DLC1PlayerVampireChangeScript
-Quest __temp = self as Quest
-DLC1PlayerVampireChangeScript kmyQuest = __temp as DLC1PlayerVampireChangeScript
-;END AUTOCAST
-;BEGIN CODE
-; normal vamping around
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_2
 Function Fragment_2()
 ;BEGIN AUTOCAST TYPE DLC1PlayerVampireChangeScript
@@ -61,18 +44,6 @@ DLC1PlayerVampireChangeScript kmyQuest = __temp as DLC1PlayerVampireChangeScript
 ; timer almost out
 
 kmyQuest.WarnPlayer()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_7
-Function Fragment_7()
-;BEGIN AUTOCAST TYPE DLC1PlayerVampireChangeScript
-Quest __temp = self as Quest
-DLC1PlayerVampireChangeScript kmyQuest = __temp as DLC1PlayerVampireChangeScript
-;END AUTOCAST
-;BEGIN CODE
-kmyQuest.PrepShift()
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -113,6 +84,30 @@ DLC1PlayerVampireChangeScript kmyQuest = __temp as DLC1PlayerVampireChangeScript
 ; back to non-beast form
 
 kmyQuest.ShiftBack()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_7
+Function Fragment_7()
+;BEGIN AUTOCAST TYPE DLC1PlayerVampireChangeScript
+Quest __temp = self as Quest
+DLC1PlayerVampireChangeScript kmyQuest = __temp as DLC1PlayerVampireChangeScript
+;END AUTOCAST
+;BEGIN CODE
+kmyQuest.PrepShift()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN AUTOCAST TYPE DLC1PlayerVampireChangeScript
+Quest __temp = self as Quest
+DLC1PlayerVampireChangeScript kmyQuest = __temp as DLC1PlayerVampireChangeScript
+;END AUTOCAST
+;BEGIN CODE
+; normal vamping around
 ;END CODE
 EndFunction
 ;END FRAGMENT
