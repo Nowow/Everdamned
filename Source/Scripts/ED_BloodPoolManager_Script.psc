@@ -18,7 +18,7 @@ endfunction
 ; not interface
 function ReconstructBloodPoolAV()
 	
-	playerRef.SetAV("ED_BloodPool", ED_BloodPoolMax.GetValue() + ED_BloodPoolMaxBonus.GetValue() + ED_BloodPoolMaxPermaBonus.GetValue())
+	playerRef.SetAV("ED_BloodPool", ED_Mechanics_BloodPool_Total.GetValue() + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
 	; top up, cant reconstruct keeping current value because not thread safe
 	playerRef.RestoreAV("ED_BloodPool", 9999.0)
 	
@@ -32,7 +32,7 @@ endfunction
 ;		SetBonusAfterFeed(hpEaten)
 ;	else
 
-;		ED_BloodPoolMaxBonus.SetValue(0.0)
+;		ED_Mechanics_BloodPool_MaxBonus.SetValue(0.0)
 ;	endif
 ;	ReconstructBloodPoolAV()
 
@@ -71,7 +71,7 @@ state StageOrAgeChange
 		int VampireStatus
 		int VampireAge
 		VampireStatus = PlayerVampireQuest.VampireStatus
-		VampireAge = ED_VampireAge.GetValue() as int
+		VampireAge = ED_Mechanics_VampireAge.GetValue() as int
 		debug.Trace("Everdamned DEBUG: Blood Pool Manager is doing adjustments for Status " + VampireStatus + " and Age " + VampireAge)
 		
 		float _calcMaxAv
@@ -80,7 +80,7 @@ state StageOrAgeChange
 		; Base pool values for progression, full for Sated, half for Starved
 		_calcMaxAv = _calcMaxAv - ((_calcMaxAv / 6.0) * ((VampireStatus - 1) as float))
 	
-		ED_BloodPoolMax.SetValue(_calcMaxAv)
+		ED_Mechanics_BloodPool_Total.SetValue(_calcMaxAv)
 		
 		;utility.wait(0.2) ; waiting to release lock for any other calls to this script to do their thing, mainly AtStageOrAgeChange()
 		GoToState("Postprocess")
@@ -110,15 +110,15 @@ state AfterFeed
 		
 		; % HP to be eaten gets applied at EatThisActor
 		__calculatedBonus = PlayerVampireQuest.GetHPtoBeEaten()
-		__currentBonus = ED_BloodPoolMaxBonus.GetValue()
+		__currentBonus = ED_Mechanics_BloodPool_MaxBonus.GetValue()
 		debug.Trace("Everdamned DEBUG: current blood pool bonus: " + __currentBonus + ", calculated: " + __calculatedBonus)
 		if __calculatedBonus > __currentBonus
 			debug.Trace("Everdamned DEBUG: Setting new blood pool bonus!")
 			__currentBonus = __calculatedBonus
-			ED_BloodPoolMaxBonus.SetValue(__currentBonus)
+			ED_Mechanics_BloodPool_MaxBonus.SetValue(__currentBonus)
 			
 			; top up included
-			;playerRef.ForceAV("ED_BloodPool", ED_BloodPoolMax.GetValue() + __currentBonus + ED_BloodPoolMaxPermaBonus.GetValue())
+			;playerRef.ForceAV("ED_BloodPool", ED_Mechanics_BloodPool_Total.GetValue() + __currentBonus + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
 		endif
 		
 		GoToState("Postprocess")
@@ -143,10 +143,10 @@ state ProcessBonuses
 	event OnBeginState()
 		float _incrementPermaBonus
 		float _decrementBonus
-		_incrementPermaBonus = ED_BloodPoolMaxBonus.GetValue() * 0.05
+		_incrementPermaBonus = ED_Mechanics_BloodPool_MaxBonus.GetValue() * 0.05
 		_decrementBonus = BaseBloodPoolBonusDecreaseRate - _incrementPermaBonus
-		ED_BloodPoolMaxPermaBonus.Mod(_incrementPermaBonus)
-		ED_BloodPoolMaxBonus.Mod(_decrementBonus)
+		ED_Mechanics_BloodPool_MaxPermaBonus.Mod(_incrementPermaBonus)
+		ED_Mechanics_BloodPool_MaxBonus.Mod(_decrementBonus)
 		
 		ModBloodPoolMaximum(BaseBloodPoolBonusDecreaseRate)
 	endevent
@@ -220,9 +220,9 @@ state PostPostprocess
 	endevent
 endstate
 
-GlobalVariable Property ED_BloodPoolMax  Auto  
-GlobalVariable Property ED_BloodPoolMaxBonus  Auto  
-GlobalVariable Property ED_BloodPoolMaxPermaBonus  Auto  
-GlobalVariable property ED_VampireAge auto
+GlobalVariable Property ED_Mechanics_BloodPool_Total  Auto  
+GlobalVariable Property ED_Mechanics_BloodPool_MaxBonus  Auto  
+GlobalVariable Property ED_Mechanics_BloodPool_MaxPermaBonus  Auto  
+GlobalVariable property ED_Mechanics_VampireAge auto
 
 playervampirequestscript property PlayerVampireQuest auto

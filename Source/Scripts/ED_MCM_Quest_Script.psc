@@ -1,14 +1,25 @@
 Scriptname ED_MCM_Quest_Script extends SKI_ConfigBase
 
 
-Int BloodPoolWidgetX
-float property Default_BloodPoolWidgetX auto
-GlobalVariable Property ED_BloodMeterX  Auto  
+Int BloodMeter_X
+float property Default_BloodMeter_X auto
+GlobalVariable Property ED_Mechanics_BloodMeter_X_Global  Auto  
 
-Int BloodPoolWidgetY
-float property Default_BloodPoolWidgetY auto
-GlobalVariable Property ED_BloodMeterY  Auto
+Int BloodMeter_Y
+float property Default_BloodMeter_Y auto
+GlobalVariable Property ED_Mechanics_BloodMeter_Y_Global  Auto
 
+Int BloodMeter_Scale
+float property Default_BloodMeter_Scale auto
+GlobalVariable Property ED_Mechanics_BloodMeter_Scale_Global Auto
+
+int BloodMeter_Opacity
+float property Default_BloodMeter_Opacity auto
+GlobalVariable property ED_Mechanics_BloodMeter_Opacity_Global auto
+
+int BloodMeter_FillDirection
+int property Default_BloodMeter_FillDirection auto
+GlobalVariable property ED_Mechanics_BloodMeter_FillDirection_Global auto
 
 
 ; on pressing R for default i guess?
@@ -16,16 +27,30 @@ function OnOptionDefault(Int akOp)
 
 	; ------------------------------------------------------------
 	; Blood Meter
-	If akOp == BloodPoolWidgetX
-		ED_BloodMeterX.SetValue(Default_BloodPoolWidgetX as Float)
-		self.SetSliderOptionValue(BloodPoolWidgetX, Default_BloodPoolWidgetX)
-	elseif akOp == BloodPoolWidgetY
-		ED_BloodMeterY.SetValue(Default_BloodPoolWidgetY as Float)
-		self.SetSliderOptionValue(BloodPoolWidgetY, Default_BloodPoolWidgetY)
+	If akOp == BloodMeter_X
+		ED_Mechanics_BloodMeter_X_Global.SetValue(Default_BloodMeter_X as Float)
+		self.SetSliderOptionValue(BloodMeter_X, Default_BloodMeter_X)
+		
+	elseif akOp == BloodMeter_Y
+		ED_Mechanics_BloodMeter_Y_Global.SetValue(Default_BloodMeter_Y as Float)
+		self.SetSliderOptionValue(BloodMeter_Y, Default_BloodMeter_Y)
+		
+	elseIf akOp == BloodMeter_Scale
+		ED_Mechanics_BloodMeter_Scale_Global.SetValue(Default_BloodMeter_Scale as Float)
+		self.SetSliderOptionValue(BloodMeter_Scale, Default_BloodMeter_Scale)
+		
+	elseIf akOp == BloodMeter_FillDirection
+		ED_Mechanics_BloodMeter_FillDirection_Global.SetValue(Default_BloodMeter_FillDirection as Float)
+		self.SetSliderOptionValue(BloodMeter_FillDirection, Default_BloodMeter_FillDirection)
+		
+	elseIf akOp == BloodMeter_Opacity
+		ED_Mechanics_BloodMeter_Opacity_Global.SetValue(Default_BloodMeter_Opacity as Float)
+		self.SetSliderOptionValue(BloodMeter_Opacity, Default_BloodMeter_Opacity)
 	
 	; ------------------------------------------------------------
 	
-	endif	
+	endif
+	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
 endfunction
 
 
@@ -37,8 +62,11 @@ function OnPageReset(String akPage)
 	
 	; ------------------------------------------------------------
 	; Blood Meter
-	BloodPoolWidgetX = self.AddSliderOption("Blood pool widget X coordinate", ED_BloodMeterX.GetValue())
-	BloodPoolWidgetY = self.AddSliderOption("Blood pool widget Y coordinate", ED_BloodMeterY.GetValue())
+	BloodMeter_X = self.AddSliderOption("Blood pool bar X coordinate", ED_Mechanics_BloodMeter_X_Global.GetValue())
+	BloodMeter_Y = self.AddSliderOption("Blood pool bar Y coordinate", ED_Mechanics_BloodMeter_Y_Global.GetValue())
+	BloodMeter_Scale = self.AddSliderOption("Blood pool bar scale", ED_Mechanics_BloodMeter_Scale_Global.GetValue())
+	BloodMeter_FillDirection = self.AddSliderOption("Blood pool bar fill direction", ED_Mechanics_BloodMeter_FillDirection_Global.GetValue())
+	BloodMeter_Opacity = self.AddSliderOption("Blood pool bar opacity", ED_Mechanics_BloodMeter_Opacity_Global.GetValue())
 	; ------------------------------------------------------------
 
 endFunction
@@ -47,35 +75,72 @@ function OnOptionSliderOpen(Int akOp)
 	
 	; ------------------------------------------------------------
 	; Blood Meter
-	if akOp == BloodPoolWidgetX
-		self.SetSliderDialogStartValue(ED_BloodMeterX.GetValue())
-		self.SetSliderDialogDefaultValue(Default_BloodPoolWidgetX)
+	if akOp == BloodMeter_X
+		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_X_Global.GetValue())
+		self.SetSliderDialogDefaultValue(Default_BloodMeter_X)
 		self.SetSliderDialogRange(0.0000, 1000.0000)
 		self.SetSliderDialogInterval(2.00000)
-	elseIf akOp == BloodPoolWidgetY
-		self.SetSliderDialogStartValue(ED_BloodMeterY.GetValue())
-		self.SetSliderDialogDefaultValue(Default_BloodPoolWidgetY)
+		
+	elseIf akOp == BloodMeter_Y
+		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_Y_Global.GetValue())
+		self.SetSliderDialogDefaultValue(Default_BloodMeter_Y)
 		self.SetSliderDialogRange(50.000000, 700.0000)
 		self.SetSliderDialogInterval(2.00000)
+		
+	elseIf akOp == BloodMeter_Scale
+		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_Scale_Global.GetValue())
+		self.SetSliderDialogDefaultValue(Default_BloodMeter_Scale)
+		self.SetSliderDialogRange(10.000000, 200.0000)
+		self.SetSliderDialogInterval(2.00000)
+		
+	elseIf akOp == BloodMeter_FillDirection
+		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_FillDirection_Global.GetValue())
+		self.SetSliderDialogDefaultValue(Default_BloodMeter_FillDirection)
+		self.SetSliderDialogRange(0.000000, 3.0000)
+		self.SetSliderDialogInterval(1.00000)
+		
+	elseIf akOp == BloodMeter_Opacity
+		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_Opacity_Global.GetValue())
+		self.SetSliderDialogDefaultValue(Default_BloodMeter_Opacity)
+		self.SetSliderDialogRange(0.000000, 100.0000)
+		self.SetSliderDialogInterval(2.00000)
+		
+		ED_Mechanics_BloodMeter_Opacity_Global.SetValue(Default_BloodMeter_Opacity as Float)
+		self.SetSliderOptionValue(BloodMeter_Opacity, Default_BloodMeter_Opacity)
 
 	; ------------------------------------------------------------
 	
-	endIf	
+	endIf
 endFunction
 
 function OnOptionSliderAccept(Int akOp, Float akValue)
 
 	; ------------------------------------------------------------
 	; Blood Meter
-	if akOp == BloodPoolWidgetX
-		ED_BloodMeterX.SetValue(akValue)
-		self.SetSliderOptionValue(BloodPoolWidgetX, akValue)
-	elseIf akOp == BloodPoolWidgetY
-		ED_BloodMeterY.SetValue(akValue)
-		self.SetSliderOptionValue(BloodPoolWidgetY, akValue)
+	if akOp == BloodMeter_X
+		ED_Mechanics_BloodMeter_X_Global.SetValue(akValue)
+		self.SetSliderOptionValue(BloodMeter_X, akValue)
+	
+	elseIf akOp == BloodMeter_Y
+		ED_Mechanics_BloodMeter_Y_Global.SetValue(akValue)
+		self.SetSliderOptionValue(BloodMeter_Y, akValue)
+		
+	elseIf akOp == BloodMeter_Scale
+		ED_Mechanics_BloodMeter_Scale_Global.SetValue(akValue)
+		self.SetSliderOptionValue(BloodMeter_Scale, akValue)
+	
+	elseIf akOp == BloodMeter_FillDirection
+		ED_Mechanics_BloodMeter_FillDirection_Global.SetValue(akValue)
+		self.SetSliderOptionValue(BloodMeter_FillDirection, akValue)
+		
+	elseIf akOp == BloodMeter_Opacity
+		ED_Mechanics_BloodMeter_Opacity_Global.SetValue(akValue)
+		self.SetSliderOptionValue(BloodMeter_Opacity, akValue)
+		
 	; ------------------------------------------------------------
 	
 	endif
+	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
 endFunction
 
 
@@ -85,13 +150,21 @@ function OnOptionHighlight(Int akOp)
 
 	; ------------------------------------------------------------
 	; Blood Meter
-	If akOp == BloodPoolWidgetX
+	If akOp == BloodMeter_X
 		self.SetInfoText("TEST: Intricate Description of X coordinate")
-	elseif akOp == BloodPoolWidgetY
+	elseif akOp == BloodMeter_Y
 		self.SetInfoText("TEST: Intricate Description of Y coordinate")
+	elseIf akOp == BloodMeter_Scale
+		self.SetInfoText("TEST: Intricate Description of meter scale")
+	elseIf akOp == BloodMeter_FillDirection
+		self.SetInfoText("The position at which the meter fills from, 0 = right, 1 = center, 2 = left. Default: right")
+	elseIf akOp == BloodMeter_Opacity
+		self.SetInfoText("TEST: Intricate Description of opacity")
+		
 		
 	; ------------------------------------------------------------
 	
 	endif
 endfunction
 
+ED_BloodMeterUpdate property ED_BloodMeter_Quest auto
