@@ -90,7 +90,7 @@ endEvent
 ; FUNCTIONS ---------------------------------------------------------------------------------------
 
 
-function UpdateMeter(bool bSkipDisplayHandling = false)
+function UpdateMeter()
 
 ;	debug.trace("Blood meter UpdateMeter called")
 	
@@ -103,14 +103,14 @@ function UpdateMeter(bool bSkipDisplayHandling = false)
 ;	debug.Trace("fMeterPercent value is: " + fMeterPercent)
 	
 	
-	UpdateBlood(fMeterPercent, bSkipDisplayHandling)
+	UpdateBlood(fMeterPercent)
 	
 	fLastMeterPercent = fMeterPercent
 	
 endFunction
 
 
-function UpdateBlood(float meterPercent, bool bSkipDisplayHandling = false)
+function UpdateBlood(float meterPercent)
 
 ;	debug.trace("Blood meter UpdateBlood called")
 	ExposureMeter.Alpha = ED_BloodMeter_Opacity.GetValue()
