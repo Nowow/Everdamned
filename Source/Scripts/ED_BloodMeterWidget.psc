@@ -141,9 +141,7 @@ endProperty
 
 ; @override SKI_WidgetBase
 event OnWidgetReset()
-	debug.Trace("EVERDAMNED DEBUG: ON WIDGET RESET CALLED")
 	parent.OnWidgetReset()
-	debug.Trace("EVERDAMNED DEBUG: ON WIDGET RESET PARENT FINISHED")
 	; Init numbers
 	float[] numberArgs = new float[6]
 	numberArgs[0] = _width
@@ -161,7 +159,6 @@ event OnWidgetReset()
 
 	; Init commit
 	UI.Invoke(HUD_MENU, WidgetRoot + ".initCommit")
-	debug.Trace("EVERDAMNED DEBUG: ON WIDGET RESET FINISHED")
 	
 endEvent
 

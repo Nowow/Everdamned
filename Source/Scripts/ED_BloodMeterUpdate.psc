@@ -1,11 +1,7 @@
 Scriptname ED_BloodMeterUpdate extends Quest  
 
 
-
-; -------------------------------------------------------------------------------------------------
-; VARIABLES ---------------------------------------------------------------------------------------
-
-
+; script on this same quest with address that extends unattached script ED_BloodMeterWidget
 ED_BloodMeter property ExposureMeter auto
 GlobalVariable Property EnableVampireBloodPool Auto
 GlobalVariable Property EnableVampireBloodMeter Auto
@@ -58,8 +54,6 @@ endEvent
 function StartUpdating()
 
 	debug.Trace("Blood meter started updating!")
-	
-	PlayerRef = Game.GetPlayer()
 
 	RegisterForSingleUpdate(2)
 	
@@ -69,10 +63,10 @@ endFunction
 Event OnUpdate()
 
 ;	debug.trace("Blood meter OnUpdate called")
-	
 ;	debug.Trace("EnableVampireBloodPool value is: " + EnableVampireBloodPool.GetValue())
 ;	debug.Trace("EnableVampireBloodMeter value is: " + EnableVampireBloodMeter.GetValue())
 
+	; TODO: move param switching logic to MCM quest
 	if EnableVampireBloodPool.GetValue() == 0 || EnableVampireBloodMeter.GetValue() == 0
 ;	debug.trace("Blood meter is hidden now")
 		ExposureMeter.Alpha = 0.0
@@ -81,10 +75,13 @@ Event OnUpdate()
 		UpdateMeter()
 	endif
 
-	if EnableVampireBloodPool.GetValue() != 0
+	;if EnableVampireBloodPool.GetValue() != 0
 ;		debug.trace("Blood meter registred for update")
-		RegisterForSingleUpdate(2)
-	endif
+	
+	; TODO: switch to RegisterForUpdate
+	RegisterForSingleUpdate(2)
+	
+	;endif
 	
 endEvent
 
@@ -109,23 +106,6 @@ function UpdateMeter(bool bSkipDisplayHandling = false)
 	UpdateBlood(fMeterPercent, bSkipDisplayHandling)
 	
 	fLastMeterPercent = fMeterPercent
-
-	;if iDisplayIterationsRemaining > 0
-	;	iDisplayIterationsRemaining -= 1
-	;	if iDisplayIterationsRemaining <= 0
-	;		iDisplayIterationsRemaining = 0
-	;		if ED_BloodMeterDisplay_Contextual.GetValueInt() != 1
-	;			ExposureMeter.FadeTo(0.0, 3.0)
-	;		endif
-	;	endif
-	;elseif iDisplayIterationsRemaining == 0
-	;	if ExposureMeter.Alpha == ED_BloodMeter_Opacity.GetValue()
-	;		if ED_BloodMeterDisplay_Contextual.GetValueInt() != 1
-	;			ExposureMeter.FadeTo(0.0, 3.0)
-	;		endif
-	;	endif
-	;else
-	;endif	
 	
 endFunction
 
@@ -134,15 +114,7 @@ function UpdateBlood(float meterPercent, bool bSkipDisplayHandling = false)
 
 ;	debug.trace("Blood meter UpdateBlood called")
 	ExposureMeter.Alpha = ED_BloodMeter_Opacity.GetValue()
-	
-	;if BetterVampiresBloodMeterDisplay_Contextual.GetValueInt() == 1
-		;ExposureMeter.Alpha = BetterVampiresBloodMeter_Opacity.GetValue()
-	;elseif BetterVampiresBloodMeterDisplay_Contextual.GetValueInt() == 2
-	;	ContextualDisplay(fThisBloodPointValue)
-	;elseif BetterVampiresBloodMeterDisplay_Contextual.GetValueInt() == 0 && iDisplayIterationsRemaining == 0
-	;	ExposureMeter.Alpha = 0.0
-	;	return
-	;endif
+
 	
 	;if fLastBloodPointValue <= 0
 	;	ExposureMeter.ForcePercent(0.0)
@@ -155,37 +127,11 @@ function UpdateBlood(float meterPercent, bool bSkipDisplayHandling = false)
 	ExposureMeter.Height = 25.2
 	ExposureMeter.Width = 292.8
 	ExposureMeter.FillDirection = "right"
-	;Exposuremeter.Height = ((BetterVampiresBloodMeterScale.GetValue()/100)*25.2) ; Default Scale is 100 with Height of 25.2
-	;Exposuremeter.Width = ((BetterVampiresBloodMeterScale.GetValue()/100)*292.8) ; Default Scale is 100 with Width of 292.8
 	
 	ExposureMeter.SetPercent(meterPercent)
-	
-	;If VampireDynamicStages.GetValue() == 20000
-	;	ExposureMeter.SetPercent((fThisBloodPointValue) / 100.0)
-	;ElseIf VampireDynamicStages.GetValue() != 20000
-	;	ExposureMeter.SetPercent((fThisBloodPointValue) / 300.0)
-	;EndIf
+
 
 	Int _primaryColor = 11141120
-	;Int _primaryColor = 4259840
-	
-	;If VampireDynamicStages.GetValue() == 20000
-	;	If VampireBloodPoints.GetValue() > 67
-	;		_primaryColor	= 11141120
-	;	ElseIf VampireBloodPoints.GetValue() > 37
-	;		_primaryColor	= 6553600
-	;	ElseIf VampireBloodPoints.GetValue() > 0
-	;		_primaryColor	= 3276800
-	;	EndIf
-	;ElseIf VampireDynamicStages.GetValue() < 20000
-	;	If VampireBloodPoints.GetValue() > 200
-	;		_primaryColor	= 11141120
-	;	ElseIf VampireBloodPoints.GetValue() > 100
-	;		_primaryColor	= 6553600
-	;	ElseIf VampireBloodPoints.GetValue() > 0
-	;		_primaryColor	= 3276800
-	;	EndIf	
-	;EndIf		
 	
 	ExposureMeter.SetColors(_primaryColor, 3276800)
 	
