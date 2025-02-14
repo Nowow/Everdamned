@@ -279,7 +279,7 @@ Function Feed(Actor victim)
     
 	;PlayerWerewolfFeedMessage.Show()
 	;FeedBoost.Cast(Game.GetPlayer())
-	; victim.SetActorValue("Variable08", 100)
+	; victim.SetActorValue("ED_BloodPool", 100)
 	if !(playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)) && GetStage() < 80
 		debug.Trace("Everdamned INFO: Untamed Garkain just fed on corpse, reverting to mortal when out of combat")
 		Message.ResetHelpMessage("ed_garkain_thirstquenched")

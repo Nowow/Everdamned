@@ -17,7 +17,7 @@ GlobalVariable property ED_BloodMeterX auto
 GlobalVariable property ED_BloodMeterY auto
 GlobalVariable property ED_BloodMeterDisplayTime auto
 
-; using Actor value Variable08 as blood pool now
+; using Actor value ED_BloodPool as blood pool now
 GlobalVariable Property VampireBloodPool Auto
 GlobalVariable Property VampireBloodPoolMax Auto
 
@@ -97,7 +97,7 @@ function UpdateMeter(bool bSkipDisplayHandling = false)
 
 ;	debug.trace("Blood meter UpdateMeter called")
 	
-	fThisBloodPoolValue = PlayerRef.GetActorValue("Variable08")
+	fThisBloodPoolValue = PlayerRef.GetActorValue("ED_BloodPool")
 	fMaxBloodPoolValue = VampireBloodPoolMax.GetValue()
 	fMeterPercent = ((fThisBloodPoolValue)/(fMaxBloodPoolValue))
 	

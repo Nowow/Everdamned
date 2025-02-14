@@ -74,7 +74,7 @@ String property SCS_Stat2 auto
 
 function OnUpdateGameTime()
 
-	ED_BloodPoolManager_Quest.ProcessBonuses()
+	ED_BloodPoolManager_Quest.AtProcessBonus()
 	FeedTimer = (GameDaysPassed.value - LastFeedTime) * 24.0100 / ED_Mechanics_Global_DelayBetweenStages.GetValue()
 	if game.IsMovementControlsEnabled() && game.IsFightingControlsEnabled() && playerRef.GetCombatState() == 0 && !playerRef.HasMagicEffect(DLC1VampireChangeEffect) && !playerRef.HasMagicEffect(DLC1VampireChangeFXEffect)
 		Float Chance
@@ -90,32 +90,31 @@ function OnUpdateGameTime()
 	endIf
 endFunction
 
-; this function exists because dont want to change VampireFeed() interface to avoid compatibility issues
-float _defaultHPtoBeEaten = 20.0 ; for compatibility, a default amount for feeds that do not know feed target
-float _hpToBeEaten = 0.0
-float __hpCacheVal
-float property hpToBeEaten hidden
-	
-	function Set(float newValue)
-		if newValue >= 0.0	
-			_hpToBeEaten = newValue
-		endif
-	EndFunction
-  
-	float function Get()
-		__hpCacheVal = _hpToBeEaten
-		_hpToBeEaten = _defaultHPtoBeEaten
-		return __hpCacheVal
-	EndFunction
 
-EndProperty
+; this function exists because dont want to change VampireFeed() interface to avoid compatibility issues
+float __defaultHPtoBeEaten = 100.0 ; for compatibility, a default amount for feeds that do not know feed target
+float __hpToBeEaten
+float __hpCacheVal
+function SetHPtoBeEaten(float newValue, bool force = false)
+	
+	;checking new value is bigger then old
+	;idea is that Blood Pool Manager can disregard smaller values if they happen to come uprocessed before bigger ones appear
+	if force || newValue >= __hpToBeEaten
+		__hpToBeEaten = newValue
+	endif
+endfunction
+
+float function GetHPtoBeEaten()
+	__hpCacheVal = __hpToBeEaten
+	__hpToBeEaten = 0.0
+	return __hpCacheVal
+endfunction
+
 
 function EatThisActor(actor Target, float percentToDigest = 0.2)
-	
-
-	debug.Trace("Everdamned Info: actor to be eaten at 20% of base hp")
-	hpToBeEaten = Target.getbaseav("health") * 0.2
-	
+	debug.Trace("Everdamned Info: actor to be eaten at " + percentToDigest*100.0 + "% of base hp")
+	SetHPtoBeEaten(Target.getbaseav("health") * percentToDigest)
+	ED_BloodPoolManager_Quest.SetBonusAfterFeed()
 	VampireFeed()
 endFunction
 
@@ -307,7 +306,8 @@ Bool function Devolve(Bool abForceDevolve)
 	endIf
 endFunction
 
-
+; VampireStage gets new stage, but property is still an old stage and is set after VampireProgression completes
+; Done so you can distinguish when VampireProgression is called to actually change stage
 function VampireProgression(actor Player, Int VampireStage)
 
 	; TODO: move all that somewhere out of here. maybe leave abilities and move spells elsewhere
@@ -325,6 +325,7 @@ function VampireProgression(actor Player, Int VampireStage)
 		if VampireStatus == 0
 			debug.Trace("Everdamned ERROR: VampireProgression for stage 2 while Vampire Status is 0")
 		endif
+		
 		VampireTransformIncreaseISMD.applyCrossFade(2.00000)
 		utility.Wait(2.00000)
 		imagespacemodifier.removeCrossFade(1.00000)
@@ -345,7 +346,10 @@ function VampireProgression(actor Player, Int VampireStage)
 		
 		Player.RemoveSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell)
 		
-		ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage, ED_VampireAge.GetValue() as int, 0.0)
+		if VampireStatus != VampireStage
+			debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
+			ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+		endif
 		
 		;Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
 		;Player.AddSpell(ED_VampirePowers_Pw_VampiresWill_Spell, false)
@@ -359,6 +363,7 @@ function VampireProgression(actor Player, Int VampireStage)
 		if VampireStatus == 0
 			debug.Trace("Everdamned ERROR: VampireProgression for stage 3 while Vampire Status is 0")
 		endif
+		
 		VampireTransformIncreaseISMD.applyCrossFade(2.00000)
 		utility.Wait(2.00000)
 		imagespacemodifier.removeCrossFade(1.00000)
@@ -383,7 +388,10 @@ function VampireProgression(actor Player, Int VampireStage)
 		
 		Player.RemoveSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell)
 		
-		ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage, ED_VampireAge.GetValue() as int, 0.0)
+		if VampireStatus != VampireStage
+			debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
+			ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+		endif
 		
 		;Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
 		
@@ -416,7 +424,10 @@ function VampireProgression(actor Player, Int VampireStage)
 		Player.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell)
 		Player.AddSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell, false)
 		
-		ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage, ED_VampireAge.GetValue() as int, 0.0)
+		if VampireStatus != VampireStage
+			debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
+			ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+		endif
 		
 		;Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
 		
@@ -472,10 +483,11 @@ function VampireProgression(actor Player, Int VampireStage)
 		
 		Player.AddSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell, false)
 		
-		; i dont remember why do I do that here and not in VampireFeed but there was some reason
-		ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage, ED_VampireAge.GetValue() as int, hpToBeEaten)
 		
-
+		if VampireStatus != VampireStage
+			debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
+			ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+		endif
 		
 		; now a perk
 		;Player.AddSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage1, false)
