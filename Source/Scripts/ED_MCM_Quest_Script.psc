@@ -1,6 +1,10 @@
 Scriptname ED_MCM_Quest_Script extends SKI_ConfigBase
 
 
+Int BloodMeter_Enable
+float property Default_BloodMeter_Enable auto
+GlobalVariable Property ED_Mechanics_BloodMeter_Enable_Global Auto  
+
 Int BloodMeter_X
 float property Default_BloodMeter_X auto
 GlobalVariable Property ED_Mechanics_BloodMeter_X_Global  Auto  
@@ -20,6 +24,11 @@ GlobalVariable property ED_Mechanics_BloodMeter_Opacity_Global auto
 int BloodMeter_FillDirection
 int property Default_BloodMeter_FillDirection auto
 GlobalVariable property ED_Mechanics_BloodMeter_FillDirection_Global auto
+
+int BloodMeter_DisplayTime
+int property Default_BloodMeter_DisplayTime auto
+GlobalVariable property ED_Mechanics_BloodMeter_DisplayTime_Global auto
+
 
 
 ; on pressing R for default i guess?
@@ -41,18 +50,25 @@ function OnOptionDefault(Int akOp)
 		
 	elseIf akOp == BloodMeter_FillDirection
 		ED_Mechanics_BloodMeter_FillDirection_Global.SetValue(Default_BloodMeter_FillDirection as Float)
-		self.SetSliderOptionValue(BloodMeter_FillDirection, Default_BloodMeter_FillDirection)
+		self.SetSliderOptionValue(BloodMeter_FillDirection, Default_BloodMeter_FillDirection as Float)
 		
 	elseIf akOp == BloodMeter_Opacity
 		ED_Mechanics_BloodMeter_Opacity_Global.SetValue(Default_BloodMeter_Opacity as Float)
 		self.SetSliderOptionValue(BloodMeter_Opacity, Default_BloodMeter_Opacity)
+		
+	elseIf akOp == BloodMeter_Enable
+		ED_Mechanics_BloodMeter_Enable_Global.SetValue(Default_BloodMeter_Enable as Float)
+		self.SetToggleOptionValue(BloodMeter_Enable, Default_BloodMeter_Enable as bool)
+	
+	elseIf akOp == BloodMeter_DisplayTime
+		ED_Mechanics_BloodMeter_DisplayTime_Global.SetValue(Default_BloodMeter_DisplayTime as Float)
+		self.SetSliderOptionValue(BloodMeter_DisplayTime, Default_BloodMeter_DisplayTime as Float)
 	
 	; ------------------------------------------------------------
 	
 	endif
 	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
 endfunction
-
 
 function OnPageReset(String akPage)
 
@@ -62,11 +78,16 @@ function OnPageReset(String akPage)
 	
 	; ------------------------------------------------------------
 	; Blood Meter
+	
+	BloodMeter_Enable = self.AddToggleOption("Enable blood pool bar", ED_Mechanics_BloodMeter_Enable_Global.GetValue() as Bool)
+	
 	BloodMeter_X = self.AddSliderOption("Blood pool bar X coordinate", ED_Mechanics_BloodMeter_X_Global.GetValue())
 	BloodMeter_Y = self.AddSliderOption("Blood pool bar Y coordinate", ED_Mechanics_BloodMeter_Y_Global.GetValue())
 	BloodMeter_Scale = self.AddSliderOption("Blood pool bar scale", ED_Mechanics_BloodMeter_Scale_Global.GetValue())
 	BloodMeter_FillDirection = self.AddSliderOption("Blood pool bar fill direction", ED_Mechanics_BloodMeter_FillDirection_Global.GetValue())
 	BloodMeter_Opacity = self.AddSliderOption("Blood pool bar opacity", ED_Mechanics_BloodMeter_Opacity_Global.GetValue())
+	BloodMeter_DisplayTime = self.AddSliderOption("Seconds to fade when incative", ED_Mechanics_BloodMeter_DisplayTime_Global.GetValue())
+	
 	; ------------------------------------------------------------
 
 endFunction
@@ -95,8 +116,8 @@ function OnOptionSliderOpen(Int akOp)
 		
 	elseIf akOp == BloodMeter_FillDirection
 		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_FillDirection_Global.GetValue())
-		self.SetSliderDialogDefaultValue(Default_BloodMeter_FillDirection)
-		self.SetSliderDialogRange(0.000000, 3.0000)
+		self.SetSliderDialogDefaultValue(Default_BloodMeter_FillDirection as float)
+		self.SetSliderDialogRange(0.000000, 2.0000)
 		self.SetSliderDialogInterval(1.00000)
 		
 	elseIf akOp == BloodMeter_Opacity
@@ -105,8 +126,11 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogRange(0.000000, 100.0000)
 		self.SetSliderDialogInterval(2.00000)
 		
-		ED_Mechanics_BloodMeter_Opacity_Global.SetValue(Default_BloodMeter_Opacity as Float)
-		self.SetSliderOptionValue(BloodMeter_Opacity, Default_BloodMeter_Opacity)
+	elseIf akOp == BloodMeter_DisplayTime
+		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_DisplayTime_Global.GetValue())
+		self.SetSliderDialogDefaultValue(Default_BloodMeter_DisplayTime as Float)
+		self.SetSliderDialogRange(0.000000, 20.0000)
+		self.SetSliderDialogInterval(1.0)
 
 	; ------------------------------------------------------------
 	
@@ -136,12 +160,30 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 	elseIf akOp == BloodMeter_Opacity
 		ED_Mechanics_BloodMeter_Opacity_Global.SetValue(akValue)
 		self.SetSliderOptionValue(BloodMeter_Opacity, akValue)
+	
+	elseIf akOp == BloodMeter_DisplayTime
+		ED_Mechanics_BloodMeter_DisplayTime_Global.SetValue(akValue)
+		self.SetSliderOptionValue(BloodMeter_DisplayTime, akValue)
 		
 	; ------------------------------------------------------------
 	
 	endif
 	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
 endFunction
+
+
+function OnOptionSelect(Int akOp)
+	; ------------------------------------------------------------
+	; Blood Meter
+	if akOp == BloodMeter_Enable
+		ED_Mechanics_BloodMeter_Enable_Global.SetValue(1 as Float - ED_Mechanics_BloodMeter_Enable_Global.GetValue())
+		self.SetToggleOptionValue(BloodMeter_Enable, ED_Mechanics_BloodMeter_Enable_Global.GetValue() as Bool)
+	
+	; ------------------------------------------------------------
+	
+	endif
+	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
+endfunction
 
 
 ; proper description of the option when you highlight it with a mouse
@@ -160,6 +202,10 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("The position at which the meter fills from, 0 = right, 1 = center, 2 = left. Default: right")
 	elseIf akOp == BloodMeter_Opacity
 		self.SetInfoText("TEST: Intricate Description of opacity")
+	elseIf akOp == BloodMeter_Enable
+		self.SetInfoText("Enable blood bar")
+	elseIf akOp == BloodMeter_DisplayTime
+		self.SetInfoText("How much seconds before blood bar fades after displaying last change. Setting to 0 disables fading. May not be exact amount of seconds due to bar update rate")
 		
 		
 	; ------------------------------------------------------------

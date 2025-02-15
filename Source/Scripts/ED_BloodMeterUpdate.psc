@@ -19,6 +19,8 @@ GlobalVariable property ED_Mechanics_BloodMeter_DisplayTime_Global auto
 
 GlobalVariable Property ED_Mechanics_BloodPool_Total Auto
 
+float property BloodMeter_UpdateRate auto
+
 Actor Property PlayerRef Auto
 
 float fThisBloodPoolValue
@@ -26,6 +28,8 @@ float fMaxBloodPoolValue
 float fMeterPercent
 float fLastMeterPercent
 
+bool bShouldFadeWhenIdle
+int iDisplayIterationsNeededUntilFade = 3
 int iDisplayIterationsRemaining
 
 
@@ -34,22 +38,13 @@ int iDisplayIterationsRemaining
 ; EVENTS ------------------------------------------------------------------------------------------
 
 
-Event OnInit()
-
-	ExposureMeter.HAnchor = "left"
-	ExposureMeter.VAnchor = "bottom"
-	ExposureMeter.X = ED_Mechanics_BloodMeter_X_Global.GetValue() ; Default is 67
-	ExposureMeter.Y = ED_Mechanics_BloodMeter_Y_Global.GetValue() ; Default is 640
-	
+Event OnInit()	
 	StartUpdating()
-	
 endEvent
 
 
 Event OnGameReload()
-
 	StartUpdating()
-	
 endEvent
 
 
@@ -59,33 +54,13 @@ function StartUpdating()
 	
 	UpdateMeterBasicSettings()
 	
-	RegisterForSingleUpdate(2)
+	; registration happens in UpdateMeterBasicSettings
 	
 endFunction
 
 
 Event OnUpdate()
-
-;	debug.trace("Blood meter OnUpdate called")
-;	debug.Trace("ED_Mechanics_BloodMeter_Enable_Global value is: " + ED_Mechanics_BloodMeter_Enable_Global.GetValue())
-
-	; TODO: move param switching logic to MCM quest
-	if ED_Mechanics_BloodMeter_Enable_Global.GetValue() == 0
-;	debug.trace("Blood meter is hidden now")
-		ExposureMeter.Alpha = 0.0
-		;UnRegisterForUpdate()
-	else
 		UpdateMeter()
-	endif
-
-	;if UDALIT.GetValue() != 0
-;		debug.trace("Blood meter registred for update")
-	
-	; TODO: switch to RegisterForUpdate
-	RegisterForSingleUpdate(2)
-	
-	;endif
-	
 endEvent
 
 
@@ -94,8 +69,6 @@ endEvent
 
 
 function UpdateMeter()
-
-;	debug.trace("Blood meter UpdateMeter called")
 	
 	fThisBloodPoolValue = PlayerRef.GetActorValue("ED_BloodPool")
 	fMaxBloodPoolValue = ED_Mechanics_BloodPool_Total.GetValue()
@@ -105,15 +78,37 @@ function UpdateMeter()
 	
 	Int _primaryColor = 11141120
 	ExposureMeter.SetColors(_primaryColor, 3276800)
-	ExposureMeter.Alpha = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
+
 	
-;	debug.Trace("fThisBloodPoolValue value is: " + fThisBloodPoolValue)
-;	debug.Trace("fMaxBloodPoolValue value is: " + fMaxBloodPoolValue)
-;	debug.Trace("fMeterPercent value is: " + fMeterPercent)
+	
+	float fNewOpacity = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
+	if bShouldFadeWhenIdle
+		if fLastMeterPercent == fMeterPercent
+		
+			if iDisplayIterationsRemaining > 0
+				iDisplayIterationsRemaining -= 1
+			else
+				fNewOpacity = fNewOpacity/2.0 ; 2 times less opaque
+			endif
+			
+		else
+			iDisplayIterationsRemaining = iDisplayIterationsNeededUntilFade
+		endif
+	endif
+	
+	ExposureMeter.FadeTo(fNewOpacity, 1.0)
 	
 	fLastMeterPercent = fMeterPercent
 	
-	
+	; here on occasion UpdateMeterBasicSettings unregisters due to Enabled change
+	; but OnUpdate manages to fire anyway
+	; consider switching to OnUpdate
+	if ED_Mechanics_BloodMeter_Enable_Global.value == 0
+		ExposureMeter.Alpha = 0.0
+	else
+		RegisterForSingleUpdate(BloodMeter_UpdateRate)
+	endif
+
 endFunction
 
 function UpdateMeterBasicSettings()
@@ -121,8 +116,8 @@ function UpdateMeterBasicSettings()
 	ExposureMeter.VAnchor = "bottom" 
 	ExposureMeter.X = ED_Mechanics_BloodMeter_X_Global.GetValue() ; Default is 67
 	ExposureMeter.Y = ED_Mechanics_BloodMeter_Y_Global.GetValue() ; Default is 640
-	Exposuremeter.Height = ((ED_Mechanics_BloodMeter_Scale_Global.GetValue()/100)*25.2) ; Default Scale is 100 with Height of 25.2
-	Exposuremeter.Width = ((ED_Mechanics_BloodMeter_Scale_Global.GetValue()/100)*292.8) ; Default Scale is 100 with Width of 292.8
+	Exposuremeter.Height = ((ED_Mechanics_BloodMeter_Scale_Global.GetValue()/100.0)*25.2) ; Default Scale is 100 with Height of 25.2
+	Exposuremeter.Width = ((ED_Mechanics_BloodMeter_Scale_Global.GetValue()/100.0)*292.8) ; Default Scale is 100 with Width of 292.8
 	
 	int __fillDirection = ED_Mechanics_BloodMeter_FillDirection_Global.value as int
 	if __fillDirection == 1
@@ -133,7 +128,23 @@ function UpdateMeterBasicSettings()
 		ExposureMeter.FillDirection = "right"
 	endif
 	
-	ExposureMeter.Alpha = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
+	float DisplayTimeSeconds = ED_Mechanics_BloodMeter_DisplayTime_Global.GetValue()
+	
+	if DisplayTimeSeconds > 0
+		bShouldFadeWhenIdle = true
+		iDisplayIterationsNeededUntilFade = math.ceiling(DisplayTimeSeconds / BloodMeter_UpdateRate)
+		iDisplayIterationsRemaining = iDisplayIterationsNeededUntilFade
+	else
+		bShouldFadeWhenIdle = false
+	endif
+	
+	if ED_Mechanics_BloodMeter_Enable_Global.value == 0
+		ExposureMeter.Alpha = 0.0
+		UnregisterForUpdate()
+	else
+		ExposureMeter.Alpha = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
+		RegisterForSingleUpdate(BloodMeter_UpdateRate)
+	endif
 	
 endfunction
 
