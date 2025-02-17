@@ -4,15 +4,11 @@ actor property aFeedTarget auto
 bool property bFeedAnimRequiredForSuccess auto
 
 
-Event OnInit()
-	debug.Trace("Everdamned DEBUG: FeedManager script initialized")
-	RegisterFeedEvents()
-EndEvent
- 
 Function RegisterFeedEvents()
 	if PlayerIsVampire.value == 1
 		debug.Trace("Everdamned DEBUG: RegisterFeedEvents() called for vampire")
 		race playerRace = playerRef.GetRace()
+		; TODO: why not DLC1VampireBeastRace?
 		if (playerRace != VampireGarkainBeastRace) && (playerRace != DLC1VampireBeastRace)
 			Debug.Trace("Everdamned INFO: Registred player for feed animation events")
 			unRegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
@@ -23,15 +19,21 @@ Function RegisterFeedEvents()
 EndFunction
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
-	if asEventName == "SoundPlay.NPCVampireLordFeed"
-		PlayerVampireQuest.VampireFeed()
-	endif
+	; TODO: change to some specific custom animevent to differentiate from regular feed and killmove
+	;if asEventName == "SoundPlay.NPCVampireLordFeed"
+	;	PlayerVampireQuest.VampireFeed() 544D0F
+	;endif
 endevent
 
 function HandleFeed(actor FeedTarget)
 
-	debug.Trace("Everdamned DEBUG: Player feeds on target " + FeedTarget)
+	debug.Trace("Everdamned DEBUG:  Feed Manager recieved Drain call on target " + FeedTarget)
 	
+	; tell OAR that ist vanilla feed animation
+	ED_Mechanics_Global_FeedType.SetValue(0.0)
+	
+	;start actual feed animation
+	PlayerRef.StartVampireFeed(FeedTarget)
 	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
 	;TODO: change for bystander quest
@@ -69,7 +71,13 @@ function HandleFeed(actor FeedTarget)
 endfunction
 
 function HandleDrain(actor FeedTarget, bool isDiablerie = false)
-	debug.Trace("Everdamned DEBUG: Feed Manager callback was called in CombatDrain state, feed anim WAS played, proceed")
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain call on target " + FeedTarget)
+	
+	; tell OAR that ist jump feed killmove
+	ED_Mechanics_Global_FeedType.SetValue(1.0)
+	;start actual feed animation
+	
+	PlayerRef.StartVampireFeed(FeedTarget)
 	
 	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
@@ -131,6 +139,12 @@ endfunction
 function HandleDialogueFeed(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Player feeds on target " + FeedTarget)
 	
+	; tell OAR that ist vanilla feed animation
+	ED_Mechanics_Global_FeedType.SetValue(0.0)
+	
+	;start actual feed animation
+	PlayerRef.StartVampireFeed(FeedTarget)
+	
 	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
 	;no assault alarm
@@ -179,6 +193,9 @@ state CombatDrain
 	
 	event OnBeginState()
 		debug.Trace("Everdamned DEBUG: Feed Manager entered CombatDrain state, bFeedAnimRequiredForSuccess = true")
+		; tell OAR that ist jump feed killmove
+		ED_Mechanics_Global_FeedType.SetValue(1.0)
+		
 		bFeedAnimRequiredForSuccess = true
 		debug.Trace("Everdamned DEBUG: Feed Manager starts Vampire Feed with aFeedTarget")
 		PlayerRef.StartVampireFeed(aFeedTarget)
@@ -263,6 +280,7 @@ sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
 formlist property ED_Mechanics_BlueBlood_Track_FormList auto
 spell property ED_Mechanics_PsychicVampire_Spell auto
 quest property ED_Mechanics_Hemomancy_Quest auto
+globalvariable property ED_Mechanics_Global_FeedType auto
 
 playerVampireQuestScript property PlayerVampireQuest auto
 dlc1vampireturnscript property DLC1VampireTurn auto

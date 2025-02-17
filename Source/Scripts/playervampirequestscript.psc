@@ -225,6 +225,9 @@ function VampireCure(actor Player)
 	;endIf
 	;SCS_Mechanics_Global_Wassail_NerfAmount.SetValue(0.000000)
 	;Player.DispelSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc)
+	
+	ED_Mechanics_Hotkeys_Quest.stop()
+	
 endFunction
 
 function VampireFeedBedRoll()
@@ -267,6 +270,7 @@ function VampireChange(actor Target)
 	PlayerIsVampire.SetValue(1 as Float)
 	;SCS_Main500_Quest.RebuildRewardSpells()
 	utility.Wait(1.00000)
+	ED_Mechanics_Hotkeys_Quest.start()
 	ED_FeedManager_Quest.RegisterFeedEvents()
 	ED_MainQuest.GainAgeExpirience(0.0)
 	game.EnablePlayerControls(true, true, true, true, true, true, true, true, 0)
@@ -531,6 +535,7 @@ endFunction
 ED_BloodPoolManager_Script Property ED_BloodPoolManager_Quest Auto
 ED_FeedManager_Script Property ED_FeedManager_Quest Auto
 ED_MainQuest_Script Property ED_MainQuest Auto
+ED_HotKeys_Script property ED_Mechanics_Hotkeys_Quest auto
 
 globalvariable property ED_VampireAge auto
 actor property playerRef auto
