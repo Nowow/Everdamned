@@ -65,16 +65,27 @@ state LearningAdept
 	endfunction
 	
 	function AdvanceHemomancy()
-		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")
-		spell spellToLearn = AdeptHemomancySpells[AdeptHemomancyLearned]
-		playerRef.AddSpell(spellToLearn)
-		debug.Trace("Everdamned INFO: Player just learned new Hemomancy spell: " + spellToLearn)
-		AdeptHemomancyLearned += 1
+		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")		
 		
-		if AdeptHemomancyLearned >= AdeptHemomancySpells.length
-			debug.Trace("Everdamned INFO: Player just learned all Adept Hemomancy spells, goto state LearningExpert")
-			GoToState("LearningExpert")
-		endif
+		int spellListSize = AdeptHemomancySpells.Length
+		while AdeptHemomancyLearned < spellListSize
+			theSpell = AdeptHemomancySpells[i]
+			if !(player.hasspell(theSpell))
+				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
+				player.addspell(theSpell)
+				AdeptHemomancyLearned += 1
+				return
+			else
+				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
+			endif
+			AdeptHemomancyLearned += 1
+		endWhile
+		
+		
+		debug.Trace("Everdamned INFO: Player seems to have learned all " + spellListSize +" Adept Hemomancy spells, goto state LearningExpert")
+		GoToState("LearningExpert")
+		AdvanceHemomancy()
+
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
@@ -100,6 +111,7 @@ state LearningAdept
 		
 		__learnLock = false
 	endevent
+	
 endstate
 
 state LearningExpert
@@ -113,16 +125,27 @@ state LearningExpert
 	endfunction
 	
 	function AdvanceHemomancy()
-		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")
-		spell spellToLearn = ExpertHemomancySpells[ExpertHemomancyLearned]
-		playerRef.AddSpell(spellToLearn)
-		debug.Trace("Everdamned INFO: Player just learned new Hemomancy spell: " + spellToLearn)
-		ExpertHemomancyLearned += 1
+		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")		
 		
-		if ExpertHemomancyLearned >= ExpertHemomancySpells.length
-			debug.Trace("Everdamned INFO: Player just learned all Expert Hemomancy spells, goto state LearningMaster")
-			GoToState("LearningMaster")
-		endif
+		int spellListSize = ExpertHemomancySpells.Length
+		while ExpertHemomancyLearned < spellListSize
+			theSpell = ExpertHemomancySpells[i]
+			if !(player.hasspell(theSpell))
+				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
+				player.addspell(theSpell)
+				ExpertHemomancyLearned += 1
+				return
+			else
+				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
+			endif
+			ExpertHemomancyLearned += 1
+		endWhile
+		
+		
+		debug.Trace("Everdamned INFO: Player seems to have learned all " + spellListSize +" Expert Hemomancy spells, goto state LearningExpert")
+		GoToState("LearningMaster")
+		AdvanceHemomancy()
+
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
@@ -152,6 +175,7 @@ state LearningExpert
 endstate
 
 state LearningMaster
+
 	event OnBeginState()
 		debug.Trace("Everdamned INFO: Started learning Master Hemomancy")
 		__HemomancyXPneededToAdvance = 50
@@ -162,16 +186,27 @@ state LearningMaster
 	endfunction
 
 	function AdvanceHemomancy()
-		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")
-		spell spellToLearn = MasterHemomancySpells[MasterHemomancyLearned]
-		playerRef.AddSpell(spellToLearn)
-		debug.Trace("Everdamned INFO: Player just learned new Hemomancy spell: " + spellToLearn)
-		MasterHemomancyLearned += 1
+		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")		
 		
-		if MasterHemomancyLearned >= MasterHemomancySpells.length
-			debug.Trace("Everdamned INFO: Player just learned all Master Hemomancy spells, thus concluding learning, goto empty state")
-			GoToState("")
-		endif
+		int spellListSize = MasterHemomancySpells.Length
+		while MasterHemomancyLearned < spellListSize
+			theSpell = MasterHemomancySpells[i]
+			if !(player.hasspell(theSpell))
+				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
+				player.addspell(theSpell)
+				MasterHemomancyLearned += 1
+				return
+			else
+				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
+			endif
+			MasterHemomancyLearned += 1
+		endWhile
+		
+		
+		debug.Trace("Everdamned INFO: Player just learned all Master Hemomancy spells, thus concluding learning, goto empty state")
+		__allHemomancyLearned = true
+		GoToState("")
+
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
@@ -195,33 +230,10 @@ state LearningMaster
 		__HemomancyXPneededToAdvance = 50
 		
 		AdvanceHemomancy()
-		
-		__allHemomancyLearned = true
 		__learnLock = false
 	endevent
 endstate
 
-
-;function PopulateToLearnLists()
-;	Int i
-;	int listSize
-;	spell theSpell
-;	
-;	i = 0
-;	listSize = AdeptHemomancySpells.GetSize()
-;	while i < listSize
-;		theSpell = AdeptHemomancySpells.GetAt(i)
-;		if !(player.hasspell(theSpell))
-;			debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", adding to ToLearn list")
-;			AdeptHemomancySpells_ToLearn.AddForm(theSpell)
-;		else
-;			debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
-;		endif
-;		i += 1
-;	endWhile
-;	debug.Trace("Everdamned INFO: Adept Hemomancy ToLearn list populated")
-;	
-;endfunction
 
 actor property playerRef auto
 keyword property ED_Mechanics_Keyword_Hemomancy auto
