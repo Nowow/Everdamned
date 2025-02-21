@@ -1,7 +1,11 @@
 Scriptname ED_BloodPoolManager_Script Extends Quest
 
-float property BaseBloodPoolBonusDecreaseRate auto
-actor property playerRef auto
+
+float property BloodBonus_DecreaseRate_Fix auto
+float property BloodBonus_DecreaseRate_Mult auto
+float property BloodBonus_AbsorptionRate_Fix auto
+float property BloodBonus_AbsorptionRate_Mult auto
+float property BloodBonus_PermaBonusThreshold auto
 
 
 function ModBloodPoolMaximum(float _val)
@@ -17,7 +21,8 @@ endfunction
 
 ; not interface
 function ReconstructBloodPoolAV()
-	
+
+	debug.Trace("Everdamned DEBUG: Blood Pool Manager sets blood pool with this components: " + ED_Mechanics_BloodPool_Total.GetValue() + ", " + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ", " + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
 	playerRef.SetAV("ED_BloodPool", ED_Mechanics_BloodPool_Total.GetValue() + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
 	; top up, cant reconstruct keeping current value because not thread safe
 	playerRef.RestoreAV("ED_BloodPool", 9999.0)
@@ -76,11 +81,14 @@ state StageOrAgeChange
 		
 		float _calcMaxAv
 		; each age adds 150 to pool? maybe should add more?
-		_calcMaxAv = 150.0 + (150.0 * (VampireAge as float))
+		_calcMaxAv = 150.0 * (VampireAge as float)
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated " + _calcMaxAv + " pool based on Age")
 		; Base pool values for progression, full for Sated, half for Starved
 		_calcMaxAv = _calcMaxAv - ((_calcMaxAv / 6.0) * ((VampireStatus - 1) as float))
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager modified pool to " + _calcMaxAv + " based on Stage")
 	
 		ED_Mechanics_BloodPool_Total.SetValue(_calcMaxAv)
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager set base blood pool to " + _calcMaxAv)
 		
 		;utility.wait(0.2) ; waiting to release lock for any other calls to this script to do their thing, mainly AtStageOrAgeChange()
 		GoToState("Postprocess")
@@ -111,7 +119,7 @@ state AfterFeed
 		; % HP to be eaten gets applied at EatThisActor
 		__calculatedBonus = PlayerVampireQuest.GetHPtoBeEaten()
 		__currentBonus = ED_Mechanics_BloodPool_MaxBonus.GetValue()
-		debug.Trace("Everdamned DEBUG: current blood pool bonus: " + __currentBonus + ", calculated: " + __calculatedBonus)
+		debug.Trace("Everdamned DEBUG: current blood pool bonus: " + __currentBonus + ", HPtoBeEaten bonus: " + __calculatedBonus)
 		if __calculatedBonus > __currentBonus
 			debug.Trace("Everdamned DEBUG: Setting new blood pool bonus!")
 			__currentBonus = __calculatedBonus
@@ -143,12 +151,23 @@ state ProcessBonuses
 	event OnBeginState()
 		float _incrementPermaBonus
 		float _decrementBonus
-		_incrementPermaBonus = ED_Mechanics_BloodPool_MaxBonus.GetValue() * 0.05
-		_decrementBonus = BaseBloodPoolBonusDecreaseRate - _incrementPermaBonus
+		float __currentBonus = ED_Mechanics_BloodPool_MaxBonus.GetValue()
+		float __currentPermaBonusThreshold = __currentBonus * BloodBonus_PermaBonusThreshold
+		
+		_decrementBonus = BloodBonus_DecreaseRate_Fix + (__currentBonus * BloodBonus_DecreaseRate_Mult)
+		_incrementPermaBonus = BloodBonus_AbsorptionRate_Fix + (__currentBonus * BloodBonus_AbsorptionRate_Mult)
+		
+		if _incrementPermaBonus > __currentPermaBonusThreshold
+			_incrementPermaBonus -= __currentPermaBonusThreshold
+		else
+			_incrementPermaBonus = 0
+		endif
+		
 		ED_Mechanics_BloodPool_MaxPermaBonus.Mod(_incrementPermaBonus)
 		ED_Mechanics_BloodPool_MaxBonus.Mod(_decrementBonus)
 		
-		ModBloodPoolMaximum(BaseBloodPoolBonusDecreaseRate)
+		;setting new ED_BloodPool value and adjusting damage modifier to keep current value the same
+		ModBloodPoolMaximum(_incrementPermaBonus - _decrementBonus)
 	endevent
 	
 endstate
@@ -224,5 +243,7 @@ GlobalVariable Property ED_Mechanics_BloodPool_Total  Auto
 GlobalVariable Property ED_Mechanics_BloodPool_MaxBonus  Auto  
 GlobalVariable Property ED_Mechanics_BloodPool_MaxPermaBonus  Auto  
 GlobalVariable property ED_Mechanics_VampireAge auto
+
+actor property playerRef auto
 
 playervampirequestscript property PlayerVampireQuest auto

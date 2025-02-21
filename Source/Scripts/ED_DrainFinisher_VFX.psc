@@ -1,86 +1,73 @@
 Scriptname ED_DrainFinisher_VFX extends ActiveMagicEffect  
 
+float property TimeToPop auto ;= 6
+float property VfxTaper auto ;= 3
 
-string _gmtm
-
-int _state = 0
-int _duration = 6
-int _vfxTaper = 3
-
-
+float  _timeElapsed = 0.0
 
 actor _player 
 actor _target
-bool _noBleedoutRecovery 
-float _effectDur
+
+float _vfxDuration
+float _vfxDurationMax 
 bool _success = false
 
 Event OnEffectStart(Actor Target, Actor Caster)
 
-	if Target.IsEssential() == true
-		debug.Notification("Your target is protected by threads of fate...")
-		self.Dispel()
-	endif
+	_vfxDurationMax = TimeToPop + VfxTaper
+	
 	_player = Caster
 	_target = Target
-	; try deferred kill
-	;ED_ExsanguinateTarget.ForceRefTo(Target)
-	_noBleedoutRecovery = _target.GetNoBleedoutRecovery()
-	;_target.SetNoBleedoutRecovery(true)
+
 	_target.StartDeferredKill()
-	
 	registerforsingleupdate(2)
-	_gmtm = utility.GameTimeToString(Utility.GetCurrentGameTime())
-	debug.Trace("EVERDAMNED TEST " + _gmtm + ": DRAIN STARTED")
-	
-;	DLC1VampireBatsVFX.Play(Target,5.0,Caster)
+
 EndEvent
 
 Event OnUpdate()	
-	_effectDur = (_duration + _vfxTaper - _state) as float
-	DLC1BatsAbsorbTargetVFX01.Play(_target, _effectDur,_player)
-	DLC1BatsEatenBloodSplats.Play(_target, _effectDur)
-	;_target.PlayIdle(BleedOutStart)
+	_vfxDuration = _vfxDurationMax - _timeElapsed
 	
-	debug.trace("EVERDAMNED TEST: DRAIN STATE: " + _state)
-	if _state == _duration
+	;stacking vfx
+	DLC1BatsAbsorbTargetVFX01.Play(_target, _vfxDuration, _player)
+	DLC1BatsEatenBloodSplats.Play(_target, _vfxDuration)
+	
+	debug.trace("Everdamned DEBUG: DRAIN STATE: " + _timeElapsed)
+	if _timeElapsed == TimeToPop
 		
 		_success = true
-		debug.trace("EVERDAMNED TEST: BOOOOOOOOOOOM!!!!!!")
-		;_target.SetNoBleedoutRecovery(_noBleedoutRecovery)
+		debug.trace("Everdamned DEBUG: Exsanguinate KABOOoooOOOoooOOM!!!!!!")
+		; TODO: proper VFX
 		_target.kill(_player)
-		ExsanguinateExplosion.RemoteCast(_target, _player, none)
-		_target.EndDeferredKill()
+		_target.placeatme(ED_Art_Explosion_Exsanguinate)
 		PlayerVampireQuest.EatThisActor(_target)
+		_target.EndDeferredKill()
 		return
 	endif
-	_state = _state + 1
+	_timeElapsed = _timeElapsed + 1
 	RegisterForSingleUpdate(1)
 endevent
 
 Event OnEffectFinish(Actor Target, Actor Caster)
-	debug.Trace("EVERDAMNED TEST " + _gmtm + ": DRAIN FINISHED")
+	debug.Trace("Everdamned DEBUG: Exsanguinate effect finished")
 	if !_success
-		debug.Trace("No success tho")
+		debug.Trace("Everdamned DEBUG: But no exsanguination took place")
 		DLC1BatsAbsorbTargetVFX01.Stop(_target)
 		
 	; should not be reachable, but still...
 	elseif _target.isDead()
-		DLC1VampBatsEatenByBatsSkinFXS.Play(Target,5.0)
+		debug.Trace("Everdamned ERROR: Exsanguination happened, but target still not dead for some reason")
+		DLC1VampBatsEatenByBatsSkinFXS.Play(Target, 5.0)
 	endif
 	
-	;_target.SetNoBleedoutRecovery(_noBleedoutRecovery)
+	;should end it anyway
 	_target.EndDeferredKill()
 	
 EndEvent
 
-idle property BleedOutStart auto
 VisualEffect Property DLC1BatsAbsorbTargetVFX01 auto
 ImpactDataSet Property BloodSprayBleedImpactSetRed auto
 EffectShader Property DLC1BatsEatenBloodSplats Auto
 EffectShader Property DLC1VampBatsEatenByBatsSkinFXS Auto
-Spell property ExsanguinateExplosion Auto
+Explosion property ED_Art_Explosion_Exsanguinate Auto
 
 PlayerVampireQuestScript property PlayerVampireQuest auto
-
-ReferenceAlias Property ED_ExsanguinateTarget  Auto  
