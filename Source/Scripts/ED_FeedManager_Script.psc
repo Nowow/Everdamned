@@ -25,9 +25,10 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	;endif
 endevent
 
-function HandleFeed(actor FeedTarget)
+; done
+function HandleFeedThrall(actor FeedTarget)
 
-	debug.Trace("Everdamned DEBUG:  Feed Manager recieved Drain call on target " + FeedTarget)
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Feed Thrall call on target " + FeedTarget)
 	
 	; tell OAR that ist vanilla feed animation
 	ED_Mechanics_Global_FeedType.SetValue(0.0)
@@ -36,13 +37,121 @@ function HandleFeed(actor FeedTarget)
 	PlayerRef.StartVampireFeed(FeedTarget)
 	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
-	;TODO: change for bystander quest
-	;call for help
-	FeedTarget.SendAssaultAlarm()
+	;no call for help
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+	endif
+	
+	;sfx, maybe should bake into animation?
+	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
+
+	;adjust status bloodpool etc
+	PlayerVampireQuest.EatThisActor(FeedTarget, 0.2)
+	
+	;psychic vampire check
+	; TODO: redo in form of starting quest with story manager
+	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	
+	;age for 2h
+	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
+	
+	;TODO: Vamp XP
+
+	;Blue Blood - redo in form of starting quest
+	; TODO: redo in form of starting quest with story manager
+	actorbase TargetBase = FeedTarget.GetActorBase()
+	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+	if Index >= 0
+		; removing from tracking
+		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+	endIf
+	
+endfunction
+
+;TODO: trigger hemomancy progression, diablerie, restore stats
+function HandleDrainThrall(actor FeedTarget)
+
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain Thrall call on target " + FeedTarget)
+	
+	; tell OAR that ist vanilla feed animation
+	ED_Mechanics_Global_FeedType.SetValue(0.0)
+	
+	;start actual feed animation
+	PlayerRef.StartVampireFeed(FeedTarget)
+	;TODO: mark target as fed upon, when decided how that should impact feeding
+	
+	;no call for help
+	
+	; for vampire converting sidequest
+	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
+		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+	endif
+	
+	;sfx, maybe should bake into animation?
+	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
+
+	;adjust status bloodpool etc
+	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
+	
+	;psychic vampire check
+	; TODO: redo in form of starting quest with story manager
+	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	
+	;age for 2h
+	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+	
+	; kill, redo for killmove
+	FeedTarget.KillSilent(playerRef)
+	
+	;TODO: restore attributes according to VL perk POSSIBLY
+	debug.Trace("Everdamned DEBUG NOT IMPLEMENTED: Attribute restore on feed")
+	
+	;TODO: Vamp XP
+
+	;Blue Blood - redo in form of starting quest
+	; TODO: redo in form of starting quest with story manager
+	actorbase TargetBase = FeedTarget.GetActorBase()
+	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+	if Index >= 0
+		; removing from tracking
+		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+	endIf
+	
+endfunction
+
+; done
+function HandleFeedMesmerized(actor FeedTarget)
+
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Mesmerize Feed call on target " + FeedTarget)
+	
+	; tell OAR that ist vanilla feed animation
+	ED_Mechanics_Global_FeedType.SetValue(0.0)
+	
+	;start actual feed animation
+	PlayerRef.StartVampireFeed(FeedTarget)
+	;TODO: mark target as fed upon, when decided how that should impact feeding
+		
+	; for vampire converting sidequest
+	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
+		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+	else  ;call for help
+	
+		;at 10 light half meter radius = 35 units
+		;at 70+ light 30 meters 2000 unit
+		float __lightLevel = PlayerRef.GetLightLevel()
+		if __lightLevel <= 10.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0
+		elseif __lightLevel >= 70.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
+		else
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (300.0*math.pow(2.718,0.0335*(__lightLevel - 10.0)) - 310.0)
+		endif
+		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
 	;sfx, maybe should bake into animation?
@@ -70,31 +179,41 @@ function HandleFeed(actor FeedTarget)
 	
 endfunction
 
-function HandleDrain(actor FeedTarget, bool isDiablerie = false)
-	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain call on target " + FeedTarget)
+; TODO: trigger hemomancy progression, diablerie, restore stats
+function HandleDrainMesmerized(actor FeedTarget, bool isDiablerie = false)
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain Mesmerized call on target " + FeedTarget)
 	
 	; tell OAR that ist jump feed killmove
 	ED_Mechanics_Global_FeedType.SetValue(1.0)
-	;start actual feed animation
 	
+	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
 	
 	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
-	;TODO: change for bystander quest
-	;call for help
-	FeedTarget.SendAssaultAlarm()
-	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+	else
+	
+		;at 10 light half meter radius = 35 units
+		;at 70+ light 30 meters 2000 unit
+		float __lightLevel = PlayerRef.GetLightLevel()
+		if __lightLevel <= 10.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0
+		elseif __lightLevel >= 70.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
+		else
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (300.0*math.pow(2.718,0.0335*(__lightLevel - 10.0)) - 310.0)
+		endif
+		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
 
 	;adjust status bloodpool etc
-	;PlayerVampireQuest.VampireFeed()
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
 	
 	;psychic vampire check
@@ -106,6 +225,10 @@ function HandleDrain(actor FeedTarget, bool isDiablerie = false)
 	
 	;age for 1 day, default amount for regular drain
 	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+
+	; kill, redo for killmove
+	; silent because detection handled by bystander quest
+	FeedTarget.KillSilent(playerRef)
 	
 	;TODO: Vamp XP
 	
@@ -115,6 +238,9 @@ function HandleDrain(actor FeedTarget, bool isDiablerie = false)
 	endif
 	
 	;TODO: diablerie 
+	
+	; 
+	; age and exp check against targetlevel/playerlevel * 24.0
 	
 	;Blue Blood
 	actorbase TargetBase = FeedTarget.GetActorBase()
@@ -126,20 +252,11 @@ function HandleDrain(actor FeedTarget, bool isDiablerie = false)
 	endIf
 endfunction
 
-function HandleCombatDrain(actor FeedTarget, bool isDiablerie = false)
-	debug.Trace("Everdamned DEBUG: Player combat drains target " + FeedTarget)
+; TODO: conditions
+function HandleDialogueSeduction(actor FeedTarget)
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Dialogue Seduction call on target " + FeedTarget)
 	
-	aFeedTarget = FeedTarget
-
-	debug.Trace("Everdamned DEBUG: Feed Manager goes to CombatDrain state, waiting for FeedManagerCallback call from alias script")
-	GoToState("CombatDrain")
-	
-endfunction
-
-function HandleDialogueFeed(actor FeedTarget)
-	debug.Trace("Everdamned DEBUG: Player feeds on target " + FeedTarget)
-	
-	; tell OAR that ist vanilla feed animation
+	; TODO: add and use social feeding animation
 	ED_Mechanics_Global_FeedType.SetValue(0.0)
 	
 	;start actual feed animation
@@ -147,11 +264,151 @@ function HandleDialogueFeed(actor FeedTarget)
 	
 	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
-	;no assault alarm
+	; for vampire converting sidequest
+	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
+		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+	else
+	
+		; 2 factors
+		; IF social feeding is allowed
+		; IF social feeding triggers alarm check
+		; TODO: both should be checked not here, in seduction dialogue
+	
+		;LocTypeDwelling - allow IF CONDITION with bystander check
+		
+		;LocTypeHouse - not trespassing/high relationship, allow with bystander check
+		;LocTypeInn - no check allow
+		
+		;LocTypeCastle
+		;LocTypeGuild
+
+		; TODO: work out conditions for bystander check
+		;getdetected
+		;getlos
+		
+		
+		;at 10 light half meter radius = 35 units
+		;at 70+ light 30 meters 600 unit
+		float __lightLevel = PlayerRef.GetLightLevel()
+		if __lightLevel <= 10.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0
+		elseif __lightLevel >= 70.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 300.0
+		else
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (24.663*math.pow(2.718,0.04*(__lightLevel - 10.0)) - 25.0)
+		endif
+		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
+	endif
+	
+	;sfx controlled by dialogue fragments
+	;sfx, maybe should bake into animation?
+	;ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
+
+	
+	;adjust status bloodpool etc
+	PlayerVampireQuest.EatThisActor(FeedTarget, 0.35)
+	
+	;psychic vampire check
+	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	
+	;age for 2h
+	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
+	
+	;TODO: Vamp XP
+
+	;Blue Blood
+	actorbase TargetBase = FeedTarget.GetActorBase()
+	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+	if Index >= 0
+		; removing from tracking
+		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+	endIf
+endfunction
+
+function HandleDialogueIntimidation(actor FeedTarget)
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Dialogue Intimidation call on target " + FeedTarget)
+	
+	; vanilla anim
+	ED_Mechanics_Global_FeedType.SetValue(0.0)
+	
+	;start actual feed animation
+	PlayerRef.StartVampireFeed(FeedTarget)
+	
+	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+	else
+	
+		
+		;at 10 light half meter radius = 35 units
+		;at 70+ light 30 meters 600 unit
+		float __lightLevel = PlayerRef.GetLightLevel()
+		if __lightLevel <= 10.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0
+		elseif __lightLevel >= 70.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 600.0
+		else
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (52.584*math.pow(2.718,0.0406*(__lightLevel - 10.0)) - 55.0)
+		endif
+		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
+	endif
+	
+	;sfx controlled by dialogue fragments
+	;sfx, maybe should bake into animation?
+	;ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
+
+	
+	;adjust status bloodpool etc
+	PlayerVampireQuest.EatThisActor(FeedTarget, 0.2)
+	
+	;psychic vampire check
+	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	
+	;age for 3h
+	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
+	
+	;TODO: Vamp XP
+
+	;Blue Blood
+	actorbase TargetBase = FeedTarget.GetActorBase()
+	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+	if Index >= 0
+		; removing from tracking
+		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+	endIf
+endfunction
+
+function HandleFeedSleep(actor FeedTarget)
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Feed Sleep call on target " + FeedTarget)
+	
+	;start actual feed animation
+	PlayerRef.StartVampireFeed(FeedTarget)
+	
+	;TODO: mark target as fed upon, when decided how that should impact feeding
+	
+	; for vampire converting sidequest
+	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
+		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+	else
+	
+		;at 10 light half meter radius = 150 units
+		;at 70+ light 30 meters 2000 unit
+		float __lightLevel = PlayerRef.GetLightLevel()
+		if __lightLevel <= 10.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0
+		elseif __lightLevel >= 70.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
+		else
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0 + (172.18*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 179.0)
+		endif
+		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
 	;sfx controlled by dialogue fragments
@@ -166,7 +423,7 @@ function HandleDialogueFeed(actor FeedTarget)
 	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
 	
 	;age for 3h
-	ED_Mechanics_Main_Quest.GainAgeExpirience(3.0)
+	ED_Mechanics_Main_Quest.GainAgeExpirience(4.0)
 	
 	;TODO: Vamp XP
 
@@ -180,15 +437,105 @@ function HandleDialogueFeed(actor FeedTarget)
 	endIf
 endfunction
 
+; TODO: trigger hemomancy progression, restore stats
+function HandleDrainSleep(actor FeedTarget)
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain Sleep call on target " + FeedTarget)
+	
+	;start actual feed animation
+	PlayerRef.StartVampireFeed(FeedTarget)
+	
+	;TODO: mark target as fed upon, when decided how that should impact feeding
+	
+	; for vampire converting sidequest
+	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
+		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+	else
+	
+		;at 10 light half meter radius = 150 units
+		;at 70+ light 30 meters 2000 unit
+		float __lightLevel = PlayerRef.GetLightLevel()
+		if __lightLevel <= 10.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0
+		elseif __lightLevel >= 70.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
+		else
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0 + (172.18*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 179.0)
+		endif
+		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
+	endif
+	
+	;sfx, maybe should bake into animation?
+	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
+	
+	;TODO: restore attributes according to VL perk POSSIBLY
+	debug.Trace("Everdamned DEBUG NOT IMPLEMENTED: Attribute restore on feed")
+
+	;adjust status bloodpool etc
+	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
+	
+	;psychic vampire check
+	;should not apply at combat drain
+	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	
+	;age for 1 day, default amount for regular drain
+	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+
+	; kill, redo for killmove
+	; silent because detection handled by bystander quest
+	FeedTarget.KillSilent(playerRef)
+	
+	;TODO: Vamp XP
+	
+	;start hemomancy studies tracker and giff blood seed
+	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
+		ED_Mechanics_Hemomancy_Quest.start()
+	endif
+	
+	;TODO: diablerie 
+	
+	; 
+	; age and exp check against targetlevel/playerlevel * 24.0
+	
+	;Blue Blood
+	actorbase TargetBase = FeedTarget.GetActorBase()
+	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+	if Index >= 0
+		; removing from tracking
+		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+	endIf
+endfunction
+
+; TODO: trigger hemomancy progression, diablerie, restore stats
+function HandleCombatDrain(actor FeedTarget, bool isDiablerie = false)
+	debug.Trace("Everdamned DEBUG: Player combat drains target " + FeedTarget)
+	
+	aFeedTarget = FeedTarget
+
+	debug.Trace("Everdamned DEBUG: Feed Manager goes to CombatDrain state, waiting for FeedManagerCallback call from alias script")
+	GoToState("CombatDrain")
+	
+endfunction
+
+
 state CombatDrain
 	;handles should do nothing till state is released
-	function HandleDialogueFeed(actor FeedTarget)
+	function HandleFeedThrall(actor FeedTarget)
 	endfunction
-	function HandleCombatDrain(actor FeedTarget, bool isDiablerie = false)
+	function HandleDrainThrall(actor FeedTarget)
 	endfunction
-	function HandleDrain(actor FeedTarget, bool isDiablerie = false)
+	function HandleFeedMesmerized(actor FeedTarget)
 	endfunction
-	function HandleFeed(actor FeedTarget)
+	function HandleDrainMesmerized(actor FeedTarget, bool isDiablerie = false)
+	endfunction
+	function HandleDialogueSeduction(actor FeedTarget)
+	endfunction
+	function HandleDialogueIntimidation(actor FeedTarget)
+	endfunction
+	function HandleFeedSleep(actor FeedTarget)
+	endfunction
+	function HandleDrainSleep(actor FeedTarget)
 	endfunction
 	
 	event OnBeginState()
@@ -214,8 +561,8 @@ state CombatDrain
 			
 			;TODO: mark target as fed upon, when decided how that should impact feeding
 			
-			;call for help
-			aFeedTarget.SendAssaultAlarm()
+			;no calls, as already in combat
+			;aFeedTarget.SendAssaultAlarm()
 			
 			; for vampire converting sidequest
 			if aFeedTarget.IsInFaction(DLC1PotentialVampireFaction) && aFeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -224,16 +571,12 @@ state CombatDrain
 			
 			;sfx, maybe should bake into animation?
 			ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(aFeedTarget as objectreference)
-	
-			;adjust status bloodpool etc
-			PlayerVampireQuest.EatThisActor(aFeedTarget, 0.5)
-			
-			;psychic vampire check
-			;should not apply at combat drain
-			;ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, aFeedTarget)
 			
 			;TODO: restore attributes according to VL perk POSSIBLY
 			debug.Trace("Everdamned DEBUG NOT IMPLEMENTED: Attribute restore on feed")
+	
+			;adjust status bloodpool etc
+			PlayerVampireQuest.EatThisActor(aFeedTarget, 0.5)
 			
 			;age for 1 day, default amount for regular drain
 			ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
@@ -281,6 +624,8 @@ formlist property ED_Mechanics_BlueBlood_Track_FormList auto
 spell property ED_Mechanics_PsychicVampire_Spell auto
 quest property ED_Mechanics_Hemomancy_Quest auto
 globalvariable property ED_Mechanics_Global_FeedType auto
+globalvariable property ED_Mechanics_Global_VampireFeedBystanderRadius auto
+keyword property ED_Mechanics_Keyword_BystanderStart auto
 
 playerVampireQuestScript property PlayerVampireQuest auto
 dlc1vampireturnscript property DLC1VampireTurn auto
