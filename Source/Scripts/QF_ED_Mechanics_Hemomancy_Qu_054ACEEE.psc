@@ -1,5 +1,5 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 6
+;NEXT FRAGMENT INDEX 8
 Scriptname QF_ED_Mechanics_Hemomancy_Qu_054ACEEE Extends Quest Hidden
 
 ;BEGIN ALIAS PROPERTY ED_Player
@@ -7,28 +7,28 @@ Scriptname QF_ED_Mechanics_Hemomancy_Qu_054ACEEE Extends Quest Hidden
 ReferenceAlias Property Alias_ED_Player Auto
 ;END ALIAS PROPERTY
 
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+;all hemomancy learned
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
 (Alias_ED_Player.GetReference() as actor).AddSpell(ED_VampireSpells_BloodSeed_Spell)
 ED_HemomancyStudies_Script.StartLearningHemomancy()
-SetStage(50)
+SetStage(80)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
+;BEGIN FRAGMENT Fragment_6
+Function Fragment_6()
 ;BEGIN CODE
-;waiting to learn all of hemomancy
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-;all hemomancy learned
+ED_HemomancyStudies_Script.AdvanceHemomancy()
 ;END CODE
 EndFunction
 ;END FRAGMENT

@@ -111,9 +111,9 @@ float function GetHPtoBeEaten()
 endfunction
 
 
-function EatThisActor(actor Target, float percentToDigest = 0.2)
-	debug.Trace("Everdamned Info: actor to be eaten at " + percentToDigest*100.0 + "% of base hp")
-	SetHPtoBeEaten(Target.getbaseav("health") * percentToDigest)
+function EatThisActor(actor Target, float shareHPToDigest = 0.2)
+	debug.Trace("Everdamned DEBUG: actor to be eaten at " + shareHPToDigest*100.0 + "% of base hp")
+	SetHPtoBeEaten(Target.getbaseav("health") * shareHPToDigest)
 	ED_BloodPoolManager_Quest.SetBonusAfterFeed()
 	VampireFeed()
 endFunction

@@ -24,19 +24,6 @@ bool __learnLock
 bool __readyToProgress
 int __HemomancyXPneededToAdvance
 
-; TODO: remove in favor of stop starting the whole quest
-function RestartLearning()
-	debug.Trace("Everdamned INFO: Restarting Hemomancy learning, setting all counters to 0 and goto empty state")
-	AdeptHemomancyLearned = 0
-	ExpertHemomancyLearned = 0
-	MasterHemomancyLearned = 0
-	__allHemomancyLearned = false
-	__readyToProgress = false
-	__learnLock = false
-	GoToState("")
-	StartLearningHemomancy()
-endfunction
-
 
 function StartLearningHemomancy()
 	if !__allHemomancyLearned
@@ -71,7 +58,7 @@ state LearningAdept
 	
 	function AdvanceHemomancy()
 		if !__readyToProgress
-			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")		
+			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")
 			return
 		endif
 		; acts as lock as well as allowing exp to start accumulating again, however DO NOT think that it should ever come into play
@@ -110,7 +97,7 @@ state LearningAdept
 			__readyToProgress = true
 			AdvanceHemomancy()
 		endif
-
+		
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
@@ -157,7 +144,7 @@ state LearningExpert
 	
 	function AdvanceHemomancy()
 		if !__readyToProgress
-			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")		
+			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")
 			return
 		endif
 		; acts as lock as well as allowing exp to start accumulating again, however DO NOT think that it should ever come into play
@@ -243,7 +230,7 @@ state LearningMaster
 	
 	function AdvanceHemomancy()
 		if !__readyToProgress
-			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")		
+			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")
 			return
 		endif
 		; acts as lock as well as allowing exp to start accumulating again, however DO NOT think that it should ever come into play
@@ -263,7 +250,18 @@ state LearningMaster
 				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
 				playerRef.addspell(theSpell)
 				MasterHemomancyLearned += 1
-				return
+				
+				;special case, concluding all education
+				if MasterHemomancyLearned == spellListSize
+					debug.Trace("Everdamned INFO: Player just learned all Master Hemomancy spells, thus concluding learning, goto empty state")
+					__allHemomancyLearned = true
+					
+					;shutdown
+					ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(100)
+				else
+					return
+				endif
+				
 			else
 				; moving to try next spell
 				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
@@ -271,9 +269,11 @@ state LearningMaster
 			endif
 		endWhile
 		
+		; probably redundant
 		debug.Trace("Everdamned INFO: Player just learned all Master Hemomancy spells, thus concluding learning, goto empty state")
 		__allHemomancyLearned = true
-		GoToState("")
+		;shutdown
+		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(100)
 
 	endfunction
 	
@@ -313,3 +313,5 @@ keyword property ED_Mechanics_Keyword_Hemomancy auto
 perk property ED_PerkTree_BloodMagic_20_AdeptHemomancy auto
 perk property ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk auto
 perk property ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk auto
+
+quest property ED_Mechanics_Hemomancy_Quest auto

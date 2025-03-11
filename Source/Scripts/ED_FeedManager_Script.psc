@@ -25,7 +25,6 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	;endif
 endevent
 
-; done
 function HandleFeedThrall(actor FeedTarget)
 
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Feed Thrall call on target " + FeedTarget)
@@ -35,9 +34,6 @@ function HandleFeedThrall(actor FeedTarget)
 	
 	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
-	;TODO: mark target as fed upon, when decided how that should impact feeding
-	
-	;no call for help
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -48,16 +44,17 @@ function HandleFeedThrall(actor FeedTarget)
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
 
 	;adjust status bloodpool etc
+	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.4)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.2)
-	
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
 	
 	;TODO: Vamp XP
 
+	;psychic vampire check
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
+	
 	;Blue Blood
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
@@ -73,7 +70,6 @@ function HandleFeedThrall(actor FeedTarget)
 	
 endfunction
 
-;TODO: trigger hemomancy progression, diablerie, restore stats
 function HandleDrainThrall(actor FeedTarget)
 
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain Thrall call on target " + FeedTarget)
@@ -83,10 +79,7 @@ function HandleDrainThrall(actor FeedTarget)
 	
 	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
-	;TODO: mark target as fed upon, when decided how that should impact feeding
-	
-	;no call for help
-	
+
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
@@ -95,35 +88,40 @@ function HandleDrainThrall(actor FeedTarget)
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
 	
+	; fountain of life
 	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
 		playerRef.RestoreActorValue("Health", 9999.0)
 		playerRef.RestoreActorValue("Magicka", 9999.0)
 		playerRef.RestoreActorValue("Stamina", 9999.0)
 	endif
 
-	;adjust status bloodpool etc
-	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
-	
 	;psychic vampire check
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
+
+	; adjust status bloodpool etc
+	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
 	
-	;age for 2h
-	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+	; age
+	float baseDrainValue = FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
+	float currentDrainPercent = FeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
+	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
 	
 	; kill, redo for killmove
 	FeedTarget.KillSilent(playerRef)
 	
-	;start hemomancy studies tracker and giff blood seed
-	; TODO: deal with stopped quest because of hemomancy all learned
+	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
-	else
+	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
 		; we ate, we try to learn new spells
-		ED_Mechanics_Hemomancy_Quest.AdvanceHemomancy()
+		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
 	
 	;TODO: Vamp XP
 
+	;psychic vampire check
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
+	
 	;Blue Blood
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
@@ -139,7 +137,6 @@ function HandleDrainThrall(actor FeedTarget)
 	
 endfunction
 
-; done
 function HandleFeedMesmerized(actor FeedTarget)
 
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Mesmerize Feed call on target " + FeedTarget)
@@ -172,12 +169,13 @@ function HandleFeedMesmerized(actor FeedTarget)
 	
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
-
-	;adjust status bloodpool etc
-	PlayerVampireQuest.EatThisActor(FeedTarget)
 	
 	;psychic vampire check
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
+
+	;adjust status bloodpool etc
+	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.4)
+	PlayerVampireQuest.EatThisActor(FeedTarget)
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
@@ -199,7 +197,6 @@ function HandleFeedMesmerized(actor FeedTarget)
 	
 endfunction
 
-; TODO: trigger hemomancy progression, diablerie, restore stats
 function HandleDrainMesmerized(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain Mesmerized call on target " + FeedTarget)
 	
@@ -243,9 +240,6 @@ function HandleDrainMesmerized(actor FeedTarget)
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
 	
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
-
 	; kill, redo for killmove
 	; silent because detection handled by bystander quest
 	FeedTarget.KillSilent(playerRef)
@@ -261,20 +255,23 @@ function HandleDrainMesmerized(actor FeedTarget)
 			ED_VampirePowers_Amaranth_Disintegrate_Spell.Cast(playerRef, FeedTarget)
 		endif
 	else
-		;age for 1 day, default amount for regular drain
-		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+		float baseDrainValue = FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
+		float currentDrainPercent = FeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
+		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
 	endif
 	
 	;TODO: Vamp XP
 	
-	;start hemomancy studies tracker and giff blood seed
-	; TODO: deal with stopped quest because of hemomancy all learned
+	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
-	else
+	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
 		; we ate, we try to learn new spells
-		ED_Mechanics_Hemomancy_Quest.AdvanceHemomancy()
+		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
+	
+	;psychic vampire check
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -339,21 +336,18 @@ function HandleDialogueSeduction(actor FeedTarget)
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
-	;sfx controlled by dialogue fragments
-	;sfx, maybe should bake into animation?
-	;ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
-
-	
 	;adjust status bloodpool etc
+	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.7)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.35)
-	
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
 	
 	;TODO: Vamp XP
+
+
+	;psychic vampire check
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 
 	;Blue Blood
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -378,14 +372,11 @@ function HandleDialogueIntimidation(actor FeedTarget)
 	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
 	
-	;TODO: mark target as fed upon, when decided how that should impact feeding
-	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
 	else
 	
-		
 		;at 10 light half meter radius = 35 units
 		;at 70+ light 30 meters 600 unit
 		float __lightLevel = PlayerRef.GetLightLevel()
@@ -400,21 +391,17 @@ function HandleDialogueIntimidation(actor FeedTarget)
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
-	;sfx controlled by dialogue fragments
-	;sfx, maybe should bake into animation?
-	;ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
-
-	
 	;adjust status bloodpool etc
+	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.4)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.2)
 	
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
-	
 	;age for 3h
-	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
+	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
 	
 	;TODO: Vamp XP
+
+	;psychic vampire check
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 
 	;Blue Blood
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -436,8 +423,6 @@ function HandleFeedSleep(actor FeedTarget)
 	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
 	
-	;TODO: mark target as fed upon, when decided how that should impact feeding
-	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
@@ -457,22 +442,19 @@ function HandleFeedSleep(actor FeedTarget)
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
-	;sfx controlled by dialogue fragments
-	;sfx, maybe should bake into animation?
-	;ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
-
-	
 	;adjust status bloodpool etc
+	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.6)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.3)
 	
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
-	
-	;age for 3h
+	;age
 	ED_Mechanics_Main_Quest.GainAgeExpirience(4.0)
 	
 	;TODO: Vamp XP
 
+
+	;psychic vampire check
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
+	
 	;Blue Blood
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
@@ -487,14 +469,11 @@ function HandleFeedSleep(actor FeedTarget)
 	endif
 endfunction
 
-; TODO: trigger hemomancy progression, restore stats
 function HandleDrainSleep(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain Sleep call on target " + FeedTarget)
 	
 	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
-	
-	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -517,9 +496,7 @@ function HandleDrainSleep(actor FeedTarget)
 	
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
-	
-	;TODO: restore attributes according to VL perk POSSIBLY
-	debug.Trace("Everdamned DEBUG NOT IMPLEMENTED: Attribute restore on feed")
+
 
 	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
 		playerRef.RestoreActorValue("Health", 9999.0)
@@ -530,11 +507,11 @@ function HandleDrainSleep(actor FeedTarget)
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
 	
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 1 day, default amount for regular drain
-	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+	float baseDrainValue = FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
+	float currentDrainPercent = FeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
+	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
 
 	; kill, redo for killmove
 	; silent because detection handled by bystander quest
@@ -542,14 +519,16 @@ function HandleDrainSleep(actor FeedTarget)
 	
 	;TODO: Vamp XP
 	
-	;start hemomancy studies tracker and giff blood seed
-	; TODO: deal with stopped quest because of hemomancy all learned
+	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
-	else
+	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
 		; we ate, we try to learn new spells
-		ED_Mechanics_Hemomancy_Quest.AdvanceHemomancy()
+		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
+	
+	;psychic vampire check
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -564,12 +543,8 @@ function HandleDrainSleep(actor FeedTarget)
 		endIf
 	endif
 	
-	
-	
-	
 endfunction
 
-; TODO: trigger hemomancy progression, diablerie, restore stats
 function HandleCombatDrain(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Player combat drains target " + FeedTarget)
 	
@@ -623,8 +598,6 @@ state CombatDrain
 		if checkResult
 			debug.Trace("Everdamned DEBUG: Feed Manager callback was called in CombatDrain state, feed anim WAS played, proceed")
 			
-			;TODO: mark target as fed upon, when decided how that should impact feeding
-			
 			; for vampire converting sidequest
 			if aFeedTarget.IsInFaction(DLC1PotentialVampireFaction) && aFeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 				DLC1VampireTurn.PlayerBitesMe(aFeedTarget)
@@ -654,33 +627,33 @@ state CombatDrain
 				endif
 			else
 				;age for 1 day, default amount for regular drain
-				ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+				float baseDrainValue = aFeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
+				float currentDrainPercent = aFeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
+				ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
 			endif
 			
 			;TODO: Vamp XP
-			
-			;start hemomancy studies tracker and giff blood seed
-			; TODO: deal with stopped quest because of hemomancy all learned
+		
+			;hemomancy
 			if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 				ED_Mechanics_Hemomancy_Quest.start()
-			else
+			elseif ED_Mechanics_Hemomancy_Quest.IsActive()
 				; we ate, we try to learn new spells
-				ED_Mechanics_Hemomancy_Quest.AdvanceHemomancy()
+				ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 			endif
 			
 			;Blue Blood
-		if aFeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
-			debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + aFeedTarget)
-			actorbase TargetBase = aFeedTarget.GetActorBase()
-			Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-			if Index >= 0
-				; removing from tracking
-				debug.Trace("Everdamned INFO: And it was in the track list, processing")
-				ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-				ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-			endIf
-		endif
-			
+			if aFeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+				debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + aFeedTarget)
+				actorbase TargetBase = aFeedTarget.GetActorBase()
+				Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+				if Index >= 0
+					; removing from tracking
+					debug.Trace("Everdamned INFO: And it was in the track list, processing")
+					ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+					ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+				endIf
+			endif
 			
 		else
 			debug.Trace("Everdamned DEBUG: Feed Manager callback was called in CombatDrain state, feed anim WAS NOT played, do nothing")
