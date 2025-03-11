@@ -22,7 +22,7 @@ endFunction
 
 function ProcessVIP(actorbase TheVIP)
 	
-	ED_Mechanics_BlueBlood_OnVIPFeeding_Message.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
+	ED_Mechanics_BlueBlood_OnVIPFeeding_Message.Show()
 
 	;TODO: add ebony warrior as hidden?
 	

@@ -1,11 +1,11 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 26
+;NEXT FRAGMENT INDEX 38
 Scriptname PRKF_ED_BeingVampire_Vampire_041CDC21 Extends Perk Hidden
 
-;BEGIN FRAGMENT Fragment_25
-Function Fragment_25(ObjectReference akTargetRef, Actor akActor)
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
-ED_FeedManager_Quest.HandleFeed(akTargetRef as actor)
+ED_FeedManager_Quest.HandleDrainThrall(akTargetRef as actor)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -13,7 +13,7 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_8
 Function Fragment_8(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
-ED_FeedManager_Quest.HandleDrain(akTargetRef as actor)
+ED_FeedManager_Quest.HandleDrainMesmerized(akTargetRef as actor)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -21,7 +21,7 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_24
 Function Fragment_24(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
-ED_FeedManager_Quest.HandleFeed(akTargetRef as actor)
+ED_FeedManager_Quest.HandleFeedMesmerized(akTargetRef as actor)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -34,10 +34,26 @@ ED_FeedManager_Quest.HandleCombatDrain(akTargetRef as actor)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4(ObjectReference akTargetRef, Actor akActor)
+;BEGIN FRAGMENT Fragment_32
+Function Fragment_32(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
-ED_FeedManager_Quest.HandleDrain(akTargetRef as actor)
+ED_FeedManager_Quest.HandleDrainSleep(akTargetRef as actor)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_34
+Function Fragment_34(ObjectReference akTargetRef, Actor akActor)
+;BEGIN CODE
+ED_FeedManager_Quest.HandleFeedSleep(akTargetRef as actor)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_25
+Function Fragment_25(ObjectReference akTargetRef, Actor akActor)
+;BEGIN CODE
+ED_FeedManager_Quest.HandleFeedThrall(akTargetRef as actor)
 ;END CODE
 EndFunction
 ;END FRAGMENT

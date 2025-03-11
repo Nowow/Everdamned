@@ -51,23 +51,25 @@ function HandleFeedThrall(actor FeedTarget)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.2)
 	
 	;psychic vampire check
-	; TODO: redo in form of starting quest with story manager
-	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
 	
 	;TODO: Vamp XP
 
-	;Blue Blood - redo in form of starting quest
-	; TODO: redo in form of starting quest with story manager
-	actorbase TargetBase = FeedTarget.GetActorBase()
-	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-	if Index >= 0
-		; removing from tracking
-		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-	endIf
+	;Blue Blood
+	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
+		actorbase TargetBase = FeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif
 	
 endfunction
 
@@ -92,13 +94,18 @@ function HandleDrainThrall(actor FeedTarget)
 	
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
+	
+	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
+		playerRef.RestoreActorValue("Health", 9999.0)
+		playerRef.RestoreActorValue("Magicka", 9999.0)
+		playerRef.RestoreActorValue("Stamina", 9999.0)
+	endif
 
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
 	
 	;psychic vampire check
-	; TODO: redo in form of starting quest with story manager
-	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
@@ -106,20 +113,29 @@ function HandleDrainThrall(actor FeedTarget)
 	; kill, redo for killmove
 	FeedTarget.KillSilent(playerRef)
 	
-	;TODO: restore attributes according to VL perk POSSIBLY
-	debug.Trace("Everdamned DEBUG NOT IMPLEMENTED: Attribute restore on feed")
+	;start hemomancy studies tracker and giff blood seed
+	; TODO: deal with stopped quest because of hemomancy all learned
+	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
+		ED_Mechanics_Hemomancy_Quest.start()
+	else
+		; we ate, we try to learn new spells
+		ED_Mechanics_Hemomancy_Quest.AdvanceHemomancy()
+	endif
 	
 	;TODO: Vamp XP
 
-	;Blue Blood - redo in form of starting quest
-	; TODO: redo in form of starting quest with story manager
-	actorbase TargetBase = FeedTarget.GetActorBase()
-	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-	if Index >= 0
-		; removing from tracking
-		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-	endIf
+	;Blue Blood
+	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
+		actorbase TargetBase = FeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif
 	
 endfunction
 
@@ -161,7 +177,7 @@ function HandleFeedMesmerized(actor FeedTarget)
 	PlayerVampireQuest.EatThisActor(FeedTarget)
 	
 	;psychic vampire check
-	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
@@ -169,18 +185,22 @@ function HandleFeedMesmerized(actor FeedTarget)
 	;TODO: Vamp XP
 
 	;Blue Blood
-	actorbase TargetBase = FeedTarget.GetActorBase()
-	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-	if Index >= 0
-		; removing from tracking
-		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-	endIf
+	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
+		actorbase TargetBase = FeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif
 	
 endfunction
 
 ; TODO: trigger hemomancy progression, diablerie, restore stats
-function HandleDrainMesmerized(actor FeedTarget, bool isDiablerie = false)
+function HandleDrainMesmerized(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain Mesmerized call on target " + FeedTarget)
 	
 	; tell OAR that ist jump feed killmove
@@ -213,43 +233,61 @@ function HandleDrainMesmerized(actor FeedTarget, bool isDiablerie = false)
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
 
+	; fountain of life restore stats
+	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
+		playerRef.RestoreActorValue("Health", 9999.0)
+		playerRef.RestoreActorValue("Magicka", 9999.0)
+		playerRef.RestoreActorValue("Stamina", 9999.0)
+	endif
+
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
 	
 	;psychic vampire check
-	;should not apply at combat drain
-	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
-	
-	;TODO: restore attributes according to VL perk POSSIBLY
-	debug.Trace("Everdamned DEBUG NOT IMPLEMENTED: Attribute restore on feed")
-	
-	;age for 1 day, default amount for regular drain
-	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 
 	; kill, redo for killmove
 	; silent because detection handled by bystander quest
 	FeedTarget.KillSilent(playerRef)
 	
+	;diablerie and aging
+	if FeedTarget.HasKeyword(Vampire)
+		float __ageMult = FeedTarget.GetLevel() / playerRef.GetLevel()
+		debug.Trace("Everdamned INFO: Feed Manager detects diablerie, aging with mult: " + __ageMult)
+		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * __ageMult)
+		
+		if playerRef.HasPerk(ED_PerkTreeVL_Amaranth_Perk)
+			ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
+			ED_VampirePowers_Amaranth_Disintegrate_Spell.Cast(playerRef, FeedTarget)
+		endif
+	else
+		;age for 1 day, default amount for regular drain
+		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+	endif
+	
 	;TODO: Vamp XP
 	
 	;start hemomancy studies tracker and giff blood seed
+	; TODO: deal with stopped quest because of hemomancy all learned
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
+	else
+		; we ate, we try to learn new spells
+		ED_Mechanics_Hemomancy_Quest.AdvanceHemomancy()
 	endif
 	
-	;TODO: diablerie 
-	
-	; 
-	; age and exp check against targetlevel/playerlevel * 24.0
-	
 	;Blue Blood
-	actorbase TargetBase = FeedTarget.GetActorBase()
-	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-	if Index >= 0
-		; removing from tracking
-		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-	endIf
+	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
+		actorbase TargetBase = FeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif
 endfunction
 
 ; TODO: conditions
@@ -310,7 +348,7 @@ function HandleDialogueSeduction(actor FeedTarget)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.35)
 	
 	;psychic vampire check
-	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
@@ -318,13 +356,17 @@ function HandleDialogueSeduction(actor FeedTarget)
 	;TODO: Vamp XP
 
 	;Blue Blood
-	actorbase TargetBase = FeedTarget.GetActorBase()
-	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-	if Index >= 0
-		; removing from tracking
-		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-	endIf
+	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
+		actorbase TargetBase = FeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif
 endfunction
 
 function HandleDialogueIntimidation(actor FeedTarget)
@@ -367,7 +409,7 @@ function HandleDialogueIntimidation(actor FeedTarget)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.2)
 	
 	;psychic vampire check
-	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 3h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
@@ -375,13 +417,17 @@ function HandleDialogueIntimidation(actor FeedTarget)
 	;TODO: Vamp XP
 
 	;Blue Blood
-	actorbase TargetBase = FeedTarget.GetActorBase()
-	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-	if Index >= 0
-		; removing from tracking
-		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-	endIf
+	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
+		actorbase TargetBase = FeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif
 endfunction
 
 function HandleFeedSleep(actor FeedTarget)
@@ -420,7 +466,7 @@ function HandleFeedSleep(actor FeedTarget)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.3)
 	
 	;psychic vampire check
-	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 3h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(4.0)
@@ -428,13 +474,17 @@ function HandleFeedSleep(actor FeedTarget)
 	;TODO: Vamp XP
 
 	;Blue Blood
-	actorbase TargetBase = FeedTarget.GetActorBase()
-	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-	if Index >= 0
-		; removing from tracking
-		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-	endIf
+	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
+		actorbase TargetBase = FeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif
 endfunction
 
 ; TODO: trigger hemomancy progression, restore stats
@@ -471,12 +521,17 @@ function HandleDrainSleep(actor FeedTarget)
 	;TODO: restore attributes according to VL perk POSSIBLY
 	debug.Trace("Everdamned DEBUG NOT IMPLEMENTED: Attribute restore on feed")
 
+	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
+		playerRef.RestoreActorValue("Health", 9999.0)
+		playerRef.RestoreActorValue("Magicka", 9999.0)
+		playerRef.RestoreActorValue("Stamina", 9999.0)
+	endif
+
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
 	
 	;psychic vampire check
-	;should not apply at combat drain
-	ED_Mechanics_PsychicVampire_Spell.Cast(playerRef, FeedTarget)
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;age for 1 day, default amount for regular drain
 	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
@@ -488,27 +543,34 @@ function HandleDrainSleep(actor FeedTarget)
 	;TODO: Vamp XP
 	
 	;start hemomancy studies tracker and giff blood seed
+	; TODO: deal with stopped quest because of hemomancy all learned
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
+	else
+		; we ate, we try to learn new spells
+		ED_Mechanics_Hemomancy_Quest.AdvanceHemomancy()
 	endif
 	
-	;TODO: diablerie 
-	
-	; 
-	; age and exp check against targetlevel/playerlevel * 24.0
-	
 	;Blue Blood
-	actorbase TargetBase = FeedTarget.GetActorBase()
-	Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-	if Index >= 0
-		; removing from tracking
-		ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-		ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-	endIf
+	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
+		actorbase TargetBase = FeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif
+	
+	
+	
+	
 endfunction
 
 ; TODO: trigger hemomancy progression, diablerie, restore stats
-function HandleCombatDrain(actor FeedTarget, bool isDiablerie = false)
+function HandleCombatDrain(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Player combat drains target " + FeedTarget)
 	
 	aFeedTarget = FeedTarget
@@ -527,7 +589,7 @@ state CombatDrain
 	endfunction
 	function HandleFeedMesmerized(actor FeedTarget)
 	endfunction
-	function HandleDrainMesmerized(actor FeedTarget, bool isDiablerie = false)
+	function HandleDrainMesmerized(actor FeedTarget)
 	endfunction
 	function HandleDialogueSeduction(actor FeedTarget)
 	endfunction
@@ -536,6 +598,8 @@ state CombatDrain
 	function HandleFeedSleep(actor FeedTarget)
 	endfunction
 	function HandleDrainSleep(actor FeedTarget)
+	endfunction
+	function HandleCombatDrain(actor FeedTarget)
 	endfunction
 	
 	event OnBeginState()
@@ -561,9 +625,6 @@ state CombatDrain
 			
 			;TODO: mark target as fed upon, when decided how that should impact feeding
 			
-			;no calls, as already in combat
-			;aFeedTarget.SendAssaultAlarm()
-			
 			; for vampire converting sidequest
 			if aFeedTarget.IsInFaction(DLC1PotentialVampireFaction) && aFeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 				DLC1VampireTurn.PlayerBitesMe(aFeedTarget)
@@ -572,32 +633,53 @@ state CombatDrain
 			;sfx, maybe should bake into animation?
 			ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(aFeedTarget as objectreference)
 			
-			;TODO: restore attributes according to VL perk POSSIBLY
-			debug.Trace("Everdamned DEBUG NOT IMPLEMENTED: Attribute restore on feed")
+			if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
+				playerRef.RestoreActorValue("Health", 9999.0)
+				playerRef.RestoreActorValue("Magicka", 9999.0)
+				playerRef.RestoreActorValue("Stamina", 9999.0)
+			endif
 	
 			;adjust status bloodpool etc
 			PlayerVampireQuest.EatThisActor(aFeedTarget, 0.5)
 			
-			;age for 1 day, default amount for regular drain
-			ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+			;diablerie
+			if aFeedTarget.HasKeyword(Vampire)
+				float __ageMult = aFeedTarget.GetLevel() / playerRef.GetLevel()
+				debug.Trace("Everdamned INFO: Feed Manager detects diablerie, aging with mult: " + __ageMult)
+				ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * __ageMult)
+				
+				if playerRef.HasPerk(ED_PerkTreeVL_Amaranth_Perk)
+					ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
+					ED_VampirePowers_Amaranth_Disintegrate_Spell.Cast(playerRef, aFeedTarget)
+				endif
+			else
+				;age for 1 day, default amount for regular drain
+				ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+			endif
 			
 			;TODO: Vamp XP
 			
 			;start hemomancy studies tracker and giff blood seed
+			; TODO: deal with stopped quest because of hemomancy all learned
 			if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 				ED_Mechanics_Hemomancy_Quest.start()
+			else
+				; we ate, we try to learn new spells
+				ED_Mechanics_Hemomancy_Quest.AdvanceHemomancy()
 			endif
-			;TODO: maybe advance hemomancy with drains?
-			;maybe require use of hemomancy skills and then drain will advance?
 			
 			;Blue Blood
+		if aFeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+			debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + aFeedTarget)
 			actorbase TargetBase = aFeedTarget.GetActorBase()
 			Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
 			if Index >= 0
 				; removing from tracking
+				debug.Trace("Everdamned INFO: And it was in the track list, processing")
 				ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 				ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 			endIf
+		endif
 			
 			
 		else
@@ -621,11 +703,21 @@ Faction Property DLC1PlayerTurnedVampire auto
 GlobalVariable Property PlayerIsVampire  Auto
 sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
 formlist property ED_Mechanics_BlueBlood_Track_FormList auto
-spell property ED_Mechanics_PsychicVampire_Spell auto
 quest property ED_Mechanics_Hemomancy_Quest auto
 globalvariable property ED_Mechanics_Global_FeedType auto
 globalvariable property ED_Mechanics_Global_VampireFeedBystanderRadius auto
+
+perk property ED_PerkTreeVL_FountainOfLife_Perk auto
+perk property ED_PerkTreeVL_Amaranth_Perk auto
+
+spell property ED_Mechanics_PsychicVampire_Spell auto
+spell property ED_VampirePowers_Amaranth_Spell auto
+spell property ED_VampirePowers_Amaranth_Disintegrate_Spell auto
+
 keyword property ED_Mechanics_Keyword_BystanderStart auto
+keyword property ED_Mechanics_Keyword_PsychicVampireStart auto
+keyword property ED_Mechanics_Keyword_BlueBlood_VIP auto
+keyword property Vampire auto
 
 playerVampireQuestScript property PlayerVampireQuest auto
 dlc1vampireturnscript property DLC1VampireTurn auto

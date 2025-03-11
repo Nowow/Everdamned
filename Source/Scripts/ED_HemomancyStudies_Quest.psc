@@ -21,14 +21,18 @@ int property MasterHemomancyLearned auto
 
 bool __allHemomancyLearned
 bool __learnLock
+bool __readyToProgress
 int __HemomancyXPneededToAdvance
 
+; TODO: remove in favor of stop starting the whole quest
 function RestartLearning()
 	debug.Trace("Everdamned INFO: Restarting Hemomancy learning, setting all counters to 0 and goto empty state")
 	AdeptHemomancyLearned = 0
 	ExpertHemomancyLearned = 0
 	MasterHemomancyLearned = 0
 	__allHemomancyLearned = false
+	__readyToProgress = false
+	__learnLock = false
 	GoToState("")
 	StartLearningHemomancy()
 endfunction
@@ -43,12 +47,12 @@ function StartLearningHemomancy()
 	endif
 endfunction
 
-function GainHemomancyXP(int HowMuch)
-	__HemomancyXPneededToAdvance -= HowMuch
-	if __HemomancyXPneededToAdvance <= 0
-		AdvanceHemomancy()
-	endif
-endfunction
+;function GainHemomancyXP(int HowMuch)
+;	__HemomancyXPneededToAdvance -= HowMuch
+;	if __HemomancyXPneededToAdvance <= 0
+;		AdvanceHemomancy()
+;	endif
+;endfunction
 
 function AdvanceHemomancy()
 	debug.Trace("Everdamned ERROR: AdvanceHemomancy was called in an empty state, should not have happened")
@@ -57,6 +61,7 @@ endfunction
 state LearningAdept
 	event OnBeginState()
 		debug.Trace("Everdamned INFO: Started learning Adept Hemomancy")
+		__readyToProgress = false
 		__HemomancyXPneededToAdvance = 15
 	endevent
 	
@@ -65,31 +70,51 @@ state LearningAdept
 	endfunction
 	
 	function AdvanceHemomancy()
-		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")		
+		if !__readyToProgress
+			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")		
+			return
+		endif
+		; acts as lock as well as allowing exp to start accumulating again, however DO NOT think that it should ever come into play
+		__readyToProgress = false
+		debug.Trace("Everdamned INFO: Hemomancy will be advanced")		
 		
+		; total available spells of this tier
 		int spellListSize = AdeptHemomancySpells.Length
+		
+		; iterating over all of them
 		while AdeptHemomancyLearned < spellListSize
-			theSpell = AdeptHemomancySpells[i]
-			if !(player.hasspell(theSpell))
+		
+			spell theSpell = AdeptHemomancySpells[AdeptHemomancyLearned]
+			; if player does not have this spell
+			if !(playerRef.hasspell(theSpell))
+				;teach him and be done
 				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
-				player.addspell(theSpell)
+				playerRef.addspell(theSpell)
 				AdeptHemomancyLearned += 1
 				return
 			else
+				; moving to try next spell
 				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
+				AdeptHemomancyLearned += 1
 			endif
-			AdeptHemomancyLearned += 1
 		endWhile
 		
-		
+		; player know all spells of this tier, switching to next state and trying to advance there
 		debug.Trace("Everdamned INFO: Player seems to have learned all " + spellListSize +" Adept Hemomancy spells, goto state LearningExpert")
 		GoToState("LearningExpert")
-		AdvanceHemomancy()
+		; if player does not have the next perk, getting XP and learning is halted until he does
+		
+		if playerRef.hasperk(ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk)
+			; otherwise trying to advance again immediately
+			debug.Trace("Everdamned INFO: And calling Hemomancy Advance in new state because player has the perk")
+			__readyToProgress = true
+			AdvanceHemomancy()
+		endif
 
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
-		if __learnLock
+		if __readyToProgress || __learnLock
 			return
 		endif
 		__learnLock = true
@@ -106,8 +131,12 @@ state LearningAdept
 			__learnLock = false
 			return
 		endif
+		__readyToProgress = true
 		__HemomancyXPneededToAdvance = 15
-		AdvanceHemomancy()
+		
+		; now called from FeedManager, because actual hemomancy advancement 
+		; comes from feeding after getting enough exp
+		;AdvanceHemomancy()
 		
 		__learnLock = false
 	endevent
@@ -117,6 +146,7 @@ endstate
 state LearningExpert
 	event OnBeginState()
 		debug.Trace("Everdamned INFO: Started learning Expert Hemomancy")
+		__readyToProgress = false
 		__HemomancyXPneededToAdvance = 30
 	endevent
 	
@@ -124,32 +154,53 @@ state LearningExpert
 		debug.Trace("Everdamned ERROR: StartLearningHemomancy was called in an non-empty state, should not have happened")
 	endfunction
 	
+	
 	function AdvanceHemomancy()
-		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")		
+		if !__readyToProgress
+			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")		
+			return
+		endif
+		; acts as lock as well as allowing exp to start accumulating again, however DO NOT think that it should ever come into play
+		__readyToProgress = false
+		debug.Trace("Everdamned INFO: Hemomancy will be advanced")		
 		
+		; total available spells of this tier
 		int spellListSize = ExpertHemomancySpells.Length
+		
+		; iterating over all of them
 		while ExpertHemomancyLearned < spellListSize
-			theSpell = ExpertHemomancySpells[i]
-			if !(player.hasspell(theSpell))
+		
+			spell theSpell = ExpertHemomancySpells[ExpertHemomancyLearned]
+			; if player does not have this spell
+			if !(playerRef.hasspell(theSpell))
+				;teach him and be done
 				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
-				player.addspell(theSpell)
+				playerRef.addspell(theSpell)
 				ExpertHemomancyLearned += 1
 				return
 			else
+				; moving to try next spell
 				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
+				ExpertHemomancyLearned += 1
 			endif
-			ExpertHemomancyLearned += 1
 		endWhile
 		
-		
+		; player know all spells of this tier, switching to next state and trying to advance there
 		debug.Trace("Everdamned INFO: Player seems to have learned all " + spellListSize +" Expert Hemomancy spells, goto state LearningExpert")
 		GoToState("LearningMaster")
-		AdvanceHemomancy()
+		; if player does not have the next perk, getting XP and learning is halted until he does
+		
+		if playerRef.hasperk(ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk)
+			; otherwise trying to advance again immediately
+			debug.Trace("Everdamned INFO: And calling Hemomancy Advance in new state because player has the perk")
+			__readyToProgress = true
+			AdvanceHemomancy()
+		endif
 
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
-		if __learnLock
+		if __readyToProgress || __learnLock
 			return
 		endif
 		__learnLock = true
@@ -166,42 +217,59 @@ state LearningExpert
 			__learnLock = false
 			return
 		endif
+		__readyToProgress = true
 		__HemomancyXPneededToAdvance = 30
 		
-		AdvanceHemomancy()
+		; now called from FeedManager, because actual hemomancy advancement 
+		; comes from feeding after getting enough exp
+		;AdvanceHemomancy()
 		
 		__learnLock = false
 	endevent
+	
 endstate
 
 state LearningMaster
 
 	event OnBeginState()
 		debug.Trace("Everdamned INFO: Started learning Master Hemomancy")
+		__readyToProgress = false
 		__HemomancyXPneededToAdvance = 50
 	endevent
 	
 	function StartLearningHemomancy()
 		debug.Trace("Everdamned ERROR: StartLearningHemomancy was called in an non-empty state, should not have happened")
 	endfunction
-
+	
 	function AdvanceHemomancy()
-		debug.Trace("Everdamned DEBUG: Hemomancy will be advanced")		
+		if !__readyToProgress
+			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")		
+			return
+		endif
+		; acts as lock as well as allowing exp to start accumulating again, however DO NOT think that it should ever come into play
+		__readyToProgress = false
+		debug.Trace("Everdamned INFO: Hemomancy will be advanced")		
 		
+		; total available spells of this tier
 		int spellListSize = MasterHemomancySpells.Length
+		
+		; iterating over all of them
 		while MasterHemomancyLearned < spellListSize
-			theSpell = MasterHemomancySpells[i]
-			if !(player.hasspell(theSpell))
+		
+			spell theSpell = MasterHemomancySpells[MasterHemomancyLearned]
+			; if player does not have this spell
+			if !(playerRef.hasspell(theSpell))
+				;teach him and be done
 				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
-				player.addspell(theSpell)
+				playerRef.addspell(theSpell)
 				MasterHemomancyLearned += 1
 				return
 			else
+				; moving to try next spell
 				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
+				MasterHemomancyLearned += 1
 			endif
-			MasterHemomancyLearned += 1
 		endWhile
-		
 		
 		debug.Trace("Everdamned INFO: Player just learned all Master Hemomancy spells, thus concluding learning, goto empty state")
 		__allHemomancyLearned = true
@@ -210,7 +278,7 @@ state LearningMaster
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
-		if __learnLock
+		if __readyToProgress || __learnLock
 			return
 		endif
 		__learnLock = true
@@ -227,11 +295,16 @@ state LearningMaster
 			__learnLock = false
 			return
 		endif
+		__readyToProgress = true
 		__HemomancyXPneededToAdvance = 50
 		
-		AdvanceHemomancy()
+		; now called from FeedManager, because actual hemomancy advancement 
+		; comes from feeding after getting enough exp
+		;AdvanceHemomancy()
+		
 		__learnLock = false
 	endevent
+
 endstate
 
 
