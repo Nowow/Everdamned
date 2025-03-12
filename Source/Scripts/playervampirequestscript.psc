@@ -281,12 +281,12 @@ endFunction
 
 Bool function Devolve(Bool abForceDevolve)
 
-	if (FeedTimer >= 3 as Float || abForceDevolve == true) && VampireStatus == 3
+	if (FeedTimer >= 3.0 || abForceDevolve == true) && VampireStatus == 3
 		VampireFeedReady.SetValue(3 as Float)
 		if ED_Mechanics_Global_DisableHate.GetValue() == 0 as Float && !playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell as form)
-			ED_Mechanics_Message_VampireProgression_Stage4.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
+			ED_Mechanics_Message_VampireProgression_Stage4.Show()
 		else
-			ED_Mechanics_Message_VampireProgression_Stage4_Masquerade.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
+			ED_Mechanics_Message_VampireProgression_Stage4_Masquerade.Show()
 		endIf
 		VampireStatus = 4
 		self.VampireProgression(playerRef, 4)
