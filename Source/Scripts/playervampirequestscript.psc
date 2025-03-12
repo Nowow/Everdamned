@@ -78,12 +78,13 @@ function OnUpdateGameTime()
 	FeedTimer = (GameDaysPassed.value - LastFeedTime) * 24.0100 / ED_Mechanics_Global_DelayBetweenStages.GetValue()
 	if game.IsMovementControlsEnabled() && game.IsFightingControlsEnabled() && playerRef.GetCombatState() == 0 && !playerRef.HasMagicEffect(DLC1VampireChangeEffect) && !playerRef.HasMagicEffect(DLC1VampireChangeFXEffect)
 		Float Chance
-		;if Player.HasSpell(SCS_Abilities_Reward_Spell_SlowerHunger as form)
-		;	Chance = ED_HungerChance
-		;else
-		;	Chance = ED_HungerChanceSlower
-		;endIf
-		if utility.RandomFloat(0.000000, 1.00000) < ED_HungerChance
+		if playerRef.HasSpell(ED_BeingVampire_Ab_HungerDelay_Spell as form)
+			Chance = ED_HungerChance
+		else
+			Chance = ED_HungerChanceSlower
+		endIf
+		if utility.RandomFloat(0.000000, 1.00000) < Chance
+			; TODO: think if you need to show help message for the first time
 			;SCS_Help_HungerStage2.ShowAsHelpMessage("SCS_HungerStage2Event", 5.00000, 0 as Float, 1)
 			self.Devolve(false)
 		endIf
@@ -553,7 +554,7 @@ spell property ED_BeingVampire_Vanilla_Ab_PassivesHolder_Spell_WasChampionOfTheN
 ;spell property ED_BeingVampire_Vanilla_Ab_StillHeart_Spell_WasNightstalkersFootsteps auto
 spell property ED_BeingVampire_Ab_Stalker_Spell auto
 
-Float property ED_HungerChanceSlower auto
+
 spell property ED_BeingVampire_Vanilla_Ab_ResistFrost_Stage3_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell auto
 formlist property ED_RacesVampire auto
@@ -577,4 +578,8 @@ spell property ED_BeingVampire_Vanilla_Ab_WeaknessToFire_Stage3_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_WeaknessToFire_Stage2_Spell auto
 spell property ED_BeingVampire_Ab_Status_Stage2_Spell auto
 spell property ED_BeingVampire_Ab_TrespassingCurse_Spell auto
+
+
+spell property ED_BeingVampire_Ab_HungerDelay_Spell auto
 Float property ED_HungerChance auto
+Float property ED_HungerChanceSlower auto
