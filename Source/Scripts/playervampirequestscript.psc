@@ -208,6 +208,8 @@ function VampireCure(actor Player)
 		Player.SetRace(CureRace)
 	endIf
 	PlayerIsVampire.SetValue(0 as Float)
+	
+	; TODO: remove it from here because it is part of race?
 	Player.DispelSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
 	Player.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
 	
