@@ -2,28 +2,120 @@ Scriptname ED_FeedManager_Script extends Quest
 
 actor property aFeedTarget auto
 bool property bFeedAnimRequiredForSuccess auto
-
+String property BiteStart = "BiteStart" auto
 
 Function RegisterFeedEvents()
 	if PlayerIsVampire.value == 1
-		debug.Trace("Everdamned DEBUG: RegisterFeedEvents() called for vampire")
+		
+		debug.Trace("Everdamned DEBUG: Feed Manager recieved RegisterFeedEvents() call while vampire")
 		race playerRace = playerRef.GetRace()
-		; TODO: why not DLC1VampireBeastRace?
-		if (playerRace != VampireGarkainBeastRace) && (playerRace != DLC1VampireBeastRace)
-			Debug.Trace("Everdamned INFO: Registred player for feed animation events")
-			unRegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
-			utility.wait(1)
-			RegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
+		
+		if playerRace == DLC1VampireBeastRace
+			RegisterForAnimationEvent(playerRef, BiteStart)
+			debug.Trace("Everdamned DEBUG: Feed Manager registred BiteStart event for Vampire Lord")
+		elseif playerRace != VampireGarkainBeastRace
+			; TODO: chomp event for garkain registration
+			debug.Trace("Everdamned DEBUG NOTIMPLEMENTED: Feed Manager registred chomp event for Garkain")
+		else
+			debug.Trace("Everdamned DEBUG NOTIMPLEMENTED: Feed Manager registred feed event for mortal race")
 		endif
+		
+			; todo: do it correctly, or maybe dispatch with this 
+			; altogether if no killmove killmoves for mortal form
+		
+		;if (playerRace != VampireGarkainBeastRace) && (playerRace != DLC1VampireBeastRace)
+		
+		
+		;	Debug.Trace("Everdamned INFO: Registred player for feed animation events")
+		;	unRegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
+		;	utility.wait(1)
+		;	RegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
+		;endif
 	endif
 EndFunction
+
+function UnRegisterFeedEvents()
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved UnRegisterFeedEvents() call")
+	race playerRace = playerRef.GetRace()
+	
+	if playerRace == DLC1VampireBeastRace
+		UnRegisterForAnimationEvent(playerRef, BiteStart)
+		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred BiteStart event for Vampire Lord")
+	elseif playerRace != VampireGarkainBeastRace
+		; TODO: chomp event for garkain registration
+		debug.Trace("Everdamned DEBUG NOTIMPLEMENTED: Feed Manager UnRegistred chomp event for Garkain")
+	else
+		debug.Trace("Everdamned DEBUG NOTIMPLEMENTED: Feed Manager UnRegistred feed event for mortal race")
+	endif
+endfunction
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	; TODO: change to some specific custom animevent to differentiate from regular feed and killmove
 	;if asEventName == "SoundPlay.NPCVampireLordFeed"
 	;	PlayerVampireQuest.VampireFeed() 544D0F
 	;endif
+	
+	if asEventName == BiteStart
+		HandleBeastBite()
+	endif
 endevent
+
+function HandleBeastBite()
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Beast Bite call")
+	
+	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
+		playerRef.RestoreActorValue("Health", 9999.0)
+		playerRef.RestoreActorValue("Magicka", 9999.0)
+		playerRef.RestoreActorValue("Stamina", 9999.0)
+	endif
+
+	;adjust status bloodpool etc
+	PlayerVampireQuest.EatThisActor(aFeedTarget, 0.5)
+	
+	;diablerie
+	if aFeedTarget.HasKeyword(Vampire)
+		float __ageMult = aFeedTarget.GetLevel() / playerRef.GetLevel()
+		debug.Trace("Everdamned INFO: Feed Manager detects diablerie, aging with mult: " + __ageMult)
+		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * __ageMult)
+		
+		if playerRef.HasPerk(ED_PerkTreeVL_Amaranth_Perk)
+			ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
+			ED_VampirePowers_Amaranth_Disintegrate_Spell.Cast(playerRef, aFeedTarget)
+		endif
+	else
+		;age for 1 day, default amount for regular drain
+		float baseDrainValue = aFeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
+		float currentDrainPercent = aFeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
+		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
+	endif
+	
+	;TODO: Vamp XP
+
+	;hemomancy
+	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
+		ED_Mechanics_Hemomancy_Quest.start()
+	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
+		; we ate, we try to learn new spells
+		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
+	endif
+	
+	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+	
+	if aFeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + aFeedTarget)
+		actorbase TargetBase = aFeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif
+endfunction
 
 function HandleFeedThrall(actor FeedTarget)
 
@@ -704,7 +796,6 @@ function FeedManagerCallback(bool checkResult)
 endfunction
 
 
-actor property playerRef auto
 Race Property VampireGarkainBeastRace auto
 Race Property DLC1VampireBeastRace auto
 faction Property DLC1PotentialVampireFaction auto
@@ -735,3 +826,5 @@ playerVampireQuestScript property PlayerVampireQuest auto
 dlc1vampireturnscript property DLC1VampireTurn auto
 ed_mainquest_script property ED_Mechanics_Main_Quest auto
 ED_BlueBlood_Quest_Script property ED_BlueBlood_Quest auto
+
+actor property playerRef auto

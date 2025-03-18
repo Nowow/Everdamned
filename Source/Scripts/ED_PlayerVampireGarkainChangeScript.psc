@@ -76,6 +76,7 @@ armor property eruditeRing auto
 
 actor property playerRef auto
 
+ED_FeedManager_Script property ED_FeedManager_Quest auto
 
 DefaultObjectManager kDefObjMan
 
@@ -261,6 +262,7 @@ Function StartTracking()
 	; to catch Brutalize execution, because not all button activation do actually play the animation
 	;RegisterForAnimationEvent(playerRef, "KillMoveStart")
 	RegisterForAnimationEvent(playerRef, "SoundPlay.NPCWerewolfFeedingKill")
+	ED_FeedManager_Quest.RegisterFeedEvents()
 	
     SetStage(10) ; we're done with the transformation handling
 EndFunction
@@ -360,6 +362,9 @@ Function ActuallyShiftBackIfNecessary()
 
     UnRegisterForAnimationEvent(playerRef, "KillMoveStart")
 	UnRegisterForAnimationEvent(playerRef, "SoundPlay.NPCWerewolfFeedingKill")
+	
+	ED_FeedManager_Quest.RegisterFeedEvents()
+	
     UnRegisterForUpdate() ; just in case
 
     if (Game.GetPlayer().IsDead())
@@ -470,7 +475,12 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		utility.wait(2)
 		;UnregisterForUpdate()
 		ED_Mechanics_GarkainBeast_EatenCloak.Cast(playerRef, playerRef)
+		
+		; TODO: reevalueate, currenyly restores all bloodpool and 150 hp, should be discarded in favor of 
+		; standard methods
 		ED_Mechanics_GarkainBeast_CombatFeed.Cast(playerRef, playerRef)
+		
+		
 		PlayerVampireQuest.VampireFeed()
 		if !(playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)) && GetStage() < 80
 			debug.Trace("Everdamned INFO: Untamed Garkain just Brutalized/killfed on an actor, reverting to mortal when out of combat")

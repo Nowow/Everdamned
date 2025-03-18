@@ -128,3 +128,30 @@ function StopAge()
 	NextMessageIndex = 0
 	debug.Trace("Everdamned INFO: Player vampire has stopped aging")
 endFunction
+
+function TearDownRewards()
+	debug.Trace("Everdamned INFO: Main Quest reward teardown called")
+	
+	; age stuff
+	
+	StopAge()
+	
+	ED_Mechanics_VampireAge.value = 1
+	
+	ED_Mechanics_VampireAgeCurrentExp.value = 0.0
+	ED_Mechanics_VampireAgeCurrentLvlUpThreshold.value = ED_Mechanics_VampireAgeLvlUpExpIncrement.value
+	
+	int _maxIndex = MaxAge - 1
+	int i = 0
+	while i < _maxIndex
+		perk _agePerk = Age_Scaling_Perk_List[i]	
+		playerRef.removeperk(_agePerk)
+		i += 1
+	endWhile
+	
+	; TODO: remove all mortal + vl perks
+	debug.Trace("Everdamned DEBUG NOTIMPLEMENTED: add removing all mortal + vl perks")
+	
+endfunction
+
+

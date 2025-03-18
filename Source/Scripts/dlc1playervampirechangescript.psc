@@ -162,6 +162,8 @@ visualeffect property FeedBloodVFX auto
 {Visual Effect on Wolf for Feeding Blood}
 
 playervampirequestscript property PlayerVampireQuest auto
+ED_FeedManager_Script property ED_FeedManager_Quest auto
+
 formlist property DLC1VampireSpellsPowers auto
 
 DefaultObjectManager kDefObjMan
@@ -235,6 +237,9 @@ function UnregisterForEvents()
 	self.UnRegisterForAnimationEvent(PlayerActor as objectreference, LiftoffStart)
 	self.UnRegisterForAnimationEvent(PlayerActor as objectreference, LandStart)
 	self.UnRegisterForAnimationEvent(PlayerActor as objectreference, TransformToHuman)
+	
+	ED_FeedManager_Quest.UnRegisterFeedEvents()
+	; FeedManager.UnRegisterForFeedEvents()
 endFunction
 
 function WarnPlayer()
@@ -276,6 +281,8 @@ function PreloadSpells()
 	ED_VampireSpellsVL_IcyWinds_Spell.Preload()
 endFunction
 
+
+; called from StartTracking()
 function RegisterForEvents()
 
 	actor PlayerActor = game.GetPlayer()
@@ -285,6 +292,9 @@ function RegisterForEvents()
 	self.RegisterForAnimationEvent(PlayerActor as objectreference, LiftoffStart)
 	self.RegisterForAnimationEvent(PlayerActor as objectreference, LandStart)
 	self.RegisterForAnimationEvent(PlayerActor as objectreference, TransformToHuman)
+	
+	ED_FeedManager_Quest.RegisterFeedEvents()
+	
 endFunction
 
 Bool function TestIntegrity()
@@ -298,10 +308,12 @@ Float function RealTimeSecondsToGameTimeDays(Float realtime)
 	return scaledSeconds / (60 * 60 * 24) as Float
 endFunction
 
+; called from this quest's alias script on OnRaceSwitchComplete
 function StartTracking()
 
 	actor PlayerActor = game.GetPlayer()
 	if __trackingStarted
+		debug.Trace("Everdamned DEBUG: Vampire Lord script StartTracking() called, but already __trackingStarted == true")
 		return 
 	endIf
 	__trackingStarted = true
@@ -708,11 +720,15 @@ function OnAnimationEvent(objectreference akActor, String akEventName)
 			;	endIf
 			;	PlayerActor.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
 			;endIf
-			if PlayerActor.HasPerk(DLC1VampireBite) == 1 as Bool
-				PlayerActor.RestoreActorValue("Health", DLC1BiteHealthRecover)
-				PlayerActor.RestoreActorValue("Magicka", 150 as Float)
-				;game.AdvanceSkill("Destruction", SCS_PowerBite.GetValue())
-			endIf
+			
+			; moved to FeedManager
+			
+			;if PlayerActor.HasPerk(DLC1VampireBite) == 1 as Bool
+			;	PlayerActor.RestoreActorValue("Health", DLC1BiteHealthRecover)
+			;	PlayerActor.RestoreActorValue("Magicka", 150 as Float)
+			;	;game.AdvanceSkill("Destruction", SCS_PowerBite.GetValue())
+			;endIf
+			
 			PlayerActor.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
 			game.IncrementStat("Necks Bitten", 1)
 		endIf

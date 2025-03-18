@@ -44,6 +44,10 @@ endFunction
 
 function OnRaceSwitchComplete()
 
+	; TODO: test if loading save when VL triggers this
+	
+	debug.Trace("Everdamned DEBUG: Vampire Lord quest alias OnRaceSwitchComplete event triggered")
+	
 	if self.GetActorReference() == game.GetPlayer()
 		game.GetPlayer().GetActorBase().SetInvulnerable(false)
 		game.GetPlayer().SetGhost(false)
