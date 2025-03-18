@@ -56,6 +56,10 @@ function HandleFeedThrall(actor FeedTarget)
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
 		actorbase TargetBase = FeedTarget.GetActorBase()
@@ -123,6 +127,10 @@ function HandleDrainThrall(actor FeedTarget)
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
 		actorbase TargetBase = FeedTarget.GetActorBase()
@@ -183,6 +191,10 @@ function HandleFeedMesmerized(actor FeedTarget)
 	;TODO: Vamp XP
 
 	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
 		actorbase TargetBase = FeedTarget.GetActorBase()
@@ -274,6 +286,10 @@ function HandleDrainMesmerized(actor FeedTarget)
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
 		actorbase TargetBase = FeedTarget.GetActorBase()
@@ -350,6 +366,10 @@ function HandleDialogueSeduction(actor FeedTarget)
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 
 	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
 		actorbase TargetBase = FeedTarget.GetActorBase()
@@ -404,6 +424,10 @@ function HandleDialogueIntimidation(actor FeedTarget)
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 
 	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
 		actorbase TargetBase = FeedTarget.GetActorBase()
@@ -456,6 +480,10 @@ function HandleFeedSleep(actor FeedTarget)
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
 		actorbase TargetBase = FeedTarget.GetActorBase()
@@ -531,6 +559,10 @@ function HandleDrainSleep(actor FeedTarget)
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+			
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + FeedTarget)
 		actorbase TargetBase = FeedTarget.GetActorBase()
@@ -643,6 +675,10 @@ state CombatDrain
 			endif
 			
 			;Blue Blood
+			if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+				ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+			endif
+			
 			if aFeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 				debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + aFeedTarget)
 				actorbase TargetBase = aFeedTarget.GetActorBase()
@@ -676,7 +712,7 @@ Faction Property DLC1PlayerTurnedVampire auto
 GlobalVariable Property PlayerIsVampire  Auto
 sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
 formlist property ED_Mechanics_BlueBlood_Track_FormList auto
-quest property ED_Mechanics_Hemomancy_Quest auto
+
 globalvariable property ED_Mechanics_Global_FeedType auto
 globalvariable property ED_Mechanics_Global_VampireFeedBystanderRadius auto
 
@@ -691,6 +727,9 @@ keyword property ED_Mechanics_Keyword_BystanderStart auto
 keyword property ED_Mechanics_Keyword_PsychicVampireStart auto
 keyword property ED_Mechanics_Keyword_BlueBlood_VIP auto
 keyword property Vampire auto
+
+quest property ED_Mechanics_Hemomancy_Quest auto
+quest property ED_BlueBlood_Quest_quest auto
 
 playerVampireQuestScript property PlayerVampireQuest auto
 dlc1vampireturnscript property DLC1VampireTurn auto

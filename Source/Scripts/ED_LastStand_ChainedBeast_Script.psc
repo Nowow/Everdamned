@@ -1,6 +1,6 @@
 Scriptname ED_LastStand_ChainedBeast_Script extends activemagiceffect  
 
-;-- Properties --------------------------------------
+
 playervampirequestscript property PlayerVampireQuest auto
 
 actor property PlayerRef auto
@@ -14,14 +14,20 @@ perk property ED_PerkTree_General_40_EmbraceTheBeast_Perk auto
 
 quest property ED_Mechanics_Ab_BeastUnchained_Quest auto
 
+keyword property ED_Mechanics_Keyword_IsInSunlight auto
+race property ED_VampireGarkainBeastRace auto
+race property DLC1VampireBeastRace auto
+
 
 function OnEffectStart(actor akTarget, actor akCaster)
-	utility.Wait(1.00000)
+	utility.Wait(0.5)
 	PlayerProtectionPlan.ForceRefTo(PlayerRef as objectreference)
+	debug.Trace("Everdamned DEBUG: Player Protection Plan on")
 endFunction
 
 function OnEffectFinish(actor akTarget, actor akCaster)
 	PlayerProtectionPlan.Clear()
+	debug.Trace("Everdamned DEBUG: Player Protection Plan off")
 endFunction
 
 
@@ -29,21 +35,25 @@ bool __planEngaged
 function OnEnterBleedout()
 	
 	if __planEngaged
-		debug.Trace("Everdamned DEBUG: Player Protection plan ALREADY engaged, return")
+		debug.Trace("Everdamned DEBUG: Player Protection Plan ALREADY engaged, return")
 		return
 	endif
-
-	if PlayerProtectionPlan.GetActorRef() == PlayerRef
+	
+	; just for good measure, conditions are already in spell
+	race playerRace = playerRef.GetRace()
+	bool RaceNotBeast = playerRace != ED_VampireGarkainBeastRace && playerRace != DLC1VampireBeastRace
+	bool IsInSunlight = PlayerRef.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_IsInSunlight)
+	
+	if PlayerProtectionPlan.GetActorRef() == PlayerRef && RaceNotBeast && IsInSunlight
 		__planEngaged = true
 		debug.Trace("Everdamned DEBUG: Player Protection Plan engaged")
 		utility.Wait(ED_WaitUntilResurrect)
 		ED_RezSound.Play(PlayerRef)
 		
 		;SCS_Imod.Apply(1.00000)
-		PlayerVampireQuest.VampireStatus = 4
-		PlayerVampireQuest.VampireProgression(PlayerRef, 4)
 		
 		PlayerRef.RestoreActorValue("Health", 9999 as Float)
+		PlayerVampireQuest.DropToBloodstarved()
 		
 		if !(PlayerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk))
 			debug.Trace("Everdamned DEBUG: Player Protection Plan started Beast Unchained quest")

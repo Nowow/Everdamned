@@ -1,14 +1,13 @@
 Scriptname ED_BlueBlood_Quest_Script extends Quest  
 
-formlist property ED_Mechanics_BlueBlood_FormList auto
-formlist property ED_Mechanics_BlueBlood_Track_FormList auto
-perk property ED_PerkTree_General_40_EmbraceTheBeast_Perk auto
-message property ED_Mechanics_BlueBlood_OnVIPFeeding_Message auto
+
+int property Reward_ChainedBeast = 2 auto
+int property Reward_EmbraceTheBeast = 8 auto
+int property Reward_PerkPoints = 10 auto
+int property ThatMuchPerkPoints = 4 auto
 
 int property VIPsTasted auto
-int property VIPsUntilEmbraceTheBeast auto
 
-actor property playerRef auto
 
 function InitFeedList()
 
@@ -22,15 +21,30 @@ endFunction
 
 function ProcessVIP(actorbase TheVIP)
 	
-	ED_Mechanics_BlueBlood_OnVIPFeeding_Message.Show()
+	ED_Mechanics_BlueBlood_Message_OnVIPFeeding.Show()
 
 	;TODO: add ebony warrior as hidden?
-	
+
 	VIPsTasted += 1
-	if VIPsTasted == VIPsUntilEmbraceTheBeast
-		playerRef.addperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)
+	
+	if     VIPsTasted == Reward_ChainedBeast
+		playerRef.addperk(ED_Mechanics_Ab_ChainedBeast_Perk)
+		playerRef.addspell(ED_Mechanics_Ab_ChainedBeast_Spell)
+		debug.Trace("Everdamned DEBUG: Blue Blood quest rewarded player with Chained Beast")
+		
+	elseif VIPsTasted == Reward_EmbraceTheBeast
+		playerRef.addperk(ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk)
 		setstage(150)
+		debug.Trace("Everdamned DEBUG: Blue Blood quest rewarded player with Embrace The Beast")
+		
+	elseif VIPsTasted == Reward_PerkPoints
+		game.AddPerkPoints(ThatMuchPerkPoints)
+		ED_Mechanics_BlueBlood_Message_PerkPointsAdded.Show()
+		debug.Trace("Everdamned DEBUG: Blue Blood quest rewarded player with Perk Points")
 	endif
+	
+	
+	
 	if TheVIP == TitusMedeII
 		game.IncrementSkillBy("Speechcraft", 5)
 		ED_Mechanics_BlueBlood_Message_TitusMedeII.Show()
@@ -89,7 +103,7 @@ function ProcessVIP(actorbase TheVIP)
 		;pickpocket
 	elseif TheVIP == DLC1AlthadanVyrthur
 		game.IncrementSkillBy("Restoration", 2)
-		game.IncrementSkillBy("Conjuration", 2)
+		game.IncrementSkillBy("Destruction", 2)
 		ED_Mechanics_BlueBlood_Message_Vyrthur.Show()
 		;restoration
 		;conjuration
@@ -122,6 +136,20 @@ function ProcessVIP(actorbase TheVIP)
 		self.SetStage(200)
 	endIf
 endfunction
+
+
+spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
+perk property ED_Mechanics_Ab_ChainedBeast_Perk auto
+perk property ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk auto
+
+actor property playerRef auto
+formlist property ED_Mechanics_BlueBlood_FormList auto
+formlist property ED_Mechanics_BlueBlood_Track_FormList auto
+
+
+message property ED_Mechanics_BlueBlood_Message_OnVIPFeeding auto
+message property ED_Mechanics_BlueBlood_Message_PerkPointsAdded auto
+
 
 actorbase property TitusMedeII auto
 actorbase property Ulfric auto

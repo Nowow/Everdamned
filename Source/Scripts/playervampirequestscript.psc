@@ -150,7 +150,7 @@ endFunction
 
 function VampireFeedBed()
 
-	game.GetPlayer().PlayIdle(VampireFeedingBedRight)
+	playerRef.PlayIdle(VampireFeedingBedRight)
 endFunction
 
 function StopHate(actor Player, Bool akForceStopHate)
@@ -235,11 +235,10 @@ endFunction
 
 function VampireFeedBedRoll()
 
-	game.GetPlayer().PlayIdle(VampireFeedingBedrollRight)
+	playerRef.PlayIdle(VampireFeedingBedrollRight)
 endFunction
 
 Bool function TestIntegrity()
-
 	return true
 endFunction
 
@@ -351,7 +350,7 @@ function VampireProgression(actor Player, Int VampireStage)
 		Player.RemoveSpell(ED_BeingVampire_Ab_Status_Stage1_Spell)
 		Player.AddSpell(ED_BeingVampire_Ab_Status_Stage2_Spell, false)
 		
-		Player.RemoveSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell)
+		Player.RemoveSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
 		
 		if VampireStatus != VampireStage
 			debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
@@ -360,7 +359,7 @@ function VampireProgression(actor Player, Int VampireStage)
 		
 		;Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
 		;Player.AddSpell(ED_VampirePowers_Pw_VampiresWill_Spell, false)
-		;Player.RemoveSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell
+		;Player.RemoveSpell(ED_Mechanics_Ab_ChainedBeast_Spell
 		; wassail
 		;Player.AddSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N, false)
 		;Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_BloodCauldron)
@@ -393,7 +392,7 @@ function VampireProgression(actor Player, Int VampireStage)
 		Player.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage2_Spell)
 		Player.AddSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell, false)
 		
-		Player.RemoveSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell)
+		Player.RemoveSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
 		
 		if VampireStatus != VampireStage
 			debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
@@ -431,6 +430,8 @@ function VampireProgression(actor Player, Int VampireStage)
 		Player.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell)
 		Player.AddSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell, false)
 		
+		Player.RemoveSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
+		
 		if VampireStatus != VampireStage
 			debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
 			ED_BloodPoolManager_Quest.AtStageOrAgeChange()
@@ -451,6 +452,7 @@ function VampireProgression(actor Player, Int VampireStage)
 		; dampen healing, probably should be redone
 		; vampire feed perk holder
 		; resist poison and disease
+		; others
 		Player.AddSpell(ED_BeingVampire_Vanilla_Ab_PassivesHolder_Spell_WasChampionOfTheNight, false)
 		
 		; deprecated in favor of PassivesHolder
@@ -488,8 +490,9 @@ function VampireProgression(actor Player, Int VampireStage)
 		Player.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell)
 		Player.AddSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage1_Spell, false)
 		
-		Player.AddSpell(ED_BeingVampire_Ab_LastStandFrenzy_Spell, false)
-		
+		if Player.HasPerk(ED_Mechanics_Ab_ChainedBeast_Perk)
+			Player.AddSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
+		endif
 		
 		if VampireStatus != VampireStage
 			debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
@@ -535,17 +538,26 @@ function VampireProgression(actor Player, Int VampireStage)
 	;endIf
 endFunction
 
+
+; ----------------------------------------------------
+; ----- Everdamned helper funcs
+
+function DropToBloodstarved()
+	VampireStatus = 4
+	VampireProgression(PlayerRef, 4)
+endfunction
+
 ED_BloodPoolManager_Script Property ED_BloodPoolManager_Quest Auto
 ED_FeedManager_Script Property ED_FeedManager_Quest Auto
 ED_MainQuest_Script Property ED_MainQuest Auto
 ED_HotKeys_Script property ED_Mechanics_Hotkeys_Quest auto
 
 globalvariable property ED_VampireAge auto
-actor property playerRef auto
 
+perk property ED_Mechanics_Ab_ChainedBeast_Perk auto
 
 spell property ED_BeingVampire_Ab_Status_Stage3_Spell auto
-spell property ED_BeingVampire_Ab_LastStandFrenzy_Spell auto
+spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
 spell property ED_BeingVampire_Ab_Status_Stage1_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage1_Spell auto
 spell property ED_BeingVampire_Ab_Status_Stage4_Spell auto
@@ -585,3 +597,5 @@ spell property ED_BeingVampire_Ab_TrespassingCurse_Spell auto
 spell property ED_BeingVampire_Ab_HungerDelay_Spell auto
 Float property ED_HungerChance auto
 Float property ED_HungerChanceSlower auto
+
+actor property playerRef auto
