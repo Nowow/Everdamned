@@ -1,13 +1,14 @@
 scriptName PlayerVampireQuestScript extends Quest conditional
 
+Float property ED_HungerChance auto
+Float property ED_HungerChanceSlower auto
 
 spell property VampireCureDisease auto
 faction property VampirePCFaction auto
-String property SCS_Stat1 auto
 formlist property CrimeFactions auto
 Int property VampireStatus auto conditional
 Float property LastFeedTime auto
-globalvariable property PlayerIsVampire auto
+
 effectshader property VampireChangeFX auto
 race property NordRaceVampire auto
 static property XMarker auto
@@ -19,57 +20,24 @@ Quest property VC01 auto
 spell property DLC1VampireChange auto
 formlist property DLC1CrimeFactions auto
 race property NordRace auto
-globalvariable property VampireFeedReady auto
+
 idle property VampireFeedingBedRight auto
 race property CureRace auto
 formlist property DLC1VampireHateFactions auto
 sound property MagVampireTransform01 auto
 spell property DiseasePorphyricHemophelia auto
 Float property FeedTimer auto
-globalvariable property GameDaysPassed auto
+
 imagespacemodifier property VampireTransformDecreaseISMD auto
 
 spell property ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell auto
-spell property SCS_Abilities_Reward_Spell_SlowerHunger auto
 
-;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N auto
-;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc auto
-;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2 auto
-;spell property SCS_VampireSpells_Vanilla_Power_Spell_BloodCauldron auto
-
-;spell property SCS_VampireSpells_Reward_Power_Spell_VampiresCall auto
-;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage3 auto
-;spell property SCS_VampireSpells_Reward_Power_Spell_LamaesShroud auto
-;spell property SCS_Abilities_Reward_Spell_UltimatePredator_Ab auto
-;spell property SCS_VampireSpells_Vanilla_Power_Spell_BloodIsPower auto
-
-;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage5 auto
-
-;spell property SCS_VampireSpells_Vanilla_Power_Spell_Flaywind auto
-;spell property SCS_VampireSpells_Vanilla_Power_Spell_VampiresCommand2 auto
-
-;spell property SCS_Abilities_StrongBlood_Spell_04_Ab auto
-;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage1 auto
-
-;spell property SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage4 auto
 spell property ED_VampirePowers_Pw_Obfuscate_Spell auto
 
 spell property ED_VampirePowers_Pw_VampiresWill_Spell auto
 spell property ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell auto
-;spell property SCS_VampireSpells_Vanilla_Power_Spell_Nightwalk2 auto
 
-; TODO: add hunger drop message
-message property SCS_Help_HungerStage2 auto
-message property SCS_Mechanics_Message_VampireProgression auto
-; TODO: add feed message
-message property SCS_Mechanics_Message_VampireFeed auto
-
-;globalvariable property SCS_Mechanics_Global_HasLiftAndDrop auto
-
-scs_futil_script property SCS_Main500_Quest auto
-
-String property SCS_Stat0 auto
-String property SCS_Stat2 auto
+message property ED_Mechanics_Message_VampireFeed auto
 
 
 function OnUpdateGameTime()
@@ -125,7 +93,7 @@ function VampireFeed()
 	utility.Wait(2.00000)
 	imagespacemodifier.removeCrossFade(1.00000)
 	game.IncrementStat("Necks Bitten", 1)
-	SCS_Mechanics_Message_VampireFeed.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
+	ED_Mechanics_Message_VampireFeed.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
 	VampireFeedReady.SetValue(0 as Float)
 	LastFeedTime = GameDaysPassed.value
 	self.VampireProgression(playerRef, 1)
@@ -133,12 +101,13 @@ function VampireFeed()
 	self.StopHate(playerRef, false)
 	self.UnregisterforUpdateGameTime()
 	self.RegisterForUpdateGameTime(3 as Float)
+	
 endFunction
 
 function StartHate(actor Player)
 
 	if ED_Mechanics_Global_DisableHate.GetValue() == 0 as Float && !Player.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell as form)
-		debug.Trace("EVERDAMNED DEBUG: You become hated due to stage 4", 0)
+		debug.Trace("Everdamned INFO: You become hated due to stage 4")
 		Player.AddtoFaction(VampirePCFaction)
 		Int i = 0
 		while i < DLC1VampireHateFactions.GetSize()
@@ -146,6 +115,7 @@ function StartHate(actor Player)
 			i += 1
 		endWhile
 	endIf
+	
 endFunction
 
 function VampireFeedBed()
@@ -214,20 +184,6 @@ function VampireCure(actor Player)
 	Player.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
 	
 	;SCS_Main500_Quest.TearDownRewardSpells()
-	
-	;SCS_Mechanics_Global_Wassail_Current.SetValue(0.000000)
-	;Float RestoreAmount = SCS_Mechanics_Global_Wassail_NerfAmount.GetValue()
-	;if SCS_Stat0
-	;	Player.ModActorValue("Health", RestoreAmount)
-	;endIf
-	;if SCS_Stat1
-	;	Player.ModActorValue(SCS_Stat1, RestoreAmount)
-	;endIf
-	;if SCS_Stat2
-	;	Player.ModActorValue(SCS_Stat2, RestoreAmount)
-	;endIf
-	;SCS_Mechanics_Global_Wassail_NerfAmount.SetValue(0.000000)
-	;Player.DispelSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc)
 	
 	ED_Mechanics_Hotkeys_Quest.stop()
 	
@@ -520,11 +476,6 @@ function VampireProgression(actor Player, Int VampireStage)
 		
 		;Player.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage5)
 		
-	;	if Player.HasSpell(SCS_Abilities_StrongBlood_Spell_04_Ab as form)
-	;		Player.RemoveSpell(SCS_Abilities_StrongBlood_Spell_04_Ab)
-	;		GiveBackMyth = true
-	;	endIf
-	
 	endIf
 	
 	;giving back permanent passives
@@ -533,9 +484,7 @@ function VampireProgression(actor Player, Int VampireStage)
 	Player.AddSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell, false)
 	Player.AddSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell, false)
 	
-	;if GiveBackMyth
-	;	Player.AddSpell(SCS_Abilities_StrongBlood_Spell_04_Ab, false)
-	;endIf
+
 endFunction
 
 
@@ -546,6 +495,7 @@ function DropToBloodstarved()
 	VampireStatus = 4
 	VampireProgression(PlayerRef, 4)
 endfunction
+
 
 ED_BloodPoolManager_Script Property ED_BloodPoolManager_Quest Auto
 ED_FeedManager_Script Property ED_FeedManager_Quest Auto
@@ -575,7 +525,7 @@ formlist property ED_RacesVampire auto
 formlist property ED_Races auto
 message property ED_Mechanics_Message_RaceBroken auto
 message property ED_Mechanics_Message_VampireProgression_Stage2 auto
-globalvariable property ED_Mechanics_Global_DelayBetweenStages auto
+
 spell property ED_BeingVampire_Vanilla_Ab_WeaknessToFire_Stage1_Spell auto
 spell property ED_VampirePowers_Ab_Masquerade_Spell auto
 message property ED_Mechanics_Message_VampireProgression_Stage4 auto
@@ -583,7 +533,7 @@ message property ED_Mechanics_Message_VampireProgression_Stage4_Masquerade auto
 message property ED_Mechanics_Message_VampireProgression_Stage3 auto
 spell property ED_BeingVampire_Ab_MoonlitWaters_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell auto
-globalvariable property ED_Mechanics_Global_DisableHate auto
+
 spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage2_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_ResistFrost_Stage1_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_ResistFrost_Stage4_Spell auto
@@ -595,7 +545,12 @@ spell property ED_BeingVampire_Ab_TrespassingCurse_Spell auto
 
 
 spell property ED_BeingVampire_Ab_HungerDelay_Spell auto
-Float property ED_HungerChance auto
-Float property ED_HungerChanceSlower auto
+
+
+globalvariable property ED_Mechanics_Global_DisableHate auto
+globalvariable property ED_Mechanics_Global_DelayBetweenStages auto
+globalvariable property PlayerIsVampire auto
+globalvariable property VampireFeedReady auto
+globalvariable property GameDaysPassed auto
 
 actor property playerRef auto
