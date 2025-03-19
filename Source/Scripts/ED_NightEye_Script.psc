@@ -46,6 +46,8 @@ Event OnEffectStart(Actor Target, Actor Caster)
 	debug.Trace("Everdamned DEBUG: starting darkness level: " + __currentDarknessLevel)
 
 	int instanceID = IntroSoundFX.play((target as objectReference))
+	
+	; just blur and secondary stuff
 	introFX.apply(1.0) 
 	ImodArrayByStrength[__currentDarknessLevel].ApplyCrossFade(0.88)
 	utility.wait(0.88)

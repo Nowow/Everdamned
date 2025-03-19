@@ -232,7 +232,9 @@ Bool function Devolve(Bool abForceDevolve, bool dropToLowest = false)
         endIf
         VampireStatus = 4
         self.VampireProgression(playerRef, 4)
-        self.UnregisterforUpdateGameTime()
+		
+		; leaving updates for ProcessBonuses()
+        ;self.UnregisterforUpdateGameTime()
     elseIf (FeedTimer >= 2.0 || abForceDevolve == true) && VampireStatus == 2
         if abForceDevolve
             LastFeedTime -= 1 as Float

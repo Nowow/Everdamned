@@ -74,7 +74,6 @@ armor property batNecklace auto
 armor property beastRing auto
 armor property eruditeRing auto
 
-actor property playerRef auto
 
 ED_FeedManager_Script property ED_FeedManager_Quest auto
 
@@ -126,7 +125,7 @@ Function InitialShift()
 	Debug.Trace("EVERDAMNED: GARKAIN: Player beginning transformation.")
     WerewolfWarn.Apply()
 
-    if (Game.GetPlayer().IsDead())
+    if (playerRef.IsDead())
         Debug.Trace("EVERDAMNED: GARKAIN: Player is dead; bailing out.")
         return
     endif
@@ -165,8 +164,6 @@ Function StartTracking()
 
     Debug.Trace("EVERDAMNED: GARKAIN: Race swap done; starting tracking and effects.")
 	
-	; TODO: vampire rings and trinkets
-	
 	if playerRef.IsEquipped(beastRing as form)
 		pDLC1nVampireRingBeast.SetValue(1 as Float)
 	endIf
@@ -186,7 +183,7 @@ Function StartTracking()
 		kDefObjMan.SetForm("RIVS", ED_VampirePowers_GarkainBeast_Powers_List)
 	endif
 
-    Game.GetPlayer().UnequipAll()
+    playerRef.UnequipAll()
 	
 	if ED_Mechanics_Global_DisableHate.GetValue() == 0 as Float
 		if !playerRef.IsInLocation(DLC1VampireCastleLocation) && !playerRef.IsInLocation(DLC1VampireCastleGuildhallLocation) && !playerRef.IsInLocation(DLC1VampireCastleDungeonLocation)
@@ -213,10 +210,10 @@ Function StartTracking()
 	playerRef.AddSpell(ED_VampirePowers_GarkainBeast_Revert, false)
 
     ; unequip magic
-    Spell left = Game.GetPlayer().GetEquippedSpell(0)
-    Spell right = Game.GetPlayer().GetEquippedSpell(1)
-    Spell power = Game.GetPlayer().GetEquippedSpell(2)
-    Shout voice = Game.GetPlayer().GetEquippedShout()
+    Spell left = playerRef.GetEquippedSpell(0)
+    Spell right = playerRef.GetEquippedSpell(1)
+    Spell power = playerRef.GetEquippedSpell(2)
+    Shout voice = playerRef.GetEquippedShout()
     if (left != None)
         playerRef.UnequipSpell(left, 0)
     endif
@@ -259,9 +256,10 @@ Function StartTracking()
     endif
 
 	
-	; to catch Brutalize execution, because not all button activation do actually play the animation
-	;RegisterForAnimationEvent(playerRef, "KillMoveStart")
+	; for EmbraceTheBeast
 	RegisterForAnimationEvent(playerRef, "SoundPlay.NPCWerewolfFeedingKill")
+	
+	; TODO: maybe dont need to call here, just rely on OnRaceSwitchComplete in ED_FeedManager_PlayerAlias script
 	ED_FeedManager_Quest.RegisterFeedEvents()
 	
     SetStage(10) ; we're done with the transformation handling
@@ -331,7 +329,7 @@ EndFunction
 Function ShiftBack()
     __tryingToShiftBack = true
 
-    while (Game.GetPlayer().GetAnimationVariableBool("bIsSynced"))
+    while (playerRef.GetAnimationVariableBool("bIsSynced"))
         Debug.Trace("EVERDAMNED: GARKAIN: Waiting for synced animation to finish...")
         Utility.Wait(0.1)
     endwhile
@@ -359,15 +357,13 @@ Function ActuallyShiftBackIfNecessary()
 	playerRef.SetGhost(true)
     Game.SetInCharGen(true, true, false)
 	
-
-    UnRegisterForAnimationEvent(playerRef, "KillMoveStart")
 	UnRegisterForAnimationEvent(playerRef, "SoundPlay.NPCWerewolfFeedingKill")
-	
-	ED_FeedManager_Quest.RegisterFeedEvents()
+	; TODO: maybe dont need it, since game automatically unregisters animevents on racechange
+	ED_FeedManager_Quest.UnRegisterFeedEvents()
 	
     UnRegisterForUpdate() ; just in case
 
-    if (Game.GetPlayer().IsDead())
+    if (playerRef.IsDead())
         Debug.Trace("EVERDAMNED: GARKAIN: Player is dead; bailing out.")
         return
     endif
@@ -390,10 +386,10 @@ Function ActuallyShiftBackIfNecessary()
 	playerRef.RemoveSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage)
 
     ; make sure your health is reasonable before turning you back
-    float currHealth = Game.GetPlayer().GetAV("health")
+    float currHealth = playerRef.GetAV("health")
     if (currHealth <= 101)
         Debug.Trace("EVERDAMNED: GARKAIN: Player's health is only " + currHealth + "; restoring.")
-        Game.GetPlayer().RestoreAV("health", 101 - currHealth)
+        playerRef.RestoreAV("health", 101 - currHealth)
     endif
 
     ; change you back
@@ -453,35 +449,19 @@ Function Shutdown()
     Stop()
 EndFunction
 
+; feeding moved to feedmanager, here only for EmbraceTheBeast
+; TODO: probably should not register for animevent if player has the perk
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
-    ;if (asEventName == "KillMoveStart")
-		;debug.Notification("Triggered KillMoveStart animation event!")
-		;__killmoveStarted = true
-		
-		; so that if there is no followup for some reason we invalidate
-		;RegisterForSingleUpdate(10)
+
 	if (asEventName == "SoundPlay.NPCWerewolfFeedingKill")
-		
-		; TODO: capture killmove target somehow
-		; probaby should use a new quest that will find "closest" target that is in pairedanim
-		; in worst case we end up using a different actor to calcuate HpEaten
-		
-		; do the same for Vampire Lord
 	
 		if __killmoveStarted || !(playerRef.IsInKillMove())
 			return
 		endif
 		__killmoveStarted = true
 		utility.wait(2)
-		;UnregisterForUpdate()
-		ED_Mechanics_GarkainBeast_EatenCloak.Cast(playerRef, playerRef)
 		
-		; TODO: reevalueate, currenyly restores all bloodpool and 150 hp, should be discarded in favor of 
-		; standard methods
-		ED_Mechanics_GarkainBeast_CombatFeed.Cast(playerRef, playerRef)
-		
-		
-		PlayerVampireQuest.VampireFeed()
+		; TODO: make it less fast
 		if !(playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)) && GetStage() < 80
 			debug.Trace("Everdamned INFO: Untamed Garkain just Brutalized/killfed on an actor, reverting to mortal when out of combat")
 			Message.ResetHelpMessage("ed_garkain_thirstquenched")
@@ -490,8 +470,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		endif
 		__killmoveStarted = false
     endif
+	
 EndEvent
 
-
-Spell Property ED_Mechanics_GarkainBeast_CombatFeed Auto
-Spell Property ED_Mechanics_GarkainBeast_EatenCloak Auto
+actor property playerRef auto

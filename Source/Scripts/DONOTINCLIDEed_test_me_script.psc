@@ -31,6 +31,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	
 	;ScaleNode(akTarget, "NPC Head [Head]", 3.0)
+	;NetImmerse.SetNodeScale(akTarget, "NPC Head [Head]", 3.0, false)
 	;Debug.Trace("EdTestVar value at start: " + akCaster.getactorvalue("EdTestVar"))
 	;Debug.Trace("VampireSkill value at start: " + akCaster.getactorvalue("VampireSkill"))
 	

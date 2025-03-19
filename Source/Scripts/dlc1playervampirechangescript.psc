@@ -184,7 +184,6 @@ Bool __shuttingDown = false
 
 function OnUpdate()
 
-	actor PlayerActor = game.GetPlayer()
 	game.SetInCharGen(false, false, false)
 	if game.QueryStat("NumVampirePerks") as Float >= DLC1VampireMaxPerks.value
 		game.AddAchievement(58)
@@ -192,7 +191,7 @@ function OnUpdate()
 	if Untimed
 		return 
 	endIf
-	if PlayerActor.HasMagicEffect(DLC1RevertEffect) && !PlayerActor.IsInKillMove() && !__tryingToShiftBack
+	if playerRef.HasMagicEffect(DLC1RevertEffect) && !playerRef.IsInKillMove() && !__tryingToShiftBack
 		self.Revert()
 	else
 		game.ForceThirdPerson()
@@ -206,18 +205,17 @@ function Shutdown()
 		return 
 	endIf
 	__shuttingDown = true
-	actor PlayerActor = game.GetPlayer()
 	DCL1VampireLevitateStateGlobal.SetValue(0 as Float)
-	PlayerActor.GetActorBase().SetInvulnerable(false)
-	PlayerActor.SetGhost(false)
+	playerRef.GetActorBase().SetInvulnerable(false)
+	playerRef.SetGhost(false)
 	game.SetBeastForm(false)
 	game.EnableFastTravel(true)
 	game.SetInCharGen(false, false, false)
-	PlayerActor.RemovePerk(DLC1VampireActivationBlocker)
+	playerRef.RemovePerk(DLC1VampireActivationBlocker)
 	
 	; adding here because it is attached to mortal vampire races, but not to VL
 	; consider adding it to VL to not do this
-	PlayerActor.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
+	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
 	self.UnloadSpells()
 	game.EnablePlayerControls(false, false, true, true, true, false, false, false, 1)
 	self.Stop()
@@ -230,16 +228,16 @@ endFunction
 
 function UnregisterForEvents()
 
-	actor PlayerActor = game.GetPlayer()
-	self.UnRegisterForAnimationEvent(PlayerActor as objectreference, Ground)
-	self.UnRegisterForAnimationEvent(PlayerActor as objectreference, Levitate)
-	self.UnRegisterForAnimationEvent(PlayerActor as objectreference, BiteStart)
-	self.UnRegisterForAnimationEvent(PlayerActor as objectreference, LiftoffStart)
-	self.UnRegisterForAnimationEvent(PlayerActor as objectreference, LandStart)
-	self.UnRegisterForAnimationEvent(PlayerActor as objectreference, TransformToHuman)
+	self.UnRegisterForAnimationEvent(playerRef as objectreference, Ground)
+	self.UnRegisterForAnimationEvent(playerRef as objectreference, Levitate)
+	self.UnRegisterForAnimationEvent(playerRef as objectreference, BiteStart)
+	self.UnRegisterForAnimationEvent(playerRef as objectreference, LiftoffStart)
+	self.UnRegisterForAnimationEvent(playerRef as objectreference, LandStart)
+	self.UnRegisterForAnimationEvent(playerRef as objectreference, TransformToHuman)
 	
+	; TODO: maybe dont need it, since game automatically unregisters animevents on racechange
 	ED_FeedManager_Quest.UnRegisterFeedEvents()
-	; FeedManager.UnRegisterForFeedEvents()
+
 endFunction
 
 function WarnPlayer()
@@ -285,14 +283,14 @@ endFunction
 ; called from StartTracking()
 function RegisterForEvents()
 
-	actor PlayerActor = game.GetPlayer()
-	self.RegisterForAnimationEvent(PlayerActor as objectreference, Ground)
-	self.RegisterForAnimationEvent(PlayerActor as objectreference, Levitate)
-	self.RegisterForAnimationEvent(PlayerActor as objectreference, BiteStart)
-	self.RegisterForAnimationEvent(PlayerActor as objectreference, LiftoffStart)
-	self.RegisterForAnimationEvent(PlayerActor as objectreference, LandStart)
-	self.RegisterForAnimationEvent(PlayerActor as objectreference, TransformToHuman)
+	self.RegisterForAnimationEvent(playerRef as objectreference, Ground)
+	self.RegisterForAnimationEvent(playerRef as objectreference, Levitate)
+	self.RegisterForAnimationEvent(playerRef as objectreference, BiteStart)
+	self.RegisterForAnimationEvent(playerRef as objectreference, LiftoffStart)
+	self.RegisterForAnimationEvent(playerRef as objectreference, LandStart)
+	self.RegisterForAnimationEvent(playerRef as objectreference, TransformToHuman)
 	
+	; TODO: maybe dont need to call here, just rely on OnRaceSwitchComplete in ED_FeedManager_PlayerAlias script
 	ED_FeedManager_Quest.RegisterFeedEvents()
 	
 endFunction
@@ -311,7 +309,6 @@ endFunction
 ; called from this quest's alias script on OnRaceSwitchComplete
 function StartTracking()
 
-	actor PlayerActor = game.GetPlayer()
 	if __trackingStarted
 		debug.Trace("Everdamned DEBUG: Vampire Lord script StartTracking() called, but already __trackingStarted == true")
 		return 
@@ -322,40 +319,40 @@ function StartTracking()
 	kDefObjMan.SetForm("RIVR", VampireLordRace)
 	kDefObjMan.SetForm("RIVS", DLC1VampireSpellsPowers)
 	
-	if PlayerActor.IsEquipped(beastRing as form)
+	if playerRef.IsEquipped(beastRing as form)
 		pDLC1nVampireRingBeast.SetValue(1 as Float)
 	endIf
-	if PlayerActor.IsEquipped(eruditeRing as form)
+	if playerRef.IsEquipped(eruditeRing as form)
 		pDLC1nVampireRingErudite.SetValue(1 as Float)
 	endIf
-	if PlayerActor.IsEquipped(batNecklace as form)
+	if playerRef.IsEquipped(batNecklace as form)
 		pDLC1nVampireNecklaceBats.SetValue(1 as Float)
 	endIf
-	if PlayerActor.IsEquipped(gargNecklace as form)
+	if playerRef.IsEquipped(gargNecklace as form)
 		pDLC1nVampireNecklaceGargoyle.SetValue(1 as Float)
 	endIf
 	self.RegisterForEvents()
 	DCL1VampireLevitateStateGlobal.SetValue(1 as Float)
 	
 	;not need dispel this spell because no such spell will be? idk
-	;PlayerActor.DispelSpell(SCS_VampireSpells_Vanilla_Power_Spell_Obfuscate)
-	PlayerActor.UnequipAll()
+	;playerRef.DispelSpell(SCS_VampireSpells_Vanilla_Power_Spell_Obfuscate)
+	playerRef.UnequipAll()
 	
 	; TODO: when decided on DragonAtMidnight perk
-	if PlayerActor.HasPerk(SCS_PerkTree_380_Perk_VampireLord_DragonAtMidnight)
-		PlayerActor.EquipItem(DLC1ClothesVampireLordRoyalArmor as form, false, true)
+	if playerRef.HasPerk(SCS_PerkTree_380_Perk_VampireLord_DragonAtMidnight)
+		playerRef.EquipItem(DLC1ClothesVampireLordRoyalArmor as form, false, true)
 	else
-		PlayerActor.EquipItem(DLC1VampireLordArmor as form, false, true)
+		playerRef.EquipItem(DLC1VampireLordArmor as form, false, true)
 	endIf
 	
 	
 	; TODO: decide whether disable hate would be a thing
 	if ED_Mechanics_Global_DisableHate.GetValue() == 0 as Float
-		if !PlayerActor.IsInLocation(DLC1VampireCastleLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleGuildhallLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleDungeonLocation)
-			PlayerActor.SetAttackActorOnSight(true)
+		if !playerRef.IsInLocation(DLC1VampireCastleLocation) && !playerRef.IsInLocation(DLC1VampireCastleGuildhallLocation) && !playerRef.IsInLocation(DLC1VampireCastleDungeonLocation)
+			playerRef.SetAttackActorOnSight(true)
 			game.SendWereWolfTransformation()
 		endIf
-		PlayerActor.AddToFaction(DLC1PlayerVampireLordFaction)
+		playerRef.AddToFaction(DLC1PlayerVampireLordFaction)
 		Int i = 0
 		while i < DLC1VampireHateFactions.GetSize()
 			(DLC1VampireHateFactions.GetAt(i) as faction).SetPlayerEnemy(true)
@@ -368,61 +365,60 @@ function StartTracking()
 	__durationWarningTime = self.RealTimeSecondsToGameTimeDays(DurationWarningTimeSeconds)
 	__UnearthlyWillExtensionTime = self.RealTimeSecondsToGameTimeDays(UnearthlyWillExtensionTimeSeconds)
 	
-	PlayerActor.RestoreActorValue("Health", 100 as Float)
+	playerRef.RestoreActorValue("Health", 100 as Float)
 	
-	PlayerActor.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage1_Spell)
-	PlayerActor.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage2_Spell)
-	PlayerActor.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell)
-	PlayerActor.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell)
-	PlayerActor.AddSpell(LeveledAbility, false)
-	PlayerActor.AddSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage, false)
+	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage1_Spell)
+	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage2_Spell)
+	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell)
+	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell)
+	playerRef.AddSpell(LeveledAbility, false)
+	playerRef.AddSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage, false)
 	
 	; adding here because it is attached to mortal vampire races, but not to VL
 	; consider adding it to VL to not do this
-	PlayerActor.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
-	PlayerActor.AddSpell(DLC1Revert, false)
-	PlayerActor.AddSpell(DLC1VampireBats, false)
-	PlayerActor.EquipSpell((DialogueGenericVampire as vampirequestscript).LastPower, 2)
+	playerRef.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
+	playerRef.AddSpell(DLC1Revert, false)
+	playerRef.AddSpell(DLC1VampireBats, false)
+	playerRef.EquipSpell((DialogueGenericVampire as vampirequestscript).LastPower, 2)
 	self.CheckPerkSpells()
 
-	if PlayerActor.HasPerk(LightFoot)
+	if playerRef.HasPerk(LightFoot)
 		DLC1HasLightfoot = true
 	else
 		DLC1HasLightfoot = false
-		PlayerActor.AddPerk(LightFoot)
+		playerRef.AddPerk(LightFoot)
 	endIf
 	
 	Float currentTime = GameDaysPassed.GetValue()
 	; TODO: ??? needed?
 	Float regressTime = currentTime + self.RealTimeSecondsToGameTimeDays(StandardDurationSeconds)
-	if PlayerActor.HasPerk(DLC1UnearthlyWill)
+	if playerRef.HasPerk(DLC1UnearthlyWill)
 		regressTime += __UnearthlyWillExtensionTime
 	endIf
 	
 	PlayerVampireShiftBackTime.SetValue(regressTime)
-	PlayerActor.DispelSpell(DLC1VampireChange)
+	playerRef.DispelSpell(DLC1VampireChange)
 	self.RegisterForUpdate(3.00000)
 	self.SetStage(10)
 endFunction
 
 function PrepShift()
 
-	actor PlayerActor = game.GetPlayer()
 	VampireChange.Apply(1.00000)
-	VampireIMODSound.Play(PlayerActor as objectreference)
+	VampireIMODSound.Play(playerRef as objectreference)
 	game.SetInCharGen(true, true, false)
 	; TODO: activation blocker converted, check if no more work necessary
-	PlayerActor.AddPerk(DLC1VampireActivationBlocker)
+	playerRef.AddPerk(DLC1VampireActivationBlocker)
 	game.SetBeastForm(true)
 	game.EnableFastTravel(false)
-	PlayerActor.SetActorValue("GrabActorOffset", 70 as Float)
+	playerRef.SetActorValue("GrabActorOffset", 70 as Float)
 	Int Count = 0
 	
 	;dispells werewolf and certain VL summon/reanimate spells, all of that probably obsolete
 	while Count < ED_Mechanics_FormList_VLDispelList.GetSize()
 		spell Gone = ED_Mechanics_FormList_VLDispelList.GetAt(Count) as spell
 		if Gone != none
-			PlayerActor.DispelSpell(Gone)
+			playerRef.DispelSpell(Gone)
 		endIf
 		Count += 1
 	endWhile
@@ -451,59 +447,56 @@ function UnloadSpells()
 endFunction
 
 function CheckPerkSpells()
-
-	; TODO: change for playerRef
-	actor PlayerActor = game.GetPlayer()
 	
-	if PlayerActor.HasPerk(DLC1GargoylePerk) && !PlayerActor.HasSpell(DLC1ConjureGargoyleLeftHand)
-		PlayerActor.AddSpell(DLC1ConjureGargoyleLeftHand, false)
+	if playerRef.HasPerk(DLC1GargoylePerk) && !playerRef.HasSpell(DLC1ConjureGargoyleLeftHand)
+		playerRef.AddSpell(DLC1ConjureGargoyleLeftHand, false)
 	endIf
-	if PlayerActor.HasPerk(DLC1MistFormPerk) && !PlayerActor.HasSpell(DLC1VampireMistform as form) && DLC1MistformCount.GetValue() < 1 as Float
-		PlayerActor.AddSpell(DLC1VampireMistform, false)
+	if playerRef.HasPerk(DLC1MistFormPerk) && !playerRef.HasSpell(DLC1VampireMistform as form) && DLC1MistformCount.GetValue() < 1 as Float
+		playerRef.AddSpell(DLC1VampireMistform, false)
 	endIf
-	if PlayerActor.HasPerk(DLC1DetectLifePerk) && !PlayerActor.HasSpell(DLC1VampireDetectLife as form)
-		PlayerActor.AddSpell(DLC1VampireDetectLife, false)
+	if playerRef.HasPerk(DLC1DetectLifePerk) && !playerRef.HasSpell(DLC1VampireDetectLife as form)
+		playerRef.AddSpell(DLC1VampireDetectLife, false)
 	endIf
-	if PlayerActor.HasPerk(DLC1NightCloakPerk) && !PlayerActor.HasSpell(DLC1NightCloak as form)
-		PlayerActor.AddSpell(DLC1NightCloak, false)
+	if playerRef.HasPerk(DLC1NightCloakPerk) && !playerRef.HasSpell(DLC1NightCloak as form)
+		playerRef.AddSpell(DLC1NightCloak, false)
 	endIf
-		if PlayerActor.HasPerk(DLC1VampiricGrip) && !PlayerActor.HasSpell(DLC1VampiresGrip as form)
-		PlayerActor.AddSpell(DLC1VampiresGrip, false)
+		if playerRef.HasPerk(DLC1VampiricGrip) && !playerRef.HasSpell(DLC1VampiresGrip as form)
+		playerRef.AddSpell(DLC1VampiresGrip, false)
 	endIf
 	;gutwrench
-	if PlayerActor.HasPerk(DLC1CorpseCursePerk) && !PlayerActor.HasSpell(DLC1CorpseCurse as form)
-		PlayerActor.AddSpell(DLC1CorpseCurse, false)
+	if playerRef.HasPerk(DLC1CorpseCursePerk) && !playerRef.HasSpell(DLC1CorpseCurse as form)
+		playerRef.AddSpell(DLC1CorpseCurse, false)
 	endIf
 	
-	if PlayerActor.HasPerk(ED_PerkTreeVL_RoyalGuardian_Perk) && !PlayerActor.HasSpell(ED_VampirePowersVL_RoyalGuardian_Ab_Spell)
-		PlayerActor.AddSpell(ED_VampirePowersVL_RoyalGuardian_Ab_Spell, false)
+	if playerRef.HasPerk(ED_PerkTreeVL_RoyalGuardian_Perk) && !playerRef.HasSpell(ED_VampirePowersVL_RoyalGuardian_Ab_Spell)
+		playerRef.AddSpell(ED_VampirePowersVL_RoyalGuardian_Ab_Spell, false)
 	endIf
-	if PlayerActor.HasPerk(ED_PerkTreeVL_FlamesOfColdharbour_Perk) && !PlayerActor.HasSpell(ED_VampireSpellsVL_FlamesOfColdharbour_Spell)
-		PlayerActor.AddSpell(ED_VampireSpellsVL_FlamesOfColdharbour_Spell, false)
+	if playerRef.HasPerk(ED_PerkTreeVL_FlamesOfColdharbour_Perk) && !playerRef.HasSpell(ED_VampireSpellsVL_FlamesOfColdharbour_Spell)
+		playerRef.AddSpell(ED_VampireSpellsVL_FlamesOfColdharbour_Spell, false)
 	endIf
 
-	if PlayerActor.HasPerk(ED_PerkTreeVL_MarchingFlesh_Perk) && !PlayerActor.HasSpell(ED_VampireSpellsVL_MarchingFlesh_Spell as form)
-		PlayerActor.AddSpell(ED_VampireSpellsVL_MarchingFlesh_Spell, false)
+	if playerRef.HasPerk(ED_PerkTreeVL_MarchingFlesh_Perk) && !playerRef.HasSpell(ED_VampireSpellsVL_MarchingFlesh_Spell as form)
+		playerRef.AddSpell(ED_VampireSpellsVL_MarchingFlesh_Spell, false)
 	endIf
-	if PlayerActor.HasPerk(ED_PerkTreeVL_IcyWinds_Perk) && !PlayerActor.HasSpell(ED_VampireSpellsVL_IcyWinds_Spell as form)
-		PlayerActor.AddSpell(ED_VampireSpellsVL_IcyWinds_Spell, false)
+	if playerRef.HasPerk(ED_PerkTreeVL_IcyWinds_Perk) && !playerRef.HasSpell(ED_VampireSpellsVL_IcyWinds_Spell as form)
+		playerRef.AddSpell(ED_VampireSpellsVL_IcyWinds_Spell, false)
 	endIf
-	if PlayerActor.HasPerk(ED_PerkTreeVL_ShamblingHordes_Perk) && !PlayerActor.HasSpell(ED_VampireSpellsVL_ShamblingHordes_Spell as form)
-		PlayerActor.AddSpell(ED_VampireSpellsVL_ShamblingHordes_Spell, false)
+	if playerRef.HasPerk(ED_PerkTreeVL_ShamblingHordes_Perk) && !playerRef.HasSpell(ED_VampireSpellsVL_ShamblingHordes_Spell as form)
+		playerRef.AddSpell(ED_VampireSpellsVL_ShamblingHordes_Spell, false)
 	endIf
-	if PlayerActor.HasPerk(ED_PerkTreeVL_Maelstrom_Perk) && !PlayerActor.HasSpell(ED_VampireSpellsVL_Maelstrom_Spell as form)
-		PlayerActor.AddSpell(ED_VampireSpellsVL_Maelstrom_Spell, false)
+	if playerRef.HasPerk(ED_PerkTreeVL_Maelstrom_Perk) && !playerRef.HasSpell(ED_VampireSpellsVL_Maelstrom_Spell as form)
+		playerRef.AddSpell(ED_VampireSpellsVL_Maelstrom_Spell, false)
 	endIf
 	
 	
 	; The Reaping, have celerity now
-	;if PlayerActor.HasPerk(DLC1SupernaturalReflexesPerk) && !PlayerActor.HasSpell(DLC1SupernaturalReflexes as form) && DLC1ReflexesCount.GetValue() < 1 as Float
-	;	PlayerActor.AddSpell(DLC1SupernaturalReflexes, false)
+	;if playerRef.HasPerk(DLC1SupernaturalReflexesPerk) && !playerRef.HasSpell(DLC1SupernaturalReflexes as form) && DLC1ReflexesCount.GetValue() < 1 as Float
+	;	playerRef.AddSpell(DLC1SupernaturalReflexes, false)
 	;endIf
 	
 	; made it into ability
-	;if PlayerActor.HasPerk(SCS_Tremble_Perk) && !PlayerActor.HasSpell(SCS_Tremble_Spell as form) && SCS_VampireLordDark_Tremble_Count.GetValue() < 1 as Float
-	;	PlayerActor.AddSpell(SCS_Tremble_Spell, false)
+	;if playerRef.HasPerk(SCS_Tremble_Perk) && !playerRef.HasSpell(SCS_Tremble_Spell as form) && SCS_VampireLordDark_Tremble_Count.GetValue() < 1 as Float
+	;	playerRef.AddSpell(SCS_Tremble_Spell, false)
 	;endIf	
 	
 endFunction
@@ -511,11 +504,10 @@ endFunction
 ; done
 function EstablishLeveledSpells()
 
-	actor PlayerActor = game.GetPlayer()
-	Int PlayerLevel = PlayerActor.GetLevel()
-	bool PlayerHasRaze = PlayerActor.HasPerk(ED_PerkTreeVL_Raze_Perk)
+	Int PlayerLevel = playerRef.GetLevel()
+	bool PlayerHasRaze = playerRef.HasPerk(ED_PerkTreeVL_Raze_Perk)
 	
-	if PlayerActor.HasPerk(ED_PerkTreeVL_Raze_Perk)
+	if playerRef.HasPerk(ED_PerkTreeVL_Raze_Perk)
 		LeveledDrainSpell = ED_VampireSpellsVL_Raze_Spell
 	else
 		LeveledDrainSpell = ED_VampireSpellsVL_Vanilla_VampiricDrain_Spell
@@ -546,15 +538,14 @@ endFunction
 
 function InitialShift()
 
-	actor PlayerActor = game.GetPlayer()
 	VampireWarn.Apply(1.00000)
-	if PlayerActor.IsDead()
+	if playerRef.IsDead()
 		return 
 	endIf
-	PlayerActor.GetActorBase().SetInvulnerable(true)
-	PlayerActor.SetGhost(true)
-	PlayerActor.SetRace(VampireLordRace)
-	PlayerActor.AddSpell(DLC1AbVampireFloatBodyFX, false)
+	playerRef.GetActorBase().SetInvulnerable(true)
+	playerRef.SetGhost(true)
+	playerRef.SetRace(VampireLordRace)
+	playerRef.AddSpell(DLC1AbVampireFloatBodyFX, false)
 endFunction
 
 function SetUntimed(Bool untimedValue)
@@ -578,33 +569,32 @@ endFunction
 
 function ActuallyShiftBackIfNecessary()
 
-	actor PlayerActor = game.GetPlayer()
 	if __shiftingBack
 		return 
 	endIf
 	__shiftingBack = true
-	PlayerActor.GetActorBase().SetInvulnerable(true)
-	PlayerActor.SetGhost(true)
+	playerRef.GetActorBase().SetInvulnerable(true)
+	playerRef.SetGhost(true)
 	if !DLC1HasLightfoot
-		PlayerActor.RemovePerk(LightFoot)
+		playerRef.RemovePerk(LightFoot)
 	endIf
 	self.UnregisterForEvents()
 	DCL1VampireLevitateStateGlobal.SetValue(1 as Float)
 	game.SetInCharGen(true, true, false)
 	self.UnregisterForUpdate()
-	if PlayerActor.IsDead()
+	if playerRef.IsDead()
 		return 
 	endIf
 	VampireChange.Apply(1.00000)
-	VampireIMODSound.Play(PlayerActor as objectreference)
-	DLC1VampireChangeBackFXS.Play(PlayerActor as objectreference, 12.0000)
-	PlayerActor.RestoreActorValue("Health", 100 as Float)
+	VampireIMODSound.Play(playerRef as objectreference)
+	DLC1VampireChangeBackFXS.Play(playerRef as objectreference, 12.0000)
+	playerRef.RestoreActorValue("Health", 100 as Float)
 	Int Count = 0
 	
 	while Count < ED_Mechanics_FormList_VLDispelList.GetSize()
 		spell Gone = ED_Mechanics_FormList_VLDispelList.GetAt(Count) as spell
 		if Gone != none
-			PlayerActor.DispelSpell(Gone)
+			playerRef.DispelSpell(Gone)
 		endIf
 		Count += 1
 	endWhile
@@ -616,67 +606,67 @@ function ActuallyShiftBackIfNecessary()
 	endif
 	
 	;wassail
-	;PlayerActor.DispelSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc)
+	;playerRef.DispelSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N_Proc)
 	
-	CurrentEquippedLeftSpell = PlayerActor.GetEquippedSpell(0)
+	CurrentEquippedLeftSpell = playerRef.GetEquippedSpell(0)
 	(DialogueGenericVampire as vampirequestscript).LastLeftHandSpell = CurrentEquippedLeftSpell
-	if PlayerActor.GetEquippedSpell(2) == DLC1Revert
+	if playerRef.GetEquippedSpell(2) == DLC1Revert
 		(DialogueGenericVampire as vampirequestscript).LastPower = DLC1VampireBats
 	else
-		(DialogueGenericVampire as vampirequestscript).LastPower = PlayerActor.GetEquippedSpell(2)
+		(DialogueGenericVampire as vampirequestscript).LastPower = playerRef.GetEquippedSpell(2)
 	endIf
 	
 	; TODO: add 
-	PlayerActor.RemoveSpell(LeveledDrainSpell)
-	PlayerActor.RemoveSpell(LeveledRaiseDeadSpell)
-	PlayerActor.RemoveSpell(LeveledAbility)
+	playerRef.RemoveSpell(LeveledDrainSpell)
+	playerRef.RemoveSpell(LeveledRaiseDeadSpell)
+	playerRef.RemoveSpell(LeveledAbility)
 
-	PlayerActor.RemoveSpell(DLC1VampiresGrip)
-	PlayerActor.RemoveSpell(DLC1ConjureGargoyleLeftHand)
+	playerRef.RemoveSpell(DLC1VampiresGrip)
+	playerRef.RemoveSpell(DLC1ConjureGargoyleLeftHand)
 	
-	PlayerActor.RemoveSpell(DLC1VampireDetectLife)
-	PlayerActor.RemoveSpell(DLC1VampireMistform)
-	PlayerActor.RemoveSpell(DLC1VampireBats)
-	PlayerActor.RemoveSpell(DLC1NightCloak)
-	PlayerActor.RemoveSpell(DLC1Revert)
+	playerRef.RemoveSpell(DLC1VampireDetectLife)
+	playerRef.RemoveSpell(DLC1VampireMistform)
+	playerRef.RemoveSpell(DLC1VampireBats)
+	playerRef.RemoveSpell(DLC1NightCloak)
+	playerRef.RemoveSpell(DLC1Revert)
 	
-	PlayerActor.RemoveSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage)
+	playerRef.RemoveSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage)
 
-	PlayerActor.RemoveSpell(ED_VampireSpellsVL_Maelstrom_Spell)
-	PlayerActor.RemoveSpell(ED_VampireSpellsVL_FlamesOfColdharbour_Spell)
-	PlayerActor.RemoveSpell(ED_VampireSpellsVL_IcyWinds_Spell)
-	PlayerActor.RemoveSpell(ED_VampireSpellsVL_MarchingFlesh_Spell)
-	PlayerActor.RemoveSpell(ED_VampireSpellsVL_ShamblingHordes_Spell)
-	PlayerActor.RemoveSpell(ED_VampirePowersVL_RoyalGuardian_Ab_Spell)
+	playerRef.RemoveSpell(ED_VampireSpellsVL_Maelstrom_Spell)
+	playerRef.RemoveSpell(ED_VampireSpellsVL_FlamesOfColdharbour_Spell)
+	playerRef.RemoveSpell(ED_VampireSpellsVL_IcyWinds_Spell)
+	playerRef.RemoveSpell(ED_VampireSpellsVL_MarchingFlesh_Spell)
+	playerRef.RemoveSpell(ED_VampireSpellsVL_ShamblingHordes_Spell)
+	playerRef.RemoveSpell(ED_VampirePowersVL_RoyalGuardian_Ab_Spell)
 	
-	PlayerActor.RemoveSpell(DLC1CorpseCurse)
-	;PlayerActor.RemoveSpell(DLC1SupernaturalReflexes)
+	playerRef.RemoveSpell(DLC1CorpseCurse)
+	;playerRef.RemoveSpell(DLC1SupernaturalReflexes)
 	
-	PlayerActor.DispelSpell(DLC1VampireDetectLife)
-	PlayerActor.DispelSpell(DLC1VampireMistform)
-	PlayerActor.DispelSpell(DLC1Revert)
-	PlayerActor.RemoveSpell(DLC1AbVampireFloatBodyFX)
+	playerRef.DispelSpell(DLC1VampireDetectLife)
+	playerRef.DispelSpell(DLC1VampireMistform)
+	playerRef.DispelSpell(DLC1Revert)
+	playerRef.RemoveSpell(DLC1AbVampireFloatBodyFX)
 	pDLC1nVampireNecklaceBats.SetValue(0 as Float)
 	pDLC1nVampireNecklaceGargoyle.SetValue(0 as Float)
 	pDLC1nVampireRingBeast.SetValue(0 as Float)
 	pDLC1nVampireRingErudite.SetValue(0 as Float)
 	
-	PlayerVampireQuest.VampireProgression(PlayerActor, PlayerVampireQuest.VampireStatus)
-	PlayerActor.RemoveItem(DLC1VampireLordArmor as form, 2, true, none)
-	PlayerActor.RemoveItem(DLC1ClothesVampireLordRoyalArmor as form, 2, true, none)
-	PlayerActor.SetRace((VampireTrackingQuest as dlc1vampiretrackingquest).PlayerRace)
-	DLC1VampireChangeBackFXS.Stop(PlayerActor as objectreference)
-	DLC1VampireChangeBack02FXS.Play(PlayerActor as objectreference, 0.100000)
+	PlayerVampireQuest.VampireProgression(playerRef, PlayerVampireQuest.VampireStatus)
+	playerRef.RemoveItem(DLC1VampireLordArmor as form, 2, true, none)
+	playerRef.RemoveItem(DLC1ClothesVampireLordRoyalArmor as form, 2, true, none)
+	playerRef.SetRace((VampireTrackingQuest as dlc1vampiretrackingquest).PlayerRace)
+	DLC1VampireChangeBackFXS.Stop(playerRef as objectreference)
+	DLC1VampireChangeBack02FXS.Play(playerRef as objectreference, 0.100000)
 	game.ShowFirstPersonGeometry(true)
-	PlayerActor.RemoveFromFaction(DLC1PlayerVampireLordFaction)
+	playerRef.RemoveFromFaction(DLC1PlayerVampireLordFaction)
 	HunterFaction.SetPlayerEnemy(false)
-	if !PlayerActor.IsInLocation(DLC1VampireCastleLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleGuildhallLocation) && !PlayerActor.IsInLocation(DLC1VampireCastleDungeonLocation)
+	if !playerRef.IsInLocation(DLC1VampireCastleLocation) && !playerRef.IsInLocation(DLC1VampireCastleGuildhallLocation) && !playerRef.IsInLocation(DLC1VampireCastleDungeonLocation)
 		game.SendWereWolfTransformation()
 	endIf
 	
 	; todo: nohate spell if it will exist
-	if PlayerVampireQuest.VampireStatus < 4 || ED_Mechanics_Global_DisableHate.GetValue() == 1 as Float || PlayerActor.HasSpell(SCS_Abilities_Reward_Spell_NoHate as form)
-		PlayerActor.SetAttackActorOnSight(false)
+	if PlayerVampireQuest.VampireStatus < 4 || ED_Mechanics_Global_DisableHate.GetValue() == 1 as Float || playerRef.HasSpell(SCS_Abilities_Reward_Spell_NoHate as form)
+		playerRef.SetAttackActorOnSight(false)
 		Int i = 0
 		while i < DLC1VampireHateFactions.GetSize()
 			(DLC1VampireHateFactions.GetAt(i) as faction).SetPlayerEnemy(false)
@@ -691,8 +681,7 @@ endFunction
 function ShiftBack()
 
 	__tryingToShiftBack = true
-	actor PlayerActor = game.GetPlayer()
-	while PlayerActor.GetAnimationVariableBool("bIsSynced")
+	while playerRef.GetAnimationVariableBool("bIsSynced")
 		utility.Wait(0.100000)
 	endWhile
 	__shiftingBack = false
@@ -701,8 +690,7 @@ endFunction
 
 function OnAnimationEvent(objectreference akActor, String akEventName)
 
-	actor PlayerActor = game.GetPlayer()
-	if akActor == PlayerActor as objectreference
+	if akActor == playerRef as objectreference
 		if akEventName == TransformToHuman
 			self.ActuallyShiftBackIfNecessary()
 		endIf
@@ -718,18 +706,18 @@ function OnAnimationEvent(objectreference akActor, String akEventName)
 			;		DLC1VampireNextPerk.value = DLC1VampireNextPerk.value + 1 as Float
 			;		DLC1VampirePerkEarned.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
 			;	endIf
-			;	PlayerActor.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
+			;	playerRef.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
 			;endIf
 			
 			; moved to FeedManager
 			
-			;if PlayerActor.HasPerk(DLC1VampireBite) == 1 as Bool
-			;	PlayerActor.RestoreActorValue("Health", DLC1BiteHealthRecover)
-			;	PlayerActor.RestoreActorValue("Magicka", 150 as Float)
+			;if playerRef.HasPerk(DLC1VampireBite) == 1 as Bool
+			;	playerRef.RestoreActorValue("Health", DLC1BiteHealthRecover)
+			;	playerRef.RestoreActorValue("Magicka", 150 as Float)
 			;	;game.AdvanceSkill("Destruction", SCS_PowerBite.GetValue())
 			;endIf
 			
-			PlayerActor.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
+			playerRef.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
 			game.IncrementStat("Necks Bitten", 1)
 		endIf
 		if akEventName == LandStart
@@ -737,21 +725,20 @@ function OnAnimationEvent(objectreference akActor, String akEventName)
 		endIf
 		if akEventName == Ground
 			DCL1VampireLevitateStateGlobal.SetValue(1 as Float)
-			CurrentEquippedLeftSpell = PlayerActor.GetEquippedSpell(0)
+			CurrentEquippedLeftSpell = playerRef.GetEquippedSpell(0)
 			if CurrentEquippedLeftSpell != none
-				PlayerActor.UnequipSpell(CurrentEquippedLeftSpell, 0)
+				playerRef.UnequipSpell(CurrentEquippedLeftSpell, 0)
 			endIf
-			; TODO: remove spells when ground3d
-			PlayerActor.UnequipSpell(LeveledDrainSpell, 1)
-			PlayerActor.RemoveSpell(LeveledRaiseDeadSpell)
-			PlayerActor.RemoveSpell(DLC1CorpseCurse)
-			PlayerActor.RemoveSpell(DLC1VampiresGrip)
-			PlayerActor.RemoveSpell(DLC1ConjureGargoyleLeftHand)
-			PlayerActor.RemoveSpell(ED_VampireSpellsVL_Maelstrom_Spell)
-			PlayerActor.RemoveSpell(ED_VampireSpellsVL_FlamesOfColdharbour_Spell)
-			PlayerActor.RemoveSpell(ED_VampireSpellsVL_IcyWinds_Spell)
-			PlayerActor.RemoveSpell(ED_VampireSpellsVL_MarchingFlesh_Spell)
-			PlayerActor.RemoveSpell(ED_VampireSpellsVL_ShamblingHordes_Spell)
+			playerRef.UnequipSpell(LeveledDrainSpell, 1)
+			playerRef.RemoveSpell(LeveledRaiseDeadSpell)
+			playerRef.RemoveSpell(DLC1CorpseCurse)
+			playerRef.RemoveSpell(DLC1VampiresGrip)
+			playerRef.RemoveSpell(DLC1ConjureGargoyleLeftHand)
+			playerRef.RemoveSpell(ED_VampireSpellsVL_Maelstrom_Spell)
+			playerRef.RemoveSpell(ED_VampireSpellsVL_FlamesOfColdharbour_Spell)
+			playerRef.RemoveSpell(ED_VampireSpellsVL_IcyWinds_Spell)
+			playerRef.RemoveSpell(ED_VampireSpellsVL_MarchingFlesh_Spell)
+			playerRef.RemoveSpell(ED_VampireSpellsVL_ShamblingHordes_Spell)
 
 		endIf
 		if akEventName == LiftoffStart
@@ -759,18 +746,17 @@ function OnAnimationEvent(objectreference akActor, String akEventName)
 		endIf
 		if akEventName == Levitate
 			DCL1VampireLevitateStateGlobal.SetValue(2 as Float)
-			PlayerActor.EquipSpell(LeveledDrainSpell, 1)
+			playerRef.EquipSpell(LeveledDrainSpell, 1)
 			if (DialogueGenericVampire as vampirequestscript).LastLeftHandSpell == none
-				; TODO: change spell name to ED
 				(DialogueGenericVampire as vampirequestscript).LastLeftHandSpell = ED_VampireSpellsVL_LordsServant_Spell
 			endIf
 			if CurrentEquippedLeftSpell == none
 				CurrentEquippedLeftSpell = (DialogueGenericVampire as vampirequestscript).LastLeftHandSpell
 			endIf
 			self.CheckPerkSpells()
-			PlayerActor.AddSpell(LeveledRaiseDeadSpell, false)
-			PlayerActor.EquipSpell(CurrentEquippedLeftSpell, 0)
-			PlayerActor.EquipSpell(LeveledDrainSpell, 1)
+			playerRef.AddSpell(LeveledRaiseDeadSpell, false)
+			playerRef.EquipSpell(CurrentEquippedLeftSpell, 0)
+			playerRef.EquipSpell(LeveledDrainSpell, 1)
 		endIf
 	endIf
 endFunction

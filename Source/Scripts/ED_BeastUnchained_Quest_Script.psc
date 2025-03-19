@@ -73,7 +73,7 @@ event OnUpdate()
 endevent
  
 function DoTransform()
-	debug.Trace("Everdamned DEBUG:  Beast Unchained Quest triggers transform")
+	debug.Trace("Everdamned DEBUG: Beast Unchained Quest triggers transform, and stopping this quest")
 	ED_VampirePowers_GarkainBeast_Change.Cast(playerRef, playerRef)
 	SetStage(100)
 endfunction
