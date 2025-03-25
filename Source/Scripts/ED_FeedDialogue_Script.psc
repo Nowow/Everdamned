@@ -237,7 +237,7 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 			
 			Seduction_Faction_Diffic_Mod = 0
 			Reveal_Faction_Diffic_Mod = -100
-			Intimidate_Faction_Diffic_Mod = 20
+			Intimidate_Faction_Diffic_Mod = 40
 			
 	elseif akSeduced.IsInFaction(CompanionsCirclePlusKodlak)
 			
@@ -420,7 +420,7 @@ Function CalculateScoreAndDiffuculty(Actor akSeducer, Actor akSeduced)
 	debug.Trace("Reveal difficulty is: " + Reveal_Difficulty_Score)
 	
 	if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
-		debug.trace("Feed dialogue score override engaged, not actually changing results")
+		debug.trace("Everdamned INFO: Feed dialogue score override engaged, not actually changing results")
 		return
 	endif
 	
