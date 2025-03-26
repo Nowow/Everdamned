@@ -2,6 +2,16 @@
 ;NEXT FRAGMENT INDEX 3
 Scriptname ED_FeedDialogue_SedSuccessPostprocess Extends TopicInfo Hidden
 
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+; listened by ED_FeedDialogue_VictimSFX script
+SendModEvent("feedDialogue_last_scene_started")
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
@@ -19,6 +29,7 @@ if !(akSpeakerRef.IsInDialogueWithPlayer())
 endif
 
 ; race/gender specific sfx
+; can move to Victim SFX spell
 bool isFemale
 race speakerRace
 isFemale = akSpeaker.GetActorBase().GetSex() == 1
@@ -67,7 +78,7 @@ endif
 bool _pairedPlayed = playerRef.PlayIdleWithTarget(FeedDialogueIdle, akSpeaker)
 debug.Trace("Everdamned: paired anim was played: " + _pairedPlayed)
 
-ED_FeedManager_Script_Quest.HandleDialogueFeed(akSpeaker)
+ED_FeedManager_Script_Quest.HandleDialogueSeduction(akSpeaker)
 ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
 ;will enable when figure out how to ensure Mesmerize idle will play, also need to add headtrack-off mesmerized idle
 ;ED_MesmerizeSafe_Scene_FeedDialogue.Start()
@@ -88,15 +99,6 @@ if !_pairedPlayed
 	playerRef.PlayIdle(ResetRoot)
 	akSpeaker.PlayIdle(ResetRoot)
 endif
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
-SendModEvent("feedDialogue_last_scene_started")
 ;END CODE
 EndFunction
 ;END FRAGMENT

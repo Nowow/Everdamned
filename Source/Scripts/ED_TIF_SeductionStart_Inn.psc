@@ -1,6 +1,6 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
 ;NEXT FRAGMENT INDEX 9
-Scriptname TIF__040A236A Extends TopicInfo Hidden
+Scriptname ED_TIF_SeductionStart_Inn Extends TopicInfo Hidden
 
 ;BEGIN FRAGMENT Fragment_5
 Function Fragment_5(ObjectReference akSpeakerRef)

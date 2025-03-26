@@ -204,6 +204,8 @@ float Diffuculty_Mod_Setting
 
 function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 
+	; TODO: redo with hashmaps and GetPropertyValue ?
+	
 	if (akSeduced.IsInFaction(DLC1HunterFaction) || akSeduced.IsInFaction(VigilantOfStendarrFaction))
 		
 			Seduction_Faction_Diffic_Mod = 10
@@ -412,12 +414,12 @@ Function CalculateScoreAndDiffuculty(Actor akSeducer, Actor akSeduced)
 	CalculateDifficulty(akSeducer, akSeduced)
 	
 	;debug.notification("Scores got calculated")
-	debug.Trace("Seduction score is: " + Seduction_Score)
-	debug.Trace("Seduction difficulty is: " + Seduction_Difficulty_Score)
-	debug.Trace("Intimidation score is: " + Intimidation_Score)
-	debug.Trace("Intimidation difficulty is: " + Intimidation_Difficulty_Score)
-	debug.Trace("Reveal score is: " + Reveal_Score)
-	debug.Trace("Reveal difficulty is: " + Reveal_Difficulty_Score)
+	debug.Trace("Everdamned INFO: Seduction score is: " + Seduction_Score)
+	debug.Trace("Everdamned INFO: Seduction difficulty is: " + Seduction_Difficulty_Score)
+	debug.Trace("Everdamned INFO: Intimidation score is: " + Intimidation_Score)
+	debug.Trace("Everdamned INFO: Intimidation difficulty is: " + Intimidation_Difficulty_Score)
+	debug.Trace("Everdamned INFO: Reveal score is: " + Reveal_Score)
+	debug.Trace("Everdamned INFO: Reveal difficulty is: " + Reveal_Difficulty_Score)
 	
 	if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
 		debug.trace("Everdamned INFO: Feed dialogue score override engaged, not actually changing results")
