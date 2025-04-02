@@ -208,7 +208,7 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 	
 	if (akSeduced.IsInFaction(DLC1HunterFaction) || akSeduced.IsInFaction(VigilantOfStendarrFaction))
 		
-			Seduction_Faction_Diffic_Mod = 10
+			Seduction_Faction_Diffic_Mod = 40
 			Reveal_Faction_Diffic_Mod = 100
 			Intimidate_Faction_Diffic_Mod = 40
 		
@@ -216,7 +216,8 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 		
 			Seduction_Faction_Diffic_Mod = -30
 			Reveal_Faction_Diffic_Mod = 40
-			Intimidate_Faction_Diffic_Mod = 15			
+			Intimidate_Faction_Diffic_Mod = 15
+			
 	elseif (akSeduced.IsInFaction(RiftenTempleofMaraFaction) || akSeduced.IsInFaction(SolitudeTempleoftheDivinesFaction) || akSeduced.IsInFaction(WhiterunTempleofKynarethFaction) || akSeduced.IsInFaction(WindhelmTempleFaction) ||akSeduced.IsInFaction(JobPriestFaction))
 	
 			Seduction_Faction_Diffic_Mod = 0
@@ -339,6 +340,8 @@ Function CalculateDifficulty(Actor akSeducer, Actor akSeduced)
 		Intimidate_Clothing_Diffic_Mod = -10
 	endif
 	
+	int relationshipRank = akSeduced.GetRelationshipRank(akSeducer)
+	float relationshipMult = relationshipRank as float / akSeduced.GetHighestRelationshipRank() as float
 	
 	if akSeduced.GetRelationshipRank(akSeducer) < akSeduced.GetHighestRelationshipRank()
 		Relationship_Diffic_Mod = 20
@@ -359,9 +362,6 @@ Function CalculateDifficulty(Actor akSeducer, Actor akSeduced)
 	;	endif
 	;endif
 
-	if akSeduced.HasKeyword(VampireKeyword)
-		Vampire_Diffic_Mod = -60
-	endif
 	
 	Seduction_Morality_Diffic_Mod = akSeduced.GetAV("Morality")*5
 	Reveal_Morality_Diffic_Mod = akSeduced.GetAV("Morality")*10
@@ -389,7 +389,7 @@ Function CalculateDifficulty(Actor akSeducer, Actor akSeduced)
 	
 	Seduction_Difficulty_Score = Seduction_Skill_Diffic_Mod + SeductionAndReveal_Perk_Diffic_Mod + Seduction_Faction_Diffic_Mod + Seduction_Clothing_Diffic_Mod + Relationship_Diffic_Mod + Seduction_Sex_Diff_Mod + Seduction_AI_Diffic_Mod + Utility.RandomInt(-10,10) + Diffuculty_Mod_Setting
 	Intimidation_Difficulty_Score = Intimidation_Skill_Diffic_Mod + Intimidation_Perk_Diffic_Mod + Intimidate_Clothing_Diffic_Mod + Intimidate_Sex_Diffic_Mod + Intimidation_AI_Diffic_Mod + Intimidate_Faction_Diffic_Mod + Utility.RandomInt(-10,10) + Diffuculty_Mod_Setting
-	Reveal_Difficulty_Score = SeductionAndReveal_Speech_Diffic_Mod + SeductionAndReveal_Perk_Diffic_Mod + Relationship_Diffic_Mod + Reveal_Faction_Diffic_Mod + Vampire_Diffic_Mod + Reveal_AI_Diffic_Mod + Utility.RandomInt(-10,10) + Diffuculty_Mod_Setting
+	Reveal_Difficulty_Score = SeductionAndReveal_Speech_Diffic_Mod + SeductionAndReveal_Perk_Diffic_Mod + Relationship_Diffic_Mod + Reveal_Faction_Diffic_Mod + Reveal_AI_Diffic_Mod + Utility.RandomInt(-10,10) + Diffuculty_Mod_Setting
 
 		
 	
