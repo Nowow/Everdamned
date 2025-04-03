@@ -6,7 +6,7 @@ Scriptname ED_TIF_SeductionStart_Store Extends TopicInfo Hidden
 Function Fragment_5(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-(GetOwningQuest() as Ed_FeedDialogue_Script).CalculateScoreAndDiffuculty(PlayerRef, akSpeakerRef as Actor)
+(GetOwningQuest() as Ed_FeedDialogue_Script).RollFeedDialogueChecks(PlayerRef, akSpeakerRef as Actor)
 ;END CODE
 EndFunction
 ;END FRAGMENT
