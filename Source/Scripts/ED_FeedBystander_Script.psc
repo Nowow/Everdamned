@@ -10,61 +10,57 @@ referencealias Property Victim auto
 referencealias[] Property BystanderAliasArray auto
 
 Function CheckBystandersSendAlarmAndStopQuest()
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest())")
+ 	Debug.Trace("Everdamned DEBUG: Bystander Quest and check started")
 
 	Float StartTime = DLC1VampireFeedStartTime.GetValue()
 	Float Now = utility.GetCurrentGameTime()
 	Float Duration = Now - StartTime
 
 	Float DurationInRealTimeSeconds = Duration/(24*60*60) * TimeScale.GetValue()
-
-	Actor VictimRef = Victim.GetActorReference()
+	Debug.Trace("Everdamned DEBUG: Bystander Quest started after " + DurationInRealTimeSeconds + " seconds")
+	
+	Actor VictimRef = Victim.GetReference() as actor
 	Faction VictimCrimeFaction = VictimRef.GetCrimeFaction()
-
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest Start Time: " + StartTime)
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest Now: " + Now)
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest Duration: " + Duration)
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest DurationInRealTimeSeconds : " + DurationInRealTimeSeconds )
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest VictimRef: " + VictimRef)
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest Victim's Crime faction: " + VictimCrimeFaction) 
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest Will check if a bystander cares") 
+	
+	Debug.Trace("Everdamned DEBUG: Bystander Quest Victim crime faction: " + VictimCrimeFaction)
 
 	bool BystanderCares = CheckBystanders()
 
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest BystanderCares:" + BystanderCares) 
+ 	Debug.Trace("Everdamned DEBUG: Bystander Quest determined someon cares")
 
 	if bystanderCares && DurationInRealTimeSeconds <= NoticeTime
+		Debug.Trace("Everdamned DEBUG: And its not too late")
 ; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest calling VictimCrimeFaction.SendAssaultAlarm() because DurationInRealTimeSeconds <= 30")
 	   VictimCrimeFaction.SendAssaultAlarm()
 	else
-; 		Debug.Trace(self + "CheckBystandersAlarmAndStopQuest NOT DOING ANYTHING because DurationInRealTimeSeconds > 30 OR BystanderCares == false")
+		Debug.Trace("Everdamned DEBUG: But its too late!!!")
 	endif
 
 	stop()
 
 EndFunction
 
-
 bool Function CheckBystanders()
-;NOTE: The aliases already check relationship to player, if they are friends, they won't fill the aliases
 
-	actor playerRef = Game.GetPlayer()
-
+	actor currentActor
 	int i = 0
 	while (i < BystanderAliasArray.length)
-		actor currentActor = BystanderAliasArray[i].GetActorReference()
+	
+		currentActor = BystanderAliasArray[i].GetReference() as actor
 		
 		if currentActor
 
-; 			Debug.Trace(self + "CheckBystanders() currentActor == " + currentActor)
+ 			Debug.Trace("Everdamned DEBUG: Bystander Quest alias num " + i + " was filled with " + currentActor)
 
 			bool detected = playerRef.IsDetectedBy(currentActor)
 			utility.wait(0.25) ;first time checking detection between non-hostiles doesn't work
 			detected = playerRef.IsDetectedBy(currentActor)
 
-; 			Debug.Trace(self + "CheckBystanders() detected?:" + detected + "-->" + currentActor)
-
-			if detected 
+			bool theyHaveLos = currentActor.HasLOS(playerRef)
+			bool areConcious = !(currentActor.IsUnconscious())
+			Debug.Trace("Everdamned DEBUG: They detect: " + detected + ", they have los: " + theyHaveLos + ", concious: " + areConcious)
+			
+			if detected && theyHaveLos && areConcious
 				RETURN True
 			endif
 
@@ -74,10 +70,11 @@ bool Function CheckBystanders()
 
 		endif
 
-
 		i += 1
 	endwhile
 
 	RETURN False
 
 EndFunction
+
+actor property playerRef auto

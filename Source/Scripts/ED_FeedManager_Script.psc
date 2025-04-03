@@ -281,6 +281,7 @@ function HandleFeedMesmerized(actor FeedTarget)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (300.0*math.pow(2.718,0.0335*(__lightLevel - 10.0)) - 310.0)
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
@@ -345,6 +346,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (300.0*math.pow(2.718,0.0335*(__lightLevel - 10.0)) - 310.0)
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
@@ -458,6 +460,7 @@ function HandleDialogueSeduction(actor FeedTarget)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (24.663*math.pow(2.718,0.04*(__lightLevel - 10.0)) - 25.0)
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
@@ -517,6 +520,7 @@ function HandleDialogueIntimidation(actor FeedTarget)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (52.584*math.pow(2.718,0.0406*(__lightLevel - 10.0)) - 55.0)
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
@@ -572,6 +576,7 @@ function HandleFeedSleep(actor FeedTarget)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0 + (172.18*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 179.0)
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
@@ -628,6 +633,7 @@ function HandleDrainSleep(actor FeedTarget)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0 + (172.18*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 179.0)
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
@@ -819,9 +825,11 @@ Race Property VampireGarkainBeastRace auto
 Race Property DLC1VampireBeastRace auto
 faction Property DLC1PotentialVampireFaction auto
 Faction Property DLC1PlayerTurnedVampire auto	
+globalvariable property DLC1VampireFeedStartTime auto
 GlobalVariable Property PlayerIsVampire  Auto
 sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
 formlist property ED_Mechanics_BlueBlood_Track_FormList auto
+
 
 globalvariable property ED_Mechanics_Global_FeedType auto
 globalvariable property ED_Mechanics_Global_VampireFeedBystanderRadius auto
