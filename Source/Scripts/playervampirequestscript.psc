@@ -63,6 +63,12 @@ function EatThisActor(actor Target, float shareHPToDigest = 0.2)
     VampireFeed()
 endFunction
 
+function DineAlone()
+	debug.Trace("Everdamned DEBUG: Vampire is to be dining alone!!!")
+	ED_BloodPoolManager_Quest.SetBonusAfterFeed()
+    VampireFeed()
+endfunction
+
 function VampireFeed()
 
     VampireTransformDecreaseISMD.applyCrossFade(2.00000)

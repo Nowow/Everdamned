@@ -134,6 +134,24 @@ function HandleBeastBite()
 	
 endfunction
 
+function HandleBloodWine()
+	debug.Trace("Everdamned DEBUG: Feed Manager recieved Blood Wine call")
+	
+	PlayerVampireQuest.DineAlone()
+	
+	;age for 2h
+	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+	
+	;hemomancy
+	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
+		ED_Mechanics_Hemomancy_Quest.start()
+	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
+		; we ate, we try to learn new spells
+		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
+	endif
+	
+endfunction
+
 function HandleFeedThrall(actor FeedTarget)
 
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Feed Thrall call on target " + FeedTarget)

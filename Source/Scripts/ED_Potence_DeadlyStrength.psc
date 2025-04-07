@@ -1,7 +1,5 @@
 Scriptname ED_Potence_DeadlyStrength extends ActiveMagicEffect  
 
-import math
-import debug
 
 float property originalJumpHeight auto
 float property JumpBon auto
