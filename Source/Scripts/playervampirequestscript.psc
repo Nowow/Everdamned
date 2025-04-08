@@ -389,14 +389,12 @@ function VampireProgression(actor Player, Int VampireStage)
         
         ; waterwalking+waterbreathing
         Player.AddSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell, false)
-        ; dampen healing, probably should be redone
+		
+        ; dampen healing
         ; vampire feed perk holder
-        ; resist poison and disease
         ; others
         Player.AddSpell(ED_BeingVampire_Vanilla_Ab_PassivesHolder_Spell_WasChampionOfTheNight, false)
         
-        ; deprecated in favor of PassivesHolder
-        ;Player.AddSpell(ED_BeingVampire_Vanilla_Ab_StillHeart_Spell_WasNightstalkersFootsteps, false)
         ; movspeed increase, amount controlled by age perks
         Player.AddSpell(ED_BeingVampire_Ab_Stalker_Spell, false)
         
