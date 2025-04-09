@@ -66,11 +66,13 @@ function HandleBeastBite()
 	endif
 	__killmoveStarted = true
 	
-	; TODO: garkain regens hp equal to feeding bonus even without perk
+	; beasts get 50 hp regen without perk
 	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
 		playerRef.RestoreActorValue("Health", 9999.0)
 		playerRef.RestoreActorValue("Magicka", 9999.0)
 		playerRef.RestoreActorValue("Stamina", 9999.0)
+	else
+		playerRef.RestoreActorValue("Health", 50.0)
 	endif
 	
 	;retrieving actor

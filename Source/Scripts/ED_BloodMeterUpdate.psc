@@ -18,6 +18,7 @@ GlobalVariable property ED_Mechanics_BloodMeter_DisplayTime_Global auto
 ; ------------------------------------------------------------
 
 GlobalVariable Property ED_Mechanics_BloodPool_Total Auto
+GlobalVariable Property ED_Mechanics_BloodPool_Current Auto
 
 float property BloodMeter_UpdateRate auto
 
@@ -71,6 +72,9 @@ endEvent
 function UpdateMeter()
 	
 	fThisBloodPoolValue = PlayerRef.GetActorValue("ED_BloodPool")
+	; for display effect
+	ED_Mechanics_BloodPool_Current.SetValue(fThisBloodPoolValue)
+	
 	fMaxBloodPoolValue = ED_Mechanics_BloodPool_Total.GetValue()
 	fMeterPercent = ((fThisBloodPoolValue)/(fMaxBloodPoolValue))
 	

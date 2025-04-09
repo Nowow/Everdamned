@@ -21,9 +21,12 @@ endfunction
 
 ; not interface
 function ReconstructBloodPoolAV()
+	
+	debug.Trace("Everdamned DEBUG: Blood Pool Manager sets blood pool with this components: " + ED_Mechanics_BloodPool_Base.GetValue() + ", " + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ", " + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
+	
+	ED_Mechanics_BloodPool_Total.SetValue(ED_Mechanics_BloodPool_Base.GetValue() + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
 
-	debug.Trace("Everdamned DEBUG: Blood Pool Manager sets blood pool with this components: " + ED_Mechanics_BloodPool_Total.GetValue() + ", " + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ", " + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
-	playerRef.SetAV("ED_BloodPool", ED_Mechanics_BloodPool_Total.GetValue() + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
+	playerRef.SetAV("ED_BloodPool", ED_Mechanics_BloodPool_Total.GetValue())
 	; top up, cant reconstruct keeping current value because not thread safe
 	playerRef.RestoreAV("ED_BloodPool", 9999.0)
 	
@@ -87,7 +90,7 @@ state StageOrAgeChange
 		_calcMaxAv = _calcMaxAv - ((_calcMaxAv / 6.0) * ((VampireStatus - 1) as float))
 		debug.Trace("Everdamned DEBUG: Blood Pool Manager modified pool to " + _calcMaxAv + " based on Stage")
 	
-		ED_Mechanics_BloodPool_Total.SetValue(_calcMaxAv)
+		ED_Mechanics_BloodPool_Base.SetValue(_calcMaxAv)
 		debug.Trace("Everdamned DEBUG: Blood Pool Manager set base blood pool to " + _calcMaxAv)
 		
 		;utility.wait(0.2) ; waiting to release lock for any other calls to this script to do their thing, mainly AtStageOrAgeChange()
@@ -239,10 +242,11 @@ state PostPostprocess
 	endevent
 endstate
 
-GlobalVariable Property ED_Mechanics_BloodPool_Total  Auto  
-GlobalVariable Property ED_Mechanics_BloodPool_MaxBonus  Auto  
-GlobalVariable Property ED_Mechanics_BloodPool_MaxPermaBonus  Auto  
-GlobalVariable property ED_Mechanics_VampireAge auto
+GlobalVariable Property ED_Mechanics_BloodPool_Base Auto
+GlobalVariable Property ED_Mechanics_BloodPool_Total Auto
+GlobalVariable Property ED_Mechanics_BloodPool_MaxBonus Auto
+GlobalVariable Property ED_Mechanics_BloodPool_MaxPermaBonus Auto
+GlobalVariable Property ED_Mechanics_VampireAge Auto
 
 actor property playerRef auto
 
