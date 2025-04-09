@@ -148,6 +148,7 @@ function VampireCure(actor Player)
 	Player.RemoveSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell)
     Player.RemoveSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell)
     Player.RemoveSpell(ED_BeingVampire_Vanilla_Ab_PassivesHolder_Spell_WasChampionOfTheNight)
+	Player.RemoveSpell(ED_BeingVampire_Ab_HealingDampenController_Spell)
 	
 	; vanilla spells
 	Player.RemoveSpell(ED_BeingVampire_Vanilla_VampiricDrain)
@@ -215,8 +216,11 @@ function VampireChange(actor Target)
     utility.Wait(1.00000)
 	
 	; TODO: start quests
+	
     ED_Mechanics_Hotkeys_Quest.start()
 	ED_MainQuest.GainAgeExpirience(0.0)
+	
+	playerRef.addspell(ED_BeingVampire_Ab_HealingDampenController_Spell, false)
 	
     ED_FeedManager_Quest.RegisterFeedEvents()
     
@@ -388,15 +392,17 @@ function VampireProgression(actor Player, Int VampireStage)
         ; even if thats not their business
         
         ; waterwalking+waterbreathing
-        Player.AddSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell, false)
+		; given out at the end anyway
+        ;Player.AddSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell, false)
 		
         ; dampen healing
         ; vampire feed perk holder
         ; others
         Player.AddSpell(ED_BeingVampire_Vanilla_Ab_PassivesHolder_Spell_WasChampionOfTheNight, false)
         
+		; moved to passives holder perk
         ; movspeed increase, amount controlled by age perks
-        Player.AddSpell(ED_BeingVampire_Ab_Stalker_Spell, false)
+        ;Player.AddSpell(ED_BeingVampire_Ab_Stalker_Spell, false)
         
         ; is attached to vampire races, do not need to be added
         ; will be added for vampire transformations
@@ -437,32 +443,11 @@ function VampireProgression(actor Player, Int VampireStage)
             ED_BloodPoolManager_Quest.AtStageOrAgeChange()
         endif
         
-        ; now a perk
-        ;Player.AddSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage1, false)
-
-        ;Player.AddSpell(ED_VampirePowers_Pw_VampiresWill_Spell, false)     
-        ;Player.AddSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2, false)
-        ;Player.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage2N)
-        ;Player.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage3)
-        ;Player.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage4)
-        ;if !Player.HasSpell(SCS_Abilities_Reward_Spell_UltimatePredator_Ab as form)
-        ;   Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_BloodIsPower)
-        ;   Player.RemoveSpell(ED_VampirePowers_Pw_Obfuscate_Spell)
-        ;   Player.RemoveSpell(SCS_VampireSpells_Vanilla_Power_Spell_Flaywind)
-        ;endIf
-        
-        ;Player.AddSpell(SCS_VampireSpells_Vanilla_Power_Spell_VampiresCommand2, true)
-        ;Player.AddSpell(SCS_VampireSpells_Vanilla_Power_Spell_Nightwalk2, true)
-        ;Player.AddSpell(SCS_VampireSpells_Vanilla_Power_Spell_BloodCauldron, true)
-        
-        
-        ;Player.RemoveSpell(SCS_Abilities_Vanilla_Spell_Ab_ReverseProgression_Stage5)
-        
     endIf
     
     ;giving back permanent passives
     ;idk why the unplug-plug but...
-    utility.Wait(1.50000)
+    utility.Wait(0.50000)
     Player.AddSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell, false)
     Player.AddSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell, false)
 
@@ -498,7 +483,8 @@ keyword property ED_Mechanics_Keyword_BlockHungerAdvance auto
 
 spell property ED_BeingVampire_Ab_HungerDelay_Spell auto
 spell property ED_BeingVampire_Ab_MoonlitWaters_Spell auto
-spell property ED_BeingVampire_Ab_Stalker_Spell auto
+spell property ED_BeingVampire_Ab_HealingDampenController_Spell auto
+;spell property ED_BeingVampire_Ab_Stalker_Spell auto
 spell property ED_BeingVampire_Ab_Status_Stage1_Spell auto
 spell property ED_BeingVampire_Ab_Status_Stage2_Spell auto
 spell property ED_BeingVampire_Ab_Status_Stage3_Spell auto
