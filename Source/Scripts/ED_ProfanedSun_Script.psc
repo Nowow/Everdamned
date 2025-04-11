@@ -32,7 +32,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	TheOrb.Enable(true)
 	playerRef.dispelspell(ED_VampireSpells_BloodVortex_Spell)
 	;ED_Art_VFX_WellingBlood.Play(TheOrb, 15.0)
-	ED_VampireSpells_ProfanedSun_Cloak_Spell.Cast(TheOrb)
+	ED_VampireSpells_ProfanedSun_Cloak_Spell.RemoteCast(playerRef, playerRef, TheOrb)
 	utility.Wait(0.100000)
 	RegisterForSingleUpdate(1.0)
 	
