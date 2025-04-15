@@ -28,7 +28,7 @@
       "nodes": [
         {
           "id": "RootPerk",
-          "perk": "Everdamned.esp|250FEB",
+          "perk": "Everdamned.esp|1CDC23",
           "x": 0,
           "y": 0,
 		  "links": [ "FeedDialogue", "BloodSeed", "VigorMortis" ]
