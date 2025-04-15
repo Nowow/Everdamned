@@ -1,6 +1,6 @@
 Scriptname ED_BloodBrandMark_Script extends activemagiceffect  
 
-objectreference _target
+actor _target
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
 	utility.wait(0.2)
@@ -9,7 +9,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 endFunction
 
 function OnEffectFinish(Actor akTarget, Actor akCaster)
-	objectreference _current = ED_LastBloodBrandedActor.GetReference()
+	actor _current = ED_LastBloodBrandedActor.GetReference() as actor
 	if _current == _target
 		ED_LastBloodBrandedActor.Clear()
 	endif

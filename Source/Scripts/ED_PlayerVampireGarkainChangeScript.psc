@@ -293,11 +293,13 @@ EndFunction
 ; called from stage 80
 function ShiftBackWhenOutOfCombat()
 	if !(playerRef.isincombat())
-		debug.Trace("Everdamned DEBUG: ShiftBackWhenOutOfCombat called to revert from Garkain, but player in combat")
+		debug.Trace("Everdamned INFO: ShiftBackWhenOutOfCombat called to revert from Garkain, out of combat, commencing revert after random delay")
+		; TODO: substitute it for longer revert sfx
+		utility.wait(utility.randomfloat(5.0,8.0))
 		ED_VampirePowers_GarkainBeast_Revert.Cast(playerRef, playerRef)
 	else
-		debug.Trace("Everdamned INFO: ShiftBackWhenOutOfCombat called to revert from Garkain, out of combat, commencing revert")
-		RegisterForSingleUpdate(10.0)
+		debug.Trace("Everdamned DEBUG: ShiftBackWhenOutOfCombat called to revert from Garkain, but player in combat, checking again in 5")
+		RegisterForSingleUpdate(5.0)
 	endif 
 endfunction
 

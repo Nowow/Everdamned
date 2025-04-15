@@ -14,6 +14,7 @@ globalvariable property ED_Mechanics_VampireAgeRate auto
 globalvariable property ED_Mechanics_VampireAgeCurrentExp auto
 globalvariable property ED_Mechanics_VampireAgeCurrentLvlUpThreshold auto
 globalvariable property ED_Mechanics_VampireAgeLvlUpExpIncrement auto
+globalvariable property ED_Mechanics_Global_ChainedBeastAllowed auto
 
 
 ;spell[] property Age_Scaling_Display_Spell_List auto
@@ -44,7 +45,8 @@ function GainAgeExpirience(float amountToAge = 0.0)
 		debug.Trace("Everdamned INFO: Player vampire starts aging, current age is " + ED_Mechanics_VampireAge.value + ", max age is " + MaxAge)
 		SetUpAgeAppropriateRewards()
 		isAging = true
-		; give 
+		; give
+		RegisterForSleep()
 		RegisterforSingleUpdateGameTime(ED_Mechanics_VampireAgeRate.value)
 	endif
 	if amountToAge > 0.0
@@ -55,17 +57,19 @@ function GainAgeExpirience(float amountToAge = 0.0)
 				ED_Mechanics_Message_AgeLvlUpNotification.Show()
 				HasShownAgeMessage = true
 			endif
-			RegisterForSleep()
 		endif
 	endif
 endfunction
 
 event OnSleepStop(Bool abInterrupted)
-	if abInterrupted
+	
+	ED_Mechanics_Global_ChainedBeastAllowed.SetValue(1.0)
+	
+	if abInterrupted || !HasShownAgeMessage
 		return
 	endif
+	
 	debug.Trace("Everdamned INFO: Player vampire is aging upon waking up from current age of " + ED_Mechanics_VampireAge.value)
-	UnregisterForSleep()
 	LvlUpAge()
 	Age_Message_List[NextMessageIndex].Show()
 	
@@ -122,10 +126,12 @@ endfunction
 
 function StopAge()
 
-	self.UnregisterForUpdateGameTime()
+	UnregisterForSleep()
+	UnregisterForUpdateGameTime()
 	IsAging = false
 	HasShownAgeMessage = false
 	NextMessageIndex = 0
+	
 	debug.Trace("Everdamned INFO: Player vampire has stopped aging")
 endFunction
 
