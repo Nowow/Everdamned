@@ -31,20 +31,20 @@
           "perk": "Everdamned.esp|1CDC23",
           "x": 0,
           "y": 0,
-		  "links": [ "FeedDialogue", "BloodSeed", "VigorMortis" ]
+		  "links": [ "EyesOfTheMoon", "VigorMortis", "Hemomancy" ]
         },
 		{
-          "id": "BloodSeed",
+          "id": "Hemomancy",
           "perk": "Everdamned.esp|1FCCBB",
           "x": 0,
           "y": 0.5,
-		  "links": [ "Chef" ]
+		  "links": [ "WineAndRevelry" ]
         },
 		{
-          "id": "Chef",
-          "perk": "Everdamned.esp|24E840",
+          "id": "Bloodletting",
+          "perk": "Everdamned.esp|24E83A",
           "x": 0,
-          "y": 1,
+          "y": 2,
 		  "links": [ "AdeptHemomancy" ]
         },
 		{
@@ -52,62 +52,91 @@
           "perk": "Everdamned.esp|24E839",
           "x": 0,
           "y": 1.5,
-		  "links": [ "MultiDrain", "Exsanguinate", ]
-        },
-		{
-          "id": "MultiDrain",
-          "perk": "Everdamned.esp|24E83A",
-          "x": 0,
-          "y": 2,
-		  "links": [ "ExpertHemomancy" ]
+		  "links": [ "Exsanguinate", "ExpertHemomancy", "Kindred" ]
         },
 		{
           "id": "Exsanguinate",
           "perk": "Everdamned.esp|1FF45B",
           "x": 0,
           "y": 2,
-		  "links": [ "ExpertHemomancy" ]
+		  "links": []
+        },
+		{
+          "id": "Kindred",
+          "perk": "Everdamned.esp|1FF45B",
+          "x": 0,
+          "y": 2,
+		  "links": [ "Transfusion" ]
         },
 		{
           "id": "ExpertHemomancy",
           "perk": "Everdamned.esp|24E83B",
           "x": 0,
           "y": 2.5,
-		  "links": [ "Vicissitude", "ToothAndNail" ]
+		  "links": [ "Vicissitude", "MasterHemomancy" ]
         },
 		{
           "id": "Vicissitude",
           "perk": "Everdamned.esp|24E83C",
           "x": 0,
           "y": 3,
-		  "links": [ "MasterHemomancy" ]
+		  "links": [ "ToothAndClaw" ]
+        },
+		{
+          "id": "ToothAndClaw",
+          "perk": "Everdamned.esp|24E83C",
+          "x": 0,
+          "y": 3,
+		  "links": []
         },
 		{
           "id": "MasterHemomancy",
           "perk": "Everdamned.esp|24E83D",
           "x": 0,
           "y": 4.5,
-		  "links": [ "LamaesPyre" ]
+		  "links": []
         },
 		{
-          "id": "LamaesPyre",
-          "perk": "Everdamned.esp|24E83E",
-          "x": 0,
-          "y": 5
-        },
-		{
-          "id": "FeedDialogue",
+          "id": "EyesOfTheMoon",
           "perk": "Everdamned.esp|24E845",
           "x": 1,
           "y": 0.5,
-		  "links": [ "VampiresWill" ]
+		  "links": [ "Presence" ]
+        },
+		{
+          "id": "Presence",
+          "perk": "Everdamned.esp|24E845",
+          "x": 1,
+          "y": 0.5,
+		  "links": [ "VampiresWill", "Auspex" ]
         },
 		{
           "id": "VampiresWill",
           "perk": "Everdamned.esp|24E846",
           "x": 1,
           "y": 1,
-		  "links": [ "InstinctiveCharm" ]
+		  "links": [ "Mesmerize" ]
+        },
+		{
+          "id": "Mesmerize",
+          "perk": "Everdamned.esp|24E8489",
+          "x": 1,
+          "y": 2.5,
+		  "links": [ "Confusion", "DreamVisitor", "InstinctiveCharm" ]
+        },
+		{
+          "id": "Confusion",
+          "perk": "Everdamned.esp|24E847",
+          "x": 1,
+          "y": 1.5,
+		  "links": [ "Obfuscate" ]
+        },
+		{
+          "id": "DreamVisitor",
+          "perk": "Everdamned.esp|24E847",
+          "x": 1,
+          "y": 1.5,
+		  "links": [ "Obfuscate" ]
         },
 		{
           "id": "InstinctiveCharm",
@@ -121,17 +150,10 @@
           "perk": "Everdamned.esp|24E848",
           "x": 1,
           "y": 2,
-		  "links": [ "Mesmerize" ]
+		  "links": [ "Dominate" ]
         },
 		{
-          "id": "Mesmerize",
-          "perk": "Everdamned.esp|24E8489",
-          "x": 1,
-          "y": 2.5,
-		  "links": [ "VampiresCommand" ]
-        },
-		{
-          "id": "VampiresCommand",
+          "id": "Dominate",
           "perk": "Everdamned.esp|24E843",
           "x": 1,
           "y": 3
@@ -141,41 +163,36 @@
           "perk": "Everdamned.esp|250FE7",
           "x": -1.5,
           "y": 0.5,
-		  "links": [ "DeadlyStrength" ]
-        },
-		{
-          "id": "DeadlyStrength",
-          "perk": "Everdamned.esp|250FE8",
-          "x": -1,
-          "y": 1,
-		  "links": [ "ExtendedPerception", "Backstab", "ToothAndNail" ]
+		  "links": [ "ExtendedPerception", "NecroticFlesh", "WineAndRevelry" ]
         },
 		{
           "id": "ExtendedPerception",
           "perk": "Everdamned.esp|250FE3",
           "x": -2,
           "y": 1.5,
-		  "links": [ "NecroticFlesh" ]
+		  "links": [ "Auspex", "DeadlyStrength", "Celerity" ]
         },
+		{
+          "id": "DeadlyStrength",
+          "perk": "Everdamned.esp|250FE8",
+          "x": -1,
+          "y": 1,
+		  "links": [ "Backstab", "FerociousSurge", "ToothAndClaw" ]
+        },
+		
 		{
           "id": "NecroticFlesh",
           "perk": "Everdamned.esp|250FE9",
           "x": -1.5,
           "y": 2,
-		  "links": [ "Celerity" ]
+		  "links": []
         },
 		{
           "id": "Celerity",
           "perk": "Everdamned.esp|250FE4",
           "x": -2,
           "y": 2.5,
-		  "links": [ "Backstab", "FerociousSurge", "WickedWind" ]
-        },
-		{
-          "id": "ToothAndNail",
-          "perk": "Everdamned.esp|250FEC",
-          "x": -1,
-          "y": 3.0
+		  "links": [ "Backstab", "WickedWind" ]
         },
 		{
           "id": "Backstab",
@@ -194,7 +211,22 @@
           "perk": "Everdamned.esp|250FE6",
           "x": -2,
           "y": 3.5
+        },
+		{
+          "id": "WineAndRevelry",
+          "perk": "Everdamned.esp|24E840",
+          "x": 0,
+          "y": 1,
+		  "links": []
         }
+		{
+          "id": "Auspex",
+          "perk": "Everdamned.esp|24E840",
+          "x": 0,
+          "y": 1,
+		  "links": []
+        }
+		
       ]
     }
   ]
