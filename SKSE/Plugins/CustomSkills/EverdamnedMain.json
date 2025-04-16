@@ -38,7 +38,7 @@
           "perk": "Everdamned.esp|1FCCBB",
           "x": -3,
           "y": 1,
-		  "links": [ "WineAndRevelry" ]
+		  "links": [ "WineAndRevelry", "AdeptHemomancy", "Bloodletting" ]
         },
 		{
           "id": "Bloodletting",
@@ -63,14 +63,14 @@
         },
 		{
           "id": "Kindred",
-          "perk": "Everdamned.esp|1FF45B",
+          "perk": "Everdamned.esp|69D202",
           "x": -4.5,
           "y": 5,
 		  "links": [ "Transfusion" ]
         },
 		{
           "id": "Transfusion",
-          "perk": "Everdamned.esp|1FF45B",
+          "perk": "Everdamned.esp|69D201",
           "x": -4.5,
           "y": 6.5,
 		  "links": []
@@ -91,7 +91,7 @@
         },
 		{
           "id": "ToothAndClaw",
-          "perk": "Everdamned.esp|24E83C",
+          "perk": "Everdamned.esp|250FEC",
           "x": -1.5,
           "y": 8.5,
 		  "links": []
@@ -112,7 +112,7 @@
         },
 		{
           "id": "Presence",
-          "perk": "Everdamned.esp|24E845",
+          "perk": "Everdamned.esp|6AC503",
           "x": 3,
           "y": 2,
 		  "links": [ "VampiresWill", "Auspex" ]
@@ -126,21 +126,21 @@
         },
 		{
           "id": "Mesmerize",
-          "perk": "Everdamned.esp|24E8489",
+          "perk": "Everdamned.esp|6AC504",
           "x": 3,
           "y": 4,
 		  "links": [ "Confusion", "DreamVisitor", "InstinctiveCharm" ]
         },
 		{
           "id": "Confusion",
-          "perk": "Everdamned.esp|24E847",
+          "perk": "Everdamned.esp|6AC505",
           "x": 4.5,
           "y": 5,
 		  "links": [ "Obfuscate" ]
         },
 		{
           "id": "DreamVisitor",
-          "perk": "Everdamned.esp|24E847",
+          "perk": "Everdamned.esp|24E849",
           "x": 3,
           "y": 6.5,
 		  "links": [ "Obfuscate" ]
@@ -156,7 +156,7 @@
           "id": "Obfuscate",
           "perk": "Everdamned.esp|24E848",
           "x": 3,
-          "y": 6.5,
+          "y": 8,
 		  "links": [ "Dominate" ]
         },
 		{
@@ -177,7 +177,7 @@
           "perk": "Everdamned.esp|250FE3",
           "x": 0,
           "y": 2,
-		  "links": [ "Auspex", "DeadlyStrength", "Celerity" ]
+		  "links": [ "DeadlyStrength", "Celerity", "Auspex" ]
         },
 		{
           "id": "DeadlyStrength",
@@ -186,7 +186,6 @@
           "y": 3,
 		  "links": [ "Backstab", "FerociousSurge", "ToothAndClaw" ]
         },
-		
 		{
           "id": "NecroticFlesh",
           "perk": "Everdamned.esp|250FE9",
@@ -225,10 +224,10 @@
           "x": -2.5,
           "y": 3,
 		  "links": []
-        }
+        },
 		{
           "id": "Auspex",
-          "perk": "Everdamned.esp|24E840",
+          "perk": "Everdamned.esp|6AC506",
           "x": 2,
           "y": 5,
 		  "links": []
