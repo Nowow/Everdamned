@@ -629,6 +629,16 @@ function HandleFeedSleep(actor FeedTarget)
 			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 		endIf
 	endif
+	
+	if !(FeedTarget.IsInFaction(ED_Mechanics_DreamVisited_Fac)) && playerRef.HasPerk(ED_PerkTree_Deception_65_DreamVisitor_Perk)
+		int currentRelationship = FeedTarget.GetRelationshipRank(playerRef)
+		if currentRelationship >= 0
+			FeedTarget.SetRelationshipRank(playerRef, currentRelationship + 1)
+			FeedTarget.AddToFaction(ED_Mechanics_DreamVisited_Fac)
+			ED_Mechanics_Message_DreamVisitor_RelationshipIncreased.Show()
+		endif
+	endif
+	
 endfunction
 
 function HandleDrainSleep(actor FeedTarget)
@@ -849,13 +859,15 @@ globalvariable property DLC1VampireFeedStartTime auto
 GlobalVariable Property PlayerIsVampire  Auto
 sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
 formlist property ED_Mechanics_BlueBlood_Track_FormList auto
-
+faction property ED_Mechanics_DreamVisited_Fac auto
+message property ED_Mechanics_Message_DreamVisitor_RelationshipIncreased auto
 
 globalvariable property ED_Mechanics_Global_FeedType auto
 globalvariable property ED_Mechanics_Global_VampireFeedBystanderRadius auto
 
 perk property ED_PerkTreeVL_FountainOfLife_Perk auto
 perk property ED_PerkTreeVL_Amaranth_Perk auto
+perk property ED_PerkTree_Deception_65_DreamVisitor_Perk auto
 
 spell property ED_Mechanics_PsychicVampire_Spell auto
 spell property ED_VampirePowers_Amaranth_Spell auto
