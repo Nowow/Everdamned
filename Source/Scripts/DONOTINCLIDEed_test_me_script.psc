@@ -20,11 +20,15 @@ actor _summonedActor
 
 formlist property ED_TEST_formlist auto
 
+keyword property ED_Mechanics_Keyword_DistractionSceneQuestStart auto
+
 function OnEffectStart(Actor akTarget, Actor akCaster)
 	_player = akCaster
 	_target = akTarget
 
-	akTarget.Disable(true)
+	
+	ED_Mechanics_Keyword_DistractionSceneQuestStart.SendStoryEvent(akRef1 = akTarget, aiValue1 = 1)
+	
 	
 	;SendModEvent("ed_RefreshCommandEffectDuration", "", akTarget.GetFormID() as float)
 	;RegisterForSingleUpdate(10.0)
