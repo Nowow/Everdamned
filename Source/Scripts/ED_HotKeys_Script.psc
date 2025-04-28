@@ -19,13 +19,15 @@ Event OnKeyDown(int keyCode)
 		return
 	endif
 	
-	If keyCode == __currentTestHotkey
-		;Debug.MessageBox("Everdamned DEBUG: test key was pressed!")
-		debug.Trace("Everdamned DEBUG: test key was pressed! ---------------------------------------------")
-		
-		ED_Wounded_Distraction_Scene.Stop()
-		
-	Endif
+	;If keyCode == __currentTestHotkey
+	;	;Debug.MessageBox("Everdamned DEBUG: test key was pressed!")
+	;	debug.Trace("Everdamned DEBUG: test key was pressed! ---------------------------------------------")
+	;	
+	;	ED_Wounded_Distraction_Scene.Stop()
+	;	
+	;Endif
+	
+	debug.sendAnimationEvent(Game.GetPlayer(), "SkyIdles_Crouch")
 	
 EndEvent
 
