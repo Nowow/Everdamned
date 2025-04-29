@@ -38,6 +38,7 @@ event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRe
 	
 	; 1 - Wounded
 	; 2 - Haunted by Illusion
+	; 3 - Dance Naked
 	
 	if SceneNo == 2
 	

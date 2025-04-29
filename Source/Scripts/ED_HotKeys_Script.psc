@@ -13,7 +13,7 @@ Function UnRegisterHotkeys()
 EndFunction
 
 ;debug
-scene property ED_Wounded_Distraction_Scene auto
+scene property ED_TestScene auto
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
 		return
@@ -23,7 +23,7 @@ Event OnKeyDown(int keyCode)
 		;Debug.MessageBox("Everdamned DEBUG: test key was pressed!")
 		debug.Trace("Everdamned DEBUG: test key was pressed! ---------------------------------------------")
 		
-		ED_Wounded_Distraction_Scene.Stop()
+		ED_TestScene.Stop()
 		
 	Endif
 	

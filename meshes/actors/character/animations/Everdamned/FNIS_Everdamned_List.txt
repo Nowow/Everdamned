@@ -21,7 +21,8 @@
 b -a ed_test_idle ed_test.hkx 
 b -a ed_reanimate ed_reanimate.hkx
 
-b -a,h,Tn ed_crouch_idle skyIdles_Crouch.hkx
+b -a,h ed_crouch_idle skyIdles_Crouch.hkx
+b -Tn ed_cicerodancelooped_idle special_cicerodance1.hkx
 
 
 ' ----------------- SEDUCTION ------------------
