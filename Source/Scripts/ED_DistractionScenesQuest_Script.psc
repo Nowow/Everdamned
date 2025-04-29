@@ -42,12 +42,16 @@ event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRe
 	
 	if SceneNo == 2
 	
-		int WhichHaunter = utility.randomint(1, PropHauntersChoiceArray.length)
+		int WhichHaunter = utility.randomint(1, PropHauntersChoiceArray.length) - 1
 		actorbase PropHaunterBase = PropHauntersChoiceArray[WhichHaunter]
 		actor PropHaunterActor = ScenePrimaryTarget.PlaceAtMe(PropHaunterBase) as actor
 		
 		; ref should be empty because quest is just scene and is stop starting
+		; ref ability controls deleting actor
 		ED_PropHaunter.ForceRefTo(PropHaunterActor)
+		
+		; sluggish running from nightmare
+		ED_HauntedMovSlow.ForceRefTo(ScenePrimaryTarget)
 		
 	endif
 	
@@ -77,3 +81,4 @@ ReferenceAlias Property ED_Observer2 Auto
 ReferenceAlias Property ED_Observer3 Auto
 
 ReferenceAlias Property ED_PropHaunter Auto
+ReferenceAlias Property ED_HauntedMovSlow Auto

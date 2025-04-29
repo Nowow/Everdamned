@@ -7,19 +7,14 @@ Scriptname QF_ED_Mechanics_Quest_Distra_0B716A39 Extends Quest Hidden
 ReferenceAlias Property Alias_ED_Observer5 Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY ED_Observer1
+;BEGIN ALIAS PROPERTY ED_PropHaunter
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ED_Observer1 Auto
+ReferenceAlias Property Alias_ED_PropHaunter Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY ED_Observer3
+;BEGIN ALIAS PROPERTY ED_ArmorCache
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ED_Observer3 Auto
-;END ALIAS PROPERTY
-
-;BEGIN ALIAS PROPERTY ED_Observer6
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ED_Observer6 Auto
+ReferenceAlias Property Alias_ED_ArmorCache Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY ED_Target
@@ -32,19 +27,29 @@ ReferenceAlias Property Alias_ED_Target Auto
 ReferenceAlias Property Alias_ED_Observer2 Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY ED_ArmorCache
+;BEGIN ALIAS PROPERTY ED_HauntedMovSlow
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ED_ArmorCache Auto
+ReferenceAlias Property Alias_ED_HauntedMovSlow Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY ED_PropHaunter
+;BEGIN ALIAS PROPERTY ED_Observer1
 ;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ED_PropHaunter Auto
+ReferenceAlias Property Alias_ED_Observer1 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY ED_Observer3
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_ED_Observer3 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY ED_Observer4
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_ED_Observer4 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY ED_Observer6
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_ED_Observer6 Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN FRAGMENT Fragment_0

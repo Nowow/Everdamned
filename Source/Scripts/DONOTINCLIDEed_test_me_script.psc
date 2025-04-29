@@ -27,7 +27,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	_target = akTarget
 
 	
-	ED_Mechanics_Keyword_DistractionSceneQuestStart.SendStoryEvent(akRef1 = akTarget, aiValue1 = 3)
+	ED_Mechanics_Keyword_DistractionSceneQuestStart.SendStoryEvent(akRef1 = akTarget, aiValue1 = 2)
 	
 	
 	;SendModEvent("ed_RefreshCommandEffectDuration", "", akTarget.GetFormID() as float)
