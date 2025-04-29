@@ -16,9 +16,6 @@ event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRe
 		return
 	endif
 	
-	
-	;debug.Trace("Everdamned DEBUG: Distraction Scenes target voice type is: " + akRef1.GetVoiceType())
-	
 	debug.Trace("Everdamned DEBUG: Observer1 is: " + ED_Observer1.GetReference())
 	debug.Trace("Everdamned DEBUG: Observer2 is: " + ED_Observer2.GetReference())
 	debug.Trace("Everdamned DEBUG: Observer3 is: " + ED_Observer3.GetReference())
@@ -53,15 +50,21 @@ event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRe
 		; sluggish running from nightmare
 		ED_HauntedMovSlow.ForceRefTo(ScenePrimaryTarget)
 		
+	elseif SceneNo == 4
+		
+		;This function is unreliable the first time it is called 
+		;calling here to make it reliable :)
+		(ScenePrimaryTarget as actor).GetCombatState()
+		;ScenePrimaryTarget.GetCombatState()
+		;ScenePrimaryTarget.GetCombatState()
+		
+		ED_HearingThings.ForceRefTo(ScenePrimaryTarget)
 	endif
 	
 	int SceneIndex = SceneNo - 1 
 	
 	DistractionScenesArray[SceneIndex].Start()
-	
-	; TODO:
-	; make scenes check for VampiresWill keyword
-	
+
 endevent
 
 
@@ -82,3 +85,4 @@ ReferenceAlias Property ED_Observer3 Auto
 
 ReferenceAlias Property ED_PropHaunter Auto
 ReferenceAlias Property ED_HauntedMovSlow Auto
+ReferenceAlias Property ED_HearingThings Auto

@@ -12,11 +12,6 @@ ReferenceAlias Property Alias_ED_Observer5 Auto
 ReferenceAlias Property Alias_ED_PropHaunter Auto
 ;END ALIAS PROPERTY
 
-;BEGIN ALIAS PROPERTY ED_ArmorCache
-;ALIAS PROPERTY TYPE ReferenceAlias
-ReferenceAlias Property Alias_ED_ArmorCache Auto
-;END ALIAS PROPERTY
-
 ;BEGIN ALIAS PROPERTY ED_Target
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_ED_Target Auto
@@ -32,9 +27,19 @@ ReferenceAlias Property Alias_ED_Observer2 Auto
 ReferenceAlias Property Alias_ED_HauntedMovSlow Auto
 ;END ALIAS PROPERTY
 
+;BEGIN ALIAS PROPERTY ED_ArmorCache
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_ED_ArmorCache Auto
+;END ALIAS PROPERTY
+
 ;BEGIN ALIAS PROPERTY ED_Observer1
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_ED_Observer1 Auto
+;END ALIAS PROPERTY
+
+;BEGIN ALIAS PROPERTY ED_HearingThings
+;ALIAS PROPERTY TYPE ReferenceAlias
+ReferenceAlias Property Alias_ED_HearingThings Auto
 ;END ALIAS PROPERTY
 
 ;BEGIN ALIAS PROPERTY ED_Observer3

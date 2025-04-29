@@ -22,11 +22,6 @@ event OnEffectStart(Actor Target, Actor Caster)
 		; dont want to deal with race conditions on VampiresWillTarget alias
 		utility.wait(0.3)
 		
-		
-		
-		; TODO: move to distraction quest
-		ED_Mechanics_VampiresCommandImmunity_Spell.Cast(Target, Target)
-		
 		if ED_Mechanics_Quest_DistractionScenes.IsRunning() || ED_Mechanics_Quest_DistractionScenes.IsStarting()
 			ED_Mechanics_Quest_DistractionScenes.Stop()
 			debug.Trace("Everdamned WARNING: Confusion ME encountered a running / starting Distraction quest, should not have happened? Restarting it")
@@ -35,7 +30,7 @@ event OnEffectStart(Actor Target, Actor Caster)
 		; failsafe
 		int __counter = 30
 		
-		while ED_Mechanics_Quest_DistractionScenes.IsStopping() || __counter > 0
+		while ED_Mechanics_Quest_DistractionScenes.IsStopping() && __counter > 0
 			__counter -= 1
 			utility.wait(0.1)
 		endwhile
@@ -46,7 +41,7 @@ event OnEffectStart(Actor Target, Actor Caster)
 			return
 		endif
 		
-		ED_Mechanics_Keyword_DistractionSceneQuestStart.SendStoryEvent()
+		ED_Mechanics_Keyword_DistractionSceneQuestStart.SendStoryEvent(akRef1 = Target, aiValue1 = 4)
 		
 	endif
 endevent
