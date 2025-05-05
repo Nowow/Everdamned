@@ -15,7 +15,11 @@ if currentTarget
 	endWhile
 endIf
 ED_Target.ForceRefTo(akSpeaker)
-ED_Misc_VampiresCommand_SceneController_Wait_Spell.Cast(game.GetPlayer(), akSpeaker)
+if akSpeaker.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_Mesmerized)
+	ED_Mechanics_Global_MesmerizeShouldFollow.SetValue(0)
+else
+	ED_Misc_VampiresCommand_SceneController_Wait_Spell.Cast(game.GetPlayer(), akSpeaker)
+endif
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -25,3 +29,7 @@ EndFunction
 referencealias property ED_Target auto
 spell property ED_Misc_VampiresCommand_SceneController_Wait_Spell auto
 formlist property ED_Misc_VampiresCommand_SceneControllers_FormList auto
+
+GlobalVariable Property ED_Mechanics_Global_MesmerizeShouldFollow  Auto  
+
+Keyword Property ED_Mechanics_Keyword_Mesmerized  Auto  
