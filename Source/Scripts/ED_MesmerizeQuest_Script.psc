@@ -1,5 +1,8 @@
 Scriptname ED_MesmerizeQuest_Script extends Quest  
 
+event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRef1, ObjectReference akRef2, Int aiValue1, Int aiValue2)
+	debug.Trace("Everdamned DEBUG: Mesmerize Quest started from event!!!")
+endevent
 
 function DispelSeductionOnShutdown()
 	actor __target = ED_Target.GetReference() as actor
