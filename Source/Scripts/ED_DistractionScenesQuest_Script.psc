@@ -4,11 +4,12 @@ Scriptname ED_DistractionScenesQuest_Script extends Quest
 scene[] property DistractionScenesArray auto
 actorbase[] property PropHauntersChoiceArray auto
 
+
 event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRef1, ObjectReference akRef2, Int aiValue1, Int aiValue2)
 	
 	debug.Trace("Everdamned DEBUG: Distraction Scenes quest started")
 	
-	ObjectReference ScenePrimaryTarget = ED_Target.GetReference()
+	actor ScenePrimaryTarget = ED_Target.GetReference() as actor
 	
 	if !ScenePrimaryTarget
 		debug.Trace("Everdamned ERROR: Distraction Scenes primary target reference is null, bailing")
@@ -26,7 +27,24 @@ event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRe
 	
 	int SceneNo = aiValue1
 	int TotalAvailableScenes = DistractionScenesArray.length
-	if !SceneNo || SceneNo < 1 || SceneNo > TotalAvailableScenes
+	
+	bool useHearingThingsScene = ScenePrimaryTarget.GetFactionReaction(playerRef) == 1 || \
+									 ScenePrimaryTarget.IsHostileToActor(playerRef)
+	bool SoloPerformance = ED_Observer1.GetReference() == None
+	
+	if useHearingThingsScene && SoloPerformance
+	
+		debug.Trace("Everdamned DEBUG: Distraction Scenes are called on solo hostile target, overriding to Hearing Things scene")
+		SceneNo = 3
+	
+	elseif !SceneNo || SceneNo < 1 || SceneNo > TotalAvailableScenes
+		
+		; not using Hearing Things scene because non hostiles do not care about Throw Voice
+		; maybe has something to do with aggro behavior radius instead?
+		if !useHearingThingsScene
+			debug.Trace("Everdamned DEBUG: Distraction Scenes will not use Hearing Things scene " + SceneNo)
+			TotalAvailableScenes -= 1
+		endif
 		SceneNo = utility.randomint(1, TotalAvailableScenes)
 		debug.Trace("Everdamned DEBUG: Distraction Scenes quest was not provided with scene No, random: " + SceneNo)
 	else
@@ -34,29 +52,29 @@ event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRe
 	endif
 	
 	; 1 - Wounded
-	; 2 - Haunted by Illusion
-	; 3 - Dance Naked
+	; 2 - Dance Naked
+	; 3 - Hearing Things - conditional
+	; unfinished: Haunted by Illusion
 	
-	if SceneNo == 2
+	;if SceneNo == 4
 	
-		int WhichHaunter = utility.randomint(1, PropHauntersChoiceArray.length) - 1
-		actorbase PropHaunterBase = PropHauntersChoiceArray[WhichHaunter]
-		actor PropHaunterActor = ScenePrimaryTarget.PlaceAtMe(PropHaunterBase) as actor
+		;int WhichHaunter = utility.randomint(1, PropHauntersChoiceArray.length) - 1
+		;actorbase PropHaunterBase = PropHauntersChoiceArray[WhichHaunter]
+		;actor PropHaunterActor = ScenePrimaryTarget.PlaceAtMe(PropHaunterBase) as actor
+		;PropHaunterActor.SetScale(0.4)
 		
 		; ref should be empty because quest is just scene and is stop starting
 		; ref ability controls deleting actor
-		ED_PropHaunter.ForceRefTo(PropHaunterActor)
+		;ED_PropHaunter.ForceRefTo(PropHaunterActor)
 		
 		; sluggish running from nightmare
-		ED_HauntedMovSlow.ForceRefTo(ScenePrimaryTarget)
+		;ED_HauntedMovSlow.ForceRefTo(ScenePrimaryTarget)
 		
-	elseif SceneNo == 4
+	if SceneNo == 3
 		
 		;This function is unreliable the first time it is called 
 		;calling here to make it reliable :)
-		(ScenePrimaryTarget as actor).GetCombatState()
-		;ScenePrimaryTarget.GetCombatState()
-		;ScenePrimaryTarget.GetCombatState()
+		ScenePrimaryTarget.GetCombatState()
 		
 		ED_HearingThings.ForceRefTo(ScenePrimaryTarget)
 	endif
@@ -68,6 +86,7 @@ event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRe
 endevent
 
 
+actor property playerRef auto
 
 ReferenceAlias Property ED_Target Auto
 

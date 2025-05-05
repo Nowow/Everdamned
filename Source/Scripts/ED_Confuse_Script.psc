@@ -6,7 +6,9 @@ event OnEffectStart(Actor Target, Actor Caster)
 	; TODO: redo to Confusion cooldown
 	if Target.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_ConfusionImmune)
 		debug.Trace("Everdamned DEBUG: Confusion will not be applied due to Confusion immunity")
-		ED_Mechanics_Message_VampiresCommandImmune.Show()
+		MEssage.ResetHelpMessage("ed_confusion_immunity")
+		ED_Mechanics_Message_VampiresCommandImmune.ShowAsHelpMessage("ed_confusion_immunity", 4, 30, 1)
+		;ED_Mechanics_Message_VampiresCommandImmune.Show()
 		return
 	endif
 	
@@ -41,7 +43,7 @@ event OnEffectStart(Actor Target, Actor Caster)
 			return
 		endif
 		
-		ED_Mechanics_Keyword_DistractionSceneQuestStart.SendStoryEvent(akRef1 = Target, aiValue1 = 4)
+		ED_Mechanics_Keyword_DistractionSceneQuestStart.SendStoryEvent(akRef1 = Target)
 		
 	endif
 endevent

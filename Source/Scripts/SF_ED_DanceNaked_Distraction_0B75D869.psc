@@ -5,11 +5,11 @@ Scriptname SF_ED_DanceNaked_Distraction_0B75D869 Extends Scene Hidden
 ;BEGIN FRAGMENT Fragment_4
 Function Fragment_4()
 ;BEGIN CODE
-debug.Trace("Everdamned DEBUG: Naked Dance Scene ended!!")
+;debug.Trace("Everdamned DEBUG: Naked Dance Scene ended!!")
 actor __sceneTarget = SceneTargetAlias.GetReference() as actor
 
 Form bodyArmor = ED_Mechanics_FormList_DanceNakedArmorCache.GetAt(0)
-debug.Trace("Everdamne DEBUG: Armor piece got from Armor Cache: " + bodyArmor)
+;debug.Trace("Everdamne DEBUG: Armor piece got from Armor Cache: " + bodyArmor)
 
 If (bodyArmor && !(__sceneTarget.IsDead()) && __sceneTarget.GetItemCount(bodyArmor) >= 1)
 	__sceneTarget.EquipItem(bodyArmor, false, false)
@@ -26,7 +26,7 @@ ED_Mechanics_VampiresCommandImmunity_Spell.Cast(__sceneTarget, __sceneTarget)
 
 int bodySlot = 0x00000004
 armor bodyArmor = __sceneTarget.GetWornForm(bodySlot) as armor
-debug.Trace("Everdamne DEBUG: Armor piece got from Maniacal Laughterer: " + bodyArmor)
+;debug.Trace("Everdamne DEBUG: Armor piece got from Maniacal Laughterer: " + bodyArmor)
 ED_Mechanics_FormList_DanceNakedArmorCache.AddForm(bodyArmor)
 __sceneTarget.UnequipItem(bodyArmor)
 ;END CODE
