@@ -32,7 +32,7 @@ event OnEffectStart(Actor Target, Actor Caster)
 		; failsafe
 		int __counter = 30
 		
-		while ED_Mechanics_Quest_DistractionScenes.IsStopping() && __counter > 0
+		while !(ED_Mechanics_Quest_DistractionScenes.IsStopped()) && __counter > 0
 			__counter -= 1
 			utility.wait(0.1)
 		endwhile

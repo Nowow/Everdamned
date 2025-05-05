@@ -1,46 +1,40 @@
 Scriptname ED_Mesmerize_Script extends activemagiceffect  
 
+actor __target
 
 EVENT OnEffectStart(Actor Target, Actor Caster)
 
-	if !(Caster.hasperk(ED_PerkTree_Deception_40_Mesmerize_Perk))
+	debug.trace("Everdamned DEBUG: Start Mesmerize quest with actor " + Target)
+	if ED_Mechanics_Quest_Mesmerize.IsRunning() || ED_Mechanics_Quest_Mesmerize.IsStarting()
+		ED_Mechanics_Quest_Mesmerize.Stop()
+		debug.Trace("Everdamned DEBUG: Mesmerize ME encountered a running / starting Mesmerize quest. Restarting it")
+	endif
+	
+	; failsafe
+	int __counter = 30
+	
+	while !(ED_Mechanics_Quest_Mesmerize.IsStopped()) && __counter > 0
+		__counter -= 1
+		utility.wait(0.1)
+	endwhile
+	
+	if __counter <= 0
+		debug.Trace("Everdamned ERROR: Mesmerize ME waited whole 3 seconds for Distraction quest to stop, WHY IS IT STOPPING SO LONG??")
+		debug.MessageBox("Everdamned DEBUG: Mesmerize not applied because Mesmerize ME couldnt wait for Mesmerize quest to finish, report to mod author")
 		return
 	endif
 	
-	debug.trace("Everdamned DEBUG: Trying to start Follow Mesmerized scene on actor " + Target)
-	if ED_FollowMesmerized_FeedDialogue_Scene.IsPlaying()
-		debug.trace("Everdamned DEBUG: Follow Mesmerized is already playing, stopping")
-		ED_FollowMesmerized_FeedDialogue_Scene.Stop()
-		utility.wait(0.5)
-	endif
-	
-	ED_FollowMesmerized.ForceRefTo(Target)
+	ED_Mechanics_Keyword_StartMesmerizeQuest.SendStoryEvent(akRef1 = Target)
 	Target.SetLookAt(Caster)
-	ED_FollowMesmerized_FeedDialogue_Scene.Start()
+	__target = Target
 	
-	;fFollowMatchSpeedZoneWidth
-	;fFollowStartSprintDistance
-	
-	;debug.trace("Everdamned DEBUG: setting fFollowStartSprintDistance " + Game.GetGameSettingFloat("fFollowStartSprintDistance"))
-	;debug.trace("Everdamned DEBUG: setting fFollowMatchSpeedZoneWidth " + Game.GetGameSettingFloat("fFollowMatchSpeedZoneWidth"))
-	
-	;Game.SetGameSettingFloat("fFollowStartSprintDistance", 1500.0)
-	;Game.SetGameSettingFloat("fFollowMatchSpeedZoneWidth", 1500.0)
-	;debug.trace("Everdamned DEBUG: setting fFollowStartSprintDistance " + Game.GetGameSettingFloat("fFollowStartSprintDistance"))
-	;debug.trace("Everdamned DEBUG: setting fFollowMatchSpeedZoneWidth " + Game.GetGameSettingFloat("fFollowMatchSpeedZoneWidth"))
-	
-	debug.trace("Everdamned DEBUG: Follow Mesmerized scene started")
-	debug.trace("Everdamned DEBUG: Alias actor is: " + ED_FollowMesmerized.getreference() as actor)
-	debug.trace("Everdamned DEBUG: Follow Mesmerized scene is playing: " + ED_FollowMesmerized_FeedDialogue_Scene.IsPlaying())
-
 endEVENT
 
 EVENT OnEffectFinish(Actor Target, Actor Caster)
 	debug.trace("Everdamned DEBUG: Mesmerize effect finished")
-	Target.ClearLookAt()
-	ED_FollowMesmerized.Clear()
+	__target.ClearLookAt()
 endevent
 
-perk property ED_PerkTree_Deception_40_Mesmerize_Perk auto
-scene property ED_FollowMesmerized_FeedDialogue_Scene auto
-referencealias property ED_FollowMesmerized auto
+
+quest property ED_Mechanics_Quest_Mesmerize auto
+keyword property ED_Mechanics_Keyword_StartMesmerizeQuest auto
