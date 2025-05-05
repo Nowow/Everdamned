@@ -13,7 +13,7 @@ Function UnRegisterHotkeys()
 EndFunction
 
 ;debug
-scene property ED_TestScene auto
+keyword property ED_Mechanics_Keyword_StartMesmerizeQuest auto
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
 		return
@@ -23,7 +23,7 @@ Event OnKeyDown(int keyCode)
 		;Debug.MessageBox("Everdamned DEBUG: test key was pressed!")
 		debug.Trace("Everdamned DEBUG: test key was pressed! ---------------------------------------------")
 		
-		ED_TestScene.Stop()
+		ED_Mechanics_Keyword_StartMesmerizeQuest.SendStoryEvent(akRef1 = Game.GetCurrentConsoleRef())
 		
 	Endif
 	

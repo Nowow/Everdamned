@@ -103,7 +103,7 @@ endfunction
 
 int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 
-	float __playerSeductionScore =  akSeducer.GetAV("Speechcraft") as int
+	int __playerSeductionScore =  akSeducer.GetAV("Speechcraft") as int
 	
 	; -80 if aquaintance, 0 if lover
 	__playerSeductionScore += (akSeducer.GetRelationshipRank(akSeduced) * 20) - 80
@@ -216,6 +216,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	;	Reveal_SameFaction_Score_Mod = 25
 	;endif	
 
+	return __playerSeductionScore
 Endfunction
 
 
@@ -289,7 +290,7 @@ endfunction
 
 Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 
-	float PlayerSeductionScore = CalculateScore(akSeducer, akSeduced)
+	int PlayerSeductionScore = CalculateScore(akSeducer, akSeduced)
 
 	debug.Trace("Everdamned INFO: Seduction score is: " + PlayerSeductionScore)
 	
@@ -331,8 +332,8 @@ Endfunction
 
 FavorJarlsMakeFriendsScript property FavorJarlsMakeFriends auto
 
-associationtype Spouse
-associationtype Courting
+associationtype property Spouse auto
+associationtype property Courting auto
 
 keyword property ED_Mechanics_Keyword_BlueBlood_VIP auto
 keyword property USKPGiftOfCharity auto
