@@ -51,7 +51,7 @@ spell property ED_VampirePowers_GarkainBeast_Change auto
 spell property ED_VampirePowers_GarkainBeast_Revert auto
 globalvariable property DLC1VampireMaxPerks auto
 playervampirequestscript property PlayerVampireQuest auto
-spell property SCS_Abilities_Reward_Spell_NoHate auto
+spell property ED_VampirePowers_Ab_Masquerade_Spell auto
 perk property DLC1VampireActivationBlocker auto
 
 
@@ -411,7 +411,7 @@ Function ActuallyShiftBackIfNecessary()
 		game.SendWereWolfTransformation()
 	endIf
 	
-	if PlayerVampireQuest.VampireStatus < 4 || ED_Mechanics_Global_DisableHate.GetValue() == 1 as Float || playerRef.HasSpell(SCS_Abilities_Reward_Spell_NoHate as form)
+	if PlayerVampireQuest.VampireStatus < 4 || ED_Mechanics_Global_DisableHate.GetValue() == 1 as Float || playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell as form)
 		playerRef.SetAttackActorOnSight(false)
 		Int i = 0
 		while i < DLC1VampireHateFactions.GetSize()

@@ -25,8 +25,8 @@ Float property DLC1BiteHealthRecover auto
 Bool property Untimed auto
 Bool property DLC1HasLightfoot auto
 
-spell property SCS_Abilities_Reward_Spell_NoHate auto
-perk property SCS_PerkTree_380_Perk_VampireLord_DragonAtMidnight auto
+spell property ED_VampirePowers_Ab_Masquerade_Spell auto
+perk property ED_PerkTreeVL_Amaranth_Perk auto
 
 spell property LeveledDrainSpell auto
 spell property LeveledAbility auto
@@ -338,15 +338,12 @@ function StartTracking()
 	;playerRef.DispelSpell(SCS_VampireSpells_Vanilla_Power_Spell_Obfuscate)
 	playerRef.UnequipAll()
 	
-	; TODO: when decided on DragonAtMidnight perk
-	if playerRef.HasPerk(SCS_PerkTree_380_Perk_VampireLord_DragonAtMidnight)
+	if playerRef.HasPerk(ED_PerkTreeVL_Amaranth_Perk)
 		playerRef.EquipItem(DLC1ClothesVampireLordRoyalArmor as form, false, true)
 	else
 		playerRef.EquipItem(DLC1VampireLordArmor as form, false, true)
 	endIf
 	
-	
-	; TODO: decide whether disable hate would be a thing
 	if ED_Mechanics_Global_DisableHate.GetValue() == 0 as Float
 		if !playerRef.IsInLocation(DLC1VampireCastleLocation) && !playerRef.IsInLocation(DLC1VampireCastleGuildhallLocation) && !playerRef.IsInLocation(DLC1VampireCastleDungeonLocation)
 			playerRef.SetAttackActorOnSight(true)
@@ -665,7 +662,7 @@ function ActuallyShiftBackIfNecessary()
 	endIf
 	
 	; todo: nohate spell if it will exist
-	if PlayerVampireQuest.VampireStatus < 4 || ED_Mechanics_Global_DisableHate.GetValue() == 1 as Float || playerRef.HasSpell(SCS_Abilities_Reward_Spell_NoHate as form)
+	if PlayerVampireQuest.VampireStatus < 4 || ED_Mechanics_Global_DisableHate.GetValue() == 1 as Float || playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 		playerRef.SetAttackActorOnSight(false)
 		Int i = 0
 		while i < DLC1VampireHateFactions.GetSize()

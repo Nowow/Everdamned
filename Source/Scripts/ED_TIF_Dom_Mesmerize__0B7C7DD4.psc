@@ -17,23 +17,23 @@ if currentTarget
 endIf
 ED_Target.ForceRefTo(akSpeaker)
 
-objectreference __activator = akSpeaker.PlaceAtMe(FXEmptyActivator)
-
+;objectreference __activator = akSpeaker.PlaceAtMe(FXEmptyActivator)
 ;float zOffset  = __activator.GetHeadingAngle(akSpeaker)
 ;__activator.SetAngle(__activator.GetAngleX(), __activator.GetAngleY(), __activator.GetAngleZ() + zOffset)
 
-while !(__activator.Is3DLoaded())
-	debug.Trace("Everdamned DEBUG: FXEmptyActivator 3d is not yet loaded!")
-	utility.wait(0.1)
-endwhile
+;while !(__activator.Is3DLoaded())
+;	debug.Trace("Everdamned DEBUG: FXEmptyActivator 3d is not yet loaded!")
+;	utility.wait(0.1)
+;endwhile
 
-float __activatorAngleZ = __activator.GetAngleZ()
-__activator.MoveTo(akSpeaker, 10.0*math.sin(__activatorAngleZ), 10.0*math.cos(__activatorAngleZ), 50.0)
-__activator.SetAngle(__activator.GetAngleX(), __activator.GetAngleY(), __activatorAngleZ + 180.0)
+;float __activatorAngleZ = __activator.GetAngleZ()
+;__activator.MoveTo(akSpeaker, 10.0*math.sin(__activatorAngleZ), 10.0*math.cos(__activatorAngleZ), 50.0)
+;__activator.SetAngle(__activator.GetAngleX(), __activator.GetAngleY(), __activatorAngleZ + 180.0)
 
+;ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell.RemoteCast(__activator, playerRef, akSpeaker)
+;__activator.Delete()
 
-ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell.RemoteCast(__activator, playerRef, akSpeaker)
-__activator.Delete()
+playerRef.DoCombatSpellApply(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell, akSpeaker)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -50,3 +50,5 @@ formlist property ED_Mechanics_Dominate_SceneControllers_FormList auto
 
 
 Activator Property FXEmptyActivator  Auto  
+
+SPELL Property ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell  Auto  

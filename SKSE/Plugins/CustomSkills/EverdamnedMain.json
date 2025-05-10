@@ -197,6 +197,13 @@
             "Dominate"
           ]
         },
+		{
+          "id": "Masquerade",
+          "perk": "Everdamned.esp|7E12E1",
+          "x": 3.56,
+          "y": 4.69,
+          "links": []
+        },
         {
           "id": "Dominate",
           "perk": "Everdamned.esp|24E843",

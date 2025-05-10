@@ -77,6 +77,7 @@ function HandleBeastBite()
 	
 	;retrieving actor
 	;latent function, would wait for quest to start and fill the alias
+	; TODO: check for quest not being started already, although that is unexpected behavior
 	ED_Mechanics_Quest_BeastFeedVictimFinder.Start()
 	actor FeedTarget = ED_FeedVictim.GetReference() as actor
 	debug.Trace("Everdamned DEBUG: Feed Manager got actor " + FeedTarget + " captured by ED_Mechanics_Quest_BeastFeedVictimFinder")
@@ -300,6 +301,10 @@ function HandleFeedMesmerized(actor FeedTarget)
 		else
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (300.0*math.pow(2.718,0.0335*(__lightLevel - 10.0)) - 310.0)
 		endif
+		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
+			debug.Trace("Everdamned DEBUG: Feed Manager detected Masquerade perk, cutting radius by a third")
+		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
 		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
@@ -364,6 +369,10 @@ function HandleDrainMesmerized(actor FeedTarget)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
 		else
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (300.0*math.pow(2.718,0.0335*(__lightLevel - 10.0)) - 310.0)
+		endif
+		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
+			debug.Trace("Everdamned DEBUG: Feed Manager detected Masquerade perk, cutting radius by a third")
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
 		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
@@ -479,6 +488,10 @@ function HandleDialogueSeduction(actor FeedTarget)
 		else
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (24.663*math.pow(2.718,0.04*(__lightLevel - 10.0)) - 25.0)
 		endif
+		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
+			debug.Trace("Everdamned DEBUG: Feed Manager detected Masquerade perk, cutting radius by a third")
+		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
 		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
@@ -539,6 +552,10 @@ function HandleDialogueIntimidation(actor FeedTarget)
 		else
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (52.584*math.pow(2.718,0.0406*(__lightLevel - 10.0)) - 55.0)
 		endif
+		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
+			debug.Trace("Everdamned DEBUG: Feed Manager detected Masquerade perk, cutting radius by a third")
+		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
 		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
@@ -594,6 +611,10 @@ function HandleFeedSleep(actor FeedTarget)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
 		else
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0 + (172.18*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 179.0)
+		endif
+		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
+			debug.Trace("Everdamned DEBUG: Feed Manager detected Masquerade perk, cutting radius by a third")
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
 		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
@@ -661,6 +682,10 @@ function HandleDrainSleep(actor FeedTarget)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
 		else
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0 + (172.18*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 179.0)
+		endif
+		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
+			debug.Trace("Everdamned DEBUG: Feed Manager detected Masquerade perk, cutting radius by a third")
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
 		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
@@ -872,6 +897,7 @@ perk property ED_PerkTree_Deception_65_DreamVisitor_Perk auto
 spell property ED_Mechanics_PsychicVampire_Spell auto
 spell property ED_VampirePowers_Amaranth_Spell auto
 spell property ED_VampirePowers_Amaranth_Disintegrate_Spell auto
+spell property ED_VampirePowers_Ab_Masquerade_Spell auto
 
 keyword property ED_Mechanics_Keyword_BystanderStart auto
 keyword property ED_Mechanics_Keyword_PsychicVampireStart auto

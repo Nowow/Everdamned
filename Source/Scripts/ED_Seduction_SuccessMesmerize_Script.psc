@@ -6,13 +6,13 @@ Scriptname ED_Seduction_SuccessMesmerize_Script Extends TopicInfo Hidden
 Function Fragment_1(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell.remotecast(playerRef, playerRef, akSpeaker)
+playerRef.DoCombatSpellApply(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell, akSpeaker)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
-SPELL Property ED_VampirePowers_Vanilla_Pw_VampiresSeduction_Spell  Auto  
+SPELL Property ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell  Auto  
 
 Actor Property PlayerRef  Auto  
