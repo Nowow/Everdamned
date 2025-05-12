@@ -38,6 +38,14 @@ int Hotkeys_TestKey
 int property Default_Hotkeys_TestKey auto
 GlobalVariable Property ED_Test_Hotkey Auto
 
+int Hotkeys_HotkeyA
+int property Default_Hotkeys_HotkeyA auto
+GlobalVariable Property ED_Mechanics_Hotkeys_HotkeyA Auto
+
+int Hotkeys_HotkeyB
+int property Default_Hotkeys_HotkeyB auto
+GlobalVariable Property ED_Mechanics_Hotkeys_HotkeyB Auto
+
 ; ------------------------------------------------------------
 
 
@@ -63,6 +71,8 @@ function OnPageReset(String akPage)
 	; Hotkeys
 	
 	Hotkeys_TestKey = AddKeyMapOption("Test hotkey", ED_Test_Hotkey.GetValue() as int)
+	Hotkeys_HotkeyA = AddKeyMapOption("Celerity Hotkey", ED_Mechanics_Hotkeys_HotkeyA.GetValue() as int)
+	Hotkeys_HotkeyB = AddKeyMapOption("Potence Hotkey", ED_Mechanics_Hotkeys_HotkeyB.GetValue() as int)
 	
 	; ------------------------------------------------------------
 endFunction
@@ -106,6 +116,12 @@ function OnOptionDefault(Int akOp)
 	
 	elseIf akOp == Hotkeys_TestKey
 		AssignKey(ED_Test_Hotkey, Hotkeys_TestKey, Default_Hotkeys_TestKey, "", "")
+	
+	elseIf akOp == Hotkeys_HotkeyA
+		AssignKey(ED_Mechanics_Hotkeys_HotkeyA, Hotkeys_HotkeyA, Default_Hotkeys_HotkeyA, "", "")
+		
+	elseIf akOp == Hotkeys_HotkeyB
+		AssignKey(ED_Mechanics_Hotkeys_HotkeyB, Hotkeys_HotkeyB, Default_Hotkeys_HotkeyB, "", "")
 	
 	; ------------------------------------------------------------
 	endif
@@ -208,10 +224,15 @@ endfunction
 
 
 Event OnOptionKeyMapChange(int option, int keyCode, string conflictControl, string conflictName)
-	if (option == Hotkeys_TestKey)
-			AssignKey(ED_Test_Hotkey, option, keyCode, conflictControl, conflictName)
-			
-
+	if option == Hotkeys_TestKey
+		AssignKey(ED_Test_Hotkey, option, keyCode, conflictControl, conflictName)
+	
+	elseif option == Hotkeys_HotkeyA
+		AssignKey(ED_Mechanics_Hotkeys_HotkeyA, option, keyCode, conflictControl, conflictName)
+	
+	elseif option == Hotkeys_HotkeyB
+		AssignKey(ED_Mechanics_Hotkeys_HotkeyB, option, keyCode, conflictControl, conflictName)
+	
 	endIf
 endEvent
 
@@ -238,6 +259,10 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("How much seconds before blood bar fades after displaying last change. Setting to 0 disables fading. May not be exact amount of seconds due to bar update rate")
 	elseIf akOp == Hotkeys_TestKey
 		self.SetInfoText("Test key")
+	elseIf akOp == Hotkeys_HotkeyA
+		self.SetInfoText("Hold: Toggle Extended Perception; Tap: Celerity; Tap/Hold when Celerity is active: Wicked Wind/Wicked Wind with targeting")
+	elseIf akOp == Hotkeys_HotkeyB
+		self.SetInfoText("Tap: Toggle Deadly Strength, Hold: charge next jump heigth")
 		
 		
 	; ------------------------------------------------------------

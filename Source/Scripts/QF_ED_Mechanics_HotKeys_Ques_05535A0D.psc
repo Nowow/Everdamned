@@ -27,7 +27,7 @@ Quest __temp = self as Quest
 ED_HotKeys_Script kmyQuest = __temp as ED_HotKeys_Script
 ;END AUTOCAST
 ;BEGIN CODE
-kmyQuest.RegisterHotkeys()
+kmyQuest.InitializeHotkeys()
 debug.Trace("Everdamned INFO: Hotkey quest just started!")
 ;END CODE
 EndFunction
