@@ -25,30 +25,6 @@ Function RegisterHotkeys()
 	InitializeHotkeys()
 endfunction
 
-
-spell property ED_VampirePowers_WickedWind_Spell auto
-spell property ED_VampirePowers_Power_Celerity auto
-spell property ED_VampirePowers_Power_ExtendedPerceptionTog auto
-magiceffect property ED_VampirePowers_Effect_CelerityTime auto
-
-spell property ED_VampirePowers_Power_DeadlyStrengthTog auto
-spell[] property JumpBonusSpellArray auto
-spell property ED_Mechanics_PotenceJumpBonus1_Spell auto
-
-
-float property TapMaxLength = 0.3 auto
-
-bool __playerHasCelerity
-bool __hotkeyADown_lock
-bool __hotkeyA_handled
-int __hotkeyAUP_gate = 1
-
-bool __hotkeyBDown_lock
-bool __hotkeyB_handled
-bool __chargeJumpFlag
-; not needed because DoCombatSpellApply will incur cooldown
-int __hotkeyBUP_gate = 1 
-int __jumpBonusLevel
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
 		return
