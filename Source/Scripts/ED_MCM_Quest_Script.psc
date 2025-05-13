@@ -260,7 +260,7 @@ function OnOptionHighlight(Int akOp)
 	elseIf akOp == Hotkeys_TestKey
 		self.SetInfoText("Test key")
 	elseIf akOp == Hotkeys_HotkeyA
-		self.SetInfoText("Hold: Toggle Extended Perception; Tap: Celerity; Tap/Hold when Celerity is active: Wicked Wind/Wicked Wind with targeting")
+		self.SetInfoText("Hold: Cast Extended Perception or Dispel it or Celerity ; Tap: Celerity; Tap when Celerity is active: Wicked Wind")
 	elseIf akOp == Hotkeys_HotkeyB
 		self.SetInfoText("Tap: Toggle Deadly Strength, Hold: charge next jump heigth")
 		

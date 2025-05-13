@@ -34,8 +34,6 @@ Event OnKeyDown(int keyCode)
 		
 		debug.Trace("Everdamned DEBUG: Hotkey A was pressed! ---------------------------------------------")
 		
-		__playerHasCelerity = playerRef.HasMagicEffect(ED_VampirePowers_Effect_CelerityTime)
-		
 		; if somehow release event got to it faster
 		; rare race condition i guess
 		if __hotkeyA_handled
@@ -47,30 +45,30 @@ Event OnKeyDown(int keyCode)
 			return
 		endif
 		
-		if __playerHasCelerity
-			__hotkeyA_handled = true
-			__releaseGate = False
-			playerRef.DoCombatSpellApply(ED_VampirePowers_WickedWind_Spell, None)
-			debug.Trace("Everdamned DEBUG: Hotkey A pressed under Celerity, casted Wicked Wind")
+		;if __playerHasCelerity
+		;	__hotkeyA_handled = true
+		;	__releaseGate = False
+		;	playerRef.DoCombatSpellApply(ED_VampirePowers_WickedWind_Spell, None)
+		;	debug.Trace("Everdamned DEBUG: Hotkey A pressed under Celerity, casted Wicked Wind")
 		
+	
+		utility.wait(TapMaxLength)
+		
+		; if not yet handled, means OnKeyUp has not yet fired
+		; do the work and let OnKeyUp invalidate
+		if !__hotkeyA_handled
+			__hotkeyA_handled = true
+			__releaseGate = false
+			debug.Trace("Everdamned DEBUG: Hotkey A pressed long enough, casting Extended Perception")
+			playerRef.DoCombatSpellApply(ED_VampirePowers_Power_ExtendedPerceptionTog, None)
+			
+		; work is already done, invalidate
 		else
-			utility.wait(TapMaxLength)
-			
-			; if not yet handled, means OnKeyUp has not yet fired
-			; do the work and let OnKeyUp invalidate
-			if !__hotkeyA_handled
-				__hotkeyA_handled = true
-				__releaseGate = false
-				debug.Trace("Everdamned DEBUG: Hotkey A pressed long enough, casting Extended Perception")
-				playerRef.DoCombatSpellApply(ED_VampirePowers_Power_ExtendedPerceptionTog, None)
-				
-			; work is already done, invalidate
-			else
-				debug.Trace("Everdamned DEBUG: Hotkey A press found out release already did the job")
+			debug.Trace("Everdamned DEBUG: Hotkey A press found out release already did the job")
 
-			endif
-			
 		endif
+		
+
 		__hotkeyADown_lock = false
 	endif
 endevent
