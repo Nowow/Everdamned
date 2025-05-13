@@ -3,11 +3,13 @@ Scriptname ED_TeleportActivatorDash_Script extends ObjectReference
 
 import input
 
+int __currentHotkey
 function OnLoad()
 	
-	int __currentTestHotkey = ED_Test_Hotkey.GetValue() as int
+	__currentHotkey = input.GetMappedKey("Shout")
 	
-	if iskeypressed(__currentTestHotkey)
+	if iskeypressed(__currentHotkey)
+		;ED_Mechanics_Hotkeys_HotkeyBus.SetValue(__currentHotkey)
 		bool __started = ED_Mechanics_Quest_WickedWindTargeting.Start()
 		debug.Trace("Everdamned DEBUG: ww quest started: " + __started)
 		if !__started
@@ -33,6 +35,7 @@ sound property ED_Art_SoundM_WickedWind_Slow auto
 
 quest property ED_Mechanics_Quest_WickedWindTargeting auto
 message property ED_Mechanics_Message_WickedWindCooldown auto
-globalvariable property ED_Test_Hotkey auto
+globalvariable property ED_Mechanics_Hotkeys_HotkeyA auto
+;globalvariable property ED_Mechanics_Hotkeys_HotkeyBus auto
 
 actor property playerRef auto

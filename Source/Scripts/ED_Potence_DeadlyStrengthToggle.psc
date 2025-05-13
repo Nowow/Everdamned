@@ -1,6 +1,5 @@
 Scriptname ED_Potence_DeadlyStrengthToggle extends ActiveMagicEffect  
 
-import debug
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 	bool hasME = akTarget.HasMagicEffect(DeadlyStrengthEffect)

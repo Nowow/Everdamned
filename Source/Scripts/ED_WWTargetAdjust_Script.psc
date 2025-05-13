@@ -4,7 +4,7 @@ Scriptname ED_WWTargetAdjust_Script extends ObjectReference
 function OnLoad()
 	; adjust landing target
 	
-	ED_Mechanics_Quest_WickedWindTargeting.LandingTarget.TranslateToRef(self, 5500.0)
+	ED_Mechanics_Quest_WickedWindTargeting.LandingTarget.TranslateToRef(self, 15000.0)
 
 	utility.Wait(0.15)
 	self.Delete()
