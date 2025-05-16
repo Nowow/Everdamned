@@ -1,0 +1,48 @@
+{
+  "ImpactMapping": [
+	{
+      "Comment": "This modifier will generate a spark effect, a fitting sound upon impact, and cause the arrow to bounce off heavy armor pieces. No decal will be shown.",
+      "Priority": 0,
+	  "Filters": {
+        "Blocked": ["No"],
+        "Attacks": ["Regular", "Power"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFlesh"]
+      },
+	  "Modifiers": {
+		"ImpactData": "Skyrim.esm:0xF69C4",
+		"SoundOverride": "Skyrim.esm:0x3C7A5",
+		"RemoveDecal": true,
+		"ImpactBounce": true
+	  }
+    }
+  ],
+  "HitMapping": [
+    {
+      "Comment": "Plays a sound and a slight magical effect upon impact.",
+      "Priority": 10,
+      "Class": "MyCustomEffects",
+      "Filters": {
+        "Materials": ["Skyrim.esm:0x12F3F"],
+        "Blocked": ["No"]
+      },
+      "Modifiers": {
+        "ExtraImpactData": ["Skyrim.esm:0x7331F"],
+        "ExtraSound": ["Skyrim.esm:0x51939"]
+      }
+    },
+    {
+      "Comment": "When a hit is made to the head, in addition to the previous sound effect, the magical effect is replaced by a new, more dazzling one.",
+      "Priority": 20,
+      "Class": "MyCustomEffects",
+      "Override": true,
+      "Filters": {
+        "Materials": ["Skyrim.esm:0x12F3F"],
+        "BipedSlot": [31],
+        "Blocked": ["No"]
+      },
+      "Modifiers": {
+        "ExtraImpactData": ["Skyrim.esm:0x105F36"]
+      }
+    }
+  ]
+}
