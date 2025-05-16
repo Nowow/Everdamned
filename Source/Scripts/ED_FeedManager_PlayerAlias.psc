@@ -1,10 +1,6 @@
 Scriptname ED_FeedManager_PlayerAlias extends ReferenceAlias  
 
 
-Event OnInit()
-	Debug.Trace("Everdamned DEBUG: Feed Manager player alias initialized")
-endevent
-
 Event OnPlayerLoadGame()
 	Debug.Trace("Everdamned INFO: Feed Manager player alias OnPlayerLoadGame() called ")
 	(GetOwningQuest() as ED_FeedManager_Script).RegisterFeedEvents()

@@ -29,6 +29,9 @@ Function RegisterHotkeys()
 	InitializeHotkeys()
 endfunction
 
+spell property ED_VampirePowers_Power_DeadlyStrengthTog auto
+spell property ED_VampirePowers_Power_Celerity auto
+spell property ED_VampirePowers_Power_ExtendedPerceptionTog auto
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
 		return
@@ -37,15 +40,23 @@ Event OnKeyDown(int keyCode)
 	If keyCode == __currentTestHotkey
 		debug.Trace("Everdamned DEBUG: test key was pressed! ---------------------------------------------")
 		
-		;objectreference __targetThing = Game.GetCurrentConsoleRef()
+		objectreference __targetThing = Game.GetCurrentConsoleRef()
 		
-		RegisterForAnimationEvent(playerRef, "JumpUp")
+		playerRef.addspell(ED_VampirePowers_Power_DeadlyStrengthTog)
+		playerRef.addspell(ED_VampirePowers_Power_Celerity)
+		playerRef.addspell(ED_VampirePowers_Power_ExtendedPerceptionTog)
 		
-		utility.wait(1.0)
+		;bool __isSprintOK = __targetThing.GetAnimationVariableBool("bSprintOK")
 		
-		int SpacebarKey = 57
-		input.TapKey(SpacebarKey)
-
+		
+		;__targetThing.SetAnimationVariableBool("bSprintOK", !__isSprintOK)
+		;if __isSprintOK
+		;	input.TapKey(input.GetMappedKey("Sprint"))
+		;endif
+		
+		ED_VampirePowers_Power_DeadlyStrengthTog
+		
+			
 
 		;while !(__activator.Is3DLoaded())
 		;	debug.Trace("Everdamned DEBUG: FXEmptyActivator 3d is not yet loaded!")

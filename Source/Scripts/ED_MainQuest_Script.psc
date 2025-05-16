@@ -155,9 +155,33 @@ function TearDownRewards()
 		i += 1
 	endWhile
 	
-	; TODO: remove all mortal + vl perks
-	debug.Trace("Everdamned DEBUG NOTIMPLEMENTED: add removing all mortal + vl perks")
+	; all perk rewards are contained in perks
+	; all vampire spells are either removed in VampireCure() or are contained in Age perks
+	
+	i = 0
+	int __perklistSize
+	perk __perkToDelete
+	
+	__perklistSize = ED_Mechanics_FormList_MortalPerkTreePerks.GetSize() 
+	
+	while i < __perklistSize
+		__perkToDelete = ED_Mechanics_FormList_MortalPerkTreePerks.GetAt(i) as perk
+		playerRef.RemovePerk(__perkToDelete)
+		i += 1
+	endwhile
+	
+	i = 0
+	__perklistSize = ED_Mechanics_FormList_VLPerkTreePerks.GetSize() 
+	
+	while i < __perklistSize
+		__perkToDelete = ED_Mechanics_FormList_VLPerkTreePerks.GetAt(i) as perk
+		playerRef.RemovePerk(__perkToDelete)
+		i += 1
+	endwhile
+	
 	
 endfunction
 
 
+formlist property ED_Mechanics_FormList_MortalPerkTreePerks auto
+formlist property ED_Mechanics_FormList_VLPerkTreePerks auto

@@ -1,16 +1,6 @@
 Scriptname ED_HemomancyStudies_Quest extends ReferenceAlias
 
 
-;Event OnPlayerLoadGame()
-;	Debug.Trace("Everdamned INFO: Feed Manager player alias OnPlayerLoadGame() called ")
-;	(GetOwningQuest() as ED_FeedManager_Script).RegisterFeedEvents()
-;EndEvent
-
-;Event OnRaceSwitchComplete()
-; 	Debug.Trace("Everdamned INFO: Feed Manager player alias OnRaceSwitchComplete() called ")
-;	(GetOwningQuest() as ED_FeedManager_Script).RegisterFeedEvents()
-;EndEvent
-
 spell[] property AdeptHemomancySpells auto
 spell[] property ExpertHemomancySpells auto
 spell[] property MasterHemomancySpells auto

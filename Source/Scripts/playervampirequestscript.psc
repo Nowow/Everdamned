@@ -12,6 +12,7 @@ ED_BloodPoolManager_Script Property ED_BloodPoolManager_Quest Auto
 ED_FeedManager_Script Property ED_FeedManager_Quest Auto
 ED_MainQuest_Script Property ED_MainQuest Auto
 ED_HotKeys_Script property ED_Mechanics_Hotkeys_Quest auto
+ED_BloodMeterUpdate property ED_BloodMeter_Quest auto
 
 
 function OnUpdateGameTime()
@@ -158,7 +159,15 @@ function VampireCure(actor Player)
 	Player.DispelSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
 	Player.DispelSpell(ED_VampirePowers_Pw_Obfuscate_Spell)
 	
-	; TODO: ED main quest should handle removing all other mod perks and abilities
+	Player.DispelSpell(ED_VampirePowers_VigorMortis_Power)
+	Player.DispelSpell(ED_VampirePowers_Power_DeadlyStrength)
+	Player.DispelSpell(ED_VampirePowers_Power_ExtendedPerception)
+	Player.DispelSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
+	Player.DispelSpell(ED_VampirePowers_Power_CelerityTime)
+	Player.DispelSpell(ED_VampirePowers_Pw_FerociousSurge_Spell)
+	Player.DispelSpell(ED_VampirePowers_Pw_Dominate_Spell)
+	
+	ED_MainQuest.TearDownRewards()
 
     if !CureRace
         Player.SetRace(NordRace)
@@ -169,7 +178,10 @@ function VampireCure(actor Player)
     
     ; TODO: remove it from here because it is part of race?
     
-	; TODO: stopping quests 
+	; TODO: stopping quests
+	; dont forget about blood meter
+	ED_Mechanics_BloodMeter_Enable_Global.SetValue(0)
+	ED_FeedManager_Quest.Stop()
     ED_Mechanics_Hotkeys_Quest.stop()
 	
 endFunction
@@ -216,7 +228,9 @@ function VampireChange(actor Target)
     utility.Wait(1.00000)
 	
 	; TODO: start quests
-	
+	ED_Mechanics_BloodMeter_Enable_Global.SetValue(1)
+	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
+	ED_FeedManager_Quest.Start()
     ED_Mechanics_Hotkeys_Quest.start()
 	ED_MainQuest.GainAgeExpirience(0.0)
 	
@@ -472,6 +486,7 @@ message property ED_Mechanics_Message_VampireProgression_Stage4 auto
 message property ED_Mechanics_Message_VampireProgression_Stage4_Masquerade auto
 message property ED_Mechanics_Message_VampireProgression_Stage3 auto
 
+globalvariable property ED_Mechanics_BloodMeter_Enable_Global auto
 globalvariable property ED_Mechanics_Global_DisableHate auto
 globalvariable property ED_Mechanics_Global_DelayBetweenStages auto
 globalvariable property PlayerIsVampire auto
@@ -510,6 +525,14 @@ spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
 spell property ED_VampirePowers_Ab_Masquerade_Spell auto
 spell property ED_VampirePowers_Pw_Obfuscate_Spell auto
 spell property ED_VampirePowers_Pw_VampiresWill_Spell auto
+
+spell property ED_VampirePowers_VigorMortis_Power auto
+spell property ED_VampirePowers_Power_DeadlyStrength auto
+spell property ED_VampirePowers_Power_ExtendedPerception auto
+spell property ED_VampirePowers_Pw_NecroticFlesh_Spell auto
+spell property ED_VampirePowers_Power_CelerityTime auto
+spell property ED_VampirePowers_Pw_FerociousSurge_Spell auto
+spell property ED_VampirePowers_Pw_Dominate_Spell auto
 
 spell property DiseasePorphyricHemophelia auto
 spell property DLC1VampireChange auto
