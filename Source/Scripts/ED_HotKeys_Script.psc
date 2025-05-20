@@ -32,6 +32,9 @@ endfunction
 spell property ED_VampirePowers_Power_DeadlyStrengthTog auto
 spell property ED_VampirePowers_Power_Celerity auto
 spell property ED_VampirePowers_Power_ExtendedPerceptionTog auto
+spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
+visualeffect property ED_Art_VFX_BatsCloakDUPLICATE001 auto
+
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
 		return
@@ -45,16 +48,22 @@ Event OnKeyDown(int keyCode)
 		playerRef.addspell(ED_VampirePowers_Power_DeadlyStrengthTog)
 		playerRef.addspell(ED_VampirePowers_Power_Celerity)
 		playerRef.addspell(ED_VampirePowers_Power_ExtendedPerceptionTog)
+		playerRef.addspell(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell)
+		
+		ED_Art_VFX_BatsCloakDUPLICATE001.Play(__targetThing)
+		
 		
 		;bool __isSprintOK = __targetThing.GetAnimationVariableBool("bSprintOK")
+		;debug.Trace("Everdamned DEBUG: Sprint is ok: " + __isSprintOK)
 		
+		;__targetThing.SetAnimationVariableBool("bSprintOK", !__isSprintOK)
+		;__targetThing.SetAnimationVariableBool("bSprintOK", __isSprintOK)
 		
 		;__targetThing.SetAnimationVariableBool("bSprintOK", !__isSprintOK)
 		;if __isSprintOK
 		;	input.TapKey(input.GetMappedKey("Sprint"))
 		;endif
-		
-		ED_VampirePowers_Power_DeadlyStrengthTog
+	
 		
 			
 

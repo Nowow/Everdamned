@@ -1,8 +1,65 @@
 {
   "ImpactMapping": [
 	{
-      "Comment": "When in Necrotic Flesh, This modifier will generate a spark effect, a fitting sound upon impact, and cause the arrow to bounce off heavy armor pieces. No decal will be shown.",
+      "Comment": "When in Necrotic Flesh, exclude magic from other fx",
+      "Priority": 110,
+	  "Filters": {
+        "Blocked": ["No"],
+		"WeaponsType": ["Magic"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"]
+      },
+	  "Modifiers": {
+		"RemoveDecal": true,
+		"ImpactBounce": true,
+		"RemoveBloodSplatter": true
+	  }
+    },
+	{
+      "Comment": "When in Necrotic Flesh, removes decal, blood splatter and adds arrow bounce",
       "Priority": 100,
+	  "Override": true,
+	  "Filters": {
+        "Blocked": ["No"],
+        "Attacks": ["Regular", "Power"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"]
+      },
+	  "Modifiers": {
+		"RemoveDecal": true,
+		"ImpactBounce": true,
+		"RemoveBloodSplatter": true
+	  }
+    },
+	{
+      "Comment": "When in Necrotic Flesh and hit by hands for blunt sound",
+      "Priority": 99,
+	  "Filters": {
+        "Blocked": ["No"],
+        "Attacks": ["Regular", "Power"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"],
+		"WeaponsType": ["HandToHand"]
+      },
+	  "Modifiers": {
+		"SoundOverride": "Skyrim.esm:0xC1AD1",
+		"RemoveBloodSplatter": true
+	  }
+    },
+	{
+      "Comment": "When in Necrotic Flesh and hit by beast/magic so no overrides happen",
+      "Priority": 98,
+	  "Filters": {
+        "Blocked": ["No"],
+        "Attacks": ["Regular", "Power"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"],
+		"WeaponsType": ["Beast"]
+      },
+	  "Modifiers": {
+		"PreserveOriginalDecal": true,
+		"RemoveBloodSplatter": true
+	  }
+    },
+	{
+      "Comment": "When in Necrotic Flesh and hit by rest, presumed hard objects, sparks and sound",
+      "Priority": 97,
 	  "Filters": {
         "Blocked": ["No"],
         "Attacks": ["Regular", "Power"],
@@ -11,9 +68,37 @@
 	  "Modifiers": {
 		"ImpactData": "Skyrim.esm:0x4BB54",
 		"SoundOverride": "Skyrim.esm:0x3C7A5",
-		"RemoveDecal": true,
-		"ImpactBounce": true
+		"RemoveBloodSplatter": true
 	  }
+    }
+  ],
+  "HitMapping": [
+	{
+      "Comment": "Large Recoil on powerattack on hitting Necrotic Flesh, chance to disarm on attached magiceffect",
+      "Priority": 20,
+      "Class": "Everdamned_NecroticFleshRecoil",
+      "Filters": {
+		"Conditions": ["Everdamned.esp:0x828118"],
+        "Blocked": ["No"],
+        "Attacks": ["Power"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"]
+      },
+      "Modifiers": {
+        "Spells": ["Everdamned.esp:0x828119"]
+      }
+    },
+    {
+      "Comment": "Recoil on hitting Necrotic Flesh",
+      "Priority": 10,
+      "Class": "Everdamned_NecroticFleshRecoil2",
+      "Filters": {
+        "Blocked": ["No"],
+        "Attacks": ["Regular"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"]
+      },
+      "Modifiers": {
+        "Spells": ["Everdamned.esp:0x828116"]
+      }
     }
   ]
 }
