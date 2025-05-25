@@ -13,6 +13,7 @@ ED_FeedManager_Script Property ED_FeedManager_Quest Auto
 ED_MainQuest_Script Property ED_MainQuest Auto
 ED_HotKeys_Script property ED_Mechanics_Hotkeys_Quest auto
 ED_BloodMeterUpdate property ED_BloodMeter_Quest auto
+quest property ED_Mechanics_BlueBlood_Quest auto
 
 
 function OnUpdateGameTime()
@@ -183,6 +184,11 @@ function VampireCure(actor Player)
 	ED_Mechanics_BloodMeter_Enable_Global.SetValue(0)
 	ED_FeedManager_Quest.Stop()
     ED_Mechanics_Hotkeys_Quest.stop()
+	ED_BloodPoolManager_Quest.Stop()
+	
+	if ED_Mechanics_BlueBlood_Quest.IsRunning()
+		ED_Mechanics_BlueBlood_Quest.SetObjectiveDisplayed(10, false)
+	endif
 	
 endFunction
 
@@ -205,7 +211,8 @@ function VampireChange(actor Target)
     MagVampireTransform01.play(myXmarker)
     myXmarker.Disable(false)
 	
-	; TODO: start quests
+	; starts early because needed during VampireProgression()
+	ED_BloodPoolManager_Quest.Start()
 	
     utility.Wait(2.00000)
     imagespacemodifier.removeCrossFade(1.00000)
@@ -232,7 +239,10 @@ function VampireChange(actor Target)
 	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
 	ED_FeedManager_Quest.Start()
     ED_Mechanics_Hotkeys_Quest.start()
-	ED_MainQuest.GainAgeExpirience(0.0)
+	ED_MainQuest.PlayerBecameVampire()
+	if ED_Mechanics_BlueBlood_Quest.IsRunning()
+		ED_Mechanics_BlueBlood_Quest.SetObjectiveDisplayed(10, true, true)
+	endif
 	
 	playerRef.addspell(ED_BeingVampire_Ab_HealingDampenController_Spell, false)
 	

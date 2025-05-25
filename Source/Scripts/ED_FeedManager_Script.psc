@@ -118,8 +118,9 @@ function HandleBeastBite()
 	endif
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -181,13 +182,11 @@ function HandleFeedThrall(actor FeedTarget)
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
 	
 	;TODO: Vamp XP
-
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -200,6 +199,11 @@ function HandleFeedThrall(actor FeedTarget)
 			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 		endIf
+	else
+		; blue blood stops only on vampire cure?
+		; todo: blue blood stop
+		;psychic vampire check
+		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
 endfunction
@@ -229,8 +233,7 @@ function HandleDrainThrall(actor FeedTarget)
 		playerRef.RestoreActorValue("Stamina", 9999.0)
 	endif
 
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
+	
 
 	; adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
@@ -252,13 +255,11 @@ function HandleDrainThrall(actor FeedTarget)
 	endif
 	
 	;TODO: Vamp XP
-
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -271,6 +272,9 @@ function HandleDrainThrall(actor FeedTarget)
 			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 		endIf
+	else
+		;psychic vampire check
+		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
 endfunction
@@ -312,9 +316,6 @@ function HandleFeedMesmerized(actor FeedTarget)
 	
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
-	
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 
 	;adjust status bloodpool etc
 	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.4)
@@ -326,8 +327,9 @@ function HandleFeedMesmerized(actor FeedTarget)
 	;TODO: Vamp XP
 
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -340,6 +342,9 @@ function HandleFeedMesmerized(actor FeedTarget)
 			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 		endIf
+	else
+		;psychic vampire check	
+		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
 endfunction
@@ -422,12 +427,10 @@ function HandleDrainMesmerized(actor FeedTarget)
 		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
 	
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
-	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -440,6 +443,9 @@ function HandleDrainMesmerized(actor FeedTarget)
 			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 		endIf
+	else
+		;psychic vampire check	
+		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 endfunction
 
@@ -507,12 +513,10 @@ function HandleDialogueSeduction(actor FeedTarget)
 	;TODO: Vamp XP
 
 
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
-
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -525,6 +529,9 @@ function HandleDialogueSeduction(actor FeedTarget)
 			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 		endIf
+	else
+		;psychic vampire check	
+		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 endfunction
 
@@ -570,12 +577,11 @@ function HandleDialogueIntimidation(actor FeedTarget)
 	
 	;TODO: Vamp XP
 
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -588,6 +594,9 @@ function HandleDialogueIntimidation(actor FeedTarget)
 			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 		endIf
+	else
+		;psychic vampire check	
+		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 endfunction
 
@@ -631,12 +640,10 @@ function HandleFeedSleep(actor FeedTarget)
 	;TODO: Vamp XP
 
 
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
-	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -649,6 +656,9 @@ function HandleFeedSleep(actor FeedTarget)
 			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 		endIf
+	else
+		;psychic vampire check	
+		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
 	if !(FeedTarget.IsInFaction(ED_Mechanics_DreamVisited_Fac)) && playerRef.HasPerk(ED_PerkTree_Deception_65_DreamVisitor_Perk)
@@ -725,12 +735,11 @@ function HandleDrainSleep(actor FeedTarget)
 		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
 	
-	;psychic vampire check
-	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
 	endif
 			
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -743,6 +752,9 @@ function HandleDrainSleep(actor FeedTarget)
 			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
 			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
 		endIf
+	else
+		;psychic vampire check	
+		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
 endfunction
@@ -894,7 +906,6 @@ perk property ED_PerkTreeVL_FountainOfLife_Perk auto
 perk property ED_PerkTreeVL_Amaranth_Perk auto
 perk property ED_PerkTree_Deception_65_DreamVisitor_Perk auto
 
-spell property ED_Mechanics_PsychicVampire_Spell auto
 spell property ED_VampirePowers_Amaranth_Spell auto
 spell property ED_VampirePowers_Amaranth_Disintegrate_Spell auto
 spell property ED_VampirePowers_Ab_Masquerade_Spell auto

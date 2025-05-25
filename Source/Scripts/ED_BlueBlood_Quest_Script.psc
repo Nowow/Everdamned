@@ -6,9 +6,9 @@ int property Reward_EmbraceTheBeast = 8 auto
 int property Reward_PerkPoints = 10 auto
 int property ThatMuchPerkPoints = 4 auto
 
-int property VIPsTasted auto
+globalvariable property ED_Mechanics_BlueBlood_Global_VIPsTasted auto
 
-
+; on startup
 function InitFeedList()
 
 	Int i = 0
@@ -25,19 +25,23 @@ function ProcessVIP(actorbase TheVIP)
 
 	;TODO: add ebony warrior as hidden?
 
-	VIPsTasted += 1
+	ED_Mechanics_BlueBlood_Global_VIPsTasted.Mod(1)
+	int VIPsTasted = ED_Mechanics_BlueBlood_Global_VIPsTasted.GetValue() as int
 	
 	if     VIPsTasted == Reward_ChainedBeast
+		ED_Mechanics_BlueBlood_Global_ChainedBeastAwarded.SetValue(1)
 		playerRef.addperk(ED_Mechanics_Ab_ChainedBeast_Perk)
 		playerRef.addspell(ED_Mechanics_Ab_ChainedBeast_Spell)
 		debug.Trace("Everdamned DEBUG: Blue Blood quest rewarded player with Chained Beast")
 		
 	elseif VIPsTasted == Reward_EmbraceTheBeast
+		ED_Mechanics_BlueBlood_Global_EmbraceTheBeastAwarded.SetValue(1)
 		playerRef.addperk(ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk)
 		setstage(150)
 		debug.Trace("Everdamned DEBUG: Blue Blood quest rewarded player with Embrace The Beast")
 		
 	elseif VIPsTasted == Reward_PerkPoints
+		ED_Mechanics_BlueBlood_Global_PerkPointsAwarded.SetValue(1)
 		game.AddPerkPoints(ThatMuchPerkPoints)
 		ED_Mechanics_BlueBlood_Message_PerkPointsAdded.Show()
 		debug.Trace("Everdamned DEBUG: Blue Blood quest rewarded player with Perk Points")
@@ -137,6 +141,10 @@ function ProcessVIP(actorbase TheVIP)
 	endIf
 endfunction
 
+
+globalvariable property ED_Mechanics_BlueBlood_Global_ChainedBeastAwarded auto
+globalvariable property ED_Mechanics_BlueBlood_Global_EmbraceTheBeastAwarded auto
+globalvariable property ED_Mechanics_BlueBlood_Global_PerkPointsAwarded auto
 
 spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
 perk property ED_Mechanics_Ab_ChainedBeast_Perk auto

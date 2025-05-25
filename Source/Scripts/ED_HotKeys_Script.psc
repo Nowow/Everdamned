@@ -34,6 +34,12 @@ spell property ED_VampirePowers_Power_Celerity auto
 spell property ED_VampirePowers_Power_ExtendedPerceptionTog auto
 spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
 visualeffect property ED_Art_VFX_BatsCloakDUPLICATE001 auto
+effectshader property ed_Test_Art_Shader_MagicArmorEbonyFleshFXS auto
+keyword property ED_Mechanics_Keyword_NecroticFleshCIF auto
+effectshader property ED_TestShader2_empty auto
+
+
+textureset property ED_TEST_Art_TextureSet_Stoneskin_SkinBodyFemale auto
 
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
@@ -45,13 +51,20 @@ Event OnKeyDown(int keyCode)
 		
 		objectreference __targetThing = Game.GetCurrentConsoleRef()
 		
-		playerRef.addspell(ED_VampirePowers_Power_DeadlyStrengthTog)
-		playerRef.addspell(ED_VampirePowers_Power_Celerity)
-		playerRef.addspell(ED_VampirePowers_Power_ExtendedPerceptionTog)
-		playerRef.addspell(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell)
+		;debug.Trace("Everdamned DEBUG: " + (__targetThing AS ACTOR).GetEquippedArmorInSlot(61))
 		
-		ED_Art_VFX_BatsCloakDUPLICATE001.Play(__targetThing)
+		ED_SKSEnativebindings.StopAllShadersExceptThis(ed_Test_Art_Shader_MagicArmorEbonyFleshFXS, ED_Mechanics_Keyword_NecroticFleshCIF, ED_TestShader2_empty)
 		
+		;po3_SKSEFunctions.ReplaceSkinTextureSet(PlayerRef, ED_TEST_Art_TextureSet_Stoneskin_SkinBodyFemale, ED_TEST_Art_TextureSet_Stoneskin_SkinBodyFemale, 32, -1) ; Body
+		
+		;playerRef.addspell(ED_VampirePowers_Power_DeadlyStrengthTog)
+		;playerRef.addspell(ED_VampirePowers_Power_Celerity)
+		;playerRef.addspell(ED_VampirePowers_Power_ExtendedPerceptionTog)
+		;playerRef.addspell(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell)
+		
+		;ED_Art_VFX_BatsCloakDUPLICATE001.Play(__targetThing)
+		
+		;AddSkinOverrideTextureSet
 		
 		;bool __isSprintOK = __targetThing.GetAnimationVariableBool("bSprintOK")
 		;debug.Trace("Everdamned DEBUG: Sprint is ok: " + __isSprintOK)

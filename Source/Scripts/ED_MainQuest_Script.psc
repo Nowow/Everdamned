@@ -24,6 +24,11 @@ message property ED_Mechanics_Message_AgeLvlUpNotification auto
 message[] property Age_Message_List auto
 
 
+function PlayerBecameVampire()
+	GainAgeExpirience(0.0)
+	RewardBlueBloodRewardsIfNeeded()
+endfunction
+
 function OnUpdateGameTime()
 	self.GainAgeExpirience(1.00000)
 	; default is once every game hour
@@ -157,6 +162,7 @@ function TearDownRewards()
 	
 	; all perk rewards are contained in perks
 	; all vampire spells are either removed in VampireCure() or are contained in Age perks
+	; TODO: blue blood rewards should be removed as well
 	
 	i = 0
 	int __perklistSize
@@ -170,18 +176,40 @@ function TearDownRewards()
 		i += 1
 	endwhile
 	
-	i = 0
-	__perklistSize = ED_Mechanics_FormList_VLPerkTreePerks.GetSize() 
+	;i = 0
+	;__perklistSize = ED_Mechanics_FormList_VLPerkTreePerks.GetSize() 
 	
-	while i < __perklistSize
-		__perkToDelete = ED_Mechanics_FormList_VLPerkTreePerks.GetAt(i) as perk
-		playerRef.RemovePerk(__perkToDelete)
-		i += 1
-	endwhile
+	;while i < __perklistSize
+	;	__perkToDelete = ED_Mechanics_FormList_VLPerkTreePerks.GetAt(i) as perk
+	;	playerRef.RemovePerk(__perkToDelete)
+	;	i += 1
+	;endwhile
 	
 	
 endfunction
 
+function RewardBlueBloodRewardsIfNeeded()
+	
+	if ED_Mechanics_BlueBlood_Global_ChainedBeastAwarded.GetValue() as int == 1
+		playerRef.addperk(ED_Mechanics_Ab_ChainedBeast_Perk)
+		playerRef.addspell(ED_Mechanics_Ab_ChainedBeast_Spell)
+		debug.Trace("Everdamned DEBUG: Main quest rewarded player with Chained Beast because they had it previously")
+	endif
+	
+	if ED_Mechanics_BlueBlood_Global_EmbraceTheBeastAwarded.GetValue() as int == 1
+		playerRef.addperk(ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk)
+		debug.Trace("Everdamned DEBUG: Main quest rewarded player with Embrace The Beast because they had it previously")
+	endif
+	
+	
+endfunction
+
+globalvariable property ED_Mechanics_BlueBlood_Global_ChainedBeastAwarded auto
+globalvariable property ED_Mechanics_BlueBlood_Global_EmbraceTheBeastAwarded auto
+
+perk property ED_Mechanics_Ab_ChainedBeast_Perk auto
+perk property ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk auto
+spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
 
 formlist property ED_Mechanics_FormList_MortalPerkTreePerks auto
 formlist property ED_Mechanics_FormList_VLPerkTreePerks auto

@@ -19,7 +19,7 @@ function ModBloodPoolMaximum(float _val)
 	
 endfunction
 
-; not interface
+
 function ReconstructBloodPoolAV()
 	
 	debug.Trace("Everdamned DEBUG: Blood Pool Manager sets blood pool with this components: " + ED_Mechanics_BloodPool_Base.GetValue() + ", " + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ", " + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
@@ -31,18 +31,6 @@ function ReconstructBloodPoolAV()
 	playerRef.RestoreAV("ED_BloodPool", 9999.0)
 	
 endfunction
-
-
-; flow
-;SetBloodPoolGlobals(VampireStatus, VampireAge)
-;	if hpEaten > 0
-
-;		SetBonusAfterFeed(hpEaten)
-;	else
-
-;		ED_Mechanics_BloodPool_MaxBonus.SetValue(0.0)
-;	endif
-;	ReconstructBloodPoolAV()
 
 
 function AtStageOrAgeChange()
