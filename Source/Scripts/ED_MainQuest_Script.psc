@@ -116,11 +116,10 @@ function SetUpAgeAppropriateRewards()
 		
 		if i == _currentAgeIndex
 			playerRef.addperk(_agePerk)
-			;playerRef.addspell(_ageDisplaySpell)
 		else
 			playerRef.removeperk(_agePerk)
-			;playerRef.removespell(_ageDisplaySpell)
 		endif
+		ED_Mechanics_HotKeys_Quest.RegisterHotkeys()
 		
 		i += 1
 	endWhile
@@ -188,6 +187,7 @@ function TearDownRewards()
 	
 endfunction
 
+; needed in case of re-embracing, would be dull to make people do Blue Blood from scratch
 function RewardBlueBloodRewardsIfNeeded()
 	
 	if ED_Mechanics_BlueBlood_Global_ChainedBeastAwarded.GetValue() as int == 1
@@ -213,3 +213,5 @@ spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
 
 formlist property ED_Mechanics_FormList_MortalPerkTreePerks auto
 formlist property ED_Mechanics_FormList_VLPerkTreePerks auto
+
+ED_HotKeys_Script property ED_Mechanics_HotKeys_Quest auto
