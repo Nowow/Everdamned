@@ -14,6 +14,7 @@ ED_MainQuest_Script Property ED_MainQuest Auto
 ED_HotKeys_Script property ED_Mechanics_Hotkeys_Quest auto
 ED_BloodMeterUpdate property ED_BloodMeter_Quest auto
 quest property ED_Mechanics_BlueBlood_Quest auto
+quest property ED_Mechanics_BloodCost_Quest auto
 
 
 function OnUpdateGameTime()
@@ -185,6 +186,7 @@ function VampireCure(actor Player)
 	ED_FeedManager_Quest.Stop()
     ED_Mechanics_Hotkeys_Quest.stop()
 	ED_BloodPoolManager_Quest.Stop()
+	ED_Mechanics_BloodCost_Quest.Stop()
 	
 	if ED_Mechanics_BlueBlood_Quest.IsRunning()
 		ED_Mechanics_BlueBlood_Quest.SetObjectiveDisplayed(10, false)
@@ -239,6 +241,7 @@ function VampireChange(actor Target)
 	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
 	ED_FeedManager_Quest.Start()
     ED_Mechanics_Hotkeys_Quest.start()
+	ED_Mechanics_BloodCost_Quest.start()
 	ED_MainQuest.PlayerBecameVampire()
 	if ED_Mechanics_BlueBlood_Quest.IsRunning()
 		ED_Mechanics_BlueBlood_Quest.SetObjectiveDisplayed(10, true, true)
