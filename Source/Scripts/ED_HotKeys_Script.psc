@@ -41,6 +41,7 @@ effectshader property ED_TestShader2_empty auto
 
 textureset property ED_TEST_Art_TextureSet_Stoneskin_SkinBodyFemale auto
 
+spell property ED_VampireSpells_BloodSeed_Spell auto
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
 		return
@@ -51,9 +52,27 @@ Event OnKeyDown(int keyCode)
 		
 		objectreference __targetThing = Game.GetCurrentConsoleRef()
 		
+		;debug.Trace("Everdamned DEBUG: " + ED_VampireSpells_BloodSeed_Spell.GetPerk())
+		
+		;unsuccessfull end cast for both hands at once always
+		RegisterForAnimationEvent(playerRef, "InterruptCast")
+		RegisterForAnimationEvent(playerRef, "Unequip")
+		RegisterForAnimationEvent(playerRef, "weaponSheathe")
+		
+		;successfull cast (concentration special case and not needed)
+		RegisterForAnimationEvent(playerRef, "MRh_SpellRelease_Event")
+		RegisterForAnimationEvent(playerRef, "MRL_SpellRelease_Event")
+		
+		;start cast
+		RegisterForAnimationEvent(playerRef, "MRh_SpellSelfStart")
+		RegisterForAnimationEvent(playerRef, "MRl_SpellSelfStart")
+		RegisterForAnimationEvent(playerRef, "MRh_SpellAimedStart")
+		RegisterForAnimationEvent(playerRef, "MRl_SpellAimedStart")
+		
+		
 		;debug.Trace("Everdamned DEBUG: " + (__targetThing AS ACTOR).GetEquippedArmorInSlot(61))
 		
-		ED_SKSEnativebindings.StopAllShadersExceptThis(ed_Test_Art_Shader_MagicArmorEbonyFleshFXS, ED_Mechanics_Keyword_NecroticFleshCIF, ED_TestShader2_empty)
+		;ED_SKSEnativebindings.StopAllShadersExceptThis(ed_Test_Art_Shader_MagicArmorEbonyFleshFXS, ED_Mechanics_Keyword_NecroticFleshCIF, ED_TestShader2_empty)
 		
 		;po3_SKSEFunctions.ReplaceSkinTextureSet(PlayerRef, ED_TEST_Art_TextureSet_Stoneskin_SkinBodyFemale, ED_TEST_Art_TextureSet_Stoneskin_SkinBodyFemale, 32, -1) ; Body
 		
@@ -94,10 +113,9 @@ Event OnKeyDown(int keyCode)
 	Endif
 EndEvent
 
-
-;Event OnKeyUp(Int KeyCode, Float HoldTime)
-	
-;endevent
+event OnAnimationEvent(ObjectReference akSource, string asEventName)
+	debug.Trace("Everdamned DEBUG: Animevent caught: " + asEventName)
+endevent
 
 
 action property ActionJump auto
