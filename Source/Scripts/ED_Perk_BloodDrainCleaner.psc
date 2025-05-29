@@ -1,9 +1,8 @@
 Scriptname ED_Perk_BloodDrainCleaner extends activemagiceffect
 
-import debug
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
-	debug.notification("With a last drop of blood your powers fizzle out...")
+	ED_Mechanics_BloodCost_Message_PowersFizzleOut.show()
 	akTarget.addspell(CleanerSpell, false)
 Endevent
 
@@ -13,3 +12,4 @@ Endevent
 
 
 SPELL Property CleanerSpell Auto
+message property ED_Mechanics_BloodCost_Message_PowersFizzleOut auto

@@ -1,6 +1,5 @@
 Scriptname ED_Fortitude_VigorMortis_Toggle extends activemagiceffect  
 
-import debug
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 	bool hasME = akTarget.HasMagicEffect(VigorMortisEffect)

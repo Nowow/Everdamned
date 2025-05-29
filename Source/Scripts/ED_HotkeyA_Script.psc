@@ -3,9 +3,11 @@ Scriptname ED_HotkeyA_Script extends Quest
 
 import input
 
+int LShift = 0x2A
+
 float property TapMaxLength = 0.3 auto
 
-
+bool __hasDash
 int __currentHotkeyA
 function RegisterHotkey()
 	__currentHotkeyA = ED_Mechanics_Hotkeys_HotkeyA.GetValue() as int
@@ -13,6 +15,7 @@ function RegisterHotkey()
 	bool __hasExtendedPerception = playerRef.HasSpell(ED_VampirePowers_Power_ExtendedPerceptionTog)
 	bool __hasCelerity = playerRef.HasSpell(ED_VampirePowers_Power_Celerity)
 	bool __hasWickedWind = playerRef.HasSpell(ED_VampirePowers_WickedWind_Spell)
+	__hasDash = playerRef.HasSpell(ED_VampirePowers_DarkwingDash_Init_Power)
 	
 	if __hasWickedWind
 		GoToState("KnowsWickedWind")
@@ -26,6 +29,9 @@ function RegisterHotkey()
 		GoToState("KnowsExtendedPerception")
 		RegisterForKey(__currentHotkeyA)
 		debug.Trace("Everdamned INFO: Hotkey A Manager determined player only has Extended Perception")		
+	elseif __hasDash
+		GoToState("KnowsOnlyDash")
+		debug.Trace("Everdamned INFO: Hotkey A Manager determined player only has Dash")		
 	else
 		debug.Trace("Everdamned INFO: Hotkey A Manager determined player has no Celerity skills, not registering")		
 	endif
@@ -43,7 +49,32 @@ bool __playerHasCelerity
 bool __hotkeyADown_lock
 bool __hotkeyA_handled
 bool __releaseGate
+bool __isLShiftPressed
 
+
+state KnowsOnlyDash
+Event OnKeyDown(int keyCode)
+	if Utility.IsInMenuMode()
+		return
+	endif
+	
+	if keyCode == __currentHotkeyA
+		if __hotkeyADown_lock
+			return
+		endif
+		__hotkeyADown_lock = True
+
+		debug.Trace("Everdamned DEBUG: Hotkey A was pressed in KnowsOnlyDash state! ---------------------------------------------")
+		
+		if IsKeyPressed(LShift)
+			debug.Trace("Everdamned DEBUG: Hotkey A pressed, casting Dash")
+			playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
+		endif
+
+		__hotkeyADown_lock = false
+	endif
+endevent
+endstate
 
 
 state KnowsExtendedPerception
@@ -59,6 +90,14 @@ Event OnKeyDown(int keyCode)
 		__hotkeyADown_lock = True
 
 		debug.Trace("Everdamned DEBUG: Hotkey A was pressed in KnowsExtendedPerception state! ---------------------------------------------")
+		
+		__isLShiftPressed = IsKeyPressed(LShift)
+		
+		if __isLShiftPressed && __hasDash
+			playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
+			__hotkeyADown_lock = false
+			return
+		endif
 	
 		utility.wait(TapMaxLength)
 		
@@ -89,6 +128,8 @@ Event OnKeyDown(int keyCode)
 		
 		debug.Trace("Everdamned DEBUG: Hotkey A was pressed in KnowsCelerity state! ---------------------------------------------")
 		
+		__isLShiftPressed = IsKeyPressed(LShift)
+		
 		; if somehow release event got to it faster
 		; rare race condition i guess
 		if __hotkeyA_handled
@@ -100,6 +141,14 @@ Event OnKeyDown(int keyCode)
 			return
 		endif
 		
+		if __isLShiftPressed && __hasDash
+			__releaseGate = False
+			__hotkeyA_handled = True
+			playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
+			
+			__hotkeyADown_lock = false
+			return
+		endif
 	
 		utility.wait(TapMaxLength)
 		
@@ -135,7 +184,14 @@ Event OnKeyUp(Int KeyCode, Float HoldTime)
 		
 		if !__hotkeyA_handled
 			__hotkeyA_handled = true
-			if !playerRef.HasMagicEffect(ED_VampirePowers_Effect_CelerityTime)
+			
+			__isLShiftPressed = IsKeyPressed(LShift)
+				
+			if __isLShiftPressed && __hasDash
+				playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
+				debug.Trace("Everdamned DEBUG: Hotkey A release applies Darkwing Dash! Unlikely event, but ok")
+			
+			elseif !playerRef.HasMagicEffect(ED_VampirePowers_Effect_CelerityTime)
 				playerRef.DoCombatSpellApply(ED_VampirePowers_Power_Celerity, None)
 				debug.Trace("Everdamned DEBUG: Hotkey A released and applied celerity!")
 			endif
@@ -164,6 +220,8 @@ Event OnKeyDown(int keyCode)
 		
 		debug.Trace("Everdamned DEBUG: Hotkey A was pressed in KnowsWickedWind state! ---------------------------------------------")
 		
+		__isLShiftPressed = IsKeyPressed(LShift)
+		
 		; if somehow release event got to it faster
 		; rare race condition i guess
 		if __hotkeyA_handled
@@ -175,12 +233,14 @@ Event OnKeyDown(int keyCode)
 			return
 		endif
 		
-		;if __playerHasCelerity
-		;	__hotkeyA_handled = true
-		;	__releaseGate = False
-		;	playerRef.DoCombatSpellApply(ED_VampirePowers_WickedWind_Spell, None)
-		;	debug.Trace("Everdamned DEBUG: Hotkey A pressed under Celerity, casted Wicked Wind")
-		
+		if __isLShiftPressed && __hasDash
+			__releaseGate = False
+			__hotkeyA_handled = True
+			playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
+			
+			__hotkeyADown_lock = false
+			return
+		endif
 	
 		utility.wait(TapMaxLength)
 		
@@ -216,7 +276,14 @@ Event OnKeyUp(Int KeyCode, Float HoldTime)
 		
 		if !__hotkeyA_handled
 			__hotkeyA_handled = true
-			if playerRef.HasMagicEffect(ED_VampirePowers_Effect_CelerityTime)
+			
+			__isLShiftPressed = IsKeyPressed(LShift)
+				
+			if __isLShiftPressed && __hasDash
+				playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
+				debug.Trace("Everdamned DEBUG: Hotkey A release applies Darkwing Dash! Unlikely event, but ok")
+			
+			elseif playerRef.HasMagicEffect(ED_VampirePowers_Effect_CelerityTime)
 				playerRef.DoCombatSpellApply(ED_VampirePowers_WickedWind_Spell, None)
 				debug.Trace("Everdamned DEBUG: Hotkey A released under Celerity, casted Wicked Wind")
 			else
@@ -237,6 +304,7 @@ globalvariable property ED_Mechanics_Hotkeys_HotkeyA auto
 spell property ED_VampirePowers_WickedWind_Spell auto
 spell property ED_VampirePowers_Power_Celerity auto
 spell property ED_VampirePowers_Power_ExtendedPerceptionTog auto
+spell property ED_VampirePowers_DarkwingDash_Init_Power auto
 magiceffect property ED_VampirePowers_Effect_CelerityTime auto
 
 actor property playerRef auto 

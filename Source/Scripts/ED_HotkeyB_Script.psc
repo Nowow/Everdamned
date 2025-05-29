@@ -13,22 +13,22 @@ function RegisterHotkey()
 	__currentHotkeyB = ED_Mechanics_Hotkeys_HotkeyB.GetValue() as int
 	
 	bool __hasPotence = playerRef.HasSpell(ED_VampirePowers_Power_DeadlyStrengthTog)
-	bool __hasDash = playerRef.HasSpell(ED_VampirePowers_DarkwingDash_Init_Power)
+	bool __hasNF = playerRef.HasSpell(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell)
 	
-	if __hasPotence && __hasDash
-		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has both Potence and Darkwing Dash")
-		GoToState("KnowsPotenceAndDash")
+	if __hasPotence && __hasNF
+		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has both Potence and Necrotic Flesh")
+		GoToState("KnowsPotenceAndNF")
 		RegisterForKey(__currentHotkeyB)
 	elseif __hasPotence
-		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has Potence, but not Darkwing Dash")
+		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has Potence, but not Necrotic Flesh")
 		GoToState("KnowsOnlyPotence")
 		RegisterForKey(__currentHotkeyB)
-	elseif __hasDash
-		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has Darkwing Dash, but not Potence")
-		GoToState("KnowsOnlyDash")
+	elseif __hasNF
+		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has Necrotic Flesh, but not Potence")
+		GoToState("KnowsOnlyNF")
 		RegisterForKey(__currentHotkeyB)
 	else
-		debug.Trace("Everdamned INFO: Hotkey B Manager doesnt know neither Potence nor Darkwing Dash, not registring")
+		debug.Trace("Everdamned INFO: Hotkey B Manager doesnt know neither Potence nor Necrotic Flesh, not registring")
 	endif
 	
 endfunction
@@ -79,6 +79,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	;dispel
 	ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 	
+	;cant unregister in this event handler if dont wait
 	utility.wait(0.1)
 	UnRegisterForAnimationEvent(playerRef, "JumpUp")
 endevent
@@ -172,7 +173,7 @@ state KnowsOnlyPotence
 endstate
 
 
-state KnowsOnlyDash
+state KnowsOnlyNF
 	Event OnKeyDown(int keyCode)
 		if Utility.IsInMenuMode()
 			return
@@ -185,7 +186,7 @@ state KnowsOnlyDash
 			__hotkeyB_handled = false
 			__hotkeyBDown_lock = True
 			
-			debug.Trace("Everdamned DEBUG: Hotkey B was pressed in KnowsOnlyDash state! ---------------------------------------------")
+			debug.Trace("Everdamned DEBUG: Hotkey B was pressed in KnowsOnlyNF state! ---------------------------------------------")
 			
 			;TODO: handle player having or not having certain spells for hotkeys
 			
@@ -202,7 +203,7 @@ state KnowsOnlyDash
 			if __isLShiftPressed
 				__releaseGate = False
 				__hotkeyB_handled = True
-				playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
+				playerRef.DoCombatSpellApply(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell, None)
 				
 				__hotkeyBDown_lock = false
 				return
@@ -229,8 +230,8 @@ state KnowsOnlyDash
 				__isLShiftPressed = IsKeyPressed(LShift)
 				
 				if __isLShiftPressed
-					playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
-					debug.Trace("Everdamned DEBUG: Hotkey B release applies Darkwing Dash! Unlikely event, but ok")
+					playerRef.DoCombatSpellApply(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell, None)
+					debug.Trace("Everdamned DEBUG: Hotkey B release applies Necrotic Flesh! Unlikely event, but ok")
 				endif
 			
 			endif
@@ -240,7 +241,7 @@ state KnowsOnlyDash
 endstate
 
 
-state KnowsPotenceAndDash
+state KnowsPotenceAndNF
 	Event OnKeyDown(int keyCode)
 		if Utility.IsInMenuMode()
 			return
@@ -254,7 +255,7 @@ state KnowsPotenceAndDash
 			__hotkeyBDown_lock = True
 			__chargeJumpFlag = False
 			
-			debug.Trace("Everdamned DEBUG: Hotkey B was pressed in KnowsPotenceAndDash state! ---------------------------------------------")
+			debug.Trace("Everdamned DEBUG: Hotkey B was pressed in KnowsPotenceAndNF state! ---------------------------------------------")
 			
 			;TODO: handle player having or not having certain spells for hotkeys
 			
@@ -272,7 +273,7 @@ state KnowsPotenceAndDash
 			if __isLShiftPressed
 				__releaseGate = False
 				__hotkeyB_handled = True
-				playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
+				playerRef.DoCombatSpellApply(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell, None)
 				
 				__hotkeyBDown_lock = false
 				return
@@ -326,8 +327,8 @@ state KnowsPotenceAndDash
 					UnRegisterForUpdate()
 					
 				elseif __isLShiftPressed
-					playerRef.DoCombatSpellApply(ED_VampirePowers_DarkwingDash_Init_Power, None)
-					debug.Trace("Everdamned DEBUG: Hotkey B release applies Darkwing Dash! Unlikely event, but ok")
+					playerRef.DoCombatSpellApply(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell, None)
+					debug.Trace("Everdamned DEBUG: Hotkey B release applies Necrotic Flesh! Unlikely event, but ok")
 				; toggle Deadly Strength	
 				else
 					playerRef.DoCombatSpellApply(ED_VampirePowers_Power_DeadlyStrengthTog, None)
@@ -349,6 +350,6 @@ spell property ED_VampirePowers_Power_DeadlyStrengthTog auto
 spell[] property JumpBonusSpellArray auto
 spell property ED_Mechanics_PotenceJumpBonus1_Spell auto
 spell property ED_Mechanics_PotenceJumpBonusCleanser_Spell auto
-spell property ED_VampirePowers_DarkwingDash_Init_Power auto
+spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
 
 actor property playerRef auto
