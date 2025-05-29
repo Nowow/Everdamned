@@ -1,34 +1,50 @@
 Scriptname ED_VampiresSight_Toggle_Script extends activemagiceffect  
 
-Event OnEffectStart(Actor Target, Actor Caster)
 
-	Bool actPredatorVision = ED_Mechanics_VampireAge.value >= 2  && Input.IsKeyPressed(42)
+int LShift = 0x2A
+
+Event OnEffectStart(Actor Target, Actor Caster)
+	;given automatically at age 2
+	bool __HasPV = ED_Mechanics_VampireAge.value >= 2
+	bool __isLShiftPressed = Input.IsKeyPressed(LShift)
+	bool __hasSightME = Caster.HasMagicEffect(ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect)
+	bool __hasPVME = Caster.HasMagicEffect(ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect)
 	
-	if !actPredatorVision
-	
-		if Caster.HasMagicEffect(ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect)
-			debug.Trace("Everdamned DEBUG: actor " + Caster + " already has ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect effect, Vampires Sight + Predator Vision turn off")
-			Caster.removespell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell_Actual)
+	; check if Predator Vision interaction
+	if __HasPV && __isLShiftPressed
+		
+		; turn off Predator Vision, keep Sight
+		if __hasPVME
 			Caster.removespell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell)
+		
+		; add Predator Vision
 		else
-			debug.Trace("Everdamned DEBUG: actor " + Caster + " does not have ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect effect, Vampires Sight turn on")
-			Caster.addspell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell_Actual, false)
-		endif
-	
-	else
-		if Caster.HasMagicEffect(ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect)
-			debug.Trace("Everdamned DEBUG: actor " + Caster + " does have ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect effect, Predator Vision turn off")
-			Caster.removespell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell)
-		else
-			debug.Trace("Everdamned DEBUG: actor " + Caster + " already has ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect effect, Vampires Sight + Predator Vision turn on")
-			Caster.addspell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell_Actual, false)
+			;add sight if has no sight
+			if __hasSightME
+				Caster.addspell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell_Actual, false)
+			endif
 			Caster.addspell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell, false)
 		endif
-	
+
+	; regular Sight interation
+	else
+		if __hasSightME
+			
+			Caster.removespell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell_Actual)
+			if __hasPVME
+				Caster.removespell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell)
+			endif
+			
+		else
+			Caster.addspell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell_Actual, false)
+		endif
 	endif
+
 endevent
 
 spell property ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell_Actual auto
 spell property ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell auto
 magiceffect property ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect auto
+magiceffect property ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Effect auto
+
 globalvariable property ED_Mechanics_VampireAge auto

@@ -52,22 +52,29 @@ Event OnKeyDown(int keyCode)
 		
 		objectreference __targetThing = Game.GetCurrentConsoleRef()
 		
+		
+		debug.Trace("Everdamned DEBUG: Is sneaking: " + __targetThing.GetAnimationVariableBool("IsSneaking"))
+		debug.Trace("Everdamned DEBUG: Is Casting left: " + __targetThing.GetAnimationVariableBool("IsCastingLeft"))
+		debug.Trace("Everdamned DEBUG: Is Casting right: " + __targetThing.GetAnimationVariableBool("IsCastingRight"))
+		debug.Trace("Everdamned DEBUG: Is player: " + __targetThing.GetAnimationVariableBool("IsPlayer"))
+		
+		
 		;debug.Trace("Everdamned DEBUG: " + ED_VampireSpells_BloodSeed_Spell.GetPerk())
 		
 		;unsuccessfull end cast for both hands at once always
-		RegisterForAnimationEvent(playerRef, "InterruptCast")
-		RegisterForAnimationEvent(playerRef, "Unequip")
-		RegisterForAnimationEvent(playerRef, "weaponSheathe")
+		;RegisterForAnimationEvent(playerRef, "InterruptCast")
+		;RegisterForAnimationEvent(playerRef, "Unequip")
+		;RegisterForAnimationEvent(playerRef, "weaponSheathe")
 		
 		;successfull cast (concentration special case and not needed)
-		RegisterForAnimationEvent(playerRef, "MRh_SpellRelease_Event")
-		RegisterForAnimationEvent(playerRef, "MRL_SpellRelease_Event")
+		;RegisterForAnimationEvent(playerRef, "MRh_SpellRelease_Event")
+		;RegisterForAnimationEvent(playerRef, "MRL_SpellRelease_Event")
 		
 		;start cast
-		RegisterForAnimationEvent(playerRef, "MRh_SpellSelfStart")
-		RegisterForAnimationEvent(playerRef, "MRl_SpellSelfStart")
-		RegisterForAnimationEvent(playerRef, "MRh_SpellAimedStart")
-		RegisterForAnimationEvent(playerRef, "MRl_SpellAimedStart")
+		;RegisterForAnimationEvent(playerRef, "MRh_SpellSelfStart")
+		;RegisterForAnimationEvent(playerRef, "MRl_SpellSelfStart")
+		;RegisterForAnimationEvent(playerRef, "MRh_SpellAimedStart")
+		;RegisterForAnimationEvent(playerRef, "MRl_SpellAimedStart")
 		
 		
 		;debug.Trace("Everdamned DEBUG: " + (__targetThing AS ACTOR).GetEquippedArmorInSlot(61))
@@ -85,8 +92,7 @@ Event OnKeyDown(int keyCode)
 		
 		;AddSkinOverrideTextureSet
 		
-		;bool __isSprintOK = __targetThing.GetAnimationVariableBool("bSprintOK")
-		;debug.Trace("Everdamned DEBUG: Sprint is ok: " + __isSprintOK)
+		
 		
 		;__targetThing.SetAnimationVariableBool("bSprintOK", !__isSprintOK)
 		;__targetThing.SetAnimationVariableBool("bSprintOK", __isSprintOK)
