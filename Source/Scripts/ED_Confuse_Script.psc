@@ -12,6 +12,8 @@ event OnEffectStart(Actor Target, Actor Caster)
 		return
 	endif
 	
+	Caster.DamageActorValue("ED_BloodPool", 300.0)
+	
 	int __commandChoice
 	__commandChoice = ED_Mechanics_Message_VampriesWill_ConfusePrompt.Show()
 		
