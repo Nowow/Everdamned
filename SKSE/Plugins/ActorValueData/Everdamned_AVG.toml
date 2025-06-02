@@ -34,5 +34,9 @@ regen.rate = "0.1"
 regen.delay = "0"
 regen.fixed = true
 
+[ED_VampireSkillExpBuffer]
+type = "Adaptive"
+alias = "Variable04"
+
 [Include]
 "Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_IcyWindsTarget", "ED_BloodPool", "ED_HpDrainedPercent"]
