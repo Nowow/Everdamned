@@ -39,4 +39,4 @@ type = "Adaptive"
 alias = "Variable04"
 
 [Include]
-"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_IcyWindsTarget", "ED_BloodPool", "ED_HpDrainedPercent"]
+"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_IcyWindsTarget", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer"]

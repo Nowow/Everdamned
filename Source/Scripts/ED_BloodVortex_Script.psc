@@ -16,6 +16,8 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	ED_Art_VFX_BatsCloak.Play(TheOrb, 29.0)
 	ED_BloodVortexAlias.FillVortex(TheOrb)
 	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	
 endFunction
 
 function OnEffectFinish(Actor akTarget, Actor akCaster)
@@ -24,11 +26,8 @@ function OnEffectFinish(Actor akTarget, Actor akCaster)
 	endif
 endFunction
 
-
+float property XPgained auto
 activator property ED_Art_BloodVortex auto
-
 ED_BloodVortexAlias_Script Property ED_BloodVortexAlias Auto
-
 Explosion Property ED_Art_Explosion_VampireAbsorb auto
-
 VisualEffect property ED_Art_VFX_BatsCloak auto

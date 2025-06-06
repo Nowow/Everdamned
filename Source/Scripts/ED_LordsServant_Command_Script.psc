@@ -6,6 +6,7 @@ spell property ED_VampireSpellsVL_LordsServant_Spell auto
 keyword property ED_Mechanics_Keyword_LordsServantCommand auto
 ReferenceAlias Property CommandedRef Auto
 VisualEffect Property DominateUndeadVFX  Auto  
+float property XPgained auto
 
 actor _caster
 actor _target
@@ -18,6 +19,8 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	debug.trace("Everdamned DEBUG: Lord's Servant Command effect started on " + akTarget)
 	actor prevRef = CommandedRef.GetReference() as Actor
 	CommandedRef.ForceRefTo(akTarget)
+	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 	
 	if prevRef == akTarget
 		debug.Trace("Everdamned INFO: Lord's Servant Command effect to the same actor, so its a recast, do nothing")

@@ -9,6 +9,8 @@ float property offsetBeforeAttemptingCapture auto
 bool _effectFinished
 float _originalDuration
 actor _commandedActor
+float property XPgained auto
+
 
 ;float property CommandedActorFormIdAsFloat auto
 
@@ -38,9 +40,13 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		endif
 		
 		ED_UndyingLoyaltyServant1.ForceRefTo(_commandedActor)
+		
+		CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+		
 	else
 		debug.Trace("Everdamned DEBUG: Summon or reanimate spell failed to capture commanded actor")
 	endif
+	
 	
 	
 	

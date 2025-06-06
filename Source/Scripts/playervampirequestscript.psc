@@ -152,6 +152,8 @@ function VampireCure(actor Player)
     Player.RemoveSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell)
     Player.RemoveSpell(ED_BeingVampire_Vanilla_Ab_PassivesHolder_Spell_WasChampionOfTheNight)
 	Player.RemoveSpell(ED_BeingVampire_Ab_HealingDampenController_Spell)
+	Player.RemoveSpell(ED_VampirePowers_Ab_Presence_Spell)
+	
 	
 	; vanilla spells
 	Player.RemoveSpell(ED_BeingVampire_Vanilla_VampiricDrain)
@@ -178,7 +180,6 @@ function VampireCure(actor Player)
     endIf
     PlayerIsVampire.SetValue(0 as Float)
     
-    ; TODO: remove it from here because it is part of race?
     
 	; TODO: stopping quests
 	; dont forget about blood meter
@@ -538,6 +539,7 @@ spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
 spell property ED_VampirePowers_Ab_Masquerade_Spell auto
 spell property ED_VampirePowers_Pw_Obfuscate_Spell auto
 spell property ED_VampirePowers_Pw_VampiresWill_Spell auto
+spell property ED_VampirePowers_Ab_Presence_Spell auto
 
 spell property ED_VampirePowers_VigorMortis_Power auto
 spell property ED_VampirePowers_Power_DeadlyStrength auto

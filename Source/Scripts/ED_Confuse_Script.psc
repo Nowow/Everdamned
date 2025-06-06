@@ -12,12 +12,17 @@ event OnEffectStart(Actor Target, Actor Caster)
 		return
 	endif
 	
-	Caster.DamageActorValue("ED_BloodPool", 300.0)
+	
 	
 	int __commandChoice
 	__commandChoice = ED_Mechanics_Message_VampriesWill_ConfusePrompt.Show()
 		
 	if __commandChoice == 0
+	
+		Caster.DamageActorValue("ED_BloodPool", 300.0)
+		CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+		Game.AdvanceSkill("Illusion", 500.0)
+		
 		;debug.Trace("Everdamned DEBUG: Vampires Will casts ED_Mechanics_Apparation_Spell on target " + Target)
 		;ED_Mechanics_Apparation_Spell.Cast(Target, Target)
 		
@@ -50,6 +55,7 @@ event OnEffectStart(Actor Target, Actor Caster)
 	endif
 endevent
 
+float property XPgained auto
 
 quest property ED_Mechanics_Quest_DistractionScenes auto
 keyword property ED_Mechanics_Keyword_DistractionSceneQuestStart auto

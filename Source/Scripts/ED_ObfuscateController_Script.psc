@@ -24,6 +24,8 @@ Event OnEffectStart(Actor Target, Actor Caster)
 		RegisterForAnimationEvent(__target, "tailCombatLocomotion")
 	endif
 	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	
 EndEvent
 
 event OnAnimationEvent(ObjectReference akSource, string asEventName)
@@ -50,6 +52,6 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 	Target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
 endevent
 
-
+float property XPgained auto
 spell property ED_VampirePowers_Pw_Obfuscate_Insiv_Spell auto
 globalvariable property ED_Mechanics_VampireAge auto

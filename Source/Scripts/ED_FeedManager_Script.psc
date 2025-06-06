@@ -1,9 +1,36 @@
 Scriptname ED_FeedManager_Script extends Quest  
 
+
 actor property aFeedTarget auto
 bool property bFeedAnimRequiredForSuccess auto
 String property BiteStart = "BiteStart" auto
 String property GarkainFeedSounds = "SoundPlay.NPCWerewolfFeedingKill" auto
+
+
+function SharedDrainEffects()
+	
+	; vamp exp
+	CustomSkills.AdvanceSkill("EverdamnedMain", math.pow(ED_Mechanics_SkillTree_Level_Global.GetValue(), 2.0) + 200.0 )
+	
+	; VL perks
+	DLC1VampireBloodPoints.Mod(3.0)
+	if DLC1VampireTotalPerksEarned.value < DLC1VampireMaxPerks.value
+		ED_Mechanics_Message_LifebloodDrained.Show()
+		if DLC1VampireBloodPoints.value >= DLC1VampireNextPerk.value
+			
+			DLC1VampireBloodPoints.Mod(-DLC1VampireNextPerk.value)
+			DLC1VampirePerkPoints.Mod(1.0)
+			DLC1VampireTotalPerksEarned.Mod(1.0)
+			DLC1VampireNextPerk.Mod(1.0)
+			DLC1VampirePerkEarned.Show()
+			
+		endIf
+	endIf
+
+	playerRef.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
+			
+endfunction
+
 
 Function RegisterFeedEvents()
 	if PlayerIsVampire.value == 1
@@ -22,6 +49,8 @@ Function RegisterFeedEvents()
 		;	unRegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
 		;	utility.wait(1)
 		;	RegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
+		
+		; I think thats needed for combat bite killmoves?
 			debug.Trace("Everdamned DEBUG NOTIMPLEMENTED: Feed Manager registred feed event for mortal race")
 		endif
 
@@ -107,7 +136,7 @@ function HandleBeastBite()
 		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
 	endif
 	
-	;TODO: Vamp XP
+	SharedDrainEffects()
 
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
@@ -181,8 +210,6 @@ function HandleFeedThrall(actor FeedTarget)
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
 	
-	;TODO: Vamp XP
-	
 	;Blue Blood
 	if !(ED_BlueBlood_Quest_quest.IsStopped())
 		; startup stage 10
@@ -254,7 +281,7 @@ function HandleDrainThrall(actor FeedTarget)
 		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
 	
-	;TODO: Vamp XP
+	SharedDrainEffects()
 	
 	;Blue Blood
 	if !(ED_BlueBlood_Quest_quest.IsStopped())
@@ -323,8 +350,6 @@ function HandleFeedMesmerized(actor FeedTarget)
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
-	
-	;TODO: Vamp XP
 
 	;Blue Blood
 	if !(ED_BlueBlood_Quest_quest.IsStopped())
@@ -357,8 +382,6 @@ function HandleDrainMesmerized(actor FeedTarget)
 	
 	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
-	
-	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -417,7 +440,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
 	endif
 	
-	;TODO: Vamp XP
+	SharedDrainEffects()
 	
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
@@ -449,7 +472,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 	endif
 endfunction
 
-; TODO: conditions
+
 function HandleDialogueSeduction(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Dialogue Seduction call on target " + FeedTarget)
 	
@@ -509,9 +532,6 @@ function HandleDialogueSeduction(actor FeedTarget)
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
-	
-	;TODO: Vamp XP
-
 
 	;Blue Blood
 	if !(ED_BlueBlood_Quest_quest.IsStopped())
@@ -637,8 +657,6 @@ function HandleFeedSleep(actor FeedTarget)
 	;age
 	ED_Mechanics_Main_Quest.GainAgeExpirience(4.0)
 	
-	;TODO: Vamp XP
-
 
 	;Blue Blood
 	if !(ED_BlueBlood_Quest_quest.IsStopped())
@@ -725,7 +743,7 @@ function HandleDrainSleep(actor FeedTarget)
 	; silent because detection handled by bystander quest
 	FeedTarget.KillSilent(playerRef)
 	
-	;TODO: Vamp XP
+	SharedDrainEffects()
 	
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
@@ -848,7 +866,7 @@ state CombatDrain
 				ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
 			endif
 			
-			;TODO: Vamp XP
+			SharedDrainEffects()
 		
 			;hemomancy
 			if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
@@ -897,10 +915,19 @@ GlobalVariable Property PlayerIsVampire  Auto
 sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
 formlist property ED_Mechanics_BlueBlood_Track_FormList auto
 faction property ED_Mechanics_DreamVisited_Fac auto
+
 message property ED_Mechanics_Message_DreamVisitor_RelationshipIncreased auto
+message property DLC1VampirePerkEarned auto
+message property ED_Mechanics_Message_LifebloodDrained auto
 
 globalvariable property ED_Mechanics_Global_FeedType auto
 globalvariable property ED_Mechanics_Global_VampireFeedBystanderRadius auto
+globalvariable property ED_Mechanics_SkillTree_Level_Global auto
+globalvariable property DLC1VampireBloodPoints auto
+globalvariable property DLC1VampirePerkPoints auto
+globalvariable property DLC1VampireTotalPerksEarned auto
+globalvariable property DLC1VampireNextPerk auto
+globalvariable property DLC1VampireMaxPerks auto
 
 perk property ED_PerkTreeVL_FountainOfLife_Perk auto
 perk property ED_PerkTreeVL_Amaranth_Perk auto

@@ -14,11 +14,13 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	_target = akTarget
 	_caster = akCaster
 	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	
 	; doing it in papyrus because dont trust spell side conditions, feels like they might give start+stops
 	; also because dont trust papyrus functions to be equivalent to CK 
 	if _target.GetActorValuePercentage("Health") < 0.51
 		debug.Trace("Everdamned DEBUG:  Blood Boil BURN casts BURST right away!")
-		ED_VampireSpells_BloodBoil_Burst_Spell.Cast(_caster, _target)
+		_caster.DoCombatSpellApply(ED_VampireSpells_BloodBoil_Burst_Spell, _target)
 		self.dispel()
 		return
 	endif
@@ -30,11 +32,12 @@ event OnUpdate()
 	debug.Trace("Everdamned DEBUG:  Blood Boil BURN updates, hp percent: " + _percent)
 	if _target.GetActorValuePercentage("Health") < 0.51
 		debug.Trace("Everdamned DEBUG: Blood Boil BURN casts BURST from update!")
-		ED_VampireSpells_BloodBoil_Burst_Spell.Cast(_caster, _target)
+		_caster.DoCombatSpellApply(ED_VampireSpells_BloodBoil_Burst_Spell, _target)
 		self.dispel()
 	endif
 endevent
 
+float property XPgained auto
 Spell Property ED_VampireSpells_BloodBoil_Burst_Spell auto
 ReferenceAlias Property ED_BloodBoilTarget  Auto
 Message property ED_Mechanics_Message_BloodBoil_FailAliasFilled auto

@@ -42,6 +42,9 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	_d.MoveTo(akTarget, -100, 0, 100) 
 	_up.MoveTo(akTarget, 0, 0, 400) 
 	_source.MoveTo(akTarget, 0, 0, 100)
+	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	
 	RegisterForSingleUpdate(6.0)
 	
 	
@@ -63,7 +66,7 @@ event OnUpdate()
 	endif
 	
 	_target.setghost(false)
-	ED_VampireSpells_BloodBoil_AoeDmgExplosion_Spell.Cast(_caster, _target)
+	_caster.DoCombatSpellApply(ED_VampireSpells_BloodBoil_AoeDmgExplosion_Spell, _target)
 	ED_Misc_BloodDecalLarge_Spell_Supermassive.remotecast(_target, _caster)
 	_target.Kill(_caster)
 	_target.PlaceAtMe(ED_Art_Hazard_Bones as form, 1, false, false)
@@ -95,6 +98,8 @@ function OnEffectFinish(Actor akTarget, Actor akCaster)
 	debug.Trace("Everdamned DEBUG: BLOOD BOIL BURST EFFECT cleared alias: " + _cleared )
 
 endFunction
+
+float property XPgained auto
 
 ReferenceAlias Property ED_BloodBoilTarget  Auto
 activator property AshPile auto

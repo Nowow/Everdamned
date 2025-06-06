@@ -5,7 +5,7 @@ import ED_SKSEnativebindings
 float property offsetBeforeAttemptingCapture auto
 {Summon/Reanimate effects are cast upon caster, not target, and actual summoning and actor creation happens with lag}
 
-
+float property XPgained auto
 bool _effectFinished
 float _originalDuration
 actor _commandedActor
@@ -49,6 +49,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		
 		ED_UndyingLoyaltyServant1.ForceRefTo(_commandedActor)
 		
+		CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 		
 	else
 		debug.Trace("Summon or reanimate spell failed to capture commanded actor")

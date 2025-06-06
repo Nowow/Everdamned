@@ -40,8 +40,12 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	if _target != none
 		TheOrb.TranslateToRef(_target, 200.0, 0.000000)
 	endif
+	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	
 endFunction
 
+float property XPgained auto
 actor property playerRef auto
 ED_BloodVortexAlias_Script Property ED_BloodVortexAlias Auto
 light property ED_Art_Light_ProfanedSun_Projectile auto

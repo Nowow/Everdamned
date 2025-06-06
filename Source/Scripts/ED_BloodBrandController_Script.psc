@@ -1,6 +1,7 @@
 Scriptname ED_BloodBrandController_Script extends activemagiceffect  
 
 
+float property XPgained auto
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
 
@@ -16,6 +17,8 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	else
 		akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_NonHostile, akTarget)
 	endif
+	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 
 endFunction
 

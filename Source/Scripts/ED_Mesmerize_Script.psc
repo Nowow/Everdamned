@@ -28,6 +28,8 @@ EVENT OnEffectStart(Actor Target, Actor Caster)
 	Target.SetLookAt(Caster)
 	__target = Target
 	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	
 endEVENT
 
 EVENT OnEffectFinish(Actor Target, Actor Caster)
@@ -35,6 +37,6 @@ EVENT OnEffectFinish(Actor Target, Actor Caster)
 	__target.ClearLookAt()
 endevent
 
-
+float property XPgained auto
 quest property ED_Mechanics_Quest_Mesmerize auto
 keyword property ED_Mechanics_Keyword_StartMesmerizeQuest auto

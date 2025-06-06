@@ -21,6 +21,8 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	Endif
 	
 	CeleritySP.cast(akTarget,akTarget)
+		
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 
 Endevent
 
@@ -39,6 +41,7 @@ Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	
 Endevent
 
+float property XPgained auto
 SPELL Property ExtendedPerceptionSP  Auto  
 MagicEffect Property ExtendedPerceptionME  Auto  
 MagicEffect Property ED_VampirePowers_Effect_ExtendedPerceptionTog  Auto  

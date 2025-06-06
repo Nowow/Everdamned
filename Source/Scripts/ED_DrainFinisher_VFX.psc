@@ -41,6 +41,7 @@ Event OnUpdate()
 		_target.placeatme(ED_Art_Explosion_Exsanguinate)
 		PlayerVampireQuest.EatThisActor(_target)
 		_target.EndDeferredKill()
+		CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 		return
 	endif
 	_timeElapsed = _timeElapsed + 1
@@ -64,6 +65,7 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 	
 EndEvent
 
+float property XPgained auto
 VisualEffect Property DLC1BatsAbsorbTargetVFX01 auto
 ImpactDataSet Property BloodSprayBleedImpactSetRed auto
 EffectShader Property DLC1BatsEatenBloodSplats Auto

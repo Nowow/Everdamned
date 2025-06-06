@@ -8,8 +8,9 @@ function OnEffectStart(actor akTarget, actor akCaster)
 
 	utility.wait(0.1)
 	akTarget.DoCombatSpellApply(RealDarkwingDashEffects, akTarget)
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 	
 endFunction
 
-
+float property XPgained auto
 SPELL Property RealDarkwingDashEffects Auto 

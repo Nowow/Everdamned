@@ -4,6 +4,8 @@ spell property ED_VampireSpellsVL_ShamblingHordes_Reanimate_Spell auto
 
 float property offsetMin auto
 float property offsetMax auto
+float property XPgained auto
+
 
 float _offset
 function OnEffectStart(Actor akTarget, Actor akCaster)
@@ -11,4 +13,5 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	debug.Trace("Shambling Horde Raise by " + akCaster + " on " + akTarget + " is offset by " + _offset)
 	utility.wait(_offset)
 	akCaster.DoCombatSpellApply(ED_VampireSpellsVL_ShamblingHordes_Reanimate_Spell, akTarget)
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 endFunction

@@ -53,11 +53,8 @@ Event OnKeyDown(int keyCode)
 		objectreference __targetThing = Game.GetCurrentConsoleRef()
 		
 		
-		debug.Trace("Everdamned DEBUG: Is sneaking: " + __targetThing.GetAnimationVariableBool("IsSneaking"))
-		debug.Trace("Everdamned DEBUG: Is Casting left: " + __targetThing.GetAnimationVariableBool("IsCastingLeft"))
-		debug.Trace("Everdamned DEBUG: Is Casting right: " + __targetThing.GetAnimationVariableBool("IsCastingRight"))
-		debug.Trace("Everdamned DEBUG: Is player: " + __targetThing.GetAnimationVariableBool("IsPlayer"))
-		
+		CustomSkills.IncrementSkillBy("EverdamnedMain", 5)
+		;CustomSkills.ShowSkillIncreaseMessage("EverdamnedMain")
 		
 		;debug.Trace("Everdamned DEBUG: " + ED_VampireSpells_BloodSeed_Spell.GetPerk())
 		

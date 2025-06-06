@@ -7,6 +7,7 @@ bool HasShownAgeMessage
 int NextMessageIndex = 0
 int property MaxAge auto
 
+import CustomSkills
 
 actor property playerRef auto
 globalvariable property ED_Mechanics_VampireAge auto
@@ -23,10 +24,36 @@ perk[] property Age_Scaling_Perk_List auto
 message property ED_Mechanics_Message_AgeLvlUpNotification auto
 message[] property Age_Message_List auto
 
+float __currentExpBuffer
+event OnUpdate()
+	__currentExpBuffer =  playerRef.GetActorValue("ED_VampireSkillExpBuffer")
+	
+	if __currentExpBuffer > 0
+		CustomSkills.AdvanceSkill("EverdamnedMain", __currentExpBuffer)
+		playerRef.DamageAV("ED_VampireSkillExpBuffer", __currentExpBuffer)
+		debug.Trace("Everdamned DEBUG: Player had this much XP to absorb: " + __currentExpBuffer)
+	endif
+	
+	if isAging
+		RegisterForUpdate(2.0)
+	endif
+endevent
 
 function PlayerBecameVampire()
 	GainAgeExpirience(0.0)
 	RewardBlueBloodRewardsIfNeeded()
+	
+	; absorbing exp
+	playerRef.SetActorValue("ED_VampireSkillExpBuffer", 3000.0)
+	playerRef.DamageActorValue("ED_VampireSkillExpBuffer", 3000.0)
+	
+	CustomSkills_FormExt.RegisterForCustomSkillIncrease(self)
+	
+	; giving 2 starting perk points
+	ED_Mechanics_SkillTree_PerkPoints_Global.SetValue(2)
+	DLC1VampirePerkPoints.SetValue(0)
+	
+	RegisterForUpdate(2.0)
 endfunction
 
 function OnUpdateGameTime()
@@ -162,6 +189,7 @@ function TearDownRewards()
 	; all perk rewards are contained in perks
 	; all vampire spells are either removed in VampireCure() or are contained in Age perks
 	; TODO: blue blood rewards should be removed as well
+	; BIG TODO: remove hemomancy, because its awarded through quest, not perks
 	
 	i = 0
 	int __perklistSize
@@ -184,6 +212,7 @@ function TearDownRewards()
 	;	i += 1
 	;endwhile
 	
+	CustomSkills_FormExt.UnregisterForCustomSkillIncrease(self)
 	
 endfunction
 
@@ -201,15 +230,64 @@ function RewardBlueBloodRewardsIfNeeded()
 		debug.Trace("Everdamned DEBUG: Main quest rewarded player with Embrace The Beast because they had it previously")
 	endif
 	
-	
 endfunction
+
+bool __skillLvlupLock
+Event OnCustomSkillIncrease(string asSkillId)
+	if __skillLvlupLock
+		return
+	endif
+	if asSkillId == "EverdamnedMain"
+		__skillLvlupLock = true
+		debug.Trace("Everdamned INFO: Vampire skill just leveld up!")
+		
+		int __newSkillLevel = ED_Mechanics_SkillTree_Level_Global.GetValue() as int
+		int __alreadyGrantedPerkPoints = ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.GetValue() as int
+		int __perkPointsForThisSkillLevel = __newSkillLevel / 5
+		int __perkPointsToGive = __perkPointsForThisSkillLevel - __alreadyGrantedPerkPoints
+		
+		if __perkPointsToGive > 0
+			ED_Mechanics_SkillTree_PerkPoints_Global.Mod(__perkPointsToGive)
+			ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.Mod(__perkPointsToGive)
+			ED_Mechanics_SkillTree_Message_MortalPerkPointGained.Show()
+		endif
+		
+		if playerRef.HasSpell(ED_VampirePowers_Ab_Presence_Spell)
+			playerRef.RemoveSpell(ED_VampirePowers_Ab_Presence_Spell)
+			playerRef.AddSpell(ED_VampirePowers_Ab_Presence_Spell, false)
+		endif
+		
+		;UISkillIncreaseSD
+		
+		; 30 mortal perks in total
+		;18 perk points from skill levelling
+		;2 perk points from start
+		;10 perk points from ageing
+		
+		; 23 VL perks in total
+		;10 per aging
+		;rest from biting
+		
+		__skillLvlupLock = false
+	endif
+EndEvent
+
 
 globalvariable property ED_Mechanics_BlueBlood_Global_ChainedBeastAwarded auto
 globalvariable property ED_Mechanics_BlueBlood_Global_EmbraceTheBeastAwarded auto
+globalvariable property ED_Mechanics_SkillTree_PerkPoints_Global auto
+globalvariable property ED_Mechanics_SkillTree_Level_Global auto
+globalvariable property ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global auto
+
+message property ED_Mechanics_SkillTree_Message_MortalPerkPointGained auto
+
+globalvariable property DLC1VampirePerkPoints auto
+
 
 perk property ED_Mechanics_Ab_ChainedBeast_Perk auto
 perk property ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk auto
 spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
+spell property ED_VampirePowers_Ab_Presence_Spell auto
 
 formlist property ED_Mechanics_FormList_MortalPerkTreePerks auto
 formlist property ED_Mechanics_FormList_VLPerkTreePerks auto

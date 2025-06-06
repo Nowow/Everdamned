@@ -126,7 +126,7 @@ location property DLC1VampireCastleGuildhallLocation auto
 
 message property PlayerVampireExpirationWarning auto
 message property PlayerVampireFeedMessage auto
-message property DLC1BloodPointsMsg auto
+message property ED_Mechanics_Message_LifebloodDrained auto
 message property DLC1VampirePerkEarned auto
 
 formlist property DLC1VampireHateFactions auto
@@ -691,31 +691,25 @@ function OnAnimationEvent(objectreference akActor, String akEventName)
 		if akEventName == TransformToHuman
 			self.ActuallyShiftBackIfNecessary()
 		endIf
-		; TODO: feeding and exp
+
 		if akEventName == BiteStart
-			;DLC1VampireBloodPoints.value = DLC1VampireBloodPoints.value + 1 as Float
-			;if DLC1VampireTotalPerksEarned.value < DLC1VampireMaxPerks.value
-			;	DLC1BloodPointsMsg.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
-			;	if DLC1VampireBloodPoints.value >= DLC1VampireNextPerk.value
-			;		DLC1VampireBloodPoints.value = DLC1VampireBloodPoints.value - DLC1VampireNextPerk.value
-			;		DLC1VampirePerkPoints.value = DLC1VampirePerkPoints.value + 1 as Float
-			;		DLC1VampireTotalPerksEarned.value = DLC1VampireTotalPerksEarned.value + 1 as Float
-			;		DLC1VampireNextPerk.value = DLC1VampireNextPerk.value + 1 as Float
-			;		DLC1VampirePerkEarned.Show(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
-			;	endIf
-			;	playerRef.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
-			;endIf
-			
-			; moved to FeedManager
-			
-			;if playerRef.HasPerk(DLC1VampireBite) == 1 as Bool
-			;	playerRef.RestoreActorValue("Health", DLC1BiteHealthRecover)
-			;	playerRef.RestoreActorValue("Magicka", 150 as Float)
-			;	;game.AdvanceSkill("Destruction", SCS_PowerBite.GetValue())
-			;endIf
-			
+			DLC1VampireBloodPoints.Mod(3.0)
+			if DLC1VampireTotalPerksEarned.value < DLC1VampireMaxPerks.value
+				ED_Mechanics_Message_LifebloodDrained.Show()
+				if DLC1VampireBloodPoints.value >= DLC1VampireNextPerk.value
+					
+					DLC1VampireBloodPoints.Mod(-DLC1VampireNextPerk.value)
+					DLC1VampirePerkPoints.Mod(1.0)
+					DLC1VampireTotalPerksEarned.Mod(1.0)
+					DLC1VampireNextPerk.Mod(1.0)
+					DLC1VampirePerkEarned.Show()
+				endIf
+			endIf
+
 			playerRef.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
-			game.IncrementStat("Necks Bitten", 1)
+			; that is handled by VampireFeed which gets called from feed manager
+			;game.IncrementStat("Necks Bitten", 1)
+			
 		endIf
 		if akEventName == LandStart
 			DCL1VampireLevitateStateGlobal.SetValue(1 as Float)

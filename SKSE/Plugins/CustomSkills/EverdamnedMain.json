@@ -7,7 +7,7 @@
   },
   "showMenu": "Everdamned.esp|1DA23C",
   "debugReload": "Everdamned.esp|1DA23B",
-  "perkPoints": "Dawnguard.esm|6938",
+  "perkPoints": "Everdamned.esp|8B0C8F",
   "skills": [
     {
       "id": "EverdamnedMain",
@@ -19,10 +19,10 @@
       "color": null,
       "showLevelup": "Everdamned.esp|1DA23A",
       "experienceFormula": {
-        "useMult": 1.35,
+        "useMult": 1.0,
         "useOffset": 0.0,
-        "improveMult": 2.0,
-        "improveOffset": 0.0,
+        "improveMult": 1.9,
+        "improveOffset": 100.0,
         "enableXPPerRank": false
       },
       "nodes": [

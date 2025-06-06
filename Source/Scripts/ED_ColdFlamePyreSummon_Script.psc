@@ -6,6 +6,8 @@ activator property DefaultAshPile1 auto
 
 spell[] property SummonSpells auto
 
+float property XPgained auto
+
 event oneffectstart(actor akTarget, actor akCaster)
 	
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateStart)
@@ -27,6 +29,9 @@ event oneffectstart(actor akTarget, actor akCaster)
 	spell SummonToCast = SummonSpells[utility.randomint(0, SummonSpells.length - 1)]
 	akCaster.DoCombatSpellApply(SummonToCast, akCaster)
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateEnd)
+	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	
 endevent
 
 ;spell property ED_ColdFlame_ConjureAtronach_Spell auto

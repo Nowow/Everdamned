@@ -3,6 +3,7 @@ Scriptname ED_BloodAnkh_Detonate extends ActiveMagicEffect
 visualeffect property ED_Art_VFX_BloodAnkh auto
 activator property AshPile auto
 spell property ED_VampireSpells_BloodAnkh_Proc_Spell auto
+float property XPgained auto
 
 Float _freezeDelay = 0.25
 Float _popDelay = 2.50
@@ -29,6 +30,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	akTarget.SetAlpha(0.000000, true)
 	akTarget.AttachAshPile(AshPile as form)
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateEnd)
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 	akTarget.EnableAI(true)
 	akTarget.SetGhost(false)
 endFunction
