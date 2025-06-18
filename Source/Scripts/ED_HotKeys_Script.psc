@@ -49,6 +49,7 @@ idle property pa_KillMoveDLC02RipHeartOut auto
 
 idle property ED_KM_JumpFeed auto
 idle property pa_KillMoveED_bleedoutFinisher auto
+spell property ED_Art_Spell_MouthMuzzleFlash auto
 
 int counter
 Event OnKeyDown(int keyCode)
@@ -87,7 +88,13 @@ Event OnKeyDown(int keyCode)
 		
 		float zOffset = __targetThing.GetHeadingAngle(pl)
 		__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
-		pl.PlayIdleWithTarget(pa_HugA, __targetThing)
+		pl.StartVampireFeed(__targetThing as actor)
+		
+		utility.wait(1)
+		ED_Art_Spell_MouthMuzzleFlash.RemoteCast(playerRef, __targetThing as actor)
+		;pl.PlayIdleWithTarget(pa_HugA, __targetThing)
+		
+		
 		
 		
 		

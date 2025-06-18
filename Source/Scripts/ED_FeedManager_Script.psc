@@ -92,6 +92,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		;playerRef.PlayImpactEffect(BloodSprayBleedImpactSetRed, "NPC Head MagicNode [Hmag]", 0, 0, -1, 0, false, false)
 		
 		ED_Art_Spell_MouthMuzzleFlash.Cast(playerRef)
+		;ED_Art_Spell_MouthMuzzleFlash.RemoteCast(playerRef)
 		
 		utility.wait(0.3)
 		Game.TriggerScreenBlood(100)
