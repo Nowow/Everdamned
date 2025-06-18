@@ -5,11 +5,24 @@ actor _caster
 
 spell property ED_VampireSpellsVL_ChillingFlamesofUndeath_Proc_Spell auto
 
+bool __doneDid
 event oneffectstart(actor akTarget, actor akCaster)
-	_caster = akCaster
-	_target = akTarget
+
+	if akTarget.IsDead() && !__doneDid
+		__doneDid = true
+		ED_VampireSpellsVL_ChillingFlamesofUndeath_Proc_Spell.Cast(akCaster, akTarget)
+		
+		dispel()
+	else
+		_caster = akCaster
+		_target = akTarget
+	endif
+
 endevent
 
 Event ondying(actor akKiller)
-	ED_VampireSpellsVL_ChillingFlamesofUndeath_Proc_Spell.Cast(_caster, _target)
+	if !__doneDid
+		__doneDid = true
+		ED_VampireSpellsVL_ChillingFlamesofUndeath_Proc_Spell.Cast(_caster, _target)
+	endif
 endevent

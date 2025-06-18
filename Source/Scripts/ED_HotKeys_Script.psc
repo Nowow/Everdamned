@@ -42,6 +42,13 @@ effectshader property ED_TestShader2_empty auto
 textureset property ED_TEST_Art_TextureSet_Stoneskin_SkinBodyFemale auto
 
 spell property ED_VampireSpells_BloodSeed_Spell auto
+idle property pa_HugA auto
+idle property ED_GroundFeedKillmove auto
+idle property ED_testidle auto
+idle property pa_KillMoveDLC02RipHeartOut auto
+idle property pa_KillMoveED_bleedoutFinisher auto
+
+int counter
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
 		return
@@ -52,8 +59,37 @@ Event OnKeyDown(int keyCode)
 		
 		objectreference __targetThing = Game.GetCurrentConsoleRef()
 		
+		actor pl = Game.GetPlayer()
 		
-		CustomSkills.IncrementSkillBy("EverdamnedMain", 5)
+		
+		;pl.SetHeadTracking(False)
+		;(__targetThing as actor).SetHeadTracking(False)
+		
+		counter += 1
+		
+		if (__targetThing as actor)
+		
+			float zOffset = __targetThing.GetHeadingAngle(pl)
+			__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
+			
+			if counter % 2 == 0
+				debug.Trace("Everdamned DEBUG: even")
+				pl.PlayIdleWithTarget(pa_HugA, __targetThing)
+			else
+				debug.Trace("Everdamned DEBUG: odd")
+				pl.PlayIdleWithTarget(pa_KillMoveDLC02RipHeartOut, __targetThing)
+				
+			endif
+		
+		endif
+		
+		;float zOffset = __targetThing.GetHeadingAngle(pl)
+		;__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
+		;pl.PlayIdleWithTarget(pa_KillMoveED_bleedoutFinisher, __targetThing)
+		
+		
+		
+		;CustomSkills.IncrementSkillBy("EverdamnedMain", 5)
 		;CustomSkills.ShowSkillIncreaseMessage("EverdamnedMain")
 		
 		;debug.Trace("Everdamned DEBUG: " + ED_VampireSpells_BloodSeed_Spell.GetPerk())

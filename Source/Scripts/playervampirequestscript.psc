@@ -232,6 +232,7 @@ function VampireChange(actor Target)
     VampireCureDisease.Cast(Target as objectreference, none)
     VampireStatus = 1
     self.VampireProgression(playerRef, 1)
+	ED_BloodPoolManager_Quest.AtStageOrAgeChange()
     self.RegisterForUpdateGameTime(3 as Float)
     LastFeedTime = GameDaysPassed.value
     PlayerIsVampire.SetValue(1 as Float)

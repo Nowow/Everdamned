@@ -43,6 +43,9 @@ function PlayerBecameVampire()
 	GainAgeExpirience(0.0)
 	RewardBlueBloodRewardsIfNeeded()
 	
+	; initial skill level
+	ED_Mechanics_SkillTree_Level_Global.SetValue(10)
+	
 	; absorbing exp
 	playerRef.SetActorValue("ED_VampireSkillExpBuffer", 3000.0)
 	playerRef.DamageActorValue("ED_VampireSkillExpBuffer", 3000.0)
@@ -50,6 +53,7 @@ function PlayerBecameVampire()
 	CustomSkills_FormExt.RegisterForCustomSkillIncrease(self)
 	
 	; giving 2 starting perk points
+	ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.SetValue(2)
 	ED_Mechanics_SkillTree_PerkPoints_Global.SetValue(2)
 	DLC1VampirePerkPoints.SetValue(0)
 	

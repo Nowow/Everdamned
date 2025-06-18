@@ -6,6 +6,9 @@ bool property bFeedAnimRequiredForSuccess auto
 String property BiteStart = "BiteStart" auto
 String property GarkainFeedSounds = "SoundPlay.NPCWerewolfFeedingKill" auto
 
+String property BleedoutFinisherRustle = "ed_playsound_bleedoutrustle" auto
+String property BloodgushImpact = "ed_impact_bloodgush" auto
+
 
 function SharedDrainEffects()
 	
@@ -51,7 +54,14 @@ Function RegisterFeedEvents()
 		;	RegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
 		
 		; I think thats needed for combat bite killmoves?
-			debug.Trace("Everdamned DEBUG NOTIMPLEMENTED: Feed Manager registred feed event for mortal race")
+		
+		
+			debug.Trace("Everdamned DEBUG: Feed Manager registred feed event for mortal race")
+			; using for custom feed anim sound events
+			
+			RegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
+			RegisterForAnimationEvent(playerRef, BloodgushImpact)
+			
 		endif
 
 	endif
@@ -68,8 +78,9 @@ function UnRegisterFeedEvents()
 		UnRegisterForAnimationEvent(playerRef, GarkainFeedSounds)
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred chomp event for Garkain")
 	else
-		; TODO: probably dont need this section
-		debug.Trace("Everdamned DEBUG NOTIMPLEMENTED: Feed Manager UnRegistred feed event for mortal race")
+		UnRegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
+		UnRegisterForAnimationEvent(playerRef, BloodgushImpact)
+		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
 	endif
 endfunction
 
@@ -79,7 +90,23 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	;	PlayerVampireQuest.VampireFeed() 544D0F
 	;endif
 	
-	if asEventName == BiteStart || asEventName == GarkainFeedSounds
+	if asEventName == BloodgushImpact
+	
+		;playerRef.PlayImpactEffect(BloodSprayBleedImpactSetRed, "NPC Head MagicNode [Hmag]", 0, 0, -1, 0, false, false)
+		
+		ED_Art_Spell_MouthMuzzleFlash.Cast(playerRef)
+		
+		utility.wait(0.3)
+		Game.TriggerScreenBlood(100)
+		
+		debug.Trace("Everdamned DEBUG: Feed Manager caught BloodgushImpact event")
+	
+	elseif asEventName == BleedoutFinisherRustle
+		ED_Art_SoundM_BleedoutFinishRustle.Play(playerRef)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught BleedoutFinisherRustle event")
+		
+	
+	elseif asEventName == BiteStart || asEventName == GarkainFeedSounds
 		debug.Trace("Everdamned DEBUG: Feed Manager caught Beast Bite event")
 		HandleBeastBite()
 	endif
@@ -303,7 +330,7 @@ function HandleDrainThrall(actor FeedTarget)
 		;psychic vampire check
 		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
-	
+
 endfunction
 
 function HandleFeedMesmerized(actor FeedTarget)
@@ -905,6 +932,9 @@ function FeedManagerCallback(bool checkResult)
 	debug.Trace("Everdamned DEBUG: Feed Manager callback was called in Empty state, probably a timeouted callback from player alias on this quest")
 endfunction
 
+sound property ED_Art_SoundM_BleedoutFinishRustle auto
+impactdataset property BloodSprayBleedImpactSetRed auto
+spell property ED_Art_Spell_MouthMuzzleFlash auto
 
 Race Property VampireGarkainBeastRace auto
 Race Property DLC1VampireBeastRace auto
