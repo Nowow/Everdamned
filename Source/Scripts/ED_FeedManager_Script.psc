@@ -8,6 +8,7 @@ String property GarkainFeedSounds = "SoundPlay.NPCWerewolfFeedingKill" auto
 
 String property BleedoutFinisherRustle = "ed_playsound_bleedoutrustle" auto
 String property BloodgushImpact = "ed_impact_bloodgush" auto
+String property FeedDoubletap = "ed_playsound_feeddoubletap" auto
 
 
 function SharedDrainEffects()
@@ -48,19 +49,14 @@ Function RegisterFeedEvents()
 			RegisterForAnimationEvent(playerRef, GarkainFeedSounds)
 			debug.Trace("Everdamned DEBUG: Feed Manager registred chomp event for Garkain")
 		else
-			; TODO: why wait????
-		;	unRegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
-		;	utility.wait(1)
-		;	RegisterForAnimationEvent(playerRef, "SoundPlay.NPCVampireLordFeed")
-		
-		; I think thats needed for combat bite killmoves?
-		
 		
 			debug.Trace("Everdamned DEBUG: Feed Manager registred feed event for mortal race")
 			; using for custom feed anim sound events
 			
 			RegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
 			RegisterForAnimationEvent(playerRef, BloodgushImpact)
+			RegisterForAnimationEvent(playerRef, FeedDoubletap)
+			
 			
 		endif
 
@@ -80,6 +76,7 @@ function UnRegisterFeedEvents()
 	else
 		UnRegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
 		UnRegisterForAnimationEvent(playerRef, BloodgushImpact)
+		UnRegisterForAnimationEvent(playerRef, FeedDoubletap)
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
 	endif
 endfunction
@@ -104,8 +101,11 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	elseif asEventName == BleedoutFinisherRustle
 		ED_Art_SoundM_BleedoutFinishRustle.Play(playerRef)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught BleedoutFinisherRustle event")
-		
 	
+	elseif asEventName == FeedDoubletap
+		ED_Art_SoundM_FeedDoubletapJumping.Play(playerRef)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedDoubletap event")
+		
 	elseif asEventName == BiteStart || asEventName == GarkainFeedSounds
 		debug.Trace("Everdamned DEBUG: Feed Manager caught Beast Bite event")
 		HandleBeastBite()
@@ -932,6 +932,7 @@ function FeedManagerCallback(bool checkResult)
 	debug.Trace("Everdamned DEBUG: Feed Manager callback was called in Empty state, probably a timeouted callback from player alias on this quest")
 endfunction
 
+sound property ED_Art_SoundM_FeedDoubletapJumping auto
 sound property ED_Art_SoundM_BleedoutFinishRustle auto
 impactdataset property BloodSprayBleedImpactSetRed auto
 spell property ED_Art_Spell_MouthMuzzleFlash auto

@@ -42,10 +42,12 @@ effectshader property ED_TestShader2_empty auto
 textureset property ED_TEST_Art_TextureSet_Stoneskin_SkinBodyFemale auto
 
 spell property ED_VampireSpells_BloodSeed_Spell auto
+
 idle property pa_HugA auto
-idle property ED_GroundFeedKillmove auto
 idle property ED_testidle auto
 idle property pa_KillMoveDLC02RipHeartOut auto
+
+idle property ED_KM_JumpFeed auto
 idle property pa_KillMoveED_bleedoutFinisher auto
 
 int counter
@@ -74,10 +76,10 @@ Event OnKeyDown(int keyCode)
 			
 			if counter % 2 == 0
 				debug.Trace("Everdamned DEBUG: even")
-				pl.PlayIdleWithTarget(pa_HugA, __targetThing)
+				pl.PlayIdleWithTarget(ED_KM_JumpFeed, __targetThing)
 			else
 				debug.Trace("Everdamned DEBUG: odd")
-				pl.PlayIdleWithTarget(pa_KillMoveDLC02RipHeartOut, __targetThing)
+				pl.PlayIdleWithTarget(pa_KillMoveED_bleedoutFinisher, __targetThing)
 				
 			endif
 		
