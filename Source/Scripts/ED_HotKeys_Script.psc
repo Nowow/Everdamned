@@ -67,27 +67,27 @@ Event OnKeyDown(int keyCode)
 		;pl.SetHeadTracking(False)
 		;(__targetThing as actor).SetHeadTracking(False)
 		
-		counter += 1
+		;counter += 1
 		
-		if (__targetThing as actor)
+		;if (__targetThing as actor)
+		;
+		;	float zOffset = __targetThing.GetHeadingAngle(pl)
+		;	__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
+		;	
+		;	if counter % 2 == 0
+		;		debug.Trace("Everdamned DEBUG: even")
+		;		pl.PlayIdleWithTarget(ED_KM_JumpFeed, __targetThing)
+		;	else
+		;		debug.Trace("Everdamned DEBUG: odd")
+		;		pl.PlayIdleWithTarget(pa_KillMoveED_bleedoutFinisher, __targetThing)
+		;		
+		;	endif
+		;
+		;endif
 		
-			float zOffset = __targetThing.GetHeadingAngle(pl)
-			__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
-			
-			if counter % 2 == 0
-				debug.Trace("Everdamned DEBUG: even")
-				pl.PlayIdleWithTarget(ED_KM_JumpFeed, __targetThing)
-			else
-				debug.Trace("Everdamned DEBUG: odd")
-				pl.PlayIdleWithTarget(pa_KillMoveED_bleedoutFinisher, __targetThing)
-				
-			endif
-		
-		endif
-		
-		;float zOffset = __targetThing.GetHeadingAngle(pl)
-		;__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
-		;pl.PlayIdleWithTarget(pa_KillMoveED_bleedoutFinisher, __targetThing)
+		float zOffset = __targetThing.GetHeadingAngle(pl)
+		__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
+		pl.PlayIdleWithTarget(pa_HugA, __targetThing)
 		
 		
 		
