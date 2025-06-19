@@ -1,14 +1,51 @@
 Scriptname ED_FeedManager_PlayerAlias extends ReferenceAlias  
 
 
+String property BleedoutFinisherRustle = "ed_playsound_bleedoutrustle" auto
+String property BloodgushImpact = "ed_impact_bloodgush" auto
+String property FeedDoubletap = "ed_playsound_feeddoubletap" auto
+
 Event OnPlayerLoadGame()
 	Debug.Trace("Everdamned INFO: Feed Manager player alias OnPlayerLoadGame() called ")
-	(GetOwningQuest() as ED_FeedManager_Script).RegisterFeedEvents()
+	
+	ED_FeedManager_Script FeedManager = GetOwningQuest() as ED_FeedManager_Script
+	
+	; feed km processing for VL and garkain
+	FeedManager.RegisterFeedEvents()
+	
+	; feed km processing for mortal feed killmoves, separate to be separate thread
+	if FeedManager.PlayerIsVampire.value == 1
+		
+		race playerRace = playerRef.GetRace()
+		
+		; using for custom feed anim sound events		
+		RegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
+		RegisterForAnimationEvent(playerRef, BloodgushImpact)
+		RegisterForAnimationEvent(playerRef, FeedDoubletap)
+
+	endif
 EndEvent
 
 Event OnRaceSwitchComplete()
  	Debug.Trace("Everdamned INFO: Feed Manager player alias OnRaceSwitchComplete() called ")
-	(GetOwningQuest() as ED_FeedManager_Script).RegisterFeedEvents()
+	
+	ED_FeedManager_Script FeedManager = GetOwningQuest() as ED_FeedManager_Script
+	
+	; feed km processing for VL and garkain
+	FeedManager.RegisterFeedEvents()
+	
+	; feed km processing for mortal feed killmoves, separate to be separate thread
+	if FeedManager.PlayerIsVampire.value == 1
+		
+		race playerRace = playerRef.GetRace()
+		
+		; using for custom feed anim sound events		
+		RegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
+		RegisterForAnimationEvent(playerRef, BloodgushImpact)
+		RegisterForAnimationEvent(playerRef, FeedDoubletap)
+
+	endif
+	
 EndEvent
 
 
@@ -36,22 +73,35 @@ Event OnVampireFeed(actor akTarget)
 		endif
 	else
 		debug.Trace("Everdamned DEBUG: bFeedAnimRequiredForSuccess is false, proceed with feed things regardless")
-		
 	endif
-	
-	
 	
 endevent
 
-;Event OnAnimationEvent(ObjectReference akSource, string asEventName)
-;	if _killTarget 
-;		playerRef.pushactoraway(_killTarget, 30.0)
-;		_killTarget.kill(playerRef)
-;		_killTarget = none
-;	endif
+Event OnAnimationEvent(ObjectReference akSource, string asEventName)
+	if asEventName == BloodgushImpact
+			
+		ED_Art_Spell_MouthMuzzleFlash.Cast(playerRef)
+		utility.wait(0.3)
+		Game.TriggerScreenBlood(100)
+		
+		debug.Trace("Everdamned DEBUG: Feed Manager caught BloodgushImpact event")
 	
-;endevent
+	elseif asEventName == BleedoutFinisherRustle
+		ED_Art_SoundM_BleedoutFinishRustle.Play(playerRef)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught BleedoutFinisherRustle event")
+	
+	elseif asEventName == FeedDoubletap
+		ED_Art_SoundM_FeedDoubletapJumping.Play(playerRef)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedDoubletap event")
+		
+	endif
+endevent
 
 ED_FeedManager_Script property ED_FeedManager_Quest auto
+
+
+sound property ED_Art_SoundM_FeedDoubletapJumping auto
+sound property ED_Art_SoundM_BleedoutFinishRustle auto
+spell property ED_Art_Spell_MouthMuzzleFlash auto
 
 actor property playerRef auto

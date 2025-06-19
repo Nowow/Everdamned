@@ -46,6 +46,7 @@ spell property ED_VampireSpells_BloodSeed_Spell auto
 idle property pa_HugA auto
 idle property ED_testidle auto
 idle property pa_KillMoveDLC02RipHeartOut auto
+idle property IdleVampireStandingFeedFront_Loose auto
 
 idle property ED_KM_JumpFeed auto
 idle property pa_KillMoveED_bleedoutFinisher auto
@@ -88,12 +89,14 @@ Event OnKeyDown(int keyCode)
 		
 		float zOffset = __targetThing.GetHeadingAngle(pl)
 		__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
-		pl.StartVampireFeed(__targetThing as actor)
+		;pl.StartVampireFeed(__targetThing as actor)
 		
-		utility.wait(1)
-		ED_Art_Spell_MouthMuzzleFlash.RemoteCast(playerRef, __targetThing as actor)
-		;pl.PlayIdleWithTarget(pa_HugA, __targetThing)
+		pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
 		
+		;utility.wait(0.1)
+		;playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(false), 1)
+		;playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(true), 2)
+		;playerRef.SheatheWeapon()
 		
 		
 		

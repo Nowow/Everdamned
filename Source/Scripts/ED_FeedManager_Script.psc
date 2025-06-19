@@ -3,12 +3,10 @@ Scriptname ED_FeedManager_Script extends Quest
 
 actor property aFeedTarget auto
 bool property bFeedAnimRequiredForSuccess auto
+
 String property BiteStart = "BiteStart" auto
 String property GarkainFeedSounds = "SoundPlay.NPCWerewolfFeedingKill" auto
-
-String property BleedoutFinisherRustle = "ed_playsound_bleedoutrustle" auto
-String property BloodgushImpact = "ed_impact_bloodgush" auto
-String property FeedDoubletap = "ed_playsound_feeddoubletap" auto
+String property FeedTrigger = "ed_FeedAnimationPlayed" auto
 
 
 function SharedDrainEffects()
@@ -49,20 +47,15 @@ Function RegisterFeedEvents()
 			RegisterForAnimationEvent(playerRef, GarkainFeedSounds)
 			debug.Trace("Everdamned DEBUG: Feed Manager registred chomp event for Garkain")
 		else
-		
-			debug.Trace("Everdamned DEBUG: Feed Manager registred feed event for mortal race")
-			; using for custom feed anim sound events
-			
-			RegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
-			RegisterForAnimationEvent(playerRef, BloodgushImpact)
-			RegisterForAnimationEvent(playerRef, FeedDoubletap)
-			
+			debug.Trace("Everdamned DEBUG: Feed Manager registred chomp event for Mortal")
+			RegisterForAnimationEvent(playerRef, FeedTrigger)
 			
 		endif
 
 	endif
 EndFunction
 
+; probably unneeded because game automatically unregisters on race change
 function UnRegisterFeedEvents()
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved UnRegisterFeedEvents() call")
 	race playerRace = playerRef.GetRace()
@@ -74,39 +67,19 @@ function UnRegisterFeedEvents()
 		UnRegisterForAnimationEvent(playerRef, GarkainFeedSounds)
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred chomp event for Garkain")
 	else
-		UnRegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
-		UnRegisterForAnimationEvent(playerRef, BloodgushImpact)
-		UnRegisterForAnimationEvent(playerRef, FeedDoubletap)
+		UnRegisterForAnimationEvent(playerRef, FeedTrigger)
+	;	UnRegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
+	;	UnRegisterForAnimationEvent(playerRef, BloodgushImpact)
+	;	UnRegisterForAnimationEvent(playerRef, FeedDoubletap)
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
 	endif
 endfunction
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
-	; TODO: change to some specific custom animevent to differentiate from regular feed and killmove
-	;if asEventName == "SoundPlay.NPCVampireLordFeed"
-	;	PlayerVampireQuest.VampireFeed() 544D0F
-	;endif
 	
-	if asEventName == BloodgushImpact
+	if asEventName == FeedTrigger
 	
-		;playerRef.PlayImpactEffect(BloodSprayBleedImpactSetRed, "NPC Head MagicNode [Hmag]", 0, 0, -1, 0, false, false)
-		
-		ED_Art_Spell_MouthMuzzleFlash.Cast(playerRef)
-		;ED_Art_Spell_MouthMuzzleFlash.RemoteCast(playerRef)
-		
-		utility.wait(0.3)
-		Game.TriggerScreenBlood(100)
-		
-		debug.Trace("Everdamned DEBUG: Feed Manager caught BloodgushImpact event")
-	
-	elseif asEventName == BleedoutFinisherRustle
-		ED_Art_SoundM_BleedoutFinishRustle.Play(playerRef)
-		debug.Trace("Everdamned DEBUG: Feed Manager caught BleedoutFinisherRustle event")
-	
-	elseif asEventName == FeedDoubletap
-		ED_Art_SoundM_FeedDoubletapJumping.Play(playerRef)
-		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedDoubletap event")
-		
+
 	elseif asEventName == BiteStart || asEventName == GarkainFeedSounds
 		debug.Trace("Everdamned DEBUG: Feed Manager caught Beast Bite event")
 		HandleBeastBite()
@@ -805,6 +778,24 @@ function HandleDrainSleep(actor FeedTarget)
 	
 endfunction
 
+;function HandleCombatDrain(actor FeedTarget)
+;	debug.Trace("Everdamned DEBUG: Player attempts combat drain at target " + FeedTarget)
+;	
+;	; tell OAR the animation type
+;	if aFeedTarget.IsBleedingOut()
+;		; bleedout km
+;		ED_Mechanics_Global_FeedType.SetValue(1.0)
+;	else ;stagger 
+;		;jump feed
+;		ED_Mechanics_Global_FeedType.SetValue(2.0)
+;	endif
+;	
+;	
+;endfunction
+
+
+
+
 function HandleCombatDrain(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Player combat drains target " + FeedTarget)
 	
@@ -841,8 +832,20 @@ state CombatDrain
 	
 	event OnBeginState()
 		debug.Trace("Everdamned DEBUG: Feed Manager entered CombatDrain state, bFeedAnimRequiredForSuccess = true")
-		; tell OAR that ist jump feed killmove
-		ED_Mechanics_Global_FeedType.SetValue(1.0)
+		; tell OAR the animation type
+		if aFeedTarget.IsBleedingOut()
+			; bleedout km
+			ED_Mechanics_Global_FeedType.SetValue(1.0)
+		else ;stagger 
+			;jump feed
+			ED_Mechanics_Global_FeedType.SetValue(2.0)
+		endif
+		
+		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(false), 1)
+		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(true), 2)
+		
+		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
+		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
 		
 		bFeedAnimRequiredForSuccess = true
 		debug.Trace("Everdamned DEBUG: Feed Manager starts Vampire Feed with aFeedTarget")
@@ -866,7 +869,7 @@ state CombatDrain
 			endif
 			
 			;sfx, maybe should bake into animation?
-			ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(aFeedTarget as objectreference)
+			;sfx baked in animation/managed through animevents
 			
 			if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
 				playerRef.RestoreActorValue("Health", 9999.0)
@@ -933,10 +936,6 @@ function FeedManagerCallback(bool checkResult)
 	debug.Trace("Everdamned DEBUG: Feed Manager callback was called in Empty state, probably a timeouted callback from player alias on this quest")
 endfunction
 
-sound property ED_Art_SoundM_FeedDoubletapJumping auto
-sound property ED_Art_SoundM_BleedoutFinishRustle auto
-impactdataset property BloodSprayBleedImpactSetRed auto
-spell property ED_Art_Spell_MouthMuzzleFlash auto
 
 Race Property VampireGarkainBeastRace auto
 Race Property DLC1VampireBeastRace auto
