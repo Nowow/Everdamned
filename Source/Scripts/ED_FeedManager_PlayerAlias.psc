@@ -52,34 +52,7 @@ Event OnRaceSwitchComplete()
 EndEvent
 
 
-Event OnVampireFeed(actor akTarget)
-	; event gets called after StartVampireFeed regardless of whether did the animation actually play
-	debug.Trace("Everdamned DEBUG: Feed Manager player alias caught OnVampireFeed event on target " + akTarget)
-	
-	; to check if player in animation here use playerRef.GetPlayerControls(), works with no utility.wait()
-	
-	; bFeedAnimRequiredForSuccess controlled via ED_FeedManager_Quest script states
-	if ED_FeedManager_Quest.bFeedAnimRequiredForSuccess == true
-		debug.Trace("Everdamned DEBUG: bFeedAnimRequiredForSuccess is true in this feed on" + akTarget)
-		if playerRef.GetPlayerControls() == false
-			debug.Trace("Everdamned DEBUG: playerRef.GetPlayerControls() is true, means player did play the anim, proceeding with feed effects")
-			Game.ForceThirdPerson()
-			ED_FeedManager_Quest.FeedManagerCallback(true)
-			return
-			
-	;		_killTarget = akTarget
-	;		RegisterForAnimationEvent(playerRef, "KillMoveEnd")
-		else
-			debug.Trace("Everdamned DEBUG: but playerRef.GetPlayerControls() is false, anim didnt play, do nothing")
-			ED_FeedManager_Quest.FeedManagerCallback(false)
-			return
-		endif
-	else
-		debug.Trace("Everdamned DEBUG: bFeedAnimRequiredForSuccess is false, proceed with feed things regardless")
-	endif
-	
-endevent
-
+;  handles animations baked in .hkx, for sfx and other stuff directly related to playing animation
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	if asEventName == BloodgushImpact
 			
@@ -105,8 +78,37 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	endif
 endevent
 
-ED_FeedManager_Script property ED_FeedManager_Quest auto
 
+;Event OnVampireFeed(actor akTarget)
+	; event gets called after StartVampireFeed regardless of whether did the animation actually play
+;	debug.Trace("Everdamned DEBUG: Feed Manager player alias caught OnVampireFeed event on target " + akTarget)
+	
+	; to check if player in animation here use playerRef.GetPlayerControls(), works with no utility.wait()
+	
+	; bFeedAnimRequiredForSuccess controlled via ED_FeedManager_Quest script states
+;	if ED_FeedManager_Quest.bFeedAnimRequiredForSuccess == true
+;		debug.Trace("Everdamned DEBUG: bFeedAnimRequiredForSuccess is true in this feed on" + akTarget)
+;		if playerRef.GetPlayerControls() == false
+;			debug.Trace("Everdamned DEBUG: playerRef.GetPlayerControls() is true, means player did play the anim, proceeding with feed effects")
+;			Game.ForceThirdPerson()
+;			ED_FeedManager_Quest.FeedManagerCallback(true)
+;			return
+			
+	;		_killTarget = akTarget
+	;		RegisterForAnimationEvent(playerRef, "KillMoveEnd")
+;		else
+;			debug.Trace("Everdamned DEBUG: but playerRef.GetPlayerControls() is false, anim didnt play, do nothing")
+;			ED_FeedManager_Quest.FeedManagerCallback(false)
+;			return
+;		endif
+;	else
+;		debug.Trace("Everdamned DEBUG: bFeedAnimRequiredForSuccess is false, proceed with feed things regardless")
+;	endif
+	
+;endevent
+
+
+ED_FeedManager_Script property ED_FeedManager_Quest auto
 
 sound property ED_Art_SoundM_FeedDoubletapJumping auto
 sound property ED_Art_SoundM_BleedoutFinishRustle auto

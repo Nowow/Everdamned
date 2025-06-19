@@ -2,7 +2,6 @@ Scriptname ED_FeedManager_Script extends Quest
 
 
 actor property aFeedTarget auto
-bool property bFeedAnimRequiredForSuccess auto
 
 String property BiteStart = "BiteStart" auto
 String property GarkainFeedSounds = "SoundPlay.NPCWerewolfFeedingKill" auto
@@ -77,10 +76,12 @@ endfunction
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	
-	if asEventName == FeedTrigger
-	
-
-	elseif asEventName == BiteStart || asEventName == GarkainFeedSounds
+	;if asEventName == FeedTrigger
+		
+		;logging inside
+		;ApplyCombatFeedEffects()
+		
+	if asEventName == BiteStart || asEventName == GarkainFeedSounds
 		debug.Trace("Everdamned DEBUG: Feed Manager caught Beast Bite event")
 		HandleBeastBite()
 	endif
@@ -778,31 +779,83 @@ function HandleDrainSleep(actor FeedTarget)
 	
 endfunction
 
-;function HandleCombatDrain(actor FeedTarget)
-;	debug.Trace("Everdamned DEBUG: Player attempts combat drain at target " + FeedTarget)
-;	
-;	; tell OAR the animation type
-;	if aFeedTarget.IsBleedingOut()
-;		; bleedout km
-;		ED_Mechanics_Global_FeedType.SetValue(1.0)
-;	else ;stagger 
-;		;jump feed
-;		ED_Mechanics_Global_FeedType.SetValue(2.0)
-;	endif
-;	
-;	
-;endfunction
-
-
-
 
 function HandleCombatDrain(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Player combat drains target " + FeedTarget)
 	
 	aFeedTarget = FeedTarget
-
-	debug.Trace("Everdamned DEBUG: Feed Manager goes to CombatDrain state, waiting for FeedManagerCallback call from alias script")
+	
 	GoToState("CombatDrain")
+	
+endfunction
+
+
+function ApplyCombatFeedEffects()
+
+	debug.Trace("Everdamned DEBUG: Feed trigger animevent was caught, processing")
+	
+	; for vampire converting sidequest
+	if aFeedTarget.IsInFaction(DLC1PotentialVampireFaction) && aFeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
+		DLC1VampireTurn.PlayerBitesMe(aFeedTarget)
+	endif
+	
+	;sfx, maybe should bake into animation?
+	;sfx baked in animation/managed through animevents
+	
+	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
+		playerRef.RestoreActorValue("Health", 9999.0)
+		playerRef.RestoreActorValue("Magicka", 9999.0)
+		playerRef.RestoreActorValue("Stamina", 9999.0)
+	endif
+
+	;adjust status bloodpool etc
+	PlayerVampireQuest.EatThisActor(aFeedTarget, 0.5)
+	
+	;diablerie
+	if aFeedTarget.HasKeyword(Vampire)
+		float __ageMult = math.pow((aFeedTarget.GetLevel() / playerRef.GetLevel()), 1.5)
+		debug.Trace("Everdamned INFO: Feed Manager detects diablerie, aging with mult: " + __ageMult)
+		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * __ageMult)
+		
+		if playerRef.HasPerk(ED_PerkTreeVL_Amaranth_Perk)
+			ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
+			ED_VampirePowers_Amaranth_Disintegrate_Spell.Cast(playerRef, aFeedTarget)
+		endif
+	else
+		;age for 1 day, default amount for regular drain
+		float baseDrainValue = aFeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
+		float currentDrainPercent = aFeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
+		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
+	endif
+	
+	SharedDrainEffects()
+
+	;hemomancy
+	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
+		ED_Mechanics_Hemomancy_Quest.start()
+	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
+		; we ate, we try to learn new spells
+		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
+	endif
+	
+	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
+	endif
+	
+	if aFeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
+		debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + aFeedTarget)
+		actorbase TargetBase = aFeedTarget.GetActorBase()
+		Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
+		if Index >= 0
+			; removing from tracking
+			debug.Trace("Everdamned INFO: And it was in the track list, processing")
+			ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
+			ED_BlueBlood_Quest.ProcessVIP(TargetBase)
+		endIf
+	endif	
+	
+	GoToState("")
 	
 endfunction
 
@@ -831,7 +884,8 @@ state CombatDrain
 	endfunction
 	
 	event OnBeginState()
-		debug.Trace("Everdamned DEBUG: Feed Manager entered CombatDrain state, bFeedAnimRequiredForSuccess = true")
+		debug.Trace("Everdamned DEBUG: Feed Manager entered CombatDrain state")
+	
 		; tell OAR the animation type
 		if aFeedTarget.IsBleedingOut()
 			; bleedout km
@@ -841,101 +895,41 @@ state CombatDrain
 			ED_Mechanics_Global_FeedType.SetValue(2.0)
 		endif
 		
-		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(false), 1)
-		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(true), 2)
-		
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
 		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
 		
-		bFeedAnimRequiredForSuccess = true
-		debug.Trace("Everdamned DEBUG: Feed Manager starts Vampire Feed with aFeedTarget")
-		PlayerRef.StartVampireFeed(aFeedTarget)
-		;TODO: add a failsafe, like RegisterForSingleUpdate(5.0)
+		debug.Trace("Everdamned DEBUG: Feed Manager commands combat feeding animation")
+		
+		; using IdleVampireStandingFeedFront_Loose because it 
+		; does not make player immune and doesnt break because of weapons 
+		; StartVampireFeed forces player to sheathe
+		; paired_HugA doesnt but breaks if started with unsheather weap
+		; any real killmove makes player immune to damage
+		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		
+		
+		; the rest of the interaction and actual feed handling would happen in anim event, should it play
+		; P.S.: not really, now here
+		
+		
+		if __animPlayed
+			ApplyCombatFeedEffects()
+		else
+			ED_Mechanics_Message_CombatFeedFailed.Show()
+			debug.Trace("Everdamned DEBUG: Combat Feed attempt failed")
+			GoToState("")
+		endif
 	
 	endevent
 	event OnEndState()
 		aFeedTarget = none
-		bFeedAnimRequiredForSuccess = false
-		debug.Trace("Everdamned DEBUG: Feed Manager exited CombatDrain state, bFeedAnimRequiredForSuccess = false")
+		debug.Trace("Everdamned DEBUG: Feed Manager exited CombatDrain state")
 	endevent
-
-	function FeedManagerCallback(bool checkResult)
-		if checkResult
-			debug.Trace("Everdamned DEBUG: Feed Manager callback was called in CombatDrain state, feed anim WAS played, proceed")
-			
-			; for vampire converting sidequest
-			if aFeedTarget.IsInFaction(DLC1PotentialVampireFaction) && aFeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
-				DLC1VampireTurn.PlayerBitesMe(aFeedTarget)
-			endif
-			
-			;sfx, maybe should bake into animation?
-			;sfx baked in animation/managed through animevents
-			
-			if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
-				playerRef.RestoreActorValue("Health", 9999.0)
-				playerRef.RestoreActorValue("Magicka", 9999.0)
-				playerRef.RestoreActorValue("Stamina", 9999.0)
-			endif
 	
-			;adjust status bloodpool etc
-			PlayerVampireQuest.EatThisActor(aFeedTarget, 0.5)
-			
-			;diablerie
-			if aFeedTarget.HasKeyword(Vampire)
-				float __ageMult = math.pow((aFeedTarget.GetLevel() / playerRef.GetLevel()), 1.5)
-				debug.Trace("Everdamned INFO: Feed Manager detects diablerie, aging with mult: " + __ageMult)
-				ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * __ageMult)
-				
-				if playerRef.HasPerk(ED_PerkTreeVL_Amaranth_Perk)
-					ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
-					ED_VampirePowers_Amaranth_Disintegrate_Spell.Cast(playerRef, aFeedTarget)
-				endif
-			else
-				;age for 1 day, default amount for regular drain
-				float baseDrainValue = aFeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
-				float currentDrainPercent = aFeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
-				ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
-			endif
-			
-			SharedDrainEffects()
-		
-			;hemomancy
-			if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
-				ED_Mechanics_Hemomancy_Quest.start()
-			elseif ED_Mechanics_Hemomancy_Quest.IsActive()
-				; we ate, we try to learn new spells
-				ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
-			endif
-			
-			;Blue Blood
-			if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
-				ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
-			endif
-			
-			if aFeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
-				debug.Trace("Everdamned INFO: Feed Manager notifies that player just fed on Blue Blood VIP " + aFeedTarget)
-				actorbase TargetBase = aFeedTarget.GetActorBase()
-				Int Index = ED_Mechanics_BlueBlood_Track_FormList.Find(TargetBase as form)
-				if Index >= 0
-					; removing from tracking
-					debug.Trace("Everdamned INFO: And it was in the track list, processing")
-					ED_Mechanics_BlueBlood_Track_FormList.RemoveAddedForm(TargetBase as form)
-					ED_BlueBlood_Quest.ProcessVIP(TargetBase)
-				endIf
-			endif
-			
-		else
-			debug.Trace("Everdamned DEBUG: Feed Manager callback was called in CombatDrain state, feed anim WAS NOT played, do nothing")
-		endif
-		GoToState("")
-	endfunction
 endstate
 
-; necessary to define same function in non default state
-function FeedManagerCallback(bool checkResult)
-	debug.Trace("Everdamned DEBUG: Feed Manager callback was called in Empty state, probably a timeouted callback from player alias on this quest")
-endfunction
 
+idle property IdleVampireStandingFeedFront_Loose auto
 
 Race Property VampireGarkainBeastRace auto
 Race Property DLC1VampireBeastRace auto
@@ -950,6 +944,7 @@ faction property ED_Mechanics_DreamVisited_Fac auto
 message property ED_Mechanics_Message_DreamVisitor_RelationshipIncreased auto
 message property DLC1VampirePerkEarned auto
 message property ED_Mechanics_Message_LifebloodDrained auto
+message property ED_Mechanics_Message_CombatFeedFailed auto
 
 globalvariable property ED_Mechanics_Global_FeedType auto
 globalvariable property ED_Mechanics_Global_VampireFeedBystanderRadius auto
