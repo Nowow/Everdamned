@@ -4,6 +4,7 @@ Scriptname ED_FeedManager_PlayerAlias extends ReferenceAlias
 String property BleedoutFinisherRustle = "ed_playsound_bleedoutrustle" auto
 String property BloodgushImpact = "ed_impact_bloodgush" auto
 String property FeedDoubletap = "ed_playsound_feeddoubletap" auto
+String property SheatheWepons = "ed_sheatheweapons" auto
 
 Event OnPlayerLoadGame()
 	Debug.Trace("Everdamned INFO: Feed Manager player alias OnPlayerLoadGame() called ")
@@ -22,6 +23,8 @@ Event OnPlayerLoadGame()
 		RegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
 		RegisterForAnimationEvent(playerRef, BloodgushImpact)
 		RegisterForAnimationEvent(playerRef, FeedDoubletap)
+		RegisterForAnimationEvent(playerRef, SheatheWepons)
+		
 
 	endif
 EndEvent
@@ -93,6 +96,11 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	elseif asEventName == FeedDoubletap
 		ED_Art_SoundM_FeedDoubletapJumping.Play(playerRef)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedDoubletap event")
+	
+	elseif asEventName == SheatheWepons
+		
+		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(false), 1)
+		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(true), 2)
 		
 	endif
 endevent
