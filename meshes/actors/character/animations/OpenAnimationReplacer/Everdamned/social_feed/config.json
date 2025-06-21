@@ -1,7 +1,7 @@
 {
-    "name": "jump_feed",
-    "description": "cobmat bite killmove when target is staggered. uses paired_huga because need player to be vulnerable during killmove, and killmoves make player invincible",
-    "priority": 4255516,
+    "name": "social feed",
+    "description": "long feed animation for use with Eyes of the Moon dialogue feed",
+    "priority": 4255517,
     "ignoreDontConvertAnnotationsToTriggersFlag": true,
     "triggersFromAnnotationsOnly": true,
     "conditions": [
@@ -16,12 +16,8 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 2.0
+                "value": 3.0
             }
-        },
-        {
-            "condition": "IsFemale",
-            "requiredVersion": "1.0.0.0"
         }
     ],
     "pairedConditions": []

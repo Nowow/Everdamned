@@ -91,15 +91,7 @@ Event OnKeyDown(int keyCode)
 		__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
 		;pl.StartVampireFeed(__targetThing as actor)
 		
-		pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
-		
-		;utility.wait(0.1)
-		;playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(false), 1)
-		;playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(true), 2)
-		;playerRef.SheatheWeapon()
-		
-		
-		
+		pl.PlayIdleWithTarget(pa_KillMoveDLC02RipHeartOut, __targetThing)	
 		
 		;CustomSkills.IncrementSkillBy("EverdamnedMain", 5)
 		;CustomSkills.ShowSkillIncreaseMessage("EverdamnedMain")

@@ -1,7 +1,7 @@
 {
     "name": "bleedout_finisher_feed",
     "description": "cobmat bite killmove when target is bleeding out. uses paired_huga because need player to be vulnerable during killmove, and killmoves make player invincible",
-    "priority": 4255514,
+    "priority": 4255515,
     "ignoreDontConvertAnnotationsToTriggersFlag": true,
     "triggersFromAnnotationsOnly": true,
     "conditions": [
@@ -18,6 +18,12 @@
             "Value B": {
                 "value": 1.0
             }
+        },
+        {
+            "condition": "IsFemale",
+            "requiredVersion": "1.0.0.0",
+            "negated": true
         }
-    ]
+    ],
+    "pairedConditions": []
 }
