@@ -91,7 +91,12 @@ Event OnKeyDown(int keyCode)
 		__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
 		;pl.StartVampireFeed(__targetThing as actor)
 		
-		pl.PlayIdleWithTarget(pa_KillMoveDLC02RipHeartOut, __targetThing)	
+		;if counter % 2 == 0
+			pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
+		;else
+		;	pl.PlayIdleWithTarget(pa_HugA, __targetThing)
+		;endif
+		;counter += 1
 		
 		;CustomSkills.IncrementSkillBy("EverdamnedMain", 5)
 		;CustomSkills.ShowSkillIncreaseMessage("EverdamnedMain")

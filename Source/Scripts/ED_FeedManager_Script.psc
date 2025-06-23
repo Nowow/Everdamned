@@ -5,8 +5,11 @@ actor property aFeedTarget auto
 
 String property BiteStart = "BiteStart" auto
 String property GarkainFeedSounds = "SoundPlay.NPCWerewolfFeedingKill" auto
-String property FeedTrigger = "ed_FeedAnimationPlayed" auto
+;String property FeedTrigger = "ed_FeedAnimationPlayed" auto
+String property BreathSounds = "ed_breathSounds" auto
 
+
+;---------- helper functions ---------------
 
 function SharedDrainEffects()
 	
@@ -33,6 +36,47 @@ function SharedDrainEffects()
 endfunction
 
 
+sound function ChooseBreathSound(actor Victim)
+	; race/gender specific sfx
+	; can move to Victim SFX spell
+	sound __result = ED_Mechanics_FeedDialogue_BreathFemaleKhajiit_SoundM 
+	bool isFemale
+	race speakerRace
+	actorbase __actorBase = Victim.GetActorBase()
+	isFemale = __actorBase.GetSex() == 1
+	speakerRace = __actorBase.GetRace()
+
+	if (speakerRace == KhajiitRace || speakerRace == KhajiitRaceVampire)
+
+		if isFemale == true
+			__result = ED_Mechanics_FeedDialogue_BreathFemaleKhajiit_SoundM
+		else
+			__result = ED_Mechanics_FeedDialogue_BreathMaleKhajiit_SoundM
+		endif 
+
+	elseif (speakerRace == OrcRace || speakerRace == OrcRaceVampire)
+
+		if isFemale == true
+			__result = ED_Mechanics_FeedDialogue_BreathFemaleOrc_SoundM
+		else
+			__result = ED_Mechanics_FeedDialogue_BreathMaleOrc_SoundM
+		endif
+		
+	else
+		
+		if isFemale == true
+			__result = ED_Mechanics_FeedDialogue_BreathFemale_SoundM
+		else
+			__result = ED_Mechanics_FeedDialogue_BreathMale_SoundM
+		endif
+
+	endif
+	
+	return __result
+endfunction
+
+;----------------------------------------
+
 Function RegisterFeedEvents()
 	if PlayerIsVampire.value == 1
 		
@@ -47,7 +91,8 @@ Function RegisterFeedEvents()
 			debug.Trace("Everdamned DEBUG: Feed Manager registred chomp event for Garkain")
 		else
 			debug.Trace("Everdamned DEBUG: Feed Manager registred chomp event for Mortal")
-			RegisterForAnimationEvent(playerRef, FeedTrigger)
+			;RegisterForAnimationEvent(playerRef, FeedTrigger)
+			RegisterForAnimationEvent(playerRef, BreathSounds)
 			
 		endif
 
@@ -66,22 +111,33 @@ function UnRegisterFeedEvents()
 		UnRegisterForAnimationEvent(playerRef, GarkainFeedSounds)
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred chomp event for Garkain")
 	else
-		UnRegisterForAnimationEvent(playerRef, FeedTrigger)
+	;	UnRegisterForAnimationEvent(playerRef, FeedTrigger)
 	;	UnRegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
 	;	UnRegisterForAnimationEvent(playerRef, BloodgushImpact)
 	;	UnRegisterForAnimationEvent(playerRef, FeedDoubletap)
+	
+		UnRegisterForAnimationEvent(playerRef, BreathSounds)
+	
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
 	endif
 endfunction
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
+
 	
 	;if asEventName == FeedTrigger
 		
 		;logging inside
 		;ApplyCombatFeedEffects()
+	
+	;its sfx, but here so i dont have to propagate victim race to alias script
+	;and timing is not critical so thread locks are not an issue
+	if asEventName == BreathSounds
+	
+		BreathSoundsToPlayOnTrigger.Play(playerRef)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught Breath event!")
 		
-	if asEventName == BiteStart || asEventName == GarkainFeedSounds
+	elseif asEventName == BiteStart || asEventName == GarkainFeedSounds
 		debug.Trace("Everdamned DEBUG: Feed Manager caught Beast Bite event")
 		HandleBeastBite()
 	endif
@@ -380,7 +436,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain Mesmerized call on target " + FeedTarget)
 	
 	; tell OAR that ist jump feed killmove
-	ED_Mechanics_Global_FeedType.SetValue(1.0)
+	ED_Mechanics_Global_FeedType.SetValue(0.0)
 	
 	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
@@ -474,17 +530,19 @@ function HandleDrainMesmerized(actor FeedTarget)
 	endif
 endfunction
 
-
+sound BreathSoundsToPlayOnTrigger
 function HandleDialogueSeduction(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Dialogue Seduction call on target " + FeedTarget)
 	
-	; TODO: add and use social feeding animation
-	ED_Mechanics_Global_FeedType.SetValue(0.0)
+	
+	ED_Mechanics_Global_FeedType.SetValue(3.0)
+	
+	BreathSoundsToPlayOnTrigger = ChooseBreathSound(FeedTarget)
 	
 	;start actual feed animation
+	; can use StartVampireFeed because we actually want to sheathe if yet havent
+	; but may be buggy, maybe revert to playidlewithtarget(IdleVampireStandingFeedFront_Loose)
 	PlayerRef.StartVampireFeed(FeedTarget)
-	
-	;TODO: mark target as fed upon, when decided how that should impact feeding
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -529,6 +587,7 @@ function HandleDialogueSeduction(actor FeedTarget)
 	endif
 	
 	;adjust status bloodpool etc
+	;damage bloodpool available on target
 	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.7)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.35)
 	
@@ -978,5 +1037,16 @@ playerVampireQuestScript property PlayerVampireQuest auto
 dlc1vampireturnscript property DLC1VampireTurn auto
 ed_mainquest_script property ED_Mechanics_Main_Quest auto
 ED_BlueBlood_Quest_Script property ED_BlueBlood_Quest auto
+
+Sound Property ED_Mechanics_FeedDialogue_BreathFemale_SoundM  Auto
+Sound Property ED_Mechanics_FeedDialogue_BreathFemaleKhajiit_SoundM  Auto 
+Sound Property ED_Mechanics_FeedDialogue_BreathFemaleOrc_SoundM  Auto 
+Sound Property ED_Mechanics_FeedDialogue_BreathMale_SoundM  Auto 
+Sound Property ED_Mechanics_FeedDialogue_BreathMaleKhajiit_SoundM  Auto 
+Sound Property ED_Mechanics_FeedDialogue_BreathMaleOrc_SoundM  Auto
+Race Property KhajiitRace Auto 
+Race Property KhajiitRaceVampire Auto 
+Race Property OrcRace Auto 
+Race Property OrcRaceVampire Auto
 
 actor property playerRef auto
