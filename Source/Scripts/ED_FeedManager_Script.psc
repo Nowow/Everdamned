@@ -153,14 +153,7 @@ function HandleBeastBite()
 	endif
 	__killmoveStarted = true
 	
-	; beasts get 50 hp regen without perk
-	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
-		playerRef.RestoreActorValue("Health", 9999.0)
-		playerRef.RestoreActorValue("Magicka", 9999.0)
-		playerRef.RestoreActorValue("Stamina", 9999.0)
-	else
-		playerRef.RestoreActorValue("Health", 50.0)
-	endif
+	ED_Mechanics_DrainAttributeRestore_Spell.Cast(playerRef)
 	
 	;retrieving actor
 	;latent function, would wait for quest to start and fill the alias
@@ -173,9 +166,7 @@ function HandleBeastBite()
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
 	
-	; TODO: Werewolf Feed archetype effect for HasBeenEaten -> 1 application
-	; move to quest or feed manager
-	;ED_Mechanics_GarkainBeast_EatenCloak.Cast(playerRef, playerRef)
+	ED_FeralBeast_ApplyHasBeenEaten_Spell.Cast(playerRef, FeedTarget)
 	
 	;diablerie
 	if FeedTarget.HasKeyword(Vampire)
@@ -311,14 +302,7 @@ function HandleDrainThrall(actor FeedTarget)
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
 	
-	; fountain of life
-	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
-		playerRef.RestoreActorValue("Health", 9999.0)
-		playerRef.RestoreActorValue("Magicka", 9999.0)
-		playerRef.RestoreActorValue("Stamina", 9999.0)
-	endif
-
-	
+	ED_Mechanics_DrainAttributeRestore_Spell.Cast(playerRef)
 
 	; adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
@@ -468,12 +452,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
 
-	; fountain of life restore stats
-	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
-		playerRef.RestoreActorValue("Health", 9999.0)
-		playerRef.RestoreActorValue("Magicka", 9999.0)
-		playerRef.RestoreActorValue("Stamina", 9999.0)
-	endif
+	ED_Mechanics_DrainAttributeRestore_Spell.Cast(playerRef)
 
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
@@ -784,12 +763,7 @@ function HandleDrainSleep(actor FeedTarget)
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
 
-
-	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
-		playerRef.RestoreActorValue("Health", 9999.0)
-		playerRef.RestoreActorValue("Magicka", 9999.0)
-		playerRef.RestoreActorValue("Stamina", 9999.0)
-	endif
+	ED_Mechanics_DrainAttributeRestore_Spell.Cast(playerRef)
 
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
@@ -861,12 +835,8 @@ function ApplyCombatFeedEffects()
 	;sfx, maybe should bake into animation?
 	;sfx baked in animation/managed through animevents
 	
-	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
-		playerRef.RestoreActorValue("Health", 9999.0)
-		playerRef.RestoreActorValue("Magicka", 9999.0)
-		playerRef.RestoreActorValue("Stamina", 9999.0)
-	endif
-
+	ED_Mechanics_DrainAttributeRestore_Spell.Cast(playerRef)
+	
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(aFeedTarget, 0.5)
 	
@@ -990,6 +960,7 @@ endstate
 
 idle property IdleVampireStandingFeedFront_Loose auto
 
+spell property ED_FeralBeast_ApplyHasBeenEaten_Spell auto
 Race Property VampireGarkainBeastRace auto
 Race Property DLC1VampireBeastRace auto
 faction Property DLC1PotentialVampireFaction auto
@@ -1014,13 +985,13 @@ globalvariable property DLC1VampireTotalPerksEarned auto
 globalvariable property DLC1VampireNextPerk auto
 globalvariable property DLC1VampireMaxPerks auto
 
-perk property ED_PerkTreeVL_FountainOfLife_Perk auto
 perk property ED_PerkTreeVL_Amaranth_Perk auto
 perk property ED_PerkTree_Deception_65_DreamVisitor_Perk auto
 
 spell property ED_VampirePowers_Amaranth_Spell auto
 spell property ED_VampirePowers_Amaranth_Disintegrate_Spell auto
 spell property ED_VampirePowers_Ab_Masquerade_Spell auto
+spell property ED_Mechanics_DrainAttributeRestore_Spell auto
 
 keyword property ED_Mechanics_Keyword_BystanderStart auto
 keyword property ED_Mechanics_Keyword_PsychicVampireStart auto

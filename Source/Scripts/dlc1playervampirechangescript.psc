@@ -108,7 +108,6 @@ perk property DLC1VampireActivationBlocker auto
 perk property DLC1VampiricGrip auto
 perk property DLC1UnearthlyWill auto
 perk property DLC1GargoylePerk auto
-perk property DLC1VampireBite auto
 
 perk property ED_PerkTreeVL_RoyalGuardian_Perk auto
 perk property ED_PerkTreeVL_FlamesOfColdharbour_Perk auto
