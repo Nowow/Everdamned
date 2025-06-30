@@ -65,6 +65,24 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		;ED_Art_VFX_BatsCloakDUPLICATE001.Play(__targetThing)
+		
+		
+		bool _avar = __targetThing.GetAnimationVariableBool("TDM_TargetLock")
+		debug.Trace("Everdamned DEBUG: Animvar: " + _avar)
+		
+		__targetThing.SetAnimationVariableBool("TDM_TargetLock", !_avar)
+		
+		_avar = __targetThing.GetAnimationVariableBool("TDM_TargetLock")
+		debug.Trace("Everdamned DEBUG: Animvar: " + _avar)
+		
+		
+		;__targetThing.SetAnimationVariableBool("bSprintOK", __isSprintOK)
+		
+		;__targetThing.SetAnimationVariableBool("bSprintOK", !__isSprintOK)
+		;if __isSprintOK
+		;	input.TapKey(input.GetMappedKey("Sprint"))
+		;endif
 		
 		;pl.SetHeadTracking(False)
 		;(__targetThing as actor).SetHeadTracking(False)
@@ -87,12 +105,12 @@ Event OnKeyDown(int keyCode)
 		;
 		;endif
 		
-		float zOffset = __targetThing.GetHeadingAngle(pl)
-		__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
+		;float zOffset = __targetThing.GetHeadingAngle(pl)
+		;__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
 		;pl.StartVampireFeed(__targetThing as actor)
 		
 		;if counter % 2 == 0
-			pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
+		;	pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
 		;else
 		;	pl.PlayIdleWithTarget(pa_HugA, __targetThing)
 		;endif
@@ -136,13 +154,7 @@ Event OnKeyDown(int keyCode)
 		
 		
 		
-		;__targetThing.SetAnimationVariableBool("bSprintOK", !__isSprintOK)
-		;__targetThing.SetAnimationVariableBool("bSprintOK", __isSprintOK)
 		
-		;__targetThing.SetAnimationVariableBool("bSprintOK", !__isSprintOK)
-		;if __isSprintOK
-		;	input.TapKey(input.GetMappedKey("Sprint"))
-		;endif
 	
 		
 			

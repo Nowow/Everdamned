@@ -38,5 +38,11 @@ regen.fixed = true
 type = "Adaptive"
 alias = "Variable04"
 
+[ED_PlayerHP1pct]
+type = "Adaptive"
+alias = "Variable03"
+default.formula = "GetActorValue('Health', Base) * 0.01"
+default.type = "Constant"
+
 [Include]
-"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_IcyWindsTarget", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer"]
+"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_IcyWindsTarget", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct"]

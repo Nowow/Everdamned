@@ -162,11 +162,13 @@ function HandleBeastBite()
 	actor FeedTarget = ED_FeedVictim.GetReference() as actor
 	debug.Trace("Everdamned DEBUG: Feed Manager got actor " + FeedTarget + " captured by ED_Mechanics_Quest_BeastFeedVictimFinder")
 	ED_Mechanics_Quest_BeastFeedVictimFinder.Stop()
+	
+	ED_FeralBeast_ApplyHasBeenEaten_Trigger_Spell.Cast(playerRef, FeedTarget)
 
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
 	
-	ED_FeralBeast_ApplyHasBeenEaten_Spell.Cast(playerRef, FeedTarget)
+	
 	
 	;diablerie
 	if FeedTarget.HasKeyword(Vampire)
@@ -960,7 +962,7 @@ endstate
 
 idle property IdleVampireStandingFeedFront_Loose auto
 
-spell property ED_FeralBeast_ApplyHasBeenEaten_Spell auto
+spell property ED_FeralBeast_ApplyHasBeenEaten_Trigger_Spell auto
 Race Property VampireGarkainBeastRace auto
 Race Property DLC1VampireBeastRace auto
 faction Property DLC1PotentialVampireFaction auto
