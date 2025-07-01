@@ -5,6 +5,10 @@ Race Property ED_VampireGarkainBeastRace auto
 VisualEffect property FeedBloodVFX auto
 Idle Property IdleVampireTransformation auto
 Explosion Property FXVampChangeExplosion auto
+VisualEffect property ED_Art_VFX_VampireTransform_Begin auto
+VisualEffect property ED_Art_VFX_VampireTransform_BatCloak auto
+hazard property ED_Art_Hazard_VampireTransformBats auto
+
 
 Quest Property ED_PlayerVampireGarkainQuest auto
 
@@ -19,8 +23,15 @@ Event OnEffectStart(Actor Target, Actor Caster)
 		
 			
 			RegisterForAnimationEvent(Target, "SetRace")
+			
+			objectreference __prop = Target.placeatme(ED_Art_Hazard_VampireTransformBats)
+			ED_Art_VFX_VampireTransform_Begin.Play(__prop, 10)
+			;ED_Art_VFX_VampireTransform_BatCloak.Play(__prop, 6.0)
 			Target.PlayIdle(IdleVampireTransformation)
-			Utility.Wait(10)
+			Utility.Wait(3.0)
+			;ED_Art_VFX_VampireTransform_Begin.Play(__prop, 6.0)
+			
+			Utility.Wait(7.0)
 			TransformIfNecessary(Target)
         
     endif

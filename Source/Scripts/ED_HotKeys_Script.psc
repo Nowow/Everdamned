@@ -33,7 +33,6 @@ spell property ED_VampirePowers_Power_DeadlyStrengthTog auto
 spell property ED_VampirePowers_Power_Celerity auto
 spell property ED_VampirePowers_Power_ExtendedPerceptionTog auto
 spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
-visualeffect property ED_Art_VFX_BatsCloakDUPLICATE001 auto
 effectshader property ed_Test_Art_Shader_MagicArmorEbonyFleshFXS auto
 keyword property ED_Mechanics_Keyword_NecroticFleshCIF auto
 effectshader property ED_TestShader2_empty auto
@@ -52,7 +51,12 @@ idle property ED_KM_JumpFeed auto
 idle property pa_KillMoveED_bleedoutFinisher auto
 spell property ED_Art_Spell_MouthMuzzleFlash auto
 
+visualeffect property ED_Art_VFX_VampireTransform_Begin auto
+visualeffect property ED_Art_VFX_VampireTransform_End auto
+hazard property ED_Art_Hazard_VampireTransformBats auto
+
 int counter
+bool __switch
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
 		return
@@ -67,14 +71,37 @@ Event OnKeyDown(int keyCode)
 		
 		;ED_Art_VFX_BatsCloakDUPLICATE001.Play(__targetThing)
 		
+		if !__switch
+			;pl.SetSubGraphFloatVariable("fdampRate", 0.20)
+			;pl.SetSubGraphFloatVariable("ftoggleBlend", 1.3)
+			
+			objectreference aaa = pl.placeatme(ED_Art_Hazard_VampireTransformBats)
+			ED_Art_VFX_VampireTransform_Begin.Play(aaa)
+			
+			debug.Trace("Everdamned DEBUG: A")
+		else
+			;pl.SetSubGraphFloatVariable("fdampRate", 0.02)
+			;pl.SetSubGraphFloatVariable("ftoggleBlend", 0.0)
+			
+			;ED_Art_VFX_VampireTransform_End.Play(pl)
+			
+			debug.Trace("Everdamned DEBUG: B")
+		endif
 		
-		bool _avar = __targetThing.GetAnimationVariableBool("TDM_TargetLock")
-		debug.Trace("Everdamned DEBUG: Animvar: " + _avar)
+		__switch = !__switch
+		;pl.SetSubGraphFloatVariable("ftoggleBlend", 1.3)
 		
-		__targetThing.SetAnimationVariableBool("TDM_TargetLock", !_avar)
+		;
+		;pl.SetSubGraphFloatVariable("ftoggleBlend", 0.0)
 		
-		_avar = __targetThing.GetAnimationVariableBool("TDM_TargetLock")
-		debug.Trace("Everdamned DEBUG: Animvar: " + _avar)
+		
+		;bool _avar = __targetThing.GetAnimationVariableBool("TDM_TargetLock")
+		;debug.Trace("Everdamned DEBUG: Animvar: " + _avar)
+		
+		;__targetThing.SetAnimationVariableBool("TDM_TargetLock", !_avar)
+		
+		;_avar = __targetThing.GetAnimationVariableBool("TDM_TargetLock")
+		;debug.Trace("Everdamned DEBUG: Animvar: " + _avar)
 		
 		
 		;__targetThing.SetAnimationVariableBool("bSprintOK", __isSprintOK)

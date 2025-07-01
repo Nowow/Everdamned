@@ -18,6 +18,8 @@ keyword property ED_Mechanics_Keyword_IsInSunlight auto
 race property ED_VampireGarkainBeastRace auto
 race property DLC1VampireBeastRace auto
 
+globalvariable property ED_Mechanics_Global_ChainedBeastAllowed auto
+
 
 function OnEffectStart(actor akTarget, actor akCaster)
 	utility.Wait(0.5)
@@ -47,6 +49,7 @@ function OnEnterBleedout()
 	if PlayerProtectionPlan.GetActorRef() == PlayerRef && RaceNotBeast && IsInSunlight
 		__planEngaged = true
 		debug.Trace("Everdamned DEBUG: Player Protection Plan engaged")
+		ED_Mechanics_Global_ChainedBeastAllowed.SetValue(0.0)
 		utility.Wait(ED_WaitUntilResurrect)
 		ED_RezSound.Play(PlayerRef)
 		

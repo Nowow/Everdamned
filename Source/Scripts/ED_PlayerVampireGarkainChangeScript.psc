@@ -59,6 +59,10 @@ imagespacemodifier property VampireChange auto
 sound property VampireIMODSound auto
 effectshader property DLC1VampireChangeBackFXS auto
 effectshader property DLC1VampireChangeBack02FXS auto
+visualeffect property ED_Art_VFX_VampireTransform_End auto
+effectshader property ED_Art_Shader_VampireTransformWithHoles_End auto
+
+
 
 formlist property ED_VampirePowers_GarkainBeast_Powers_List auto
 formlist property DLC1VampireSpellsPowers auto
@@ -158,6 +162,10 @@ Function StartTracking()
     if (__trackingStarted)
         return
     endif
+	
+	;change fxs ending
+	
+	ED_Art_VFX_VampireTransform_End.Play(playerRef, 3.0)
 
     __trackingStarted = true
 	__killmoveStarted = false

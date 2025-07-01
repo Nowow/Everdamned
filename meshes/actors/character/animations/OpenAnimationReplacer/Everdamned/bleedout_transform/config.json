@@ -1,0 +1,15 @@
+{
+    "name": "bleedout_transform",
+    "priority": 4255412,
+    "conditions": [
+        {
+            "condition": "HasMagicEffect",
+            "requiredVersion": "1.0.0.0",
+            "Magic effect": {
+                "pluginName": "Everdamned.esp",
+                "formID": "0781FB"
+            },
+            "Active effects only": true
+        }
+    ]
+}
