@@ -290,7 +290,14 @@ endfunction
 
 Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 
+	if akSeduced.IsInFaction(PlayerMarriedFaction)
+		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
+		debug.Trace("Everdamned INFO: Seduced is married to player, not calculating score, auto success")
+		return
+	endif
+
 	int PlayerSeductionScore = CalculateScore(akSeducer, akSeduced)
+	
 
 	debug.Trace("Everdamned INFO: Seduction score is: " + PlayerSeductionScore)
 	
@@ -304,8 +311,6 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	else
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(0)
 	endif
-	
-	debug.Notification("Feed dialogue score calc finished")
 	
 	;if Intimidation_score >= Intimidation_Difficulty_Score
 	;	ED_Mechanics_FeedDialogue_IntimidationResult.SetValue(1)
@@ -362,6 +367,9 @@ Faction Property CrimeFactionHjaalmarch Auto
 Faction Property CrimeFactionPale Auto
 Faction Property CrimeFactionWinterhold Auto
 Faction Property CrimeFactionFalkreath Auto
+
+; spouse
+Faction Property PlayerMarriedFaction auto
 
 ; difficulty modificator factions
 Faction Property MarkarthTempleofDibellaFaction Auto

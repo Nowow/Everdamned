@@ -54,6 +54,7 @@ spell property ED_Art_Spell_MouthMuzzleFlash auto
 visualeffect property ED_Art_VFX_VampireTransform_Begin auto
 visualeffect property ED_Art_VFX_VampireTransform_End auto
 hazard property ED_Art_Hazard_VampireTransformBats auto
+idle property ED_Idle_Seduction_Blowkiss auto
 
 int counter
 bool __switch
@@ -69,23 +70,25 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		pl.PlayIdle(ED_Idle_Seduction_Blowkiss)
+		
 		;ED_Art_VFX_BatsCloakDUPLICATE001.Play(__targetThing)
 		
 		if !__switch
 			;pl.SetSubGraphFloatVariable("fdampRate", 0.20)
 			;pl.SetSubGraphFloatVariable("ftoggleBlend", 1.3)
 			
-			objectreference aaa = pl.placeatme(ED_Art_Hazard_VampireTransformBats)
-			ED_Art_VFX_VampireTransform_Begin.Play(aaa)
+			;objectreference aaa = pl.placeatme(ED_Art_Hazard_VampireTransformBats)
+			;ED_Art_VFX_VampireTransform_Begin.Play(aaa)
 			
-			debug.Trace("Everdamned DEBUG: A")
+			;debug.Trace("Everdamned DEBUG: A")
 		else
 			;pl.SetSubGraphFloatVariable("fdampRate", 0.02)
 			;pl.SetSubGraphFloatVariable("ftoggleBlend", 0.0)
 			
 			;ED_Art_VFX_VampireTransform_End.Play(pl)
 			
-			debug.Trace("Everdamned DEBUG: B")
+			;debug.Trace("Everdamned DEBUG: B")
 		endif
 		
 		__switch = !__switch
