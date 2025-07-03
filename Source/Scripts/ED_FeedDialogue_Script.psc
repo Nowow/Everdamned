@@ -106,7 +106,15 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	int __playerSeductionScore =  akSeducer.GetAV("Speechcraft") as int
 	
 	; -80 if aquaintance, 0 if lover
-	__playerSeductionScore += (akSeducer.GetRelationshipRank(akSeduced) * 20) - 80
+	int __relationshipRank = akSeducer.GetRelationshipRank(akSeduced)
+	
+	if __relationshipRank > 0
+		__playerSeductionScore += (__relationshipRank * 20) - 80
+	else
+		; you are unaquainted, really hard to seduce. separate fail responses
+		__playerSeductionScore += -30
+	endif
+	
 	
 	; has parther that is not seducer
 	bool seducedHasPartner = (akSeduced.HasAssociation(Spouse) || akSeduced.HasAssociation(Courting)) && !(akSeduced.HasAssociation(Spouse, akSeducer))
