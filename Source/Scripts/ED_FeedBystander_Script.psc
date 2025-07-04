@@ -3,7 +3,10 @@ Scriptname ED_FeedBystander_Script extends Quest
 float property NoticeTime auto
 
 GlobalVariable Property DLC1VampireFeedStartTime  Auto  
-GlobalVariable Property TimeScale  Auto  
+GlobalVariable Property TimeScale Auto
+
+message property ED_Mechanics_Message_BystanderNotAlerted auto
+message property ED_Mechanics_Message_BystanderAlerted auto
 
 referencealias Property Victim auto
 
@@ -25,17 +28,21 @@ Function CheckBystandersSendAlarmAndStopQuest()
 	Debug.Trace("Everdamned DEBUG: Bystander Quest Victim crime faction: " + VictimCrimeFaction)
 
 	bool BystanderCares = CheckBystanders()
-
- 	Debug.Trace("Everdamned DEBUG: Bystander Quest determined someon cares")
+	
+	message __displayMessage = ED_Mechanics_Message_BystanderNotAlerted
+	
+	utility.wait(4.0)
 
 	if bystanderCares && DurationInRealTimeSeconds <= NoticeTime
-		Debug.Trace("Everdamned DEBUG: And its not too late")
-; 	Debug.Trace(self + "CheckBystandersAlarmAndStopQuest calling VictimCrimeFaction.SendAssaultAlarm() because DurationInRealTimeSeconds <= 30")
-	   VictimCrimeFaction.SendAssaultAlarm()
+		Debug.Trace("Everdamned INFO: And its not too late")
+		__displayMessage = ED_Mechanics_Message_BystanderAlerted
+		VictimCrimeFaction.SendAssaultAlarm()
 	else
-		Debug.Trace("Everdamned DEBUG: But its too late!!!")
+		Debug.Trace("Everdamned INFO: But its too late!!! HA-HAA!")
 	endif
 
+	__displayMessage.Show()
+	
 	stop()
 
 EndFunction
@@ -61,6 +68,7 @@ bool Function CheckBystanders()
 			Debug.Trace("Everdamned DEBUG: They detect: " + detected + ", they have los: " + theyHaveLos + ", concious: " + areConcious)
 			
 			if detected && theyHaveLos && areConcious
+				Debug.Trace("Everdamned INFO: Bystander Quest determined someon cares")
 				RETURN True
 			endif
 

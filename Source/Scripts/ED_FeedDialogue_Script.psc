@@ -108,7 +108,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	; -80 if aquaintance, 0 if lover
 	int __relationshipRank = akSeducer.GetRelationshipRank(akSeduced)
 	
-	if __relationshipRank > 0
+	if __relationshipRank > 0 || akSeduced.GetCurrentLocation().HasKeyword(LocTypeInn)
 		__playerSeductionScore += (__relationshipRank * 20) - 80
 	else
 		; you are unaquainted, really hard to seduce. separate fail responses
@@ -353,6 +353,7 @@ keyword property USKPGiftOfCharity auto
 Keyword Property ClothingRich Auto
 Keyword Property ClothingPoor Auto
 Keyword Property VampireKeyword Auto
+keyword property LocTypeInn auto
 
 magiceffect property FortifyPersuasionFFSelf auto
 magiceffect property PerkT01Dibella auto
