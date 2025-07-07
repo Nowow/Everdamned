@@ -56,6 +56,12 @@ visualeffect property ED_Art_VFX_VampireTransform_End auto
 hazard property ED_Art_Hazard_VampireTransformBats auto
 idle property ED_Idle_Seduction_Blowkiss auto
 
+message property ED_Mechanics_FeedDialogue_Message_SomeTestM auto
+topic property ED_HelloTopic_FeedDialogue auto
+topic property ED_CommentOnResult_PostMortem_FeedDialogue_Topic auto
+topic property ED_Recommendation_PostMortem_FeedDialogue_Topic auto
+activator property FXEmptyActivator auto
+
 int counter
 bool __switch
 Event OnKeyDown(int keyCode)
@@ -70,11 +76,45 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		pl.PlayIdle(ED_Idle_Seduction_Blowkiss)
+		objectreference __aaa = pl.placeatme(FXEmptyActivator)
+		
+		utility.wait(1.0)
+		
+		;__aaa.Say(ED_HelloTopic_FeedDialogue, pl, false)
+		__aaa.Say(ED_Recommendation_PostMortem_FeedDialogue_Topic, pl, true)
+		
+		utility.wait(3.0)
+		
+		__aaa.Say(ED_CommentOnResult_PostMortem_FeedDialogue_Topic, pl, true)
+		
+		utility.wait(3.0)
+		
+		__aaa.Say(ED_Recommendation_PostMortem_FeedDialogue_Topic, pl, true)
+		
+		utility.wait(3.0)
+		
+		
+		__aaa.disable()
+		__aaa.delete()
+		
+		 __aaa = pl.placeatme(FXEmptyActivator)
+		
+		utility.wait(1.0)
+		
+		;__aaa.Say(ED_HelloTopic_FeedDialogue, pl, false)
+		__aaa.Say(ED_CommentOnResult_PostMortem_FeedDialogue_Topic, pl, true)
+		
+		
+		
+		;message.resethelpmessage("ed_test_hlpmsg")
+		;ED_Mechanics_FeedDialogue_Message_SomeTestM.ShowAsHelpMessage("ed_test_hlpmsg", 5.0, 0.0, -1)
+		
+		;pl.PlayIdle(ED_Idle_Seduction_Blowkiss)
 		
 		;ED_Art_VFX_BatsCloakDUPLICATE001.Play(__targetThing)
 		
 		if !__switch
+			
 			;pl.SetSubGraphFloatVariable("fdampRate", 0.20)
 			;pl.SetSubGraphFloatVariable("ftoggleBlend", 1.3)
 			
@@ -83,6 +123,7 @@ Event OnKeyDown(int keyCode)
 			
 			;debug.Trace("Everdamned DEBUG: A")
 		else
+			
 			;pl.SetSubGraphFloatVariable("fdampRate", 0.02)
 			;pl.SetSubGraphFloatVariable("ftoggleBlend", 0.0)
 			
