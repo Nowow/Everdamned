@@ -7,6 +7,7 @@ Function Fragment_5(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 (GetOwningQuest() as Ed_FeedDialogue_Script).RollFeedDialogueChecks(PlayerRef, akSpeakerRef as Actor)
+utility.wait(15)
 ;END CODE
 EndFunction
 ;END FRAGMENT

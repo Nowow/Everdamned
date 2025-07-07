@@ -8,6 +8,8 @@ Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 ED_Mechanics_FeedDialogue_Cooldown3d_Spell.Cast(akSpeaker, akSpeaker)
 
+playerRef.placeatme(ED_Misc_Activator_FeedDialogueFailLines)
+
 if !(akSpeakerRef.IsInDialogueWithPlayer())
 	debug.Trace("Everdamned: Player failed seduction check and left dialogue, calling ResetRoot for him")
 	playerRef.PlayIdle(ResetRoot)
@@ -25,3 +27,5 @@ Spell Property ED_Mechanics_FeedDialogue_Cooldown3d_Spell Auto
 Idle Property ResetRoot  Auto 
 
 actor property playerRef auto
+
+Activator Property ED_Misc_Activator_FeedDialogueFailLines  Auto  

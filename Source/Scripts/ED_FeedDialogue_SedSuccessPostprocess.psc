@@ -18,8 +18,6 @@ Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 int _cntr
 
-actor PlayerRef = Game.GetPlayer()
-
 ; for walk-away type situations
 if !(akSpeakerRef.IsInDialogueWithPlayer())
 	debug.Trace("Everdamned: First check determined player didnt wait to feed, calling ResetRoot")
@@ -83,6 +81,7 @@ ED_FeedManager_Script_Quest.HandleDialogueSeduction(akSpeaker)
 int currentFactionRank = akSpeaker.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac)
 if currentFactionRank < 0
 	akSpeaker.SetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac, 0)
+	playerRef.placeatme(ED_Misc_Activator_FeedDialogueSuccessLines)
 	debug.trace("Victim seduced fac is now to seduced fac at rank 0")
 elseif currentFactionRank < 2
 	akSpeaker.SetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac, (currentFactionRank + 1))
@@ -132,3 +131,7 @@ Race Property OrcRace Auto
 Race Property OrcRaceVampire Auto 
 
 SPELL Property FeedDialogue_Cooldown_Spell  Auto  
+
+Activator Property ED_Misc_Activator_FeedDialogueSuccessLines  Auto  
+
+actor property playerRef auto

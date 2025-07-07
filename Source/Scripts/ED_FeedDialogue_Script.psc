@@ -111,11 +111,14 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	; from -80 to 0
 	if __relationshipRank > 0 || akSeduced.GetCurrentLocation().HasKeyword(LocTypeInn)
 		__playerSeductionScore += (__relationshipRank * 20) - 80
-		
+		if __relationshipRank > 3
+			ConditionalsScript.Bonus_HighRelationship = true
+		endif
 	;becomes -110
 	else
 		; you are unaquainted, really hard to seduce. separate fail responses
 		__playerSeductionScore += -30
+		ConditionalsScript.Penalty_LowRelationship = true
 	endif
 	
 	
@@ -123,16 +126,12 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	bool seducedHasPartner = __relationshipRank < 4 && (akSeduced.HasAssociation(Spouse) || akSeduced.HasAssociation(Courting)) && !(akSeduced.HasAssociation(Spouse, akSeducer))
 	if seducedHasPartner
 		__playerSeductionScore += akSeduced.GetHighestRelationshipRank() * -10
+		ConditionalsScript.Penalty_TargetHasSomeone = true
 	endif
 	
 	; faction relationships
 	CalculateFactionDifficulty(akSeducer, akSeduced)
 	__playerSeductionScore += SeductionFactionScore
-	
-	; if thane
-	if CheckIfThanePrivilege(akSeduced)
-		__playerSeductionScore += 20
-	endif
 	
 	; if BlueBlood
 	if akSeduced.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -143,12 +142,15 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	__playerSeductionScore += GetPersonalModifier(akSeduced)
 
 	; AI data
+	
+	
+	
 	__playerSeductionScore += -5 *  (akSeduced.GetAV("Morality") as int)
 	__playerSeductionScore += -10 * (akSeduced.GetAV("Aggression") as int)
 	
-	float seducedCondifence = akSeduced.GetAV("Confidence")	as int 
-	if seducedCondifence == 0 || seducedCondifence == 4
-		; cowardly or foolhardy
+	int seducedCondifence = akSeduced.GetAV("Confidence") as int 
+	if seducedCondifence == 0
+		; cowardly
 		__playerSeductionScore += -20
 	endif
 	
@@ -160,8 +162,6 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	if akSeducer.HasPerk(Persuasion)
 		__playerSeductionScore += 10
 	endif
-	
-
 	
 	if akSeducer.HasPerk(HypnoticGaze)
 		__playerSeductionScore += 10
@@ -178,14 +178,22 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	;CLOTHING
 	if akSeducer.WornHasKeyword(ClothingRich)
 		__playerSeductionScore += 20
+		ConditionalsScript.Bonus_Clothes = true
 	elseif akSeducer.WornHasKeyword(ClothingPoor)
 		__playerSeductionScore += -20
 	endif
 	
 	if akSeduced.WornHasKeyword(ClothingRich)
 		__playerSeductionScore -= 20
+		ConditionalsScript.Bonus_Clothes = false
 	elseif akSeduced.WornHasKeyword(ClothingPoor)
 		__playerSeductionScore += 20
+	endif
+	
+	; if thane
+	if CheckIfThanePrivilege(akSeduced)
+		__playerSeductionScore += 20
+		ConditionalsScript.Bonus_Thane = true
 	endif
 		
 	;race match
@@ -194,8 +202,12 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	string playerRace = akSeducer.GetLeveledActorBase().GetRace().GetName()
 	string seducedRace = akSeduced.GetLeveledActorBase().GetRace().GetName()
 	
-	if !HasDibellasBlessing && playerRace != seducedRace
-		__playerSeductionScore += -10
+	if playerRace != seducedRace
+		if HasDibellasBlessing
+			ConditionalsScript.Bonus_Dibella = true
+		else
+			__playerSeductionScore += -10
+		endif
 	endif 
 	
 	int pc_sex
@@ -210,6 +222,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		; agent of dibella
 		if akSeducer.HasMagicEffect(PerkT01Dibella)
 			__playerSeductionScore += 10
+			ConditionalsScript.Bonus_Dibella = true
 		endif
 	endif	
 	
@@ -306,12 +319,22 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 		debug.Trace("Everdamned INFO: Seduced is married to player, not calculating score, auto success")
 		return
 	endif
-
+	
 	int PlayerSeductionScore = CalculateScore(akSeducer, akSeduced)
 	
-
 	debug.Trace("Everdamned INFO: Seduction score is: " + PlayerSeductionScore)
 	
+	ConditionalsScript.SetLastScore(PlayerSeductionScore)
+	
+	debug.Trace("Everdamned DEBUG: Feed Dialogue LastScore: " + ConditionalsScript.LastScore)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue LastScore_Category: " + ConditionalsScript.LastScore_Category)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Dibella: " + ConditionalsScript.Bonus_Dibella)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Clothes: " + ConditionalsScript.Bonus_Clothes)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Thane: " + ConditionalsScript.Bonus_Thane)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_HighRelationship: " + ConditionalsScript.Bonus_HighRelationship)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_TargetHasSomeone: " + ConditionalsScript.Penalty_TargetHasSomeone)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_LowRelationship: " + ConditionalsScript.Penalty_LowRelationship)
+
 	if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
 		debug.trace("Everdamned INFO: Feed dialogue score override engaged, not actually changing results")
 		return
@@ -415,3 +438,6 @@ Faction Property CompanionsCirclePlusKodlak Auto
 Faction property JobBardFaction auto
 
 FormList Property ED_Mechanics_OrcRace_List Auto
+
+ED_FeedDialogueConditionals_Script property ConditionalsScript auto
+
