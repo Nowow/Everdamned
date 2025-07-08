@@ -3,6 +3,10 @@ Scriptname ED_FeedDialogue_Lines_Script extends ObjectReference
 
 function OnLoad()
 	
+	debug.Trace("Everdamned DEBUG: Feed Dialogue LINES activator loaded!")
+	
+	utility.wait(2.0)
+	
 	Say(FirstTopic, playerRef, false)
 	utility.Wait(FirstTopicLength)
 	
