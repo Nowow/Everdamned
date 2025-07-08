@@ -523,7 +523,19 @@ function HandleDialogueSeduction(actor FeedTarget)
 	;start actual feed animation
 	; can use StartVampireFeed because we actually want to sheathe if yet havent
 	; but may be buggy, maybe revert to playidlewithtarget(IdleVampireStandingFeedFront_Loose)
-	PlayerRef.StartVampireFeed(FeedTarget)
+	
+	; UPD: using paired anim because StartVampireFeed provokes attack response?
+	;PlayerRef.StartVampireFeed(FeedTarget)
+	
+	float zOffset = FeedTarget.GetHeadingAngle(playerRef)
+	FeedTarget.SetAngle(FeedTarget.GetAngleX(), FeedTarget.GetAngleY(), FeedTarget.GetAngleZ() + zOffset)
+	
+	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
+	
+	if sceneTarget.GetRelationshipRank(playerRef) == 0
+		debug.trace("Everdamned INFO: Feed Dialogue determined Seduced was an Aquaintance, setting to Friendly")
+		sceneTarget.SetRelationshipRank(playerRef, 1)
+	endif
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False

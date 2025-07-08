@@ -6,11 +6,8 @@ Scriptname ED_Seduction_SuccessWalkaway_Script Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
+ED_Mechanics_FeedDialogue_Seduction_WalkawayHappeend.SetValue(1)
 ED_Mechanics_FeedDialogue_Cooldown3d_Spell.Cast(akSpeaker, akSpeaker)
-
-debug.Trace("Everdamned INFO: Player successfully seduced target, but was in a hurry and left before dialogue concluded, now target is on cooldown")
-playerRef.PlayIdle(ResetRoot)
-akSpeaker.PlayIdle(ResetRoot)
 
 ED_Mechanics_FeedDialogue_Message_SuccessWalkaway.Show()
 ;END CODE
@@ -26,3 +23,5 @@ idle property ResetRoot auto
 actor property playerRef auto
 
 spell property ED_Mechanics_FeedDialogue_Cooldown3d_Spell auto
+
+GlobalVariable Property ED_Mechanics_FeedDialogue_Seduction_WalkawayHappeend  Auto  

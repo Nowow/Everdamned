@@ -8,6 +8,19 @@ Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 ; listened by ED_FeedDialogue_VictimSFX script
 SendModEvent("feedDialogue_last_scene_started")
+
+; for walk-away type situations
+if !(akSpeakerRef.IsInDialogueWithPlayer())
+	debug.Trace("Everdamned: First check determined player didnt wait to feed, calling ResetRoot")
+	playerRef.PlayIdle(ResetRoot)
+	akSpeaker.PlayIdle(ResetRoot)
+	return
+endif
+
+ED_FeedManager_Script_Quest.HandleDialogueSeduction(akSpeaker)
+
+; seduced faction rank increment moved to controller scene fragments
+; because lines activator need to be placed after dialogue ends
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -18,13 +31,10 @@ Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 int _cntr
 
-; for walk-away type situations
-if !(akSpeakerRef.IsInDialogueWithPlayer())
-	debug.Trace("Everdamned: First check determined player didnt wait to feed, calling ResetRoot")
-	playerRef.PlayIdle(ResetRoot)
-	akSpeaker.PlayIdle(ResetRoot)
-	return
-endif
+;make em feel good
+ED_Mechanics_FeedDialogue_FeedExpression_Spell.Cast(akSpeakerRef, akSpeakerRef)
+
+return
 
 ; race/gender specific sfx
 ; can move to Victim SFX spell
@@ -59,37 +69,17 @@ else
 
 endif
 
-;make em feel good
-ED_Mechanics_FeedDialogue_FeedExpression_Spell.Cast(akSpeakerRef, akSpeakerRef)
 
-utility.wait(1)
+;utility.wait(1)
 
 ;recheck, if player cant wait 1 sec
-if !(akSpeakerRef.IsInDialogueWithPlayer())
-	debug.Trace("Everdamned: Second check determined player didnt wait to feed, calling ResetRoot")
-	playerRef.PlayIdle(ResetRoot)
-	akSpeaker.PlayIdle(ResetRoot)
+;if !(akSpeakerRef.IsInDialogueWithPlayer())
+;	debug.Trace("Everdamned: Second check determined player didnt wait to feed, calling ResetRoot")
+;	playerRef.PlayIdle(ResetRoot)
+;	akSpeaker.PlayIdle(ResetRoot)
 	;maybe wave?
-	return
-endif
-
-ED_FeedManager_Script_Quest.HandleDialogueSeduction(akSpeaker)
-
-; TODO: will enable when figure out how to ensure Mesmerize idle will play, also need to add headtrack-off mesmerized idle
-;ED_MesmerizeSafe_Scene_FeedDialogue.Start()
-
-int currentFactionRank = akSpeaker.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac)
-if currentFactionRank < 0
-	akSpeaker.SetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac, 0)
-	playerRef.placeatme(ED_Misc_Activator_FeedDialogueSuccessLines)
-	debug.trace("Victim seduced fac is now to seduced fac at rank 0")
-elseif currentFactionRank < 2
-	akSpeaker.SetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac, (currentFactionRank + 1))
-	debug.trace("Victim seduced fac is now to seduced fac at rank " + (currentFactionRank + 1))
-endif
-
-; cooldown handled by ED_HpDrainedTimer av
-;FeedDialogue_Cooldown_Spell.Cast(akSpeaker, akSpeaker)
+;	return
+;endif
 ;END CODE
 EndFunction
 ;END FRAGMENT

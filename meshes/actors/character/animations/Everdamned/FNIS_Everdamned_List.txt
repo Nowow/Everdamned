@@ -73,7 +73,8 @@ s -a,h ed_seduction_serious_start ed_empty.hkx
 ' Touch hair + playful
 s -a,h ed_seduction_touchHair_start ed_empty.hkx
 + -a,h ed_seduction_touchHair_playfulInt ed_seduction_playful_interested.hkx
-+ -a,h,Ted_seduction_touchHair_trigger/2.8 ed_seduction_touchHair_touchHair ed_seduction_flirt_touchHair.hkx
+'+ -a,h,Ted_seduction_touchHair_trigger/2.8 ed_seduction_touchHair_touchHair ed_seduction_flirt_touchHair.hkx
++ -a,h ed_seduction_touchHair_touchHair ed_seduction_flirt_touchHair.hkx
 + -a,h ed_seduction_touchHair_forceNext ed_seduction_playful_idle.hkx
 + -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_touchHair_playfulEnd ed_seduction_playful_end.hkx
 
