@@ -43,15 +43,16 @@ sceneTarget = ED_FeedDialogue_Target.GetReference() as actor
 
 playerRef.PlayIdle(ED_Idle_Seduction_PlayerSeqStart)
 
+ED_Mechanics_FeedDialogue_CrutchAnimTrigger_Spell.Cast(sceneTarget, sceneTarget)
+
+sceneTarget.SetLookAt(playerRef)
+
+
 ; TODO: furniture exiting
 ;debug.SendAnimationEvent(sceneTarget, "IdleChairExitStart")
 
 ;this does not work
 ;sceneTarget.playIdle(Chair)
-
-ED_Mechanics_FeedDialogue_Signal_Spell.Cast(sceneTarget, sceneTarget)
-
-sceneTarget.SetLookAt(playerRef)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -66,7 +67,7 @@ Actor Property sceneTarget  Auto
 
 Idle Property Chair  Auto  
 
-SPELL Property ED_Mechanics_FeedDialogue_Signal_Spell  Auto  
+SPELL Property ED_Mechanics_FeedDialogue_CrutchAnimTrigger_Spell  Auto  
 
 Idle Property ED_Idle_Seduction_PlayerSeqStart  Auto  
 

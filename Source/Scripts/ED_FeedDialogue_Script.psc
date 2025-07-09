@@ -316,6 +316,7 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 
 	if akSeduced.IsInFaction(PlayerMarriedFaction)
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
+		ConditionalsScript.SetLastScore(100)
 		debug.Trace("Everdamned INFO: Seduced is married to player, not calculating score, auto success")
 		return
 	endif
