@@ -63,7 +63,9 @@ topic property ED_Recommendation_PostMortem_FeedDialogue_Topic auto
 activator property FXEmptyActivator auto
 
 idle property ED_Idle_Seduction_TouchHairPlayful auto
- 
+
+referencealias property ED_FeedDialogue_Target auto
+scene property ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene auto
 
 
 int counter
@@ -80,10 +82,8 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		
-		float __target_Z_Offset = pl.GetAngleZ() + __targetThing.GetHeadingAngle(pl)
-		__targetThing.TranslateTo(__targetThing.X + 3.0, __targetThing.Y, __targetThing.Z, __targetThing.GetAngleX(), __targetThing.GetAngleY(), __target_Z_Offset, 1.0, afMaxRotationSpeed = 0.0)
- 
+		ED_FeedDialogue_Target.ForceRefTo(__targetThing)
+		ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene.Start()
 		
 		;pl.PlayIdle(ED_Idle_Seduction_TouchHairPlayful)
 		

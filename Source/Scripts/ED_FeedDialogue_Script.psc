@@ -311,13 +311,16 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 
 endfunction
 
-
+bool __finished = true
 Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
+	__finished = false
+	
 
 	if akSeduced.IsInFaction(PlayerMarriedFaction)
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
 		ConditionalsScript.SetLastScore(100)
 		debug.Trace("Everdamned INFO: Seduced is married to player, not calculating score, auto success")
+		__finished = true
 		return
 	endif
 	
@@ -338,6 +341,7 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 
 	if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
 		debug.trace("Everdamned INFO: Feed dialogue score override engaged, not actually changing results")
+		__finished = true
 		return
 	endif
 	
@@ -346,6 +350,10 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	else
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(0)
 	endif
+	
+	__finished = true
+	
+	
 	
 	;if Intimidation_score >= Intimidation_Difficulty_Score
 	;	ED_Mechanics_FeedDialogue_IntimidationResult.SetValue(1)
@@ -369,6 +377,19 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	
 Endfunction
 
+int __failsafeCounter
+function WaitForScoreCalcToFinish()
+	
+	while !__finished || __failsafeCounter <= 150
+		__failsafeCounter += 1
+		utility.wait(0.1)
+	endwhile
+	
+	if __failsafeCounter > 150
+		debug.Trace("Everdamned WARNING: Feed Dialogue score calc waiter waiter more than 15 sec for score calc, something went wrong")
+	endif
+
+endfunction
 
 FavorJarlsMakeFriendsScript property FavorJarlsMakeFriends auto
 

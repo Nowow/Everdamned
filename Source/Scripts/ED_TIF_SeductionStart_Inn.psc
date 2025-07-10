@@ -7,15 +7,7 @@ Function Fragment_8(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
-ControllerScene.Start()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_5
-Function Fragment_5(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
+ED_Controller_FeedDialogue_Scene.Start()
 (GetOwningQuest() as Ed_FeedDialogue_Script).RollFeedDialogueChecks(PlayerRef, akSpeakerRef as Actor)
 ;END CODE
 EndFunction
@@ -31,4 +23,4 @@ Idle Property ED_Idle_Seduction_PlayerSeqStart  Auto
 
 ReferenceAlias Property ED_FeedDialogue_Target  Auto  
 
-Scene Property ControllerScene  Auto  
+Scene Property ED_Controller_FeedDialogue_Scene  Auto  
