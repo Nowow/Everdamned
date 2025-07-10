@@ -33,12 +33,16 @@ Function CheckBystandersSendAlarmAndStopQuest()
 	
 	utility.wait(4.0)
 
-	if bystanderCares && DurationInRealTimeSeconds <= NoticeTime
-		Debug.Trace("Everdamned INFO: And its not too late")
-		__displayMessage = ED_Mechanics_Message_BystanderAlerted
-		VictimCrimeFaction.SendAssaultAlarm()
+	if bystanderCares 
+		if DurationInRealTimeSeconds <= NoticeTime
+			Debug.Trace("Everdamned INFO: And its not too late")
+			__displayMessage = ED_Mechanics_Message_BystanderAlerted
+			VictimCrimeFaction.SendAssaultAlarm()
+		else
+			Debug.Trace("Everdamned INFO: But its too late!!! HA-HAA!")
+		endif
 	else
-		Debug.Trace("Everdamned INFO: But its too late!!! HA-HAA!")
+		Debug.Trace("Everdamned INFO: No Bystander cares about what the player is doing right now")
 	endif
 
 	__displayMessage.Show()

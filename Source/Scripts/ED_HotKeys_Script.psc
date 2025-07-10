@@ -63,6 +63,8 @@ topic property ED_Recommendation_PostMortem_FeedDialogue_Topic auto
 activator property FXEmptyActivator auto
 
 idle property ED_Idle_Seduction_TouchHairPlayful auto
+ 
+
 
 int counter
 bool __switch
@@ -74,11 +76,16 @@ Event OnKeyDown(int keyCode)
 	If keyCode == __currentTestHotkey
 		debug.Trace("Everdamned DEBUG: test key was pressed! ---------------------------------------------")
 		
-		objectreference __targetThing = Game.GetCurrentConsoleRef()
+		actor __targetThing = Game.GetCurrentConsoleRef() as actor
 		
 		actor pl = Game.GetPlayer()
 		
-		pl.PlayIdle(ED_Idle_Seduction_TouchHairPlayful)
+		
+		float __target_Z_Offset = pl.GetAngleZ() + __targetThing.GetHeadingAngle(pl)
+		__targetThing.TranslateTo(__targetThing.X + 3.0, __targetThing.Y, __targetThing.Z, __targetThing.GetAngleX(), __targetThing.GetAngleY(), __target_Z_Offset, 1.0, afMaxRotationSpeed = 0.0)
+ 
+		
+		;pl.PlayIdle(ED_Idle_Seduction_TouchHairPlayful)
 		
 		
 		

@@ -13,6 +13,10 @@ if (GameDaysPassed.value - ED_Mechanics_FeedDialogue_Seduction_LastSuccessTime.v
 	ED_Mechanics_FeedDialogue_Seduction_LastSuccessTime.SetValue(GameDaysPassed.value)
 	DialogueFavorGeneric.Persuade(akSpeaker)
 endif
+
+utility.wait(1.0)
+float __target_Z_Offset = playerRef.GetAngleZ() + akSpeaker.GetHeadingAngle(playerRef)
+akSpeaker.TranslateTo(akSpeaker.X + 3.0, akSpeaker.Y, akSpeaker.Z, akSpeaker.GetAngleX(), akSpeaker.GetAngleY(), __target_Z_Offset, 1.0, afMaxRotationSpeed = 0.0)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -30,3 +34,5 @@ FavorDialogueScript property DialogueFavorGeneric auto
 GlobalVariable Property ED_Mechanics_FeedDialogue_Seduction_LastSuccessTime  Auto  
 
 GlobalVariable Property ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours  Auto  
+
+Actor Property PlayerRef  Auto  

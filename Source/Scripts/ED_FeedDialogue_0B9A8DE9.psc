@@ -6,6 +6,9 @@ Scriptname ED_FeedDialogue_0B9A8DE9 Extends TopicInfo Hidden
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
+float __target_Z_Offset = playerRef.GetAngleZ() + akSpeaker.GetHeadingAngle(playerRef)
+akSpeaker.TranslateTo(akSpeaker.X + 3.0, akSpeaker.Y, akSpeaker.Z, akSpeaker.GetAngleX(), akSpeaker.GetAngleY(), __target_Z_Offset, 1.0, afMaxRotationSpeed = 0.0)
+
 ED_Mechanics_FeedDialogue_ExpressionSmile_Spell.Cast(akSpeaker)
 ED_Mechanics_FeedDialogue_VictimSFX_Spell.Cast(akSpeaker)
 
@@ -32,3 +35,5 @@ GlobalVariable Property ED_Mechanics_FeedDialogue_Seduction_LastSuccessTime  Aut
 
 GlobalVariable Property ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours  Auto  
 
+
+Actor Property PlayerRef  Auto  

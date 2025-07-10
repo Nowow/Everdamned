@@ -2,6 +2,30 @@
 ;NEXT FRAGMENT INDEX 2
 Scriptname SF_ED_SeductionDialogueContr_0560A490 Extends Scene Hidden
 
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene starter")
+
+ED_Mechanics_FeedDialogue_Seduction_WalkawayHappeend.SetValue(0)
+
+sceneTarget = ED_FeedDialogue_Target.GetReference() as actor
+
+playerRef.PlayIdle(ED_Idle_Seduction_PlayerSeqStart)
+
+ED_Mechanics_FeedDialogue_CrutchAnimTrigger_Spell.Cast(sceneTarget, sceneTarget)
+
+sceneTarget.SetLookAt(playerRef, true)
+
+; TODO: furniture exiting
+;debug.SendAnimationEvent(sceneTarget, "IdleChairExitStart")
+
+;this does not work
+;sceneTarget.playIdle(Chair)
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
@@ -28,31 +52,6 @@ else
 endif
 
 endif
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN CODE
-debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene starter")
-
-ED_Mechanics_FeedDialogue_Seduction_WalkawayHappeend.SetValue(0)
-
-sceneTarget = ED_FeedDialogue_Target.GetReference() as actor
-
-playerRef.PlayIdle(ED_Idle_Seduction_PlayerSeqStart)
-
-ED_Mechanics_FeedDialogue_CrutchAnimTrigger_Spell.Cast(sceneTarget, sceneTarget)
-
-sceneTarget.SetLookAt(playerRef)
-
-
-; TODO: furniture exiting
-;debug.SendAnimationEvent(sceneTarget, "IdleChairExitStart")
-
-;this does not work
-;sceneTarget.playIdle(Chair)
 ;END CODE
 EndFunction
 ;END FRAGMENT
