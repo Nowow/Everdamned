@@ -377,10 +377,10 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	
 Endfunction
 
-int __failsafeCounter
+
 function WaitForScoreCalcToFinish()
-	
-	while !__finished || __failsafeCounter <= 150
+	int __failsafeCounter
+	while !__finished && __failsafeCounter <= 150
 		__failsafeCounter += 1
 		utility.wait(0.1)
 	endwhile
