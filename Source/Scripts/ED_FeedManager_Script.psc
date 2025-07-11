@@ -532,11 +532,6 @@ function HandleDialogueSeduction(actor FeedTarget)
 	
 	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
 	
-	if sceneTarget.GetRelationshipRank(playerRef) == 0
-		debug.trace("Everdamned INFO: Feed Dialogue determined Seduced was an Aquaintance, setting to Friendly")
-		sceneTarget.SetRelationshipRank(playerRef, 1)
-	endif
-	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)

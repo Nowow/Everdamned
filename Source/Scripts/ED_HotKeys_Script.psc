@@ -82,8 +82,9 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		ED_FeedDialogue_Target.ForceRefTo(__targetThing)
-		ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene.Start()
+		
+		;ED_FeedDialogue_Target.ForceRefTo(__targetThing)
+		;ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene.Start()
 		
 		;pl.PlayIdle(ED_Idle_Seduction_TouchHairPlayful)
 		
@@ -97,7 +98,7 @@ Event OnKeyDown(int keyCode)
 		;ED_Art_VFX_BatsCloakDUPLICATE001.Play(__targetThing)
 		
 		if !__switch
-			
+			;Game.DisablePlayerControls(true, true, true, true, true, true, true, true, 0)
 			;pl.SetSubGraphFloatVariable("fdampRate", 0.20)
 			;pl.SetSubGraphFloatVariable("ftoggleBlend", 1.3)
 			
@@ -106,7 +107,9 @@ Event OnKeyDown(int keyCode)
 			
 			;debug.Trace("Everdamned DEBUG: A")
 		else
+			;Game.EnablePlayerControls(true, true, true, true, true, true, true, true, 0)
 			
+			;Game.SetPlayerAIDriven(false)
 			;pl.SetSubGraphFloatVariable("fdampRate", 0.02)
 			;pl.SetSubGraphFloatVariable("ftoggleBlend", 0.0)
 			

@@ -6,6 +6,9 @@ Scriptname ED_Seduction_SuccessMesmerize_Script Extends TopicInfo Hidden
 Function Fragment_2(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
+;walkaway will not happen, whatever happens next we count it as finished dialogue
+ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(2)
+
 playerRef.DoCombatSpellApply(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell, akSpeaker)
 ;END CODE
 EndFunction
@@ -16,3 +19,5 @@ EndFunction
 SPELL Property ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell  Auto  
 
 Actor Property PlayerRef  Auto  
+
+GlobalVariable Property ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState  Auto  

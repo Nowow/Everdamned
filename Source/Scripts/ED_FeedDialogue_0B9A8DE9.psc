@@ -1,18 +1,13 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 1
+;NEXT FRAGMENT INDEX 2
 Scriptname ED_FeedDialogue_0B9A8DE9 Extends TopicInfo Hidden
 
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0(ObjectReference akSpeakerRef)
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-ED_Mechanics_FeedDialogue_ExpressionSmile_Spell.Cast(akSpeaker)
-ED_Mechanics_FeedDialogue_VictimSFX_Spell.Cast(akSpeaker)
-
-if (GameDaysPassed.value - ED_Mechanics_FeedDialogue_Seduction_LastSuccessTime.value) * 24.0100 >= ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.value
-	ED_Mechanics_FeedDialogue_Seduction_LastSuccessTime.SetValue(GameDaysPassed.value)
-	DialogueFavorGeneric.Persuade(akSpeaker)
-endif
+(GetOwningQuest() as Ed_FeedDialogue_Script).WaitForScoreCalcToFinish()
+debug.trace("Everdamned DEBUG: Feed Dialogue ForceGreet bridge finished waiting for score to calc")
 ;END CODE
 EndFunction
 ;END FRAGMENT

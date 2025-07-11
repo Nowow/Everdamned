@@ -2,29 +2,6 @@
 ;NEXT FRAGMENT INDEX 3
 Scriptname ED_FeedDialogue_SedSuccessPostprocess Extends TopicInfo Hidden
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
-; listened by ED_FeedDialogue_VictimSFX script
-SendModEvent("feedDialogue_last_scene_started")
-
-; for walk-away type situations
-if !(akSpeakerRef.IsInDialogueWithPlayer())
-	debug.Trace("Everdamned: First check determined player didnt wait to feed, calling ResetRoot")
-	playerRef.PlayIdle(ResetRoot)
-	akSpeaker.PlayIdle(ResetRoot)
-	return
-endif
-
-ED_FeedManager_Script_Quest.HandleDialogueSeduction(akSpeaker)
-
-; seduced faction rank increment moved to controller scene fragments
-; because lines activator need to be placed after dialogue ends
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
@@ -68,18 +45,24 @@ else
 	endif
 
 endif
+;END CODE
+EndFunction
+;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+; listened by ED_FeedDialogue_VictimSFX script
+SendModEvent("feedDialogue_last_scene_started")
 
-;utility.wait(1)
+;walkaway will not happen, whatever happens next we count it as finished dialogue
+ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(2)
 
-;recheck, if player cant wait 1 sec
-;if !(akSpeakerRef.IsInDialogueWithPlayer())
-;	debug.Trace("Everdamned: Second check determined player didnt wait to feed, calling ResetRoot")
-;	playerRef.PlayIdle(ResetRoot)
-;	akSpeaker.PlayIdle(ResetRoot)
-	;maybe wave?
-;	return
-;endif
+ED_FeedManager_Script_Quest.HandleDialogueSeduction(akSpeaker)
+
+; seduced faction rank increment moved to controller scene fragments
+; because lines activator need to be placed after dialogue ends
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -125,3 +108,5 @@ SPELL Property FeedDialogue_Cooldown_Spell  Auto
 Activator Property ED_Misc_Activator_FeedDialogueSuccessLines  Auto  
 
 actor property playerRef auto
+
+GlobalVariable Property ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState  Auto  

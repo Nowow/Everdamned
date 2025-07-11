@@ -388,10 +388,15 @@ function WaitForScoreCalcToFinish()
 	if __failsafeCounter > 150
 		debug.Trace("Everdamned WARNING: Feed Dialogue score calc waiter waiter more than 15 sec for score calc, something went wrong")
 	endif
+	
+	; walkaway can still happen, but seduction was successfully applied/failed
+	ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(1)
 
 endfunction
 
 FavorJarlsMakeFriendsScript property FavorJarlsMakeFriends auto
+
+globalvariable property ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState auto
 
 associationtype property Spouse auto
 associationtype property Courting auto
