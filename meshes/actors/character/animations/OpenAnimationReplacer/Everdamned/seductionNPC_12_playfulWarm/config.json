@@ -1,6 +1,6 @@
 {
-    "name": "seductionNPC_5_seriousDismiss",
-    "priority": 4255605,
+    "name": "seductionNPC_12_playfulWarm",
+    "priority": 4255612,
     "conditions": [
         {
             "condition": "CompareValues",
@@ -13,7 +13,7 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 5.0
+                "value": 12.0
             }
         }
     ]

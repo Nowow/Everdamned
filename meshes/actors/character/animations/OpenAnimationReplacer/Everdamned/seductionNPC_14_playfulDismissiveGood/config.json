@@ -1,6 +1,6 @@
 {
-    "name": "seductionNPC_12_playfulDismissiveGood",
-    "priority": 4255612,
+    "name": "seductionNPC_14_playfulDismissiveGood",
+    "priority": 4255614,
     "conditions": [
         {
             "condition": "CompareValues",
@@ -13,7 +13,7 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 12.0
+                "value": 14.0
             }
         }
     ]

@@ -1,6 +1,6 @@
 {
-    "name": "seductionNPC_6_seriousShock",
-    "priority": 4255606,
+    "name": "seductionNPC_13_playfulBlowkiss",
+    "priority": 4255613,
     "conditions": [
         {
             "condition": "CompareValues",
@@ -13,7 +13,7 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 6.0
+                "value": 13.0
             }
         }
     ]

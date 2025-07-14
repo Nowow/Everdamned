@@ -1,6 +1,6 @@
 {
-    "name": "seductionNPC_3guardedInterested",
-    "priority": 4255603,
+    "name": "seductionNPC_16_playfulAroused",
+    "priority": 4255616,
     "conditions": [
         {
             "condition": "CompareValues",
@@ -13,7 +13,7 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 3.0
+                "value": 16.0
             }
         }
     ]

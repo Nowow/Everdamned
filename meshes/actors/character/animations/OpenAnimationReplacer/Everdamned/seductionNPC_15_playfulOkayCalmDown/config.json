@@ -1,6 +1,6 @@
 {
-    "name": "seductionNPC_4_guardedToPlayful",
-    "priority": 4255604,
+    "name": "seductionNPC_15_playfulOkayCalmDown",
+    "priority": 4255615,
     "conditions": [
         {
             "condition": "CompareValues",
@@ -13,7 +13,7 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 4.0
+                "value": 15.0
             }
         }
     ]

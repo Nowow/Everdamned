@@ -315,6 +315,21 @@ bool __finished = true
 Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	__finished = false
 	
+	
+	; setting this asap to win the race condition with ForceGreet idle ;)
+	int __relationshipRank = akSeducer.GetRelationshipRank(akSeduced)
+	if !(akSeduced.IsInFaction(ED_Mechanics_FeedDialogue_Seduced_Fac))
+		if __relationshipRank <= 1
+			; guarded 1,2,5,6
+			ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(1)
+		else
+			; serious 3,4,7,8
+			ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(3)
+		endif
+	else
+		;all else
+		ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(9,16))
+	endif
 
 	if akSeduced.IsInFaction(PlayerMarriedFaction)
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
@@ -346,8 +361,39 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	endif
 	
 	if PlayerSeductionScore >= 0
+		
+		bool __isFemale = akSeduced.GetActorBase().GetSex() == 1
+		; painful...
+		if akSeduced.IsInFaction(PlayerMarriedFaction)
+			if __isFemale
+				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(12,17))
+			else
+				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(11,15))
+			endif
+		elseif !(akSeduced.IsInFaction(ED_Mechanics_FeedDialogue_Seduced_Fac))
+			if __relationshipRank <= 1
+				; guarded
+				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(5,6))
+			else
+				; serious
+				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(7,8))
+			endif
+		else
+			if __isFemale
+				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(9,17))
+			else
+				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(9,15))
+			endif
+		endif
+		
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
 	else
+		if __relationshipRank <= 1
+			ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(1,2))
+		else
+			ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(3,4))
+		endif
+		
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(0)
 	endif
 	
@@ -397,6 +443,8 @@ endfunction
 FavorJarlsMakeFriendsScript property FavorJarlsMakeFriends auto
 
 globalvariable property ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState auto
+globalvariable property ED_Mechanics_FeedDialogue_NPCSequenceIndex auto
+
 
 associationtype property Spouse auto
 associationtype property Courting auto
@@ -432,6 +480,9 @@ Faction Property CrimeFactionFalkreath Auto
 
 ; spouse
 Faction Property PlayerMarriedFaction auto
+
+; seduced faction
+faction property ED_Mechanics_FeedDialogue_Seduced_Fac auto
 
 ; difficulty modificator factions
 Faction Property MarkarthTempleofDibellaFaction Auto

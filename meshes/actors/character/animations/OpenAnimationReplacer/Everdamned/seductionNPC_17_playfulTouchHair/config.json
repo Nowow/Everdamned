@@ -1,6 +1,6 @@
 {
-    "name": "seductionNPC_14_playfulAroused",
-    "priority": 4255614,
+    "name": "seductionNPC_17_playfulTouchHair",
+    "priority": 4255617,
     "conditions": [
         {
             "condition": "CompareValues",
@@ -13,7 +13,7 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 14.0
+                "value": 17.0
             }
         }
     ]
