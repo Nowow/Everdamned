@@ -1,0 +1,20 @@
+{
+    "name": "seductionNPC_7_seriousInterested",
+    "priority": 4255607,
+    "conditions": [
+        {
+            "condition": "CompareValues",
+            "requiredVersion": "1.0.0.0",
+            "Value A": {
+                "form": {
+                    "pluginName": "Everdamned.esp",
+                    "formID": "A3BB6F"
+                }
+            },
+            "Comparison": "==",
+            "Value B": {
+                "value": 7.0
+            }
+        }
+    ]
+}

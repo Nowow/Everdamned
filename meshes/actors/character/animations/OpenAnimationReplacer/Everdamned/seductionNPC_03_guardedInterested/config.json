@@ -1,7 +1,6 @@
 {
-    "name": "seductionNPC_guardedDismissive",
-    "description": "guarded dismissive sequence, for rejections",
-    "priority": 4255514,
+    "name": "seductionNPC_3guardedInterested",
+    "priority": 4255603,
     "conditions": [
         {
             "condition": "CompareValues",
@@ -14,7 +13,7 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 1.0
+                "value": 3.0
             }
         }
     ]

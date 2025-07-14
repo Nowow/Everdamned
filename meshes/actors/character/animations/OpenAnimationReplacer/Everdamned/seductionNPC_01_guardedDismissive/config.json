@@ -1,0 +1,20 @@
+{
+    "name": "seductionNPC_1_guardedDismissive",
+    "priority": 4255601,
+    "conditions": [
+        {
+            "condition": "CompareValues",
+            "requiredVersion": "1.0.0.0",
+            "Value A": {
+                "form": {
+                    "pluginName": "Everdamned.esp",
+                    "formID": "A3BB6F"
+                }
+            },
+            "Comparison": "==",
+            "Value B": {
+                "value": 1.0
+            }
+        }
+    ]
+}
