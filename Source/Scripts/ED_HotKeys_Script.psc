@@ -63,6 +63,8 @@ topic property ED_Recommendation_PostMortem_FeedDialogue_Topic auto
 activator property FXEmptyActivator auto
 
 idle property ED_Idle_Seduction_TouchHairPlayful auto
+idle property ResetRoot auto
+idle property ED_Idle_Seduction_NPCSequenceStart auto
 
 referencealias property ED_FeedDialogue_Target auto
 scene property ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene auto
@@ -82,40 +84,15 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		
-		;ED_FeedDialogue_Target.ForceRefTo(__targetThing)
-		;ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene.Start()
-		
-		;pl.PlayIdle(ED_Idle_Seduction_TouchHairPlayful)
+		;__targetThing.PlayIdle(ED_Idle_Seduction_NPCSequenceStart)
+		;debug.SendAnimationEvent(__targetThing, "NPC_TurnLeft180")
 		
 		
-		
-		;message.resethelpmessage("ed_test_hlpmsg")
-		;ED_Mechanics_FeedDialogue_Message_SomeTestM.ShowAsHelpMessage("ed_test_hlpmsg", 5.0, 0.0, -1)
-		
-		;pl.PlayIdle(ED_Idle_Seduction_Blowkiss)
-		
-		;ED_Art_VFX_BatsCloakDUPLICATE001.Play(__targetThing)
 		
 		if !__switch
-			;Game.DisablePlayerControls(true, true, true, true, true, true, true, true, 0)
-			;pl.SetSubGraphFloatVariable("fdampRate", 0.20)
-			;pl.SetSubGraphFloatVariable("ftoggleBlend", 1.3)
-			
-			;objectreference aaa = pl.placeatme(ED_Art_Hazard_VampireTransformBats)
-			;ED_Art_VFX_VampireTransform_Begin.Play(aaa)
-			
-			;debug.Trace("Everdamned DEBUG: A")
+			debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_act1")
 		else
-			;Game.EnablePlayerControls(true, true, true, true, true, true, true, true, 0)
-			
-			;Game.SetPlayerAIDriven(false)
-			;pl.SetSubGraphFloatVariable("fdampRate", 0.02)
-			;pl.SetSubGraphFloatVariable("ftoggleBlend", 0.0)
-			
-			;ED_Art_VFX_VampireTransform_End.Play(pl)
-			
-			;debug.Trace("Everdamned DEBUG: B")
+			debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_end")
 		endif
 		
 		__switch = !__switch

@@ -1,7 +1,12 @@
 Scriptname ED_FeedDialogue_Lines_Script extends ObjectReference  
 
-
+bool __fired
 function OnLoad()
+	if __fired
+		debug.Trace("Everdamned DEBUG: Feed Dialogue LINES  OnLoad fired but alread FIRED!")
+		return
+	endif
+	__fired = true
 	
 	debug.Trace("Everdamned DEBUG: Feed Dialogue LINES activator loaded!")
 	
@@ -10,8 +15,11 @@ function OnLoad()
 	Say(FirstTopic, playerRef, false)
 	utility.Wait(FirstTopicLength)
 	
-	if SecondTopicLength
+	if SecondTopic
+		Disable()
+		Enable()
 		Say(SecondTopic, playerRef, false)
+		debug.Trace("Everdamned DEBUG: Feed Dialogue LINES SECOND topic said!")
 		utility.Wait(SecondTopicLength)
 	endif
 	

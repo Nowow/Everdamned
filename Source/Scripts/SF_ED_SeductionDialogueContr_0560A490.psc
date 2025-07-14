@@ -59,7 +59,6 @@ else
 			ED_Mechanics_FeedDialogue_CooldownHalfDay_Spell.Cast(sceneTarget, sceneTarget)
 			message.ResetHelpMessage("ed_feedd_walkaway_halfday")
 			ED_Mechanics_FeedDialogue_Message_Walkaway_Impatience.ShowAsHelpMessage("ed_feedd_walkaway_halfday", 3.0, 1.0, 1)
-			sceneTarget.PlayIdle(ResetRoot)
 		else ; walkaway type 2
 			debug.Trace("Everdamned DEBUG: Seduction Controller Scene determined seduc was successfull and we followed through")
 			int currentFactionRank = sceneTarget.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac)

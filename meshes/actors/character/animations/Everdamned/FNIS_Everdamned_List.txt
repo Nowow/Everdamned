@@ -27,13 +27,24 @@ b -Tn ed_cicerodancelooped_idle special_cicerodance1.hkx
 
 ' ----------------- SEDUCTION ------------------
 
+' NPC REGULAR Sequence, contents controlled by OAR
+s -a,h ed_seduction_NPCSeq_start ed_seduction_bp_start.hkx
++ -h ed_seduction_NPCSeq_idleStart ed_seduction_bp_idleStart.hkx
++ -a,h ed_seduction_NPCSeq_act1 ed_seduction_bp_act1.hkx
++ -a,h ed_seduction_NPCSeq_act2 ed_seduction_bp_act2.hkx
++ -h ed_seduction_NPCSeq_idleLast ed_seduction_bp_idleLast.hkx
++ -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_NPCSeq_end ed_seduction_bp_end.hkx
+
+
+
+
 ' Player sequence, contents controlled by OAR
-s -a,h ed_seduction_playerSeq_start ed_seduction_playerseq_start.hkx
-+ -a,h ed_seduction_playerSeq_talk1 ed_seduction_playerseq_talk.hkx
-+ -a,h ed_seduction_playerSeq_idle1 ed_seduction_playerseq_idle.hkx
-+ -a,h ed_seduction_playerSeq_talk2 ed_seduction_playerseq_talk.hkx
-+ -a,h ed_seduction_playerSeq_idle2 ed_seduction_playerseq_idle.hkx
-+ -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_playerSeq_end ed_seduction_playerseq_end.hkx
+s -a,h ed_seduction_playerSeq_start ed_seduction_bp_start.hkx
++ -a,h ed_seduction_playerSeq_talk1 ed_seduction_bp_act1.hkx
++ -a,h ed_seduction_playerSeq_idle1 ed_seduction_bp_idleStart.hkx
++ -a,h ed_seduction_playerSeq_talk2 ed_seduction_bp_act1.hkx
++ -a,h ed_seduction_playerSeq_idle2 ed_seduction_bp_idleStart.hkx
++ -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_playerSeq_end ed_seduction_bp_end.hkx
 
 ' Aroused
 s -a,h ed_seduction_aroused_start ed_empty.hkx 
@@ -177,6 +188,8 @@ s -a ed_seduction_flirt_nervousLookAround ed_seduction_nervous_lookaround.hkx
 ' Successful intimidation, assault, flee
 s -a ed_seduction_flirt_nervousLookAround2 ed_seduction_nervous_lookaround.hkx
 + -a,Ted_seduction_customAnimFin/-0.3 ed_seduction_flirt_defensiveGesture ed_seduction_nervous_defensiveGesture.hkx
+
+' ----------------- END SEDUCTION ------------------
 
 
 'Feed killmove with jump
