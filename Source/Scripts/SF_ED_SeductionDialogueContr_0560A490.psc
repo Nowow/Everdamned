@@ -1,5 +1,5 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 2
+;NEXT FRAGMENT INDEX 8
 Scriptname SF_ED_SeductionDialogueContr_0560A490 Extends Scene Hidden
 
 ;BEGIN FRAGMENT Fragment_1
@@ -26,14 +26,22 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
 ;BEGIN CODE
-debug.MEssageBox("Everdamned DEBUG: Feed Dialogue Controller scene ended")
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene ended")
 sceneTarget.ClearLookAt()
 
 objectreference packageStartMarker = ED_FeedDialogue_StartLocMarker.GetReference()
 ED_FeedDialogue_StartLocMarker.Clear()
 packageStartMarker.Disable()
 packageStartMarker.Delete()
+;END CODE
+EndFunction
+;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2()
+;BEGIN CODE
+playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceMainEnd)
+sceneTarget.PlayIdle(ED_Idle_Seduction_NPCSequenceEnd)
 
 int __walkawayState = ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.GetValue() as int 
 
@@ -121,3 +129,7 @@ SPELL Property ED_Mechanics_FeedDialogue_CooldownHalfDay_Spell  Auto
 SPELL Property ED_Mechanics_FeedDialogue_CooldownShort_Spell  Auto  
 
 Idle Property ResetRoot  Auto  
+
+Idle Property ED_Idle_Seduction_PlayerSequenceMainEnd  Auto  
+
+Idle Property ED_Idle_Seduction_NPCSequenceEnd  Auto  

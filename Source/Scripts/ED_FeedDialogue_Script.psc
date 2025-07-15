@@ -226,6 +226,11 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		endif
 	endif	
 	
+	
+	if akSeduced.IsInFaction(ED_Mechanics_FeedDialogue_Seduced_Fac)
+		__playerSeductionScore += 40
+	endif
+	
 	__playerSeductionScore += ED_Mechanics_FeedDialogue_DifficultyModifier_Setting.GetValue() as int
 	
 	; add some random
