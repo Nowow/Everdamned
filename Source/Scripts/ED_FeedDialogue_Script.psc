@@ -314,22 +314,6 @@ endfunction
 bool __finished = true
 Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	__finished = false
-	
-	
-	; setting this asap to win the race condition with ForceGreet idle ;)
-	int __relationshipRank = akSeducer.GetRelationshipRank(akSeduced)
-	if !(akSeduced.IsInFaction(ED_Mechanics_FeedDialogue_Seduced_Fac))
-		if __relationshipRank <= 1
-			; guarded 1,2,5,6
-			ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(1)
-		else
-			; serious 3,4,7,8
-			ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(3)
-		endif
-	else
-		;all else
-		ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(9,16))
-	endif
 
 	if akSeduced.IsInFaction(PlayerMarriedFaction)
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
@@ -359,6 +343,8 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 		__finished = true
 		return
 	endif
+	
+	int __relationshipRank = akSeducer.GetRelationshipRank(akSeduced)
 	
 	if PlayerSeductionScore >= 0
 		

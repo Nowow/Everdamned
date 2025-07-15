@@ -14,7 +14,7 @@ ED_Mechanics_Keyword_RollFeedDialogueScore.SendStoryEvent(None, playerRef, akSpe
 ED_FeedDialogue_StartLocMarker.ForceRefTo(akSpeaker.PlaceAtMe(FXEmptyActivator))
 
 ED_Controller_FeedDialogue_Scene.Start()
-utility.wait(0.1)
+utility.wait(2.0)
 if akSpeaker.IsInDialogueWithPlayer()
 	input.TapKey(input.GetMappedKey("Activate"))
 endif
