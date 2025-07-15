@@ -39,12 +39,9 @@ s -a,h ed_seduction_NPCSeq_start ed_seduction_bp_start.hkx
 
 
 ' Player sequence, contents controlled by OAR
-s -a,h ed_seduction_playerSeq_start ed_seduction_bp_start.hkx
-+ -a,h ed_seduction_playerSeq_talk1 ed_seduction_bp_act1.hkx
-+ -a,h ed_seduction_playerSeq_idle1 ed_seduction_bp_idleStart.hkx
-+ -a,h ed_seduction_playerSeq_talk2 ed_seduction_bp_act1.hkx
-+ -a,h ed_seduction_playerSeq_idle2 ed_seduction_bp_idleStart.hkx
-+ -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_playerSeq_end ed_seduction_bp_end.hkx
+s -a,h ed_seduction_playerSeq_start ed_seduction_ps_start.hkx
++ -a,h ed_seduction_playerSeq_talk ed_seduction_ps_talk.hkx
++ -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_playerSeq_end ed_seduction_ps_end.hkx
 
 ' Aroused
 s -a,h ed_seduction_aroused_start ed_empty.hkx 

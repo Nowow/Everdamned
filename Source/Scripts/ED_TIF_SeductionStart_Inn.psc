@@ -13,9 +13,18 @@ ED_Mechanics_Keyword_RollFeedDialogueScore.SendStoryEvent(None, playerRef, akSpe
 ; here because needs to exist before controller scene starts
 ED_FeedDialogue_StartLocMarker.ForceRefTo(akSpeaker.PlaceAtMe(FXEmptyActivator))
 
+if ED_Controller_FeedDialogue_Scene.IsPlaying()
+	ED_Controller_FeedDialogue_Scene.Stop()
+	utility.wait(0.5)
+endif
+
 ED_Controller_FeedDialogue_Scene.Start()
-utility.wait(2.0)
-if akSpeaker.IsInDialogueWithPlayer()
+
+ED_Mechanics_FeedDialogue_DarkRadius.SetValue(0.0)
+ED_Mechanics_FeedDialogue_LightRadius.SetValue(70.0)
+
+utility.wait(3.0)
+if !ThisTopicFinished  && akSpeaker.IsInDialogueWithPlayer()
 	input.TapKey(input.GetMappedKey("Activate"))
 endif
 ;END CODE
@@ -26,6 +35,8 @@ EndFunction
 Function Fragment_9(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
+ThisTopicFinished = true
+
 while !(ED_Mechanics_Quest_RollFeedDialogueScore.IsStopped())
 	utility.wait(0.1)
 endwhile
@@ -59,3 +70,9 @@ Activator Property FXEmptyActivator  Auto
 Keyword Property ED_Mechanics_Keyword_RollFeedDialogueScore  Auto  
 
 quest property ED_Mechanics_Quest_RollFeedDialogueScore auto
+
+Bool Property ThisTopicFinished  Auto  
+
+globalvariable property ED_Mechanics_FeedDialogue_DarkRadius auto
+
+globalvariable property ED_Mechanics_FeedDialogue_LightRadius auto

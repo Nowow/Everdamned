@@ -311,15 +311,14 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 
 endfunction
 
-bool __finished = true
+
 Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
-	__finished = false
+
 
 	if akSeduced.IsInFaction(PlayerMarriedFaction)
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
 		ConditionalsScript.SetLastScore(100)
 		debug.Trace("Everdamned INFO: Seduced is married to player, not calculating score, auto success")
-		__finished = true
 		return
 	endif
 	
@@ -340,7 +339,6 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 
 	if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
 		debug.trace("Everdamned INFO: Feed dialogue score override engaged, not actually changing results")
-		__finished = true
 		return
 	endif
 	
@@ -389,8 +387,7 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(0)
 	endif
 	
-	__finished = true
-	
+	debug.Trace("Everdamned DEBUG: Feed Dialogue animation sequence index is: " + ED_Mechanics_FeedDialogue_NPCSequenceIndex.GetValue())
 	
 	
 	;if Intimidation_score >= Intimidation_Difficulty_Score

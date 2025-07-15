@@ -512,7 +512,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 endfunction
 
 sound BreathSoundsToPlayOnTrigger
-function HandleDialogueSeduction(actor FeedTarget)
+function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float HighRadius = 300.0)
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Dialogue Seduction call on target " + FeedTarget)
 	
 	
@@ -537,33 +537,15 @@ function HandleDialogueSeduction(actor FeedTarget)
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
 	else
 	
-		; 2 factors
-		; IF social feeding is allowed
-		; IF social feeding triggers alarm check
-		; TODO: both should be checked not here, in seduction dialogue
+		debug.Trace("Everdamned INFO: Feed Manager got these boundaries for dialogue Seduction handling; lower: " + LowRadius + ", higher: " + HighRadius)
 	
-		;LocTypeDwelling - allow IF CONDITION with bystander check
-		
-		;LocTypeHouse - not trespassing/high relationship, allow with bystander check
-		;LocTypeInn - no check allow
-		
-		;LocTypeCastle
-		;LocTypeGuild
-
-		; TODO: work out conditions for bystander check
-		;getdetected
-		;getlos
-		
-		
-		;at 10 light half meter radius = 35 units
-		;at 70+ light 30 meters 600 unit
 		float __lightLevel = PlayerRef.GetLightLevel()
 		if __lightLevel <= 10.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = LowRadius
 		elseif __lightLevel >= 70.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 300.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = HighRadius
 		else
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (24.663*math.pow(2.718,0.04*(__lightLevel - 10.0)) - 25.0)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = LowRadius + (24.663*math.pow(2.718,0.04*(__lightLevel - 10.0)) - 25.0)
 		endif
 		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
@@ -908,7 +890,7 @@ state CombatDrain
 	endfunction
 	function HandleDrainMesmerized(actor FeedTarget)
 	endfunction
-	function HandleDialogueSeduction(actor FeedTarget)
+	function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float HighRadius = 300.0)
 	endfunction
 	function HandleDialogueIntimidation(actor FeedTarget)
 	endfunction

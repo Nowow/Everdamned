@@ -2,6 +2,27 @@
 ;NEXT FRAGMENT INDEX 3
 Scriptname ED_FeedDialogue_SedSuccessPostprocess Extends TopicInfo Hidden
 
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+; listened by ED_FeedDialogue_VictimSFX script
+SendModEvent("feedDialogue_last_scene_started")
+
+;walkaway will not happen, whatever happens next we count it as finished dialogue
+ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(2)
+
+float lowerRadiusBoundary = ED_Mechanics_FeedDialogue_DarkRadius.GetValue()
+float higherRadiusBoundary = ED_Mechanics_FeedDialogue_LightRadius.GetValue()
+
+ED_FeedManager_Script_Quest.HandleDialogueSeduction(akSpeaker, lowerRadiusBoundary, higherRadiusBoundary)
+
+; seduced faction rank increment moved to controller scene fragments
+; because lines activator need to be placed after dialogue ends
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
@@ -49,24 +70,6 @@ endif
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
-; listened by ED_FeedDialogue_VictimSFX script
-SendModEvent("feedDialogue_last_scene_started")
-
-;walkaway will not happen, whatever happens next we count it as finished dialogue
-ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(2)
-
-ED_FeedManager_Script_Quest.HandleDialogueSeduction(akSpeaker)
-
-; seduced faction rank increment moved to controller scene fragments
-; because lines activator need to be placed after dialogue ends
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 Faction Property ED_Mechanics_FeedDialogue_Seduced_Fac  Auto  
@@ -110,3 +113,7 @@ Activator Property ED_Misc_Activator_FeedDialogueSuccessLines  Auto
 actor property playerRef auto
 
 GlobalVariable Property ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState  Auto  
+
+globalVariable property ED_Mechanics_FeedDialogue_DarkRadius auto
+
+globalVariable property ED_Mechanics_FeedDialogue_LightRadius auto
