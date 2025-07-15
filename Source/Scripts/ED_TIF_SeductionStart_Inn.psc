@@ -1,5 +1,5 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 9
+;NEXT FRAGMENT INDEX 10
 Scriptname ED_TIF_SeductionStart_Inn Extends TopicInfo Hidden
 
 ;BEGIN FRAGMENT Fragment_8
@@ -11,11 +11,23 @@ ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
 ED_FeedDialogue_StartLocMarker.ForceRefTo(akSpeaker.PlaceAtMe(FXEmptyActivator))
 
 ED_Controller_FeedDialogue_Scene.Start()
-utility.wait(1.0)
-if akSpeaker.IsInDialogueWithPlayer()
-	input.TapKey(input.GetMappedKey("Activate"))
-endif
+;utility.wait(1.0)
+;if akSpeaker.IsInDialogueWithPlayer()
+;	input.TapKey(input.GetMappedKey("Activate"))
+;endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_9
+Function Fragment_9(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+debug.MessageBox("End fragment started")
 (GetOwningQuest() as Ed_FeedDialogue_Script).RollFeedDialogueChecks(PlayerRef, akSpeakerRef as Actor)
+
+(GetOwningQuest() as Ed_FeedDialogue_Script).WaitForScoreCalcToFinish()
+debug.trace("Everdamned DEBUG: Feed Dialogue START TOPIC finished waiting for score to calc")
 ;END CODE
 EndFunction
 ;END FRAGMENT

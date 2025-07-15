@@ -366,22 +366,28 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 		; painful...
 		if akSeduced.IsInFaction(PlayerMarriedFaction)
 			if __isFemale
+				debug.Trace("Everdamned DEBUG: Feed Dialogue sets NPC animation to female spouse")
 				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(12,17))
 			else
+				debug.Trace("Everdamned DEBUG: Feed Dialogue sets NPC animation to male spouse")
 				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(11,15))
 			endif
 		elseif !(akSeduced.IsInFaction(ED_Mechanics_FeedDialogue_Seduced_Fac))
 			if __relationshipRank <= 1
 				; guarded
+				debug.Trace("Everdamned DEBUG: Feed Dialogue sets NPC animation to low relationship guarded success")
 				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(5,6))
 			else
 				; serious
+				debug.Trace("Everdamned DEBUG: Feed Dialogue sets NPC animation to high relationship serious success")
 				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(7,8))
 			endif
 		else
 			if __isFemale
+			debug.Trace("Everdamned DEBUG: Feed Dialogue sets NPC animation to seduced female")
 				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(9,17))
 			else
+				debug.Trace("Everdamned DEBUG: Feed Dialogue sets NPC animation to seduced male")
 				ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(9,15))
 			endif
 		endif
