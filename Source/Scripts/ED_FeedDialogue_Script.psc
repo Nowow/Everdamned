@@ -429,32 +429,36 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	
 Endfunction
 
-Event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRef1, ObjectReference akRef2, \
-  int aiValue1, int aiValue2)
+function DoTheThing()
 	
-	actor __Seducer = akRef1 as actor
-	actor __Seduced = akRef2 as actor
+	actor __Seducer = ED_Seducer.GetReference() as actor
+	actor __Seduced = ED_Seduced.GetReference() as actor
 	
 	if !__Seducer || !__Seduced
 		debug.Trace("Everdamned ERROR: Roll Feed Dialogue Score quest started without 2 actors, FAILED")
 		SetCurrentStageID(150)
 		stop()
+		return
 	endif
 	
-	if !__Seducer == !__Seduced
+	if __Seducer == __Seduced
 		debug.Trace("Everdamned ERROR: Roll Feed Dialogue Score quest started without 2 DISTINCT actors, FAILED")
 		SetCurrentStageID(150)
 		stop()
+		return
 	endif
 	
-	debug.Trace("Everdamned INFO: Roll Feed Dialogue Score quest started successfully, Seducer: " + akRef1 + ", Seduced: " + akRef2)
+	debug.Trace("Everdamned INFO: Roll Feed Dialogue Score quest started successfully, Seducer: " + __Seducer + ", Seduced: " + __Seduced)
 	
 	RollFeedDialogueChecks(__Seducer, __Seduced)
 	
 	; walkaway can still happen, but seduction was successfully applied/failed
 	ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(1)
 	
-endevent
+	SetCurrentStageID(100)
+	stop()
+endfunction
+
 
 
 ;function WaitForScoreCalcToFinish()
@@ -472,6 +476,10 @@ endevent
 ;	ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(1)
 ;
 ;endfunction
+
+
+referencealias property ED_Seducer auto
+referencealias property ED_Seduced auto
 
 FavorJarlsMakeFriendsScript property FavorJarlsMakeFriends auto
 

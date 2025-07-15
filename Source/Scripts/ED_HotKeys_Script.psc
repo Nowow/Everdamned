@@ -69,6 +69,7 @@ idle property ED_Idle_Seduction_NPCSequenceStart auto
 referencealias property ED_FeedDialogue_Target auto
 scene property ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene auto
 
+keyword property ED_Mechanics_Keyword_RollFeedDialogueScore auto
 
 int counter
 bool __switch
@@ -84,15 +85,20 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		debug.Trace("Everdamned DEBUG: " + __targetThing + " " + pl)
+		
+		ED_Mechanics_Keyword_RollFeedDialogueScore.SendStoryEvent(None, pl, __targetThing, 0, 0)
+
+		
 		;__targetThing.PlayIdle(ED_Idle_Seduction_NPCSequenceStart)
 		;debug.SendAnimationEvent(__targetThing, "NPC_TurnLeft180")
 		
 		
 		
 		if !__switch
-			debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_act1")
+			;debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_act1")
 		else
-			debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_end")
+			;debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_end")
 		endif
 		
 		__switch = !__switch

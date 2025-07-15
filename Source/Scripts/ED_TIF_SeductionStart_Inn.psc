@@ -14,7 +14,7 @@ ED_Mechanics_Keyword_RollFeedDialogueScore.SendStoryEvent(None, playerRef, akSpe
 ED_FeedDialogue_StartLocMarker.ForceRefTo(akSpeaker.PlaceAtMe(FXEmptyActivator))
 
 ED_Controller_FeedDialogue_Scene.Start()
-utility.wait(2.0)
+utility.wait(0.1)
 if akSpeaker.IsInDialogueWithPlayer()
 	input.TapKey(input.GetMappedKey("Activate"))
 endif
@@ -26,11 +26,16 @@ EndFunction
 Function Fragment_9(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-;debug.MessageBox("End fragment started")
-;(GetOwningQuest() as Ed_FeedDialogue_Script).RollFeedDialogueChecks(PlayerRef, akSpeakerRef as Actor)
+while !(ED_Mechanics_Quest_RollFeedDialogueScore.IsStopped())
+	utility.wait(0.1)
+endwhile
 
-;(GetOwningQuest() as Ed_FeedDialogue_Script).WaitForScoreCalcToFinish()
-;debug.trace("Everdamned DEBUG: Feed Dialogue START TOPIC finished waiting for score to calc")
+; success stage
+if ED_Mechanics_Quest_RollFeedDialogueScore.IsStageDone(100)
+	debug.Trace("Everdamned INFO: Feed Dialogue determined Score Roll was successful")
+else
+	debug.Trace("Everdamned ERROR: Feed Dialogue determined Score Roll was FAILED")
+endif
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -52,3 +57,5 @@ ReferenceAlias Property ED_FeedDialogue_StartLocMarker  Auto
 Activator Property FXEmptyActivator  Auto  
 
 Keyword Property ED_Mechanics_Keyword_RollFeedDialogueScore  Auto  
+
+quest property ED_Mechanics_Quest_RollFeedDialogueScore auto
