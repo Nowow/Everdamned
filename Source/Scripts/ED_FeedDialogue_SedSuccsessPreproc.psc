@@ -6,8 +6,16 @@ Scriptname ED_FeedDialogue_SedSuccsessPreproc Extends TopicInfo Hidden
 Function Fragment_1(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-(GetOwningQuest() as Ed_FeedDialogue_Script).WaitForScoreCalcToFinish()
-debug.trace("Everdamned DEBUG: Feed Dialogue ForceGreet bridge finished waiting for score to calc")
+while !(ED_Mechanics_Quest_RollFeedDialogueScore.IsStopped())
+	utility.wait(0.1)
+endwhile
+
+; success stage
+if ED_Mechanics_Quest_RollFeedDialogueScore.IsStageDone(100)
+	debug.Trace("Everdamned INFO: Feed Dialogue determined Score Roll was successful")
+else
+	debug.Trace("Everdamned ERROR: Feed Dialogue determined Score Roll was FAILED")
+endif
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -27,3 +35,5 @@ GlobalVariable Property ED_Mechanics_FeedDialogue_Seduction_LastSuccessTime  Aut
 GlobalVariable Property ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours  Auto  
 
 Actor Property PlayerRef  Auto  
+
+quest property ED_Mechanics_Quest_RollFeedDialogueScore auto

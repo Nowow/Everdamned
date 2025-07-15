@@ -429,22 +429,49 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	
 Endfunction
 
-
-function WaitForScoreCalcToFinish()
-	int __failsafeCounter
-	while !__finished && __failsafeCounter <= 150
-		__failsafeCounter += 1
-		utility.wait(0.1)
-	endwhile
+Event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRef1, ObjectReference akRef2, \
+  int aiValue1, int aiValue2)
 	
-	if __failsafeCounter > 150
-		debug.Trace("Everdamned WARNING: Feed Dialogue score calc waiter waiter more than 15 sec for score calc, something went wrong")
+	actor __Seducer = akRef1 as actor
+	actor __Seduced = akRef2 as actor
+	
+	if !__Seducer || !__Seduced
+		debug.Trace("Everdamned ERROR: Roll Feed Dialogue Score quest started without 2 actors, FAILED")
+		SetCurrentStageID(150)
+		stop()
 	endif
+	
+	if !__Seducer == !__Seduced
+		debug.Trace("Everdamned ERROR: Roll Feed Dialogue Score quest started without 2 DISTINCT actors, FAILED")
+		SetCurrentStageID(150)
+		stop()
+	endif
+	
+	debug.Trace("Everdamned INFO: Roll Feed Dialogue Score quest started successfully, Seducer: " + akRef1 + ", Seduced: " + akRef2)
+	
+	RollFeedDialogueChecks(__Seducer, __Seduced)
 	
 	; walkaway can still happen, but seduction was successfully applied/failed
 	ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(1)
+	
+endevent
 
-endfunction
+
+;function WaitForScoreCalcToFinish()
+;	int __failsafeCounter
+;	while !__finished && __failsafeCounter <= 150
+;		__failsafeCounter += 1
+;		utility.wait(0.1)
+;	endwhile
+;	
+;	if __failsafeCounter > 150
+;		debug.Trace("Everdamned WARNING: Feed Dialogue score calc waiter waiter more than 15 sec for score calc, something went wrong")
+;	endif
+;	
+;	; walkaway can still happen, but seduction was successfully applied/failed
+;	ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(1)
+;
+;endfunction
 
 FavorJarlsMakeFriendsScript property FavorJarlsMakeFriends auto
 

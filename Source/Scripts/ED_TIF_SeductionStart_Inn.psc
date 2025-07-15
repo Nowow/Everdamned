@@ -8,13 +8,16 @@ Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
 
+ED_Mechanics_Keyword_RollFeedDialogueScore.SendStoryEvent(None, playerRef, akSpeaker, 0, 0)
+
+; here because needs to exist before controller scene starts
 ED_FeedDialogue_StartLocMarker.ForceRefTo(akSpeaker.PlaceAtMe(FXEmptyActivator))
 
 ED_Controller_FeedDialogue_Scene.Start()
-;utility.wait(1.0)
-;if akSpeaker.IsInDialogueWithPlayer()
-;	input.TapKey(input.GetMappedKey("Activate"))
-;endif
+utility.wait(2.0)
+if akSpeaker.IsInDialogueWithPlayer()
+	input.TapKey(input.GetMappedKey("Activate"))
+endif
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -23,11 +26,11 @@ EndFunction
 Function Fragment_9(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-debug.MessageBox("End fragment started")
-(GetOwningQuest() as Ed_FeedDialogue_Script).RollFeedDialogueChecks(PlayerRef, akSpeakerRef as Actor)
+;debug.MessageBox("End fragment started")
+;(GetOwningQuest() as Ed_FeedDialogue_Script).RollFeedDialogueChecks(PlayerRef, akSpeakerRef as Actor)
 
-(GetOwningQuest() as Ed_FeedDialogue_Script).WaitForScoreCalcToFinish()
-debug.trace("Everdamned DEBUG: Feed Dialogue START TOPIC finished waiting for score to calc")
+;(GetOwningQuest() as Ed_FeedDialogue_Script).WaitForScoreCalcToFinish()
+;debug.trace("Everdamned DEBUG: Feed Dialogue START TOPIC finished waiting for score to calc")
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -47,3 +50,5 @@ Scene Property ED_Controller_FeedDialogue_Scene  Auto
 ReferenceAlias Property ED_FeedDialogue_StartLocMarker  Auto  
 
 Activator Property FXEmptyActivator  Auto  
+
+Keyword Property ED_Mechanics_Keyword_RollFeedDialogueScore  Auto  
