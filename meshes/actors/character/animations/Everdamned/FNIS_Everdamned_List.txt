@@ -28,21 +28,24 @@ b -Tn ed_cicerodancelooped_idle special_cicerodance1.hkx
 ' ----------------- SEDUCTION ------------------
 
 ' NPC REGULAR Sequence, contents controlled by OAR
-s -a,h ed_seduction_NPCSeq_start ed_seduction_bp_start.hkx
-+ -h ed_seduction_NPCSeq_idleStart ed_seduction_bp_idleStart.hkx
-+ -a,h ed_seduction_NPCSeq_act1 ed_seduction_bp_act1.hkx
-+ -a,h ed_seduction_NPCSeq_act2 ed_seduction_bp_act2.hkx
-+ -h ed_seduction_NPCSeq_idleLast ed_seduction_bp_idleLast.hkx
+s -a,h ed_seduction_NPCSeq_start ed_empty.hkx 
++ -a,h,AVbIdlePlaying ed_seduction_NPCSeq_start2 ed_seduction_bp_start.hkx
++ -h,AVbIdlePlaying ed_seduction_NPCSeq_idleStart ed_seduction_bp_idleStart.hkx
++ -a,h,AVbIdlePlaying ed_seduction_NPCSeq_act1 ed_seduction_bp_act1.hkx
++ -a,h,AVbIdlePlaying ed_seduction_NPCSeq_act2 ed_seduction_bp_act2.hkx
++ -h,AVbIdlePlaying ed_seduction_NPCSeq_idleLast ed_seduction_bp_idleLast.hkx
 + -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_NPCSeq_end ed_seduction_bp_end.hkx
 
 ' Player sequence, contents controlled by OAR
-s -a,h ed_seduction_playerSeq_start ed_seduction_ps_start.hkx
-+ -a,h ed_seduction_playerSeq_talk ed_seduction_ps_talk.hkx
+s -a,h ed_seduction_playerSeq_start ed_empty.hkx 
++ -a,h,AVbIdlePlaying ed_seduction_playerSeq_start2 ed_seduction_ps_start.hkx
++ -a,h,AVbIdlePlaying ed_seduction_playerSeq_talk ed_seduction_ps_talk.hkx
 + -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_playerSeq_end ed_seduction_ps_end.hkx
 
 ' Player sequence 2, contents controlled by OAR
-s -a,h ed_seduction_playerSeqMain_start ed_seduction_psm_start.hkx
-+ -h ed_seduction_playerSeqMain_talk ed_seduction_psm_talk.hkx
+s -a,h ed_seduction_playerSeqMain_start ed_empty.hkx 
++ -a,h,AVbIdlePlaying ed_seduction_playerSeqMain_start2 ed_seduction_psm_start.hkx
++ -h,AVbIdlePlaying ed_seduction_playerSeqMain_talk ed_seduction_psm_talk.hkx
 + -a,h,Ted_seduction_customAnimFin/-0.1 ed_seduction_playerSeqMain_end ed_seduction_psm_end.hkx
 
 ' Aroused

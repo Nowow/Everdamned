@@ -1,47 +1,43 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 8
+;NEXT FRAGMENT INDEX 20
 Scriptname SF_ED_SeductionDialogueContr_0560A490 Extends Scene Hidden
 
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
+;BEGIN FRAGMENT Fragment_8
+Function Fragment_8()
 ;BEGIN CODE
-debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene starter")
+int cntr
 
-
-ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(0)
-
-sceneTarget = ED_FeedDialogue_Target.GetReference() as actor
-
-
-;playerRef.PlayIdle(ED_Idle_Seduction_PlayerSeqStart)
-;
-
-ED_Mechanics_FeedDialogue_CrutchAnimTrigger_Spell.Cast(sceneTarget, sceneTarget)
-
-sceneTarget.SetLookAt(playerRef)
+; mega haxx with anim var, see FNIS file
+while playerRef.GetAnimationVariableBool("bIdlePlaying") &&  cntr <= 30
+	playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceEnd)
+	cntr = cntr + 1
+	utility.wait(0.5)
+endwhile
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller Scene Phase 1 ENDED, cntr: " + cntr)
 ;END CODE
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
+;BEGIN FRAGMENT Fragment_18
+Function Fragment_18()
 ;BEGIN CODE
-debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene ended")
-sceneTarget.ClearLookAt()
+int cntr
 
-objectreference packageStartMarker = ED_FeedDialogue_StartLocMarker.GetReference()
-ED_FeedDialogue_StartLocMarker.Clear()
-packageStartMarker.Disable()
-packageStartMarker.Delete()
-;END CODE
-EndFunction
-;END FRAGMENT
+; mega haxx with anim var, see FNIS file
+while playerRef.GetAnimationVariableBool("bIdlePlaying") &&  cntr <= 30
+	playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceMainEnd)
+	cntr = cntr + 1
+	utility.wait(0.5)
+endwhile
 
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2()
-;BEGIN CODE
-playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceMainEnd)
-sceneTarget.PlayIdle(ED_Idle_Seduction_NPCSequenceEnd)
+cntr = 0
+
+while sceneTarget.GetAnimationVariableBool("bIdlePlaying") &&  cntr <= 30
+	sceneTarget.PlayIdle(ED_Idle_Seduction_NPCSequenceEnd)
+	cntr = cntr + 1
+	utility.wait(0.5)
+endwhile
+
 
 int __walkawayState = ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.GetValue() as int 
 
@@ -90,6 +86,41 @@ endif
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN CODE
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene ended")
+sceneTarget.ClearLookAt()
+
+objectreference packageStartMarker = ED_FeedDialogue_StartLocMarker.GetReference()
+ED_FeedDialogue_StartLocMarker.Clear()
+packageStartMarker.Disable()
+packageStartMarker.Delete()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene starter")
+
+
+ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(0)
+
+sceneTarget = ED_FeedDialogue_Target.GetReference() as actor
+
+
+;playerRef.PlayIdle(ED_Idle_Seduction_PlayerSeqStart)
+;
+
+ED_Mechanics_FeedDialogue_CrutchAnimTrigger_Spell.Cast(sceneTarget, sceneTarget)
+
+sceneTarget.SetLookAt(playerRef)
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 ReferenceAlias Property ED_FeedDialogue_Target  Auto  
@@ -133,3 +164,5 @@ Idle Property ResetRoot  Auto
 Idle Property ED_Idle_Seduction_PlayerSequenceMainEnd  Auto  
 
 Idle Property ED_Idle_Seduction_NPCSequenceEnd  Auto  
+
+Idle Property ED_Idle_Seduction_PlayerSequenceEnd  Auto  

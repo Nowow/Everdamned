@@ -85,19 +85,22 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		debug.Trace("Everdamned DEBUG: " + __targetThing + " " + pl)
 		
-		ED_Mechanics_Keyword_RollFeedDialogueScore.SendStoryEvent(None, pl, __targetThing, 0, 0)
-
+		
+		
 		
 		;__targetThing.PlayIdle(ED_Idle_Seduction_NPCSequenceStart)
 		;debug.SendAnimationEvent(__targetThing, "NPC_TurnLeft180")
 		
+		bool __var
 		
+		__var = __targetThing.GetAnimationVariableBool("bIdlePlaying")
+		debug.Trace("Everdamned DEBUG: Var: " + __var)
 		
 		if !__switch
-			;debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_act1")
+			
 		else
+			;__targetThing.SetAnimationVariableBool("bIdlePlaying", !__var)
 			;debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_end")
 		endif
 		
