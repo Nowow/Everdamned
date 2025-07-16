@@ -201,12 +201,12 @@ km -ac,D8.000000,Ted_seduction_speakerBitten/2.0,TNPCSoundPlay.npcvampirelordfee
 'km -ac,D4.065000,TNPCHumanVampireFeed/0.0,TNPCSoundPlay.npcvampirelordfeed/1.155,T2_KillActor/3.8 ed_groundfeedkm ed_groundfeedkm.HKX
 ' not used, here to provide custom animevents
 'km -ac,D4.065000,Ted_playsound_feeddoubletap/0.0,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.900,TNPCSoundPlay.NPCKillShove/3.567,T2_KillActor/3.8 KillMoveED_jumpfeedkm ed_jumpfeedkm.HKX
-km -ac,D4.1,Ted_playsound_feeddoubletap/0.0,Ted_sheatheweapons/0.01,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.500,TNPCSoundPlay.NPCKillShove/3.567,T2_KillActor/3.8 KillMoveED_jumpfeedkm ed_jumpfeedkm.HKX
+km -ac,D4.1,Ted_playsound_feeddoubletap/0.0,Ted_sheatheweapons/0.01,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.500,Ted_socialfeedfinished/2.600,TNPCSoundPlay.NPCKillShove/3.567,T2_KillActor/3.8 KillMoveED_jumpfeedkm ed_jumpfeedkm.HKX
 
 ' not used, here to provide custom animevents
 km -ac,D5.344,Ted_playsound_bleedoutrustle/0.0,Ted_sheatheweapons/0.01,TNPCSoundPlay.npcvampirelordfeed/1.933,Ted_impact_bloodgush/2.867,TNPCSoundPlay.NPCKillGore/3.700,T2_KillActor/4.500 KillMoveED_bleedoutFinisher ed_bleedoutfinisher.hkx
 
 ' not used, here to provide custom animevents for social feed
-km -ac,D13.266,Ted_breathSounds/1.067,Ted_impact_bloodgushshort/5.233,Ted_socialfeedbite/5.234,Ted_feedsatiation/11.367 ed_DummyPairdEvent1 ed_bleedoutfinisher.hkx
+km -ac,D13.266,Ted_breathSounds/1.067,Ted_impact_bloodgushshort/5.233,Ted_socialfeedbite/5.234,Ted_feedsatiation/11.367,Ted_socialfeedsatiation/11.367 ed_DummyPairdEvent1 ed_bleedoutfinisher.hkx
 
 'km '-D21.00,TNPCKillMoveStart/0.0,T2_KillMoveStart/0.1,TNPCpairedStop/21.00,TNPCKillMoveEnd/21.00,TPairEnd/21.00,T2_PairEnd/21.00,T2_pairedSto'p/21.00,T2_KillMoveEnd/21.00 ZaZSensualKiss ed_kiss.hkx

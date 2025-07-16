@@ -85,7 +85,7 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		
+		pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
 		
 		
 		
@@ -94,8 +94,8 @@ Event OnKeyDown(int keyCode)
 		
 		bool __var
 		
-		__var = __targetThing.GetAnimationVariableBool("bIdlePlaying")
-		debug.Trace("Everdamned DEBUG: Var: " + __var)
+		;__var = __targetThing.GetAnimationVariableBool("bIdlePlaying")
+		;debug.Trace("Everdamned DEBUG: Var: " + __var)
 		
 		if !__switch
 			

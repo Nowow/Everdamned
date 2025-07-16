@@ -96,7 +96,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(false), 1)
 		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(true), 2)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SheatheWepons event")
-		
+	
 	endif
 endevent
 

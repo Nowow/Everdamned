@@ -7,6 +7,8 @@ String property BiteStart = "BiteStart" auto
 String property GarkainFeedSounds = "SoundPlay.NPCWerewolfFeedingKill" auto
 ;String property FeedTrigger = "ed_FeedAnimationPlayed" auto
 String property BreathSounds = "ed_breathSounds" auto
+string property SocialFeedSatiation = "ed_socialfeedsatiation" auto
+string property SocialFeedFinished = "ed_socialfeedfinished" auto
 
 
 ;---------- helper functions ---------------
@@ -93,6 +95,8 @@ Function RegisterFeedEvents()
 			debug.Trace("Everdamned DEBUG: Feed Manager registred chomp event for Mortal")
 			;RegisterForAnimationEvent(playerRef, FeedTrigger)
 			RegisterForAnimationEvent(playerRef, BreathSounds)
+			RegisterForAnimationEvent(playerRef, SocialFeedSatiation)
+			RegisterForAnimationEvent(playerRef, SocialFeedFinished)
 			
 		endif
 
@@ -117,6 +121,8 @@ function UnRegisterFeedEvents()
 	;	UnRegisterForAnimationEvent(playerRef, FeedDoubletap)
 	
 		UnRegisterForAnimationEvent(playerRef, BreathSounds)
+		UnRegisterForAnimationEvent(playerRef, SocialFeedSatiation)
+		UnRegisterForAnimationEvent(playerRef, SocialFeedFinished)
 	
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
 	endif
@@ -124,11 +130,6 @@ endfunction
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 
-	
-	;if asEventName == FeedTrigger
-		
-		;logging inside
-		;ApplyCombatFeedEffects()
 	
 	;its sfx, but here so i dont have to propagate victim race to alias script
 	;and timing is not critical so thread locks are not an issue
@@ -140,6 +141,14 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	elseif asEventName == BiteStart || asEventName == GarkainFeedSounds
 		debug.Trace("Everdamned DEBUG: Feed Manager caught Beast Bite event")
 		HandleBeastBite()
+	
+	elseif asEventName == SocialFeedSatiation
+		aFeedTarget.DamageActorValue("ED_HpDrainedTimer", aFeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.7)
+		PlayerVampireQuest.EatThisActor(aFeedTarget, 0.35)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedFinished event, processed target: " + aFeedTarget)
+	elseif asEventName == SocialFeedFinished
+		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = aFeedTarget)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedFinished event, Bystander quest started")
 	endif
 endevent
 
@@ -529,7 +538,6 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	
 	float zOffset = FeedTarget.GetHeadingAngle(playerRef)
 	FeedTarget.SetAngle(FeedTarget.GetAngleX(), FeedTarget.GetAngleY(), FeedTarget.GetAngleZ() + zOffset)
-	
 	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
 	
 	; for vampire converting sidequest
@@ -553,13 +561,13 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 		endif
 		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
 		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
-		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
+		
 	endif
 	
 	;adjust status bloodpool etc
 	;damage bloodpool available on target
-	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.7)
-	PlayerVampireQuest.EatThisActor(FeedTarget, 0.35)
+	; MOVED TO animation event
+	aFeedTarget = FeedTarget
 	
 	;age for 2h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
