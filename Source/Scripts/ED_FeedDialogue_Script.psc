@@ -441,7 +441,7 @@ function DoTheThing()
 	RollFeedDialogueChecks(__Seducer, __Seduced)
 	
 	; walkaway can still happen, but seduction was successfully applied/failed
-	ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(1)
+	; moved to PROMPT 2
 	
 	SetCurrentStageID(100)
 	stop()

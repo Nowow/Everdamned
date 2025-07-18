@@ -1,6 +1,27 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 20
+;NEXT FRAGMENT INDEX 24
 Scriptname SF_ED_SeductionDialogueContr_0560A490 Extends Scene Hidden
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1()
+;BEGIN CODE
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene starter")
+
+
+ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(0)
+
+sceneTarget = ED_FeedDialogue_Target.GetReference() as actor
+
+
+;playerRef.PlayIdle(ED_Idle_Seduction_PlayerSeqStart)
+;
+
+ED_Mechanics_FeedDialogue_CrutchAnimTrigger_Spell.Cast(sceneTarget, sceneTarget)
+
+sceneTarget.SetLookAt(playerRef)
+;END CODE
+EndFunction
+;END FRAGMENT
 
 ;BEGIN FRAGMENT Fragment_8
 Function Fragment_8()
@@ -18,6 +39,20 @@ debug.Trace("Everdamned DEBUG: Feed Dialogue Controller Scene Phase 1 ENDED, cnt
 EndFunction
 ;END FRAGMENT
 
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN CODE
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene ended")
+sceneTarget.ClearLookAt()
+
+objectreference packageStartMarker = ED_FeedDialogue_StartLocMarker.GetReference()
+ED_FeedDialogue_StartLocMarker.Clear()
+packageStartMarker.Disable()
+packageStartMarker.Delete()
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_18
 Function Fragment_18()
 ;BEGIN CODE
@@ -27,7 +62,7 @@ int cntr
 while playerRef.GetAnimationVariableBool("bIdlePlaying") &&  cntr <= 30
 	playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceMainEnd)
 	cntr = cntr + 1
-	utility.wait(0.5)
+	utility.wait(1.0)
 endwhile
 
 cntr = 0
@@ -35,7 +70,7 @@ cntr = 0
 while sceneTarget.GetAnimationVariableBool("bIdlePlaying") &&  cntr <= 30
 	sceneTarget.PlayIdle(ED_Idle_Seduction_NPCSequenceEnd)
 	cntr = cntr + 1
-	utility.wait(0.5)
+	utility.wait(1.0)
 endwhile
 
 
@@ -46,8 +81,8 @@ if __walkawayState == 0
 	debug.Trace("Everdamned INFO: Seduction Controller Scene determined seduc had walkaway type 0, we havent started actual seduction")
 	ED_Mechanics_FeedDialogue_CooldownShort_Spell.Cast(sceneTarget, sceneTarget)
 	
-	message.ResetHelpMessage("ed_feedd_walkaway_short")
-	ED_Mechanics_FeedDialogue_Message_Walkaway_OffTheHook.ShowAsHelpMessage("ed_feedd_walkaway_short", 3.0, 1.0, 1)
+	message.ResetHelpMessage("ed_feed_walkaway_short")
+	ED_Mechanics_FeedDialogue_Message_Walkaway_OffTheHook.ShowAsHelpMessage("ed_feed_walkaway_short", 6.0, 1.0, 1)
 
 else
 	if ED_Mechanics_FeedDialogue_SeductionResult.GetValue() as int == 0
@@ -61,8 +96,8 @@ else
 		if __walkawayState == 1
 			debug.Trace("Everdamned INFO: Seduction Controller Scene determined seduc had walkaway type 1, we tried seducing and succeded but walked away anyway")
 			ED_Mechanics_FeedDialogue_CooldownHalfDay_Spell.Cast(sceneTarget, sceneTarget)
-			message.ResetHelpMessage("ed_feedd_walkaway_halfday")
-			ED_Mechanics_FeedDialogue_Message_Walkaway_Impatience.ShowAsHelpMessage("ed_feedd_walkaway_halfday", 3.0, 1.0, 1)
+			message.ResetHelpMessage("ed_feed_walkaway_halfday")
+			ED_Mechanics_FeedDialogue_Message_Walkaway_Impatience.ShowAsHelpMessage("ed_feed_walkaway_halfday", 6.0, 1.0, 1)
 		else ; walkaway type 2
 			debug.Trace("Everdamned DEBUG: Seduction Controller Scene determined seduc was successfull and we followed through")
 			int currentFactionRank = sceneTarget.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac)
@@ -82,41 +117,6 @@ else
 	endif
 		
 endif
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
-;BEGIN CODE
-debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene ended")
-sceneTarget.ClearLookAt()
-
-objectreference packageStartMarker = ED_FeedDialogue_StartLocMarker.GetReference()
-ED_FeedDialogue_StartLocMarker.Clear()
-packageStartMarker.Disable()
-packageStartMarker.Delete()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1()
-;BEGIN CODE
-debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene starter")
-
-
-ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(0)
-
-sceneTarget = ED_FeedDialogue_Target.GetReference() as actor
-
-
-;playerRef.PlayIdle(ED_Idle_Seduction_PlayerSeqStart)
-;
-
-ED_Mechanics_FeedDialogue_CrutchAnimTrigger_Spell.Cast(sceneTarget, sceneTarget)
-
-sceneTarget.SetLookAt(playerRef)
 ;END CODE
 EndFunction
 ;END FRAGMENT

@@ -6,11 +6,11 @@ Scriptname ED_FeedDialogue_SedSuccessPostprocess Extends TopicInfo Hidden
 Function Fragment_2(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-; listened by ED_FeedDialogue_VictimSFX script
-SendModEvent("feedDialogue_last_scene_started")
-
 ;walkaway will not happen, whatever happens next we count it as finished dialogue
 ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(2)
+
+; listened by ED_FeedDialogue_VictimSFX script
+SendModEvent("feedDialogue_SocialFeedStarted")
 
 float lowerRadiusBoundary = ED_Mechanics_FeedDialogue_DarkRadius.GetValue()
 float higherRadiusBoundary = ED_Mechanics_FeedDialogue_LightRadius.GetValue()

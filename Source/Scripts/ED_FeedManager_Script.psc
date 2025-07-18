@@ -145,10 +145,13 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	elseif asEventName == SocialFeedSatiation
 		aFeedTarget.DamageActorValue("ED_HpDrainedTimer", aFeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.7)
 		PlayerVampireQuest.EatThisActor(aFeedTarget, 0.35)
-		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedFinished event, processed target: " + aFeedTarget)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedSatiation event, processed target: " + aFeedTarget)\
+
 	elseif asEventName == SocialFeedFinished
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = aFeedTarget)
+		SendModEvent("feedDialogue_SocialFeedFinished")
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedFinished event, Bystander quest started")
+
 	endif
 endevent
 

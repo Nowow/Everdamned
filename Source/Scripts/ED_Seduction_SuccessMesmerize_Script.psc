@@ -9,6 +9,8 @@ Actor akSpeaker = akSpeakerRef as Actor
 ;walkaway will not happen, whatever happens next we count it as finished dialogue
 ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(2)
 
+SendModEvent("feedDialogue_SocialFeedFinished")
+
 playerRef.DoCombatSpellApply(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell, akSpeaker)
 ;END CODE
 EndFunction

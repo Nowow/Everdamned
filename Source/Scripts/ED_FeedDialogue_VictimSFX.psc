@@ -1,63 +1,114 @@
 Scriptname ED_FeedDialogue_VictimSFX extends activemagiceffect  
 
 
-actor _player
-actor _target
+float BeatIntervalStart = 1.2
+float BeatIntervalFloor_State0 = 1.01
+float BeatIntervalFloor_State1 = 0.61
+float BeatRampup_State0 = -0.1
+float BeatRampup_State1 = -0.132
 
-float _beatDur = 1.2
-float _beatRampup = -0.1
-float _beatFloor = 1.01
+float ImodStrength_Start = 0.2
+float ImodStrengthMax_State0 = 0.65
+float ImodStrengthMax_State1 = 0.95
+float ImodStrengthRampup_State0 = 0.1
+float ImodStrengthRampup_State1 = 0.1
+float ImodStrengthRampup_State2 = -0.4
 
-float _currImodStr = 0.2
-float _imodStrRampup = 0.1
-float _imodStrCeiling = 0.65
+float BeatVolume = 1.0
+float BeatVolumeRampdown = -0.25
 
-bool _lastSceneStarted = false
+float BeatInterval_Current
+float BeatIntervalFloor_Current
+float BeatRampup_Current
+
+float ImodStrength_Current
+float ImodStrengthMax_Current
+float ImodStrengthRampup_Current
+
+
+; 0 - before starting the feed
+; 1 - social feed started
+; 2 - social feed ended/dialogue exited/used mesmerize
+int __state
+
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
-	_player = Game.GetPlayer()
-	_target = akTarget
-	RegisterForModEvent("feedDialogue_last_scene_started","OnFeedDgLastSceneStart")
-	ED_Mechanics_FeedDialogue_HeartbeatLongWindup_SoundM.PlayAndWait(_player)
+	Target = akTarget
+	RegisterForModEvent("feedDialogue_SocialFeedStarted","OnSocialFeedStart")
+	RegisterForModEvent("feedDialogue_SocialFeedFinished","OnSocialFeedEnd")
+	
+	BeatInterval_Current = BeatIntervalStart
+	BeatIntervalFloor_Current = BeatIntervalFloor_State0
+	BeatRampup_Current = BeatRampup_State0
+
+	ImodStrength_Current = ImodStrength_Start
+	ImodStrengthMax_Current = ImodStrengthMax_State0
+	ImodStrengthRampup_Current = ImodStrengthRampup_State0
+	
+	ED_Mechanics_FeedDialogue_HeartbeatLongWindup_SoundM.PlayAndWait(playerRef)
 	RegisterForSingleUpdate(0.01)
 EndEvent
 
-Event OnFeedDgLastSceneStart(string eventName, string strArg, float numArg, Form sender)
-	debug.Trace("OnFeedDgLastSceneStart got called!")
-	if _lastSceneStarted
-		return
-	endif
-	_lastSceneStarted = true
-	_beatFloor = 0.61
-	_beatRampup = -0.132
-	_imodStrCeiling = 0.95
-EndEvent
-
+int __playbackInstance
 Event OnUpdate()
-	ED_Mechanics_FeedDialogue_HeartbeatLongBeat_SoundM.Play(_player)
-	ED_Mechanics_FeedDialogue_PulsingVeins_Shader.Play(_target, _beatDur)
-	ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD.Apply(_currImodStr)
-	if _beatDur > _beatFloor
-		_beatDur = _beatDur + _beatRampup
+
+	__playbackInstance = ED_Mechanics_FeedDialogue_HeartbeatLongBeat_SoundM.Play(playerRef)
+	Sound.SetInstanceVolume(__playbackInstance, BeatVolume)
+	ED_Mechanics_FeedDialogue_PulsingVeins_Shader.Play(Target, BeatInterval_Current)
+	ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD.Apply(ImodStrength_Current)
+	
+	
+	if BeatInterval_Current > BeatIntervalFloor_Current
+		BeatInterval_Current += BeatRampup_Current
 	endif
-	RegisterForSingleUpdate(_beatDur)
-	if _currImodStr < _imodStrCeiling
-		_currImodStr = _currImodStr + _imodStrRampup
+	
+	if ImodStrength_Current < ImodStrengthMax_Current || __state == 2
+		ImodStrength_Current += ImodStrengthRampup_Current
 	endif
-	debug.Trace("Current str val: " + _currImodStr + ", current beat dur: " + _beatDur)
+	
+	if __state == 2
+		BeatVolume += BeatVolumeRampdown
+	endif
+	
+	if BeatVolume > 0.01
+		RegisterForSingleUpdate(BeatInterval_Current)
+	else
+		Dispel()
+		debug.Trace("Everdamned DEBUG: Feed Dialogue VICTIM SFX effect finished")
+	endif
+	
+	debug.Trace("Everdamned DEBUG: Feed Dialogue VICTIM SFX state: " + __state + ", current beat interval: " + BeatInterval_Current + ", current str val: " + ImodStrength_Current)
 EndEvent
 
-Event OnEffectFinish(Actor akTarget, Actor akCaster)
-	ED_Mechanics_FeedDialogue_HeartbeatLongWinddown_SoundM.Play(_player)
-	ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD.Apply(0.5)
+Event OnSocialFeedStart(string eventName, string strArg, float numArg, Form sender)
+	
+	__state = 1
+	
+	BeatIntervalFloor_Current = BeatIntervalFloor_State1
+	BeatRampup_Current = BeatRampup_State1
+	ImodStrengthMax_Current = ImodStrengthMax_State1
+	
+	debug.Trace("Everdamned DEBUG: Feed Dialogue VICTIM SFX got OnSocialFeedStart call")
 EndEvent
+
+Event OnSocialFeedEnd(string eventName, string strArg, float numArg, Form sender)
+	
+	__state = 2
+	
+	; winding imad strength down
+	ImodStrengthRampup_Current = ImodStrengthRampup_State2
+	
+	debug.Trace("Everdamned DEBUG: Feed Dialogue VICTIM SFX got OnSocialFeedEnd call")
+endevent
+
+
+actor Target
+
+actor property playerRef auto
 
 Sound Property ED_Mechanics_FeedDialogue_HeartbeatLongWindup_SoundM  Auto  
-
 Sound Property ED_Mechanics_FeedDialogue_HeartbeatLongBeat_SoundM  Auto  
-
+;Sound Property ED_Mechanics_FeedDialogue_HeartbeatLongWinddown_SoundM  Auto  
 ImageSpaceModifier Property ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD  Auto  
-
 EffectShader Property ED_Mechanics_FeedDialogue_PulsingVeins_Shader  Auto  
 
-Sound Property ED_Mechanics_FeedDialogue_HeartbeatLongWinddown_SoundM  Auto  
