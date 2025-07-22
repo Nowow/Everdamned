@@ -16,3 +16,5 @@ function IncreaseActiveEffectDuration(activemagiceffect AMEffect, float delta) g
 int[] function GetAdjustedAvForComparison(actor thisActor, int playerLevel, int skillsPerLevelSetting, int skillBaseSetting) global native
 
 function StopAllShadersExceptThis(effectshader a_effectShader, keyword someKeyword, effectshader ED_TestShader2_empty) global native
+
+form function LookupSomeFormByEditorID(string editorID) global native

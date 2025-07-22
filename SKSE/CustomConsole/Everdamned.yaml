@@ -1,0 +1,21 @@
+name: everdamned
+alias: evd
+script: ED_CustomConsoleScript
+help: Everdamned test commands
+subs:
+  - name: play
+    func: PlayVisualEffectFromString
+    help: plays some visual effect on player
+    args:
+      - name: editorID
+        type: string
+        default: HealTargetFX
+        help: editorID of Visual Effect to play
+  - name: stop
+    func: StopLeVFX
+    help: plays some visual effect on player
+    args:
+      - name: editorID
+        type: string
+        default:
+        help: editorID of Visual Effect to play

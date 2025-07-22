@@ -85,7 +85,11 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
+		;pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
+		
+		form leform = ED_SKSEnativebindings.LookupSomeFormByEditorID("HealTargetFX")
+		
+		debug.Trace("Everdamned DEBUG: Looked up form: " + leform)
 		
 		
 		
