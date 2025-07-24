@@ -73,6 +73,9 @@ keyword property ED_Mechanics_Keyword_RollFeedDialogueScore auto
 
 int counter
 bool __switch
+art leart
+string art_name
+string mod_name
 Event OnKeyDown(int keyCode)
 	if Utility.IsInMenuMode()
 		return
@@ -85,11 +88,12 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		
+		
 		;pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
 		
-		form leform = ED_SKSEnativebindings.LookupSomeFormByEditorID("HealTargetFX")
+		;form leform = ED_SKSEnativebindings.LookupSomeFormByEditorID("HealTargetFX")
 		
-		debug.Trace("Everdamned DEBUG: Looked up form: " + leform)
 		
 		
 		

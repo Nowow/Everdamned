@@ -18,3 +18,8 @@ int[] function GetAdjustedAvForComparison(actor thisActor, int playerLevel, int 
 function StopAllShadersExceptThis(effectshader a_effectShader, keyword someKeyword, effectshader ED_TestShader2_empty) global native
 
 form function LookupSomeFormByEditorID(string editorID) global native
+
+art function GetArtObjectByIndex(string SelectedModName, int artIndex) global native
+
+function SetupArtObjectArray() global native
+

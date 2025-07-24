@@ -3,7 +3,7 @@ alias: evd
 script: ED_CustomConsoleScript
 help: Everdamned test commands
 subs:
-  - name: play
+  - name: playbyname
     func: PlayVisualEffectFromString
     help: plays some visual effect on player
     args:
@@ -19,3 +19,39 @@ subs:
         type: string
         default:
         help: editorID of Visual Effect to play
+  - name: playnext
+    func: PlayNext
+    help: plays next art object from art array
+  - name: playprev
+    func: PlayPrevious
+    help: plays previous art object from art array
+  - name: setindex
+    func: SetCurrentIndex
+    help: set art array index
+    args:
+      - name: artIndex
+        type: int
+        default: 0
+        help: index in array
+  - name: setup
+    func: SetupArtArray
+    help: filters art objects map
+  - name: repeat
+    func: PlayCurrentArtAgain
+    help: repeat last art
+  - name: save
+    func: SaveCurrentArt
+    help: save current art in log
+    args:
+      - name: commentStr
+        type: string
+        default: 
+        help: comment to save along
+  - name: select
+    func: SelectModToBrowse
+    help: repeat last art
+    args:
+      - name: modName
+        type: string
+        default: 
+        help: which mod are we browsing now

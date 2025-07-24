@@ -2,6 +2,7 @@ Scriptname ED_DrainFinisher_VFX extends ActiveMagicEffect
 
 float property TimeToPop auto ;= 6
 float property VfxTaper auto ;= 3
+float property XPgained auto
 
 float  _timeElapsed = 0.0
 
@@ -32,15 +33,26 @@ Event OnUpdate()
 	DLC1BatsEatenBloodSplats.Play(_target, _vfxDuration)
 	
 	debug.trace("Everdamned DEBUG: DRAIN STATE: " + _timeElapsed)
-	if _timeElapsed == TimeToPop
+	if _timeElapsed == 4.0
+		DLC1VampireChangeFXS.Play(_target, _vfxDuration)
+	elseif _timeElapsed == TimeToPop
 		
 		_success = true
 		debug.trace("Everdamned DEBUG: Exsanguinate KABOOoooOOOoooOOM!!!!!!")
-		; TODO: proper VFX
+		
+		ED_Art_SoundM_SuperFleshyBurst.play(_target)
 		_target.kill(_player)
 		_target.placeatme(ED_Art_Explosion_Exsanguinate)
-		PlayerVampireQuest.EatThisActor(_target)
+		_target.placeatme(ED_Art_Explosion_BloodStorm)
+		
 		_target.EndDeferredKill()
+		_target.SetCriticalStage(_target.CritStage_DisintegrateStart)
+		_target.SetAlpha(0.000000, true)
+		_target.AttachAshPile(ED_Art_Ashpile_RedGoo as form)
+		_target.SetCriticalStage(_target.CritStage_DisintegrateEnd)
+		
+		
+		PlayerVampireQuest.EatThisActor(_target)
 		CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 		return
 	endif
@@ -50,14 +62,11 @@ endevent
 
 Event OnEffectFinish(Actor Target, Actor Caster)
 	debug.Trace("Everdamned DEBUG: Exsanguinate effect finished")
+	
 	if !_success
 		debug.Trace("Everdamned DEBUG: But no exsanguination took place")
 		DLC1BatsAbsorbTargetVFX01.Stop(_target)
-		
-	; should not be reachable, but still...
-	elseif _target.isDead()
-		debug.Trace("Everdamned ERROR: Exsanguination happened, but target still not dead for some reason")
-		DLC1VampBatsEatenByBatsSkinFXS.Play(Target, 5.0)
+		DLC1BatsEatenBloodSplats.Stop(_target)
 	endif
 	
 	;should end it anyway
@@ -65,11 +74,16 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 	
 EndEvent
 
-float property XPgained auto
+
+activator property ED_Art_Ashpile_RedGoo auto
 VisualEffect Property DLC1BatsAbsorbTargetVFX01 auto
-ImpactDataSet Property BloodSprayBleedImpactSetRed auto
 EffectShader Property DLC1BatsEatenBloodSplats Auto
 EffectShader Property DLC1VampBatsEatenByBatsSkinFXS Auto
+EffectShader Property DLC1VampireChangeFXS Auto
+
+sound property ED_Art_SoundM_SuperFleshyBurst auto
+
+explosion property ED_Art_Explosion_BloodStorm auto
 Explosion property ED_Art_Explosion_Exsanguinate Auto
 
 PlayerVampireQuestScript property PlayerVampireQuest auto
