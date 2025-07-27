@@ -71,6 +71,8 @@ scene property ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene auto
 
 keyword property ED_Mechanics_Keyword_RollFeedDialogueScore auto
 
+visualeffect property ED_TEST_VfxTargeted auto
+
 int counter
 bool __switch
 art leart
@@ -88,7 +90,7 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		
+		ED_TEST_VfxTargeted.Play(pl, 5, __targetThing)
 		
 		;pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
 		

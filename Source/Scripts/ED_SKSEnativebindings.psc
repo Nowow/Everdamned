@@ -19,7 +19,11 @@ function StopAllShadersExceptThis(effectshader a_effectShader, keyword someKeywo
 
 form function LookupSomeFormByEditorID(string editorID) global native
 
-art function GetArtObjectByIndex(string SelectedModName, int artIndex) global native
+function SetupFormMaps() global native
 
-function SetupArtObjectArray() global native
+art function GetArtObjectByIndex(string SelectedModName, int i) global native
+explosion function GetExplosionByIndex(string SelectedModName, int i) global native
+projectile function GetProjectileByIndex(string SelectedModName, int i) global native
+activator function GetActivatorByIndex(string SelectedModName, int i) global native
+hazard function GetHazardByIndex(string SelectedModName, int i) global native
 

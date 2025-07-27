@@ -19,39 +19,42 @@ subs:
         type: string
         default:
         help: editorID of Visual Effect to play
-  - name: playnext
+  - name: n
     func: PlayNext
-    help: plays next art object from art array
-  - name: playprev
+
+  - name: p
     func: PlayPrevious
-    help: plays previous art object from art array
-  - name: setindex
+
+  - name: i
     func: SetCurrentIndex
-    help: set art array index
     args:
       - name: artIndex
         type: int
         default: 0
-        help: index in array
+
   - name: setup
-    func: SetupArtArray
-    help: filters art objects map
-  - name: repeat
-    func: PlayCurrentArtAgain
-    help: repeat last art
+    func: SetupFormMaps
+
+  - name: r
+    func: PlayCurrentFormAgain
+
   - name: save
-    func: SaveCurrentArt
-    help: save current art in log
+    func: SaveCurrentForm
     args:
       - name: commentStr
         type: string
         default: 
-        help: comment to save along
-  - name: select
+
+  - name: mod
     func: SelectModToBrowse
-    help: repeat last art
     args:
       - name: modName
         type: string
         default: 
-        help: which mod are we browsing now
+
+  - name: type
+    func: SelectFormTypeToBrowse
+    args:
+      - name: modName
+        type: int
+        default: 1
