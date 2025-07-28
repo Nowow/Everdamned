@@ -72,6 +72,7 @@ scene property ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene auto
 keyword property ED_Mechanics_Keyword_RollFeedDialogueScore auto
 
 visualeffect property ED_TEST_VfxTargeted auto
+visualeffect property ED_Art_VFX_ExsanguinateBuildup auto
 
 int counter
 bool __switch
@@ -90,7 +91,12 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		ED_TEST_VfxTargeted.Play(pl, 5, __targetThing)
+		ED_Art_VFX_ExsanguinateBuildup.Play(pl)
+		
+		
+		
+		
+		;ED_TEST_VfxTargeted.Play(pl, 5, __targetThing)
 		
 		;pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
 		
@@ -108,8 +114,9 @@ Event OnKeyDown(int keyCode)
 		;debug.Trace("Everdamned DEBUG: Var: " + __var)
 		
 		if !__switch
-			
+		
 		else
+	
 			;__targetThing.SetAnimationVariableBool("bIdlePlaying", !__var)
 			;debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_end")
 		endif

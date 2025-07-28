@@ -23,6 +23,11 @@ Event OnEffectStart(Actor Target, Actor Caster)
 	_target = Target
 
 	_target.StartDeferredKill()
+	
+	; using Essential alias instead of deferred kill because 
+	; deferred kill fs with paralysis... 
+	;ED_ExsanguinateTarget.ForceRefTo(Target)
+	
 	currentSFX = PulseSound_Array[(_timeElapsed as int)/2].Play(_player)
 	sound.SetInstanceVolume(currentSFX, 100.0)
 	
@@ -53,23 +58,32 @@ Event OnUpdate()
 		
 		_success = true
 		debug.trace("Everdamned DEBUG: Exsanguinate KABOOoooOOOoooOOM!!!!!!")
-		;ED_Art_SoundM_SuperFleshyBurst.play(_target)
-		_target.kill(_player)
-		;ED_Art_SoundM_HellsBells.Play(_player)
-		_target.placeatme(ED_Art_Explosion_Exsanguinate)
 		
-		;_target.placeatme(ED_Art_Explosion_BloodStorm)
+		;if ED_ExsanguinateTarget.GetReference() == _target
+		;	debug.trace("Everdamned DEBUG: Exsanguinate alias is filled correctly, proceeding")
+			
+		;	ED_ExsanguinateTarget.Clear()
+			_target.kill(_player)
+			
+			;ED_Art_SoundM_HellsBells.Play(_player)
+			_target.placeatme(ED_Art_Explosion_Exsanguinate)
+			_target.ApplyHavokImpulse(0.0, 0.0, 400.0, 100.0)
+			
+			_target.EndDeferredKill()
+			
+			
+			;_target.SetCriticalStage(_target.CritStage_DisintegrateStart)
+			;_target.SetAlpha(0.000000, true)
+			;_target.AttachAshPile(ED_Art_Ashpile_RedGoo as form)
+			;_target.SetCriticalStage(_target.CritStage_DisintegrateEnd)
+			
+			utility.wait(0.3)
+			PlayerVampireQuest.EatThisActor(_target)
+			CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+		;else
+		;	debug.trace("Everdamned DEBUG: Exsanguinate alias was NOT filled with this target" + _target + ", doing nothing ")
+		;endif
 		
-		_target.EndDeferredKill()
-		
-		;_target.SetCriticalStage(_target.CritStage_DisintegrateStart)
-		;_target.SetAlpha(0.000000, true)
-		;_target.AttachAshPile(ED_Art_Ashpile_RedGoo as form)
-		;_target.SetCriticalStage(_target.CritStage_DisintegrateEnd)
-		
-		
-		PlayerVampireQuest.EatThisActor(_target)
-		CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 		return
 	endif
 	_timeElapsed = _timeElapsed + 2.0
@@ -84,13 +98,20 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 	
 	;sound.StopInstance(a)
 	
+	;if ED_ExsanguinateTarget.GetReference() == _target
+	;	ED_ExsanguinateTarget.Clear()
+	;	debug.trace("Everdamned DEBUG: Exsanguinate is vacated upon effect finish")	
+	;else
+	;	debug.trace("Everdamned DEBUG: Exsanguinate effect finished but target not in ref")	
+	;endif
+	
 	if _success
 		ED_Art_VFX_AbsorbBloodExsanguinate.Play(_player, 5.0, _target)
 		
-		DLC1VampireBatsVFX.Play(Target,1.0,Caster)
-		DLC1VampBatsEatenByBatsSkinFXS.Play(Target,5.0)
+		DLC1VampireBatsVFX.Play(_target,1.0,Caster)
+		DLC1VampBatsEatenByBatsSkinFXS.Play(_target,5.0)
 		Utility.wait(0.4)
-		DecalSpray(Target,2)
+		DecalSpray(_target,2)
 		
 	else
 		debug.Trace("Everdamned DEBUG: But no exsanguination took place")
@@ -101,6 +122,7 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 		ED_Art_SoundM_ExsanguinatePulse_Trail.Play(_player)
 	endif
 	
+
 	;should end it anyway
 	_target.EndDeferredKill()
 	
@@ -122,7 +144,7 @@ function DecalSpray(Actor BleedingActor, int xTimes)
 endfunction
 
 
-
+referencealias property ED_ExsanguinateTarget auto
 
 activator property ED_Art_Ashpile_RedGoo auto
 
