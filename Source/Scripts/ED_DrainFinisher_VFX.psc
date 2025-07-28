@@ -14,6 +14,7 @@ float _vfxDuration
 float _vfxDurationMax 
 bool _success = false
 
+int a 
 Event OnEffectStart(Actor Target, Actor Caster)
 
 	_vfxDurationMax = TimeToPop + VfxTaper
@@ -24,7 +25,10 @@ Event OnEffectStart(Actor Target, Actor Caster)
 	_target.StartDeferredKill()
 	currentSFX = PulseSound_Array[(_timeElapsed as int)/2].Play(_player)
 	sound.SetInstanceVolume(currentSFX, 100.0)
-
+	
+	;a = QSTWaystoneMagicBarrierLPMDUPLICATE001.Play(_player)
+	
+	ED_Art_SoundM_Exsanguinate_Intro.Play(_player)
 	
 	; length of first beat
 	registerforsingleupdate(2.38)
@@ -37,6 +41,7 @@ Event OnUpdate()
 	;stacking vfx
 	DLC1BatsAbsorbTargetVFX01.Play(_target, _vfxDuration, _player)
 	DLC1BatsEatenBloodSplats.Play(_target, _vfxDuration)
+	ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD.Apply(1.0 - 1.0/(1.0+_timeElapsed))
 	
 	currentSFX = PulseSound_Array[(_timeElapsed as int)/2].Play(_player)
 	sound.SetInstanceVolume(currentSFX, 100.0)
@@ -50,7 +55,7 @@ Event OnUpdate()
 		debug.trace("Everdamned DEBUG: Exsanguinate KABOOoooOOOoooOOM!!!!!!")
 		;ED_Art_SoundM_SuperFleshyBurst.play(_target)
 		_target.kill(_player)
-		ED_Art_SoundM_HellsBells.Play(_player)
+		;ED_Art_SoundM_HellsBells.Play(_player)
 		_target.placeatme(ED_Art_Explosion_Exsanguinate)
 		
 		;_target.placeatme(ED_Art_Explosion_BloodStorm)
@@ -77,7 +82,7 @@ endevent
 Event OnEffectFinish(Actor Target, Actor Caster)
 	debug.Trace("Everdamned DEBUG: Exsanguinate effect finished, status: " + _success)
 	
-	
+	;sound.StopInstance(a)
 	
 	if _success
 		ED_Art_VFX_AbsorbBloodExsanguinate.Play(_player, 5.0, _target)
@@ -129,6 +134,9 @@ EffectShader Property DLC1BatsEatenBloodSplats Auto
 EffectShader Property DLC1VampBatsEatenByBatsSkinFXS Auto
 EffectShader Property DLC1VampireChangeFXS Auto
 
+
+sound property ED_Art_SoundM_Exsanguinate_Intro auto
+sound property QSTAlduinDeathExplosionA auto
 sound property ED_Art_SoundM_HellsBells auto
 sound property ED_Art_SoundM_SuperFleshyBurst auto
 sound property ED_Art_SoundM_ExsanguinateBuildup auto
@@ -139,5 +147,7 @@ explosion property ED_Art_Explosion_BloodStorm auto
 Explosion property ED_Art_Explosion_Exsanguinate Auto
 
 impactdataset property BloodSprayBleedImpactSetRed auto
+
+imagespacemodifier property ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD auto
 
 PlayerVampireQuestScript property PlayerVampireQuest auto
