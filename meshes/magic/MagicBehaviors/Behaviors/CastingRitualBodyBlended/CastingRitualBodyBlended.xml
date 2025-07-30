@@ -27,7 +27,7 @@
       <!--mirroredExternalIdMap SERIALIZE_IGNORED-->
       <!--pseudoRandomGenerator SERIALIZE_IGNORED-->
       <hkparam name="rootGenerator">#0052</hkparam>
-      <hkparam name="data">#0085</hkparam>
+      <hkparam name="data">#0088</hkparam>
       <!--rootGeneratorClone SERIALIZE_IGNORED-->
       <!--activeNodes SERIALIZE_IGNORED-->
       <!--activeNodeTemplateToIndexMap SERIALIZE_IGNORED-->
@@ -83,7 +83,7 @@
       <hkparam name="startStateMode">START_STATE_MODE_DEFAULT</hkparam>
       <hkparam name="selfTransitionMode">SELF_TRANSITION_MODE_NO_TRANSITION</hkparam>
       <!--isActive SERIALIZE_IGNORED-->
-      <hkparam name="states" numelements="11">#0053 #0057 #0060 #0063 #0066 #0071 #0074 #0077 #0081 #0083 #0088</hkparam>
+      <hkparam name="states" numelements="11">#0053 #0057 #0060 #0063 #0066 #0071 #0074 #0077 #0081 #0083 #0085</hkparam>
       <hkparam name="wildcardTransitions">null</hkparam>
       <!--stateIdToIndexMap SERIALIZE_IGNORED-->
       <!--activeTransitions SERIALIZE_IGNORED-->
@@ -190,7 +190,7 @@
           <hkparam name="transition">#0055</hkparam>
           <hkparam name="condition">null</hkparam>
           <hkparam name="eventId">3</hkparam>
-          <hkparam name="toStateId">11</hkparam>
+          <hkparam name="toStateId">5</hkparam>
           <hkparam name="fromNestedStateId">0</hkparam>
           <hkparam name="toNestedStateId">0</hkparam>
           <hkparam name="priority">0</hkparam>
@@ -216,7 +216,7 @@
           <hkparam name="transition">#0055</hkparam>
           <hkparam name="condition">null</hkparam>
           <hkparam name="eventId">6</hkparam>
-          <hkparam name="toStateId">11</hkparam>
+          <hkparam name="toStateId">5</hkparam>
           <hkparam name="fromNestedStateId">0</hkparam>
           <hkparam name="toNestedStateId">0</hkparam>
           <hkparam name="priority">0</hkparam>
@@ -533,7 +533,7 @@
           <hkparam name="transition">#0055</hkparam>
           <hkparam name="condition">null</hkparam>
           <hkparam name="eventId">6</hkparam>
-          <hkparam name="toStateId">11</hkparam>
+          <hkparam name="toStateId">5</hkparam>
           <hkparam name="fromNestedStateId">0</hkparam>
           <hkparam name="toNestedStateId">0</hkparam>
           <hkparam name="priority">0</hkparam>
@@ -611,7 +611,7 @@
           <hkparam name="transition">#0055</hkparam>
           <hkparam name="condition">null</hkparam>
           <hkparam name="eventId">3</hkparam>
-          <hkparam name="toStateId">11</hkparam>
+          <hkparam name="toStateId">5</hkparam>
           <hkparam name="fromNestedStateId">0</hkparam>
           <hkparam name="toNestedStateId">0</hkparam>
           <hkparam name="priority">0</hkparam>
@@ -637,7 +637,7 @@
           <hkparam name="transition">#0055</hkparam>
           <hkparam name="condition">null</hkparam>
           <hkparam name="eventId">8</hkparam>
-          <hkparam name="toStateId">11</hkparam>
+          <hkparam name="toStateId">5</hkparam>
           <hkparam name="fromNestedStateId">0</hkparam>
           <hkparam name="toNestedStateId">0</hkparam>
           <hkparam name="priority">0</hkparam>
@@ -927,7 +927,7 @@
           <hkparam name="transition">#0055</hkparam>
           <hkparam name="condition">null</hkparam>
           <hkparam name="eventId">6</hkparam>
-          <hkparam name="toStateId">11</hkparam>
+          <hkparam name="toStateId">5</hkparam>
           <hkparam name="fromNestedStateId">0</hkparam>
           <hkparam name="toNestedStateId">0</hkparam>
           <hkparam name="priority">0</hkparam>
@@ -979,7 +979,7 @@
           <hkparam name="transition">#0055</hkparam>
           <hkparam name="condition">null</hkparam>
           <hkparam name="eventId">3</hkparam>
-          <hkparam name="toStateId">11</hkparam>
+          <hkparam name="toStateId">5</hkparam>
           <hkparam name="fromNestedStateId">0</hkparam>
           <hkparam name="toNestedStateId">0</hkparam>
           <hkparam name="priority">0</hkparam>
@@ -1784,121 +1784,7 @@
         </hkobject>
       </hkparam>
     </hkobject>
-    <hkobject name="#0085" class="hkbBehaviorGraphData" signature="0x095aca5d">
-      <!--memSizeAndFlags SERIALIZE_IGNORED-->
-      <!--referenceCount SERIALIZE_IGNORED-->
-      <hkparam name="attributeDefaults" numelements="0"></hkparam>
-      <hkparam name="variableInfos" numelements="2">
-        <hkobject>
-          <hkparam name="role">
-            <hkobject>
-              <hkparam name="role">ROLE_DEFAULT</hkparam>
-              <hkparam name="flags">FLAG_NONE</hkparam>
-            </hkobject>
-          </hkparam>
-          <hkparam name="type">VARIABLE_TYPE_BOOL</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="role">
-            <hkobject>
-              <hkparam name="role">ROLE_DEFAULT</hkparam>
-              <hkparam name="flags">FLAG_NONE</hkparam>
-            </hkobject>
-          </hkparam>
-          <hkparam name="type">VARIABLE_TYPE_BOOL</hkparam>
-        </hkobject>
-      </hkparam>
-      <hkparam name="characterPropertyInfos" numelements="0"></hkparam>
-      <hkparam name="eventInfos" numelements="14">
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="flags">0</hkparam>
-        </hkobject>
-      </hkparam>
-      <hkparam name="wordMinVariableValues" numelements="0"></hkparam>
-      <hkparam name="wordMaxVariableValues" numelements="0"></hkparam>
-      <hkparam name="variableInitialValues">#0086</hkparam>
-      <hkparam name="stringData">#0087</hkparam>
-    </hkobject>
-    <hkobject name="#0086" class="hkbVariableValueSet" signature="0x27812d8d">
-      <!--memSizeAndFlags SERIALIZE_IGNORED-->
-      <!--referenceCount SERIALIZE_IGNORED-->
-      <hkparam name="wordVariableValues" numelements="2">
-        <hkobject>
-          <hkparam name="value">1</hkparam>
-        </hkobject>
-        <hkobject>
-          <hkparam name="value">0</hkparam>
-        </hkobject>
-      </hkparam>
-      <hkparam name="quadVariableValues" numelements="0" />
-      <hkparam name="variantVariableValues" numelements="0"></hkparam>
-    </hkobject>
-    <hkobject name="#0087" class="hkbBehaviorGraphStringData" signature="0xc713064e">
-      <!--memSizeAndFlags SERIALIZE_IGNORED-->
-      <!--referenceCount SERIALIZE_IGNORED-->
-      <hkparam name="eventNames" numelements="14">
-        <hkcstring>MRh_SpellRelease_Event</hkcstring>
-        <hkcstring>RitualSpellOut</hkcstring>
-        <hkcstring>RitualSpellStart</hkcstring>
-        <hkcstring>MRh_SpellReady_Event</hkcstring>
-        <hkcstring>MLh_SpellAimedStart</hkcstring>
-        <hkcstring>MLh_Equipped_Event</hkcstring>
-        <hkcstring>MLh_SpellReady_Event</hkcstring>
-        <hkcstring>MLh_SpellRelease_Event</hkcstring>
-        <hkcstring>end</hkcstring>
-        <hkcstring>MRh_SpellSelfConcentrationStart</hkcstring>
-        <hkcstring>MRh_SpellAimedConcentrationStart</hkcstring>
-        <hkcstring>MLh_SpellSelfConcentrationStart</hkcstring>
-        <hkcstring>MLh_SpellAimedConcentrationStart</hkcstring>
-        <hkcstring>RitualSpellAimConcentrationStart</hkcstring>
-      </hkparam>
-      <hkparam name="attributeNames" numelements="0"></hkparam>
-      <hkparam name="variableNames" numelements="2">
-        <hkcstring>bRightHand</hkcstring>
-        <hkcstring>bLeftHand</hkcstring>
-      </hkparam>
-      <hkparam name="characterPropertyNames" numelements="0"></hkparam>
-    </hkobject>
-	<hkobject name="#0088" class="hkbStateMachineStateInfo" signature="0x0ed7f9d0">
+    <hkobject name="#0085" class="hkbStateMachineStateInfo" signature="0x0ed7f9d0">
       <!--memSizeAndFlags SERIALIZE_IGNORED-->
       <!--referenceCount SERIALIZE_IGNORED-->
       <hkparam name="variableBindingSet">null</hkparam>
@@ -1907,14 +1793,14 @@
       <hkparam name="listeners" numelements="0"></hkparam>
       <hkparam name="enterNotifyEvents">null</hkparam>
       <hkparam name="exitNotifyEvents">null</hkparam>
-      <hkparam name="transitions">#0089</hkparam>
-      <hkparam name="generator">#0090</hkparam>
+      <hkparam name="transitions">#0086</hkparam>
+      <hkparam name="generator">#0087</hkparam>
       <hkparam name="name">mCancelCastState</hkparam>
       <hkparam name="stateId">1</hkparam>
       <hkparam name="probability">1.000000</hkparam>
       <hkparam name="enable">true</hkparam>
     </hkobject>
-    <hkobject name="#0089" class="hkbStateMachineTransitionInfoArray" signature="0xe397b11e">
+    <hkobject name="#0086" class="hkbStateMachineTransitionInfoArray" signature="0xe397b11e">
       <!--memSizeAndFlags SERIALIZE_IGNORED-->
       <!--referenceCount SERIALIZE_IGNORED-->
       <hkparam name="transitions" numelements="3">
@@ -1998,7 +1884,7 @@
         </hkobject>
       </hkparam>
     </hkobject>
-    <hkobject name="#0090" class="BGSGamebryoSequenceGenerator" signature="0xc8df2d77">
+    <hkobject name="#0087" class="BGSGamebryoSequenceGenerator" signature="0xc8df2d77">
       <!--memSizeAndFlags SERIALIZE_IGNORED-->
       <!--referenceCount SERIALIZE_IGNORED-->
       <hkparam name="variableBindingSet">null</hkparam>
@@ -2016,6 +1902,120 @@
       <!--fTime SERIALIZE_IGNORED-->
       <!--bDelayedActivate SERIALIZE_IGNORED-->
       <!--bLooping SERIALIZE_IGNORED-->
+    </hkobject>
+    <hkobject name="#0088" class="hkbBehaviorGraphData" signature="0x095aca5d">
+      <!--memSizeAndFlags SERIALIZE_IGNORED-->
+      <!--referenceCount SERIALIZE_IGNORED-->
+      <hkparam name="attributeDefaults" numelements="0"></hkparam>
+      <hkparam name="variableInfos" numelements="2">
+        <hkobject>
+          <hkparam name="role">
+            <hkobject>
+              <hkparam name="role">ROLE_DEFAULT</hkparam>
+              <hkparam name="flags">FLAG_NONE</hkparam>
+            </hkobject>
+          </hkparam>
+          <hkparam name="type">VARIABLE_TYPE_BOOL</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="role">
+            <hkobject>
+              <hkparam name="role">ROLE_DEFAULT</hkparam>
+              <hkparam name="flags">FLAG_NONE</hkparam>
+            </hkobject>
+          </hkparam>
+          <hkparam name="type">VARIABLE_TYPE_BOOL</hkparam>
+        </hkobject>
+      </hkparam>
+      <hkparam name="characterPropertyInfos" numelements="0"></hkparam>
+      <hkparam name="eventInfos" numelements="14">
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="flags">0</hkparam>
+        </hkobject>
+      </hkparam>
+      <hkparam name="wordMinVariableValues" numelements="0"></hkparam>
+      <hkparam name="wordMaxVariableValues" numelements="0"></hkparam>
+      <hkparam name="variableInitialValues">#0089</hkparam>
+      <hkparam name="stringData">#0090</hkparam>
+    </hkobject>
+    <hkobject name="#0089" class="hkbVariableValueSet" signature="0x27812d8d">
+      <!--memSizeAndFlags SERIALIZE_IGNORED-->
+      <!--referenceCount SERIALIZE_IGNORED-->
+      <hkparam name="wordVariableValues" numelements="2">
+        <hkobject>
+          <hkparam name="value">1</hkparam>
+        </hkobject>
+        <hkobject>
+          <hkparam name="value">0</hkparam>
+        </hkobject>
+      </hkparam>
+      <hkparam name="quadVariableValues" numelements="0" />
+      <hkparam name="variantVariableValues" numelements="0"></hkparam>
+    </hkobject>
+    <hkobject name="#0090" class="hkbBehaviorGraphStringData" signature="0xc713064e">
+      <!--memSizeAndFlags SERIALIZE_IGNORED-->
+      <!--referenceCount SERIALIZE_IGNORED-->
+      <hkparam name="eventNames" numelements="14">
+        <hkcstring>MRh_SpellRelease_Event</hkcstring>
+        <hkcstring>RitualSpellOut</hkcstring>
+        <hkcstring>RitualSpellStart</hkcstring>
+        <hkcstring>MRh_SpellReady_Event</hkcstring>
+        <hkcstring>MLh_SpellAimedStart</hkcstring>
+        <hkcstring>MLh_Equipped_Event</hkcstring>
+        <hkcstring>MLh_SpellReady_Event</hkcstring>
+        <hkcstring>MLh_SpellRelease_Event</hkcstring>
+        <hkcstring>end</hkcstring>
+        <hkcstring>MRh_SpellSelfConcentrationStart</hkcstring>
+        <hkcstring>MRh_SpellAimedConcentrationStart</hkcstring>
+        <hkcstring>MLh_SpellSelfConcentrationStart</hkcstring>
+        <hkcstring>MLh_SpellAimedConcentrationStart</hkcstring>
+        <hkcstring>RitualSpellAimConcentrationStart</hkcstring>
+      </hkparam>
+      <hkparam name="attributeNames" numelements="0"></hkparam>
+      <hkparam name="variableNames" numelements="2">
+        <hkcstring>bRightHand</hkcstring>
+        <hkcstring>bLeftHand</hkcstring>
+      </hkparam>
+      <hkparam name="characterPropertyNames" numelements="0"></hkparam>
     </hkobject>
   </hksection>
 </hkpackfile>
