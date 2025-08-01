@@ -8,14 +8,28 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	_victim = akTarget
 endFunction
 
+
+bool __onDyingTriggered
 event OnDying(actor akKiller)
-	debug.Trace("Everdamned DEBUG: Hazard spell ONDEATH triggered")
-	if _victim.HasMagicEffect(Exsanguinate_Effect)
+	if __onDyingTriggered
 		return
 	endif
-	ED_BloodVortex.IncrementActorsDied()
+	__onDyingTriggered = true
+	
+	debug.Trace("Everdamned DEBUG: Blood Vortex Hazard spell ONDEATH triggered")
+
+	if _victim.HasMagicEffect(Exsanguinate_Effect)
+		debug.Trace("Everdamned DEBUG: Blood Vortex does not increment for " + _victim + ", because it is being Exsanguinated now")
+		__onDyingTriggered = false
+		return
+	endif
+	
+	if ED_Mechanics_Quest_BloodVortex.IsRunning()
+		ED_Mechanics_Quest_BloodVortex.SetCurrentStageId(50)
+	endif
+	
 endevent
 
+
 MagicEffect property Exsanguinate_Effect auto
-MagicEffect property ED_Misc_BloodVortexHazard_Effect auto
-ED_BloodVortexAlias_Script Property ED_BloodVortex Auto  
+quest Property ED_Mechanics_Quest_BloodVortex Auto  

@@ -74,6 +74,8 @@ keyword property ED_Mechanics_Keyword_RollFeedDialogueScore auto
 visualeffect property ED_TEST_VfxTargeted auto
 visualeffect property ED_Art_VFX_ExsanguinateBuildup auto
 
+hazard property ED_Art_Hazard_BloodVortex auto
+
 int counter
 bool __switch
 art leart
@@ -91,9 +93,9 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		ED_Art_VFX_ExsanguinateBuildup.Play(pl)
 		
 		
+		debug.Trace("Everdamned DEBUG: Found object: " + game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, pl, 10000))
 		
 		
 		;ED_TEST_VfxTargeted.Play(pl, 5, __targetThing)

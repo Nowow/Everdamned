@@ -1,13 +1,13 @@
 Scriptname ED_ProfanedSun_Script extends activemagiceffect  
 
+float property XPgained auto
 
-Actor TheCaster
-ObjectReference TheOrb
+ObjectReference TheSun
 
 function OnEffectFinish(Actor akTarget, Actor akCaster)
 
-	TheOrb.StopTranslation()
-	TheOrb.Delete()
+	TheSun.StopTranslation()
+	TheSun.Delete()
 	
 endFunction
 
@@ -15,41 +15,41 @@ function OnUpdate()
 	objectreference _target = ED_LastBloodBrandedActor.GetReference()
 	debug.Trace("Everdamned DEBUG: Profaned Sun target: " + _target)
 	if _target != none
-		TheOrb.TranslateToRef(_target, 200.0, 0.000000)
-		;SCS_VampireSpells_Blood_Spell_100_ProfanedSun_Proc.RemoteCast(TheOrb, TheCaster, none)
+		TheSun.TranslateToRef(_target, 200.0, 0.000000)
 	endif
 	RegisterForSingleUpdate(1.0)
 endFunction
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
 	
-	objectreference _vortex = ED_BloodVortexAlias.TransformingVortex
+	objectreference TheOrbRef = TheOrb.GetReference()
 	debug.Trace("Everdamned DEBUG: Profaned Sun started, akTarget: " + akTarget + ", akCaster:" + akCaster)
-	TheCaster = akCaster
-	TheOrb = _vortex.PlaceAtMe(ED_Art_Light_ProfanedSun_Projectile, 1, false, true)
-	TheOrb.SetAngle(0 as Float, 0 as Float, 0 as Float)
-	TheOrb.MoveTo(_vortex, 0.0, 0.0, -100.0, false)
-	TheOrb.Enable(true)
-	playerRef.dispelspell(ED_VampireSpells_BloodVortex_Spell)
-	;ED_Art_VFX_WellingBlood.Play(TheOrb, 15.0)
-	ED_VampireSpells_ProfanedSun_Cloak_Spell.RemoteCast(playerRef, playerRef, TheOrb)
-	utility.Wait(0.100000)
+	
+	TheSun = TheOrbRef.PlaceAtMe(ED_Art_Light_ProfanedSun_Projectile, 1, false, true)
+	TheSun.SetAngle(0.0, 0.0, 0.0)
+	TheSun.MoveTo(TheOrbRef, 0.0, 0.0, -100.0, false)
+	TheSun.Enable(true)
+	
+	ED_Mechanics_Quest_BloodVortex.SetCurrentStageID(100)
+	
+	ED_VampireSpells_ProfanedSun_Cloak_Spell.RemoteCast(playerRef, playerRef, TheSun)
+	utility.Wait(0.1)
 	RegisterForSingleUpdate(1.0)
 	
 	objectreference _target = ED_LastBloodBrandedActor.GetReference()
 	if _target != none
-		TheOrb.TranslateToRef(_target, 200.0, 0.000000)
+		TheSun.TranslateToRef(_target, 200.0, 0.000000)
 	endif
 	
 	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 	
 endFunction
 
-float property XPgained auto
-actor property playerRef auto
-ED_BloodVortexAlias_Script Property ED_BloodVortexAlias Auto
+quest property ED_Mechanics_Quest_BloodVortex auto
+referencealias property TheOrb auto
+
+Spell property ED_VampireSpells_ProfanedSun_Cloak_Spell auto
 light property ED_Art_Light_ProfanedSun_Projectile auto
 ReferenceAlias property ED_LastBloodBrandedActor auto
-VisualEffect property ED_Art_VFX_WellingBlood auto
-Spell property ED_VampireSpells_ProfanedSun_Cloak_Spell auto
-spell property ED_VampireSpells_BloodVortex_Spell auto
+
+actor property playerRef auto
