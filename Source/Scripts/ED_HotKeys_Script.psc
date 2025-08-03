@@ -75,6 +75,7 @@ visualeffect property ED_TEST_VfxTargeted auto
 visualeffect property ED_Art_VFX_ExsanguinateBuildup auto
 
 hazard property ED_Art_Hazard_BloodVortex auto
+spell property ED_VampireSpells_BloodVortex_Spell_HazardCloak auto
 
 int counter
 bool __switch
@@ -89,13 +90,13 @@ Event OnKeyDown(int keyCode)
 	If keyCode == __currentTestHotkey
 		debug.Trace("Everdamned DEBUG: test key was pressed! ---------------------------------------------")
 		
-		actor __targetThing = Game.GetCurrentConsoleRef() as actor
+		ObjectReference __targetThing = Game.GetCurrentConsoleRef()
 		
 		actor pl = Game.GetPlayer()
 		
 		
-		
-		debug.Trace("Everdamned DEBUG: Found object: " + game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, pl, 10000))
+		ED_VampireSpells_BloodVortex_Spell_HazardCloak.RemoteCast(__targetThing, pl)
+		;debug.Trace("Everdamned DEBUG: Found object: " + game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, pl, 10000))
 		
 		
 		;ED_TEST_VfxTargeted.Play(pl, 5, __targetThing)

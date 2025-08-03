@@ -11,7 +11,8 @@ function Startup()
 	TheOrbRef.MoveTo(TheOrbRef, 0.0, 0.0, OrbHeight, true)
 	TheOrbRef.PlaceAtMe(ED_Art_Explosion_BloodVortex_AbsorbOrbSpawnExplosion)
 	TheOrbRef.Enable(true)
-	ED_Art_VFX_BatsCloak.Play(TheOrbRef, 29.0)
+	ED_Art_VFX_BatsCloak.Play(TheOrbRef)
+	
 	ED_VampireSpells_BloodVortex_Spell_SpawnHazard.RemoteCast(TheOrbRef, playerRef)
 	
 	; dirtiest hack of them all, but I dont know how to spawn a hazard from player
@@ -19,6 +20,7 @@ function Startup()
 	utility.wait(0.1)
 	objectreference TheHazardRef = game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, playerRef, 1000)
 	debug.Trace("Everdamned DEBUG: Blood Vortex found the hazard: " + TheHazardRef)
+	
 	TheHazard.ForceRefTo(TheHazardRef)
 	
 	RegisterForSingleUpdate(VortexLifetime)
@@ -44,8 +46,10 @@ function Shutdown()
 	TheHazardRef.Delete()
 	
 	objectReference TheOrbRef = TheOrb.GetReference()
+	ED_Art_VFX_BatsCloak.Stop(TheOrbRef)
 	TheOrbRef.Disable(true)
 	TheOrbRef.Delete()
+	Stop()
 endfunction
 
 
@@ -82,6 +86,7 @@ referencealias property TheHazard auto
 
 spell property ED_VampireSpells_BloodVortex_Spell_SpawnHazard auto
 spell property ED_VampireSpells_ProfanedSun_Spell auto
+spell property ED_VampireSpells_BloodVortex_Spell_HazardCloak auto
 
 Explosion Property ED_Art_Explosion_BloodVortex_AbsorbOrbSpawnExplosion auto
 VisualEffect property ED_Art_VFX_BatsCloak auto
