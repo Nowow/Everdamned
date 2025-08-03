@@ -95,7 +95,7 @@ Event OnKeyDown(int keyCode)
 		actor pl = Game.GetPlayer()
 		
 		
-		ED_VampireSpells_BloodVortex_Spell_SpawnHazard.Cast(__targetThing, pl)
+		ED_VampireSpells_BloodVortex_Spell_SpawnHazard.Cast(pl, pl)
 		;debug.Trace("Everdamned DEBUG: Found object: " + game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, pl, 10000))
 		
 		

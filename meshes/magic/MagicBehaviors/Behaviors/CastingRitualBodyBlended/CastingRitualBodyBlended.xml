@@ -1994,7 +1994,7 @@
     <hkobject name="#0090" class="hkbBehaviorGraphStringData" signature="0xc713064e">
       <!--memSizeAndFlags SERIALIZE_IGNORED-->
       <!--referenceCount SERIALIZE_IGNORED-->
-      <hkparam name="eventNames" numelements="14">
+      <hkparam name="eventNames" numelements="15">
         <hkcstring>MRh_SpellRelease_Event</hkcstring>
         <hkcstring>RitualSpellOut</hkcstring>
         <hkcstring>RitualSpellStart</hkcstring>
@@ -2009,6 +2009,7 @@
         <hkcstring>MLh_SpellSelfConcentrationStart</hkcstring>
         <hkcstring>MLh_SpellAimedConcentrationStart</hkcstring>
         <hkcstring>RitualSpellAimConcentrationStart</hkcstring>
+		<hkcstring>SoundPlay</hkcstring>
       </hkparam>
       <hkparam name="attributeNames" numelements="0"></hkparam>
       <hkparam name="variableNames" numelements="2">
