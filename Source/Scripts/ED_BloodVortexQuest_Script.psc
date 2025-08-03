@@ -6,14 +6,19 @@ int property VictimsNeededToTransform = 4 auto
 
 function Startup()
 	
+	ED_VampireSpells_BloodVortex_Spell_SpawnHazard.Cast(playerRef)
 	ObjectReference TheOrbRef = TheOrb.GetReference()
 	TheOrbRef.SetAngle(0.0, 0.0, 0.0)
 	TheOrbRef.MoveTo(TheOrbRef, 0.0, 0.0, OrbHeight, true)
 	TheOrbRef.PlaceAtMe(ED_Art_Explosion_BloodVortex_AbsorbOrbSpawnExplosion)
 	TheOrbRef.Enable(true)
+	
+	while !(TheOrbRef.is3dloaded())
+		utility.wait(0.1)
+	endwhile
 	ED_Art_VFX_BatsCloak.Play(TheOrbRef)
 	
-	ED_VampireSpells_BloodVortex_Spell_SpawnHazard.RemoteCast(TheOrbRef, playerRef)
+	
 	
 	; dirtiest hack of them all, but I dont know how to spawn a hazard from player
 	; and capture its object / dispel the effect holding the hazard on demand...
