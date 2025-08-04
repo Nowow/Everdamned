@@ -26,7 +26,7 @@ function Startup()
 	TheOrbRef.SetAngle(0.0, 0.0, 0.0)
 	TheOrbRef.MoveTo(TheHazardRef, 0.0, 0.0, OrbHeight, true)
 	TheOrbRef.PlaceAtMe(ED_Art_Explosion_BloodVortex_AbsorbOrbSpawnExplosion)
-	TheOrbRef.Enable(true)
+	TheOrbRef.Enable()
 	
 	while !(TheOrbRef.is3dloaded())
 		utility.wait(0.1)
@@ -36,6 +36,34 @@ function Startup()
 	
 	TheHazard.ForceRefTo(TheHazardRef)
 	RegisterForSingleUpdate(VortexLifetime)
+	
+	;00SPTranscendCloakEffectEvil runic circle, lower and add to the storm
+	
+	; TODO: add energy hum to the whole vortex
+	
+	;00SPScapeGoatEffectAO add to Vortex
+	;00SPScapeGoatEffectAONEW - setscale 0.8  | imported
+	
+	;BLO_BloodCastPoint01 BLO_BloodTargetPoint01 on ingestion | imported
+	;SCS_RestorationBlood_Art_HeartOfThorns stacking when absorbing | imported
+	
+	;ED_Art_ExsanguinateBuildup
+	;ORD_Alc_ElementalOil_Explosion_FrenzyOil - initial transformation blast | imported
+	;_BL_ExpFlare - scaled down
+	; ///_AII_DPriestBossSkullExp
+	
+	;00SPFervidEye - profaned sun ; make a light | imported
+	;00SPPitLordAOEffect - profaned sun cloak effect | imported
+	
+	
+	;SCS_RestorationBlood_Art_Halo outward pulse, for ingestion / looped for profaned sun?
+	
+	
+	
+	;_Sn_ResonaCloakFX add to profaned sun 00SPPitLordAOEffect
+	;00SPTendrilsAO profaned sun object
+	;DLC1nVampireBloodPlagueExplosion transofmation explosion WB_RestorationBlood_Explosion 
+	;EASY transition _AII_DPriestBossSkullExp _AII_BloodImplosionExp
 	
 endfunction
 
@@ -91,6 +119,8 @@ function SpawnProfanedSun()
 	; or after 5 sec timeout
 	; SetCurrentStageID(100)
 endfunction
+
+visualeffect property 00SPScapeGoatEffectAO auto
 
 
 referencealias property TheOrb auto
