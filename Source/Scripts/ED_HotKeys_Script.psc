@@ -76,6 +76,7 @@ visualeffect property ED_Art_VFX_ExsanguinateBuildup auto
 
 hazard property ED_Art_Hazard_BloodVortex auto
 spell property ED_VampireSpells_BloodVortex_Spell_SpawnHazard auto
+spell property Flames auto
 
 int counter
 bool __switch
@@ -95,7 +96,7 @@ Event OnKeyDown(int keyCode)
 		actor pl = Game.GetPlayer()
 		
 		
-		ED_VampireSpells_BloodVortex_Spell_SpawnHazard.Cast(pl, pl)
+		Flames.Cast(__targetThing, pl)
 		;debug.Trace("Everdamned DEBUG: Found object: " + game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, pl, 10000))
 		
 		

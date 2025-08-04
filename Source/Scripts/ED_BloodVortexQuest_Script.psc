@@ -6,7 +6,7 @@ int property VictimsNeededToTransform = 4 auto
 
 function Startup()
 	
-	;ED_VampireSpells_BloodVortex_Spell_SpawnHazard.Cast(playerRef)
+	ED_VampireSpells_BloodVortex_Spell_SpawnHazard.Cast(playerRef)
 	
 	ObjectReference TheOrbRef = TheOrb.GetReference()
 	TheOrbRef.SetAngle(0.0, 0.0, 0.0)
@@ -18,7 +18,7 @@ function Startup()
 		utility.wait(0.1)
 	endwhile
 	
-	ED_VampireSpells_BloodVortex_Spell_SpawnHazard.RemoteCast(TheOrbRef, playerRef)
+	
 	ED_Art_VFX_BatsCloak.Play(TheOrbRef)
 	
 	
@@ -27,6 +27,7 @@ function Startup()
 	; and capture its object / dispel the effect holding the hazard on demand...
 	utility.wait(0.1)
 	objectreference TheHazardRef = game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, playerRef, 1000)
+	;objectreference TheHazardRef = TheOrbRef.placeatme(ED_Art_Hazard_BloodVortex)
 	debug.Trace("Everdamned DEBUG: Blood Vortex found the hazard: " + TheHazardRef)
 	
 	TheHazard.ForceRefTo(TheHazardRef)
