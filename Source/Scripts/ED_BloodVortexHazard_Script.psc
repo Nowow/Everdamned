@@ -25,11 +25,11 @@ event OnDying(actor akKiller)
 	endif
 	
 	if ED_Mechanics_Quest_BloodVortex.IsRunning()
-		ED_Mechanics_Quest_BloodVortex.SetCurrentStageId(50)
+		ED_Mechanics_Quest_BloodVortex.IncrementActorsDied(_victim)
 	endif
 	
 endevent
 
 
 MagicEffect property Exsanguinate_Effect auto
-quest Property ED_Mechanics_Quest_BloodVortex Auto  
+ED_BloodVortexQuest_Script Property ED_Mechanics_Quest_BloodVortex Auto  

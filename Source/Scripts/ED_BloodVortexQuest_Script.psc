@@ -112,26 +112,33 @@ function IncrementActorsDied(actor AbsorbedActor)
 	
 	ObjectReference TheOrbRef = TheOrb.GetReference()
 	
-	ED_Art_VFX_BloodVortex_AbsorbCastPoint.Play(TheOrbRef)
-	ED_Art_VFX_BloodVortex_AbsorbTargetPoint.Play(AbsorbedActor, 5.0)
+	ED_Art_VFX_BloodVortex_AbsorbCastPoint.Play(TheOrbRef, 5.0, AbsorbedActor)
+	ED_Art_VFX_BloodVortex_AbsorbTargetPoint.Play(AbsorbedActor, 5.0, TheOrbRef)
 	
 	if ActorsDied >= VictimsNeededToTransform
 		__transformHappened = true
 		__shutdownMutex = true
 		debug.Trace("Everdamned DEBUG: Blood Vortex is transforming")
 		
+		objectreference TheHazardRef = TheHazard.GetReference()
 		ObjectReference TheAnchor = TheOrbRef.PlaceAtMe(FXEmptyActivator)
-		
-		TheAnchor.PlaceAtMe(ED_Art_Explosion_BloodVortex_TransformInitial)
 		ED_Art_VFX_BatsCloak.Stop(TheOrbRef)
-		TheOrbRef.Disable(true)
+		ED_Art_VFX_BloodVortex_AbsorbCrown.Stop(TheOrbRef)
+		TheOrb.ForceRefTo(TheAnchor)
+		
+		TheAnchor.PlaceAtMe(ED_Art_Explosion_BloodVortex_FlareSecondary)
+		TheAnchor.PlaceAtMe(ED_Art_Explosion_BloodVortex_TransformInitial)
+		TheOrbRef.DisableNoWait(true)
+		TheHazardRef.DisableNoWait(true)
 		ED_Art_SoundM_BloodVortex_TransformTrigger.PlayAndWait(TheAnchor)
+		
 		
 		; moved to explosion
 		;ED_Art_SoundM_BloodVortex_Flare.Play(TheAnchor)
 		TheAnchor.PlaceAtMe(ED_Art_Explosion_BloodVortex_Flare)
+		
 		; make profaned sun appear slowly
-		ED_VampireSpells_ProfanedSun_Spell.RemoteCast(TheAnchor, playerRef)
+		ED_VampireSpells_ProfanedSun_Spell.Cast(playerRef)
 		
 		RegisterForSingleUpdate(5)
 		__shutdownMutex = false
@@ -145,6 +152,7 @@ function IncrementActorsDied(actor AbsorbedActor)
 		sound SoundToPlay = AbsorbSounds[ActorsDied]
 		ED_Art_VFX_BloodVortex_AbsorbCrown.Play(TheOrbRef)
 		SoundToPlay.Play(TheOrbRef)
+		ED_Art_SoundM_BloodVortex_Initial2.Play(TheOrbRef)
 	endif
 	
 endfunction
@@ -170,6 +178,7 @@ explosion property ED_Art_Explosion_BloodVortex_Flare auto
 
 sound property ED_Art_SoundM_BloodVortex_TransformTrigger auto
 sound property ED_Art_SoundM_BloodVortex_Flare auto
+sound property ED_Art_SoundM_BloodVortex_Initial2 auto
 sound[] property AbsorbSounds auto
 
 referencealias property TheOrb auto

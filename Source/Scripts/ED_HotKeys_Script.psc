@@ -78,7 +78,7 @@ hazard property ED_Art_Hazard_BloodVortex auto
 spell property ED_VampireSpells_BloodVortex_Spell_SpawnHazard auto
 spell property Flames auto
 
-quest property ED_Mechanics_Quest_BloodVortex auto
+ED_BloodVortexQuest_Script Property ED_Mechanics_Quest_BloodVortex Auto
 
 int counter
 bool __switch
@@ -97,7 +97,7 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		ED_Mechanics_Quest_BloodVortex.SetStage(50)
+		ED_Mechanics_Quest_BloodVortex.IncrementActorsDied(__targetThing as actor)
 		
 		;Flames.Cast(__targetThing, pl)
 		;debug.Trace("Everdamned DEBUG: Found object: " + game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, pl, 10000))

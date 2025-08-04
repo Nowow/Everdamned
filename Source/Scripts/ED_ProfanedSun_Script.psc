@@ -27,7 +27,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	TheSun = TheOrbRef.PlaceAtMe(ED_Art_Light_ProfanedSun_Projectile, 1, false, true)
 	TheSun.SetAngle(0.0, 0.0, 0.0)
-	TheSun.MoveTo(TheOrbRef, 0.0, 0.0, -100.0, false)
+	TheSun.MoveTo(TheOrbRef, 0.0, 0.0, 0.0, false)
 	TheSun.Enable(true)
 	
 	ED_Mechanics_Quest_BloodVortex.SetCurrentStageID(100)
