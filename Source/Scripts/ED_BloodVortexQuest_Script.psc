@@ -49,11 +49,12 @@ function Startup()
 	
 	;ED_Art_ExsanguinateBuildup
 	;ORD_Alc_ElementalOil_Explosion_FrenzyOil - initial transformation blast | imported
-	;_BL_ExpFlare - scaled down
+	;_BL_ExpFlare - scaled down | imported
 	; ///_AII_DPriestBossSkullExp
 	
 	;00SPFervidEye - profaned sun ; make a light | imported
 	;00SPPitLordAOEffect - profaned sun cloak effect | imported
+	; check 00SPSunSoundLoop for profaned sun loop
 	
 	
 	;SCS_RestorationBlood_Art_Halo outward pulse, for ingestion / looped for profaned sun?
@@ -120,8 +121,12 @@ function SpawnProfanedSun()
 	; SetCurrentStageID(100)
 endfunction
 
-visualeffect property 00SPScapeGoatEffectAO auto
+visualeffect property ED_Art_VFX_BloodVortex_AbsorbCastPoint auto
+visualeffect property ED_Art_VFX_BloodVortex_AbsorbTargetPoint auto
+visualeffect property ED_Art_VFX_BloodVortex_AbsorbCrown auto
 
+
+sound[] property AbsorbSounds auto
 
 referencealias property TheOrb auto
 referencealias property TheHazard auto
