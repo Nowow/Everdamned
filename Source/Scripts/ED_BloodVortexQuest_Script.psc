@@ -6,11 +6,25 @@ int property VictimsNeededToTransform = 4 auto
 
 function Startup()
 	
-	ED_VampireSpells_BloodVortex_Spell_SpawnHazard.Cast(playerRef)
+	;ED_VampireSpells_BloodVortex_Spell_SpawnHazard.Cast(playerRef)
+	
+	; dirtiest hack of them all, but I dont know how to spawn a hazard from player
+	; and capture its object / dispel the effect holding the hazard on demand...
+	
+	objectreference TheHazardRef = game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, playerRef, 10000)
+	while !TheHazardRef
+		TheHazardRef = game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, playerRef, 10000)
+		utility.wait(0.05)
+	endwhile
+	
+	;objectreference TheHazardRef = TheOrbRef.placeatme(ED_Art_Hazard_BloodVortex)
+	debug.Trace("Everdamned DEBUG: Blood Vortex found the hazard: " + TheHazardRef)
+	
+	;BlizzardForceExplosion
 	
 	ObjectReference TheOrbRef = TheOrb.GetReference()
 	TheOrbRef.SetAngle(0.0, 0.0, 0.0)
-	TheOrbRef.MoveTo(TheOrbRef, 0.0, 0.0, OrbHeight, true)
+	TheOrbRef.MoveTo(TheHazardRef, 0.0, 0.0, OrbHeight, true)
 	TheOrbRef.PlaceAtMe(ED_Art_Explosion_BloodVortex_AbsorbOrbSpawnExplosion)
 	TheOrbRef.Enable(true)
 	
@@ -18,20 +32,9 @@ function Startup()
 		utility.wait(0.1)
 	endwhile
 	
-	
 	ED_Art_VFX_BatsCloak.Play(TheOrbRef)
 	
-	
-	
-	; dirtiest hack of them all, but I dont know how to spawn a hazard from player
-	; and capture its object / dispel the effect holding the hazard on demand...
-	utility.wait(0.1)
-	objectreference TheHazardRef = game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, playerRef, 1000)
-	;objectreference TheHazardRef = TheOrbRef.placeatme(ED_Art_Hazard_BloodVortex)
-	debug.Trace("Everdamned DEBUG: Blood Vortex found the hazard: " + TheHazardRef)
-	
 	TheHazard.ForceRefTo(TheHazardRef)
-	
 	RegisterForSingleUpdate(VortexLifetime)
 	
 endfunction
