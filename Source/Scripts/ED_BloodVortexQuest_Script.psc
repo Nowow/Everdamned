@@ -23,8 +23,8 @@ function Startup()
 	;BlizzardForceExplosion
 	
 	ObjectReference TheOrbRef = TheOrb.GetReference()
-	TheOrbRef.SetAngle(0.0, 0.0, 0.0)
 	TheOrbRef.MoveTo(TheHazardRef, 0.0, 0.0, OrbHeight, true)
+	TheOrbRef.SetAngle(0.0, 0.0, 0.0)
 	TheOrbRef.PlaceAtMe(ED_Art_Explosion_BloodVortex_AbsorbOrbSpawnExplosion)
 	TheOrbRef.Enable()
 	
@@ -48,12 +48,14 @@ function Startup()
 	;SCS_RestorationBlood_Art_HeartOfThorns stacking when absorbing | imported
 	
 	;ED_Art_ExsanguinateBuildup
-	;ORD_Alc_ElementalOil_Explosion_FrenzyOil - initial transformation blast | imported
-	;_BL_ExpFlare - scaled down | imported
-	; ///_AII_DPriestBossSkullExp
 	
-	;00SPFervidEye - profaned sun ; make a light | imported
-	;00SPPitLordAOEffect - profaned sun cloak effect | imported
+	;
+	;ED_Art_Explosion_BloodVortex_FlareSecondary - initial transformation blast | imported
+	;ED_Art_Explosion_BloodVortex_Flare - scaled down | imported
+	; ----_AII_DPriestBossSkullExp
+	
+	;ED_Art_Light_BloodVortex_ProfanedSun - profaned sun ; make a light | imported
+	;ED_Art_VFX_BloodVortex_ProfanedSunCloak - profaned sun cloak effect | imported
 	; check 00SPSunSoundLoop for profaned sun loop
 	
 	
@@ -83,12 +85,16 @@ function Shutdown()
 	UnregisterForUpdate()
 	debug.Trace("Everdamned DEBUG: Blood Vortex Quest shutdown func called!")
 	objectreference TheHazardRef = TheHazard.GetReference()
-	TheHazardRef.Disable(true)
+	if TheHazardRef.IsEnabled()
+		TheHazardRef.Disable(true)
+	endif
 	TheHazardRef.Delete()
 	
 	objectReference TheOrbRef = TheOrb.GetReference()
-	ED_Art_VFX_BatsCloak.Stop(TheOrbRef)
-	TheOrbRef.Disable(true)
+	if TheOrbRef.IsEnabled()
+		ED_Art_VFX_BatsCloak.Stop(TheOrbRef)
+		TheOrbRef.Disable(true)
+	endif
 	TheOrbRef.Delete()
 	Stop()
 endfunction
@@ -96,36 +102,74 @@ endfunction
 
 int ActorsDied
 bool __transformHappened
-function IncrementActorsDied()
-	
-	ActorsDied = ActorsDied + 1
+function IncrementActorsDied(actor AbsorbedActor)
+	if __transformHappened
+		debug.Trace("Everdamned DEBUG: Blood Vortex wants to increment killed actors, but transform already happened")
+		return
+	endif
+	ActorsDied = ActorsDied + 1	
 	debug.Trace("Everdamned DEBUG: Blood Vortex is incrementing killed actors, now at " + ActorsDied)
-	if ActorsDied >= VictimsNeededToTransform && !__transformHappened
+	
+	ObjectReference TheOrbRef = TheOrb.GetReference()
+	
+	ED_Art_VFX_BloodVortex_AbsorbCastPoint.Play(TheOrbRef)
+	ED_Art_VFX_BloodVortex_AbsorbTargetPoint.Play(AbsorbedActor, 5.0)
+	
+	if ActorsDied >= VictimsNeededToTransform
 		__transformHappened = true
+		__shutdownMutex = true
 		debug.Trace("Everdamned DEBUG: Blood Vortex is transforming")
-		SpawnProfanedSun()
+		
+		ObjectReference TheAnchor = TheOrbRef.PlaceAtMe(FXEmptyActivator)
+		
+		TheAnchor.PlaceAtMe(ED_Art_Explosion_BloodVortex_TransformInitial)
+		ED_Art_VFX_BatsCloak.Stop(TheOrbRef)
+		TheOrbRef.Disable(true)
+		ED_Art_SoundM_BloodVortex_TransformTrigger.PlayAndWait(TheAnchor)
+		
+		; moved to explosion
+		;ED_Art_SoundM_BloodVortex_Flare.Play(TheAnchor)
+		TheAnchor.PlaceAtMe(ED_Art_Explosion_BloodVortex_Flare)
+		; make profaned sun appear slowly
+		ED_VampireSpells_ProfanedSun_Spell.RemoteCast(TheAnchor, playerRef)
+		
+		RegisterForSingleUpdate(5)
+		__shutdownMutex = false
+		; shutdown happens when after profaned sun setup complete
+		; or after 5 sec timeout
+		; SetCurrentStageID(100)
+		
+		TheAnchor.Disable()
+		TheAnchor.Delete()
+	else
+		sound SoundToPlay = AbsorbSounds[ActorsDied]
+		ED_Art_VFX_BloodVortex_AbsorbCrown.Play(TheOrbRef)
+		SoundToPlay.Play(TheOrbRef)
 	endif
 	
 endfunction
 
 function SpawnProfanedSun()
-	__shutdownMutex = true
-	objectReference TheOrbRef = TheOrb.GetReference()
-	ED_VampireSpells_ProfanedSun_Spell.RemoteCast(TheOrbRef, playerRef)
 	
-	RegisterForSingleUpdate(5)
-	__shutdownMutex = false
 	
-	; shutdown happens when after profaned sun setup complete
-	; or after 5 sec timeout
-	; SetCurrentStageID(100)
+	
+	
+	
+	
 endfunction
+
 
 visualeffect property ED_Art_VFX_BloodVortex_AbsorbCastPoint auto
 visualeffect property ED_Art_VFX_BloodVortex_AbsorbTargetPoint auto
 visualeffect property ED_Art_VFX_BloodVortex_AbsorbCrown auto
+visualeffect property ED_Art_VFX_BloodVortex_ProfanedSunCloak auto
 
+explosion property ED_Art_Explosion_BloodVortex_TransformInitial auto
+explosion property ED_Art_Explosion_BloodVortex_FlareSecondary auto
+explosion property ED_Art_Explosion_BloodVortex_Flare auto
 
+sound property ED_Art_SoundM_BloodVortex_TransformTrigger auto
+sound property ED_Art_SoundM_BloodVortex_Flare auto
 sound[] property AbsorbSounds auto
 
 referencealias property TheOrb auto
@@ -138,5 +182,6 @@ spell property ED_VampireSpells_BloodVortex_Spell_HazardCloak auto
 Explosion Property ED_Art_Explosion_BloodVortex_AbsorbOrbSpawnExplosion auto
 VisualEffect property ED_Art_VFX_BatsCloak auto
 hazard property ED_Art_Hazard_BloodVortex auto
+activator property FXEmptyActivator auto
 
 actor property playerRef auto
