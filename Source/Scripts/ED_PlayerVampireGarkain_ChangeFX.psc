@@ -6,7 +6,6 @@ VisualEffect property FeedBloodVFX auto
 Idle Property IdleVampireTransformation auto
 Explosion Property FXVampChangeExplosion auto
 VisualEffect property ED_Art_VFX_VampireTransform_Begin auto
-VisualEffect property ED_Art_VFX_VampireTransform_BatCloak auto
 hazard property ED_Art_Hazard_VampireTransformBats auto
 
 
