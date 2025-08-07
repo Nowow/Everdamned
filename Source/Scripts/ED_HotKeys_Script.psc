@@ -80,7 +80,7 @@ spell property Flames auto
 
 ED_BloodVortexQuest_Script Property ED_Mechanics_Quest_BloodVortex Auto
 
-idle property IdleSnowElfPrinceAscension auto
+sound property ED_Art_SoundM_FlameInglitesSwoosh auto
 
 int counter
 bool __switch
@@ -99,9 +99,12 @@ Event OnKeyDown(int keyCode)
 		actor __targetThing = Game.GetCurrentConsoleRef() as actor
 		
 		actor pl = Game.GetPlayer()
+		
+		ED_Art_SoundM_FlameInglitesSwoosh.Play(pl)
+		
 		  
-		bool __idlePlayed = __targetThing.PlayIdle(IdleSnowElfPrinceAscension)
-		debug.Trace("Everdamned DEBUG: Idle was played: " + __idlePlayed)
+		;bool __idlePlayed = __targetThing.PlayIdle(IdleSnowElfPrinceAscension)
+		;debug.Trace("Everdamned DEBUG: Idle was played: " + __idlePlayed)
 		
 		;ED_Mechanics_Quest_BloodVortex.IncrementActorsDied(__targetThing as actor)
 		

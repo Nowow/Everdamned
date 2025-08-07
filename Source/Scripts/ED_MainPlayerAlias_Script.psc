@@ -46,12 +46,26 @@ Event OnRaceSwitchComplete()
 	
 EndEvent
 
+Event OnDeath(Actor akKiller)
+	if playerRef.HasMagicEffectWithKeyword(MagicDamageFire)
+		DLC1HarkonDisintegrate01FXS.Play(playerRef)
+	
+		utility.wait(0.75)
+		playerRef.SetAlpha (0.0,True)
+		playerRef.AttachAshPile(AshPileObject)
+		
+	endif
+endevent
+
 race property DLC1VampireBeastRace auto
 actor property playerRef auto
 activator property ED_Misc_UndyingServant1_Activator_Spawn auto
 activator property ED_Misc_UndyingServant1_Activator_Despawn auto
 perk property ED_PerkTreeVL_UndyingLoyalty_Perk auto
 
+effectshader property DLC1HarkonDisintegrate01FXS auto
+keyword property MagicDamageFire auto
+activator property AshPileObject auto
 
 ReferenceAlias Property ED_UndyingLoyaltyServant1  Auto  
 
