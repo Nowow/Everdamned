@@ -23,6 +23,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		return
 	endif
 	
+	ED_Art_SoundM_Wassail.Play(akTarget)
 	_target = akTarget
 	_caster = akCaster
 	
@@ -112,3 +113,4 @@ activator property FXEmptyActivator auto
 scene property BoilingScene auto
 
 Message property ED_Mechanics_Message_BloodBoil_FailAliasFilled auto
+sound property ED_Art_SoundM_Wassail auto

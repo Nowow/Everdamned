@@ -80,6 +80,8 @@ spell property Flames auto
 
 ED_BloodVortexQuest_Script Property ED_Mechanics_Quest_BloodVortex Auto
 
+idle property IdleSnowElfPrinceAscension auto
+
 int counter
 bool __switch
 art leart
@@ -93,11 +95,17 @@ Event OnKeyDown(int keyCode)
 	If keyCode == __currentTestHotkey
 		debug.Trace("Everdamned DEBUG: test key was pressed! ---------------------------------------------")
 		
-		ObjectReference __targetThing = Game.GetCurrentConsoleRef()
+		;ObjectReference __targetThing = Game.GetCurrentConsoleRef()
+		actor __targetThing = Game.GetCurrentConsoleRef() as actor
 		
 		actor pl = Game.GetPlayer()
+		  
+		bool __idlePlayed = __targetThing.PlayIdle(IdleSnowElfPrinceAscension)
+		debug.Trace("Everdamned DEBUG: Idle was played: " + __idlePlayed)
 		
-		ED_Mechanics_Quest_BloodVortex.IncrementActorsDied(__targetThing as actor)
+		;ED_Mechanics_Quest_BloodVortex.IncrementActorsDied(__targetThing as actor)
+		
+		
 		
 		;Flames.Cast(__targetThing, pl)
 		;debug.Trace("Everdamned DEBUG: Found object: " + game.FindClosestReferenceOfTypeFromRef(ED_Art_Hazard_BloodVortex, pl, 10000))

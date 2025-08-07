@@ -11,6 +11,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		self.dispel()
 		return
 	endif
+	ED_Art_SoundM_MasterSpellHit.Play(akTarget)
 	_target = akTarget
 	_caster = akCaster
 	
@@ -41,4 +42,6 @@ float property XPgained auto
 Spell Property ED_VampireSpells_BloodBoil_Burst_Spell auto
 ReferenceAlias Property ED_BloodBoilTarget  Auto
 Message property ED_Mechanics_Message_BloodBoil_FailAliasFilled auto
+sound property ED_Art_SoundM_MasterSpellHit auto
+
 

@@ -4,6 +4,8 @@ float property OrbHeight = 170.0 auto
 float property VortexLifetime = 30.0 auto
 int property VictimsNeededToTransform = 4 auto
 
+float property ExtraDuration auto
+
 function Startup()
 	
 	;ED_VampireSpells_BloodVortex_Spell_SpawnHazard.Cast(playerRef)
@@ -73,6 +75,22 @@ endfunction
 
 bool __shutdownMutex
 event OnUpdate()
+	if __shutdownMutex
+		return
+	endif
+	
+	if __transformHappened
+		SetCurrentStageID(100)
+		return
+	endif 
+	
+	if ExtraDuration > 0
+		float __aaa = ExtraDuration
+		ExtraDuration = 0.0
+		RegisterForSingleUpdate(__aaa)
+		debug.Trace("Everdamned INFO: Blood vortex EXTENDED for " + __aaa + " seconds")
+	endif
+	
 	if !__shutdownMutex && GetCurrentStageID() != 100
 		; blood vortex did not birth a profaned sun
 		; or timeout reached
@@ -148,21 +166,15 @@ function IncrementActorsDied(actor AbsorbedActor)
 		
 		TheAnchor.Disable()
 		TheAnchor.Delete()
+		
 	else
+		ExtraDuration += 10.0
 		sound SoundToPlay = AbsorbSounds[ActorsDied]
 		ED_Art_VFX_BloodVortex_AbsorbCrown.Play(TheOrbRef)
 		SoundToPlay.Play(TheOrbRef)
 		ED_Art_SoundM_BloodVortex_Initial2.Play(TheOrbRef)
+		ED_Mechanics_Message_BloodVortex_Extended.Show()
 	endif
-	
-endfunction
-
-function SpawnProfanedSun()
-	
-	
-	
-	
-	
 	
 endfunction
 
@@ -192,5 +204,6 @@ Explosion Property ED_Art_Explosion_BloodVortex_AbsorbOrbSpawnExplosion auto
 VisualEffect property ED_Art_VFX_BatsCloak auto
 hazard property ED_Art_Hazard_BloodVortex auto
 activator property FXEmptyActivator auto
+message property ED_Mechanics_Message_BloodVortex_Extended auto
 
 actor property playerRef auto
