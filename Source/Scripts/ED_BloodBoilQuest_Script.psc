@@ -3,14 +3,16 @@ Scriptname ED_BloodBoilQuest_Script extends Quest
 
 float property BoilingDuration = 6.0 auto
 
-
+bool IsHumanoid
 function Setup()
 	
 	_target = BoilTarget.GetReference() as actor
-	EssentialHolder.ForceRefTo(_target)
+	;EssentialHolder.ForceRefTo(_target)
 	_caster = Game.GetPlayer()
 	
 	debug.Trace("Everdamned DEBUG: Blood Boil Quest started on target: " + _target + "!")
+	
+	IsHumanoid = _target.HasKeyword(ActorTypeNPC)
 	
 	; do a bloody paint job on walls and ceiling
 	_w = _target.PlaceAtMe(FXEmptyActivator, 1, false, false)
@@ -36,7 +38,7 @@ function StartScene()
 	ED_Art_SoundM_Wassail.Play(_target)
 	_caster.DoCombatSpellApply(ED_VampireSpells_BloodBoil_Burst_Spell, _target)
 	
-	;_target.setghost(true)
+	_target.setghost(true)
 	
 	;debug.Trace("Everdamned DEBUG: BLood boil quest IS RUNNING: " + isrunning())
 	;debug.Trace("Everdamned DEBUG: BLood boil quest IS STARTING: " + isstarting())
@@ -72,12 +74,15 @@ event OnUpdate()
 	endif
 	
 	_target.setghost(false)
+	_target.setrestrained(true)
 	_caster.DoCombatSpellApply(ED_VampireSpells_BloodBoil_AoeDmgExplosion_Spell, _target)
 	ED_Misc_BloodDecalLarge_Spell_Supermassive.remotecast(_target, _caster)
 	
-	EssentialHolder.Clear()
+	;EssentialHolder.Clear()
 	_target.Kill(_caster)
-	_target.PlaceAtMe(ED_Art_Hazard_Bones as form, 1, false, false)
+	if IsHumanoid
+		_target.PlaceAtMe(ED_Art_Hazard_Bones as form, 1, false, false)
+	endif
 	_target.SetCriticalStage(_target.CritStage_DisintegrateStart)
 	_target.SetAlpha(0.000000, true)
 	ED_Misc_BloodDecalLarge_Spell.remotecast(_source, _caster, _w)
@@ -86,9 +91,13 @@ event OnUpdate()
 	ED_Misc_BloodDecalLarge_Spell.remotecast(_source, _caster, _d)
 	ED_Misc_BloodDecalLarge_Spell.remotecast(_source, _caster, _up)
 	_target.AttachAshPile(AshPile as form)
+	_target.placeatme(DLC1VampChangeExplosion)
 	_target.SetCriticalStage(_target.CritStage_DisintegrateEnd)
 	
+	
 	SetCurrentStageID(100)
+		
+	
 	
 endevent
 
@@ -121,6 +130,8 @@ scene property ED_BoilingScene auto
 Hazard property ED_Art_Hazard_Bones auto
 Message property ED_Mechanics_Message_BloodBoil_FailAliasFilled auto
 sound property ED_Art_SoundM_Wassail auto
+keyword property ActorTypeNPC auto
+explosion property DLC1VampChangeExplosion auto
 
 actor _target
 actor _caster
