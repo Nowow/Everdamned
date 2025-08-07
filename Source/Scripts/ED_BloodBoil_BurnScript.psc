@@ -7,6 +7,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 
 
 	ED_Art_SoundM_MasterSpellHit.Play(akTarget)
+	
 	_target = akTarget
 	_caster = akCaster
 	

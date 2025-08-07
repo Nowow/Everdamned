@@ -4,20 +4,13 @@ Scriptname ED_BloodBoilQuest_Script extends Quest
 float property BoilingDuration = 6.0 auto
 
 
-
 function Setup()
-
-	
 	
 	_target = BoilTarget.GetReference() as actor
 	EssentialHolder.ForceRefTo(_target)
 	_caster = Game.GetPlayer()
 	
-	ED_Art_SoundM_Wassail.Play(_target)
-	_caster.DoCombatSpellApply(ED_VampireSpells_BloodBoil_Burst_Spell, _target)
-	
-	_target.setghost(true)
-	ED_BoilingScene.ForceStart()
+	debug.Trace("Everdamned DEBUG: Blood Boil Quest started on target: " + _target + "!")
 	
 	; do a bloody paint job on walls and ceiling
 	_w = _target.PlaceAtMe(FXEmptyActivator, 1, false, false)
@@ -33,16 +26,44 @@ function Setup()
 	_d.MoveTo(_target, -100, 0, 100) 
 	_up.MoveTo(_target, 0, 0, 400) 
 	_source.MoveTo(_target, 0, 0, 100)
+
+	RegisterForSingleUpdate(0.1)
+endfunction
+
+
+function StartScene()
+
+	ED_Art_SoundM_Wassail.Play(_target)
+	_caster.DoCombatSpellApply(ED_VampireSpells_BloodBoil_Burst_Spell, _target)
+	
+	;_target.setghost(true)
+	
+	;debug.Trace("Everdamned DEBUG: BLood boil quest IS RUNNING: " + isrunning())
+	;debug.Trace("Everdamned DEBUG: BLood boil quest IS STARTING: " + isstarting())
+	;debug.Trace("Everdamned DEBUG: BLood boil quest IS STOPPING: " + isstopping())
+	;debug.Trace("Everdamned DEBUG: BLood boil quest IS STOPPED: " + isstopped())
+	;debug.Trace("Everdamned DEBUG: BLood boil quest IS RUNNING: " + isrunning())
+	;debug.Trace("Everdamned DEBUG: BLood boil quest STAGE: " + GetCurrentStageID())
+	;debug.Trace("Everdamned DEBUG: BLood boil Boil REF: " + BoilTarget.GetReference())
+	;debug.Trace("Everdamned DEBUG: BLood boil ESSENTIAL REF: " + EssentialHolder.GetReference())
+	
+	ED_BoilingScene.ForceStart()
 	
 	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 	
-	RegisterForSingleUpdate(BoilingDuration)
-
 endfunction
 
 
 event OnUpdate()
 	debug.Trace("Everdamned DEBUG: Blood Boil Quest UPDATE event, about to blow up!")
+	
+	; like this to deal with wierd stuff about quest NOT YET RUNNING 
+	if GetCurrentStageID() == 0
+		StartScene()
+		SetCurrentStageID(10)
+		RegisterForSingleUpdate(BoilingDuration)
+		return
+	endif
 	
 	if _target.isdead()
 		debug.trace("Everdamned DEBUG: Blood Boil Quest determined that target is dead, not blowing up. Should not be, because essential")
@@ -57,6 +78,7 @@ event OnUpdate()
 	EssentialHolder.Clear()
 	_target.Kill(_caster)
 	_target.PlaceAtMe(ED_Art_Hazard_Bones as form, 1, false, false)
+	_target.SetCriticalStage(_target.CritStage_DisintegrateStart)
 	_target.SetAlpha(0.000000, true)
 	ED_Misc_BloodDecalLarge_Spell.remotecast(_source, _caster, _w)
 	ED_Misc_BloodDecalLarge_Spell.remotecast(_source, _caster, _a)
@@ -77,6 +99,7 @@ function Shutdown()
 	_d.Delete()
 	_up.Delete()
 	_source.Delete()
+	
 	Stop()
 endfunction
 
