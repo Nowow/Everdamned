@@ -90,6 +90,7 @@ function GainAgeExpirience(float amountToAge = 0.0)
 		if ED_Mechanics_VampireAgeCurrentExp.value >= ED_Mechanics_VampireAgeCurrentLvlUpThreshold.value
 			if !HasShownAgeMessage
 				debug.Trace("Everdamned INFO: Player vampire just hit aging threshold on current age of " + ED_Mechanics_VampireAge.value + ", waiting for sleep to do lvlup")
+				ED_Art_SoundM_VampAgeAdvance.Play(playerRef)
 				ED_Mechanics_Message_AgeLvlUpNotification.Show()
 				HasShownAgeMessage = true
 			endif
@@ -286,7 +287,7 @@ globalvariable property ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global aut
 message property ED_Mechanics_SkillTree_Message_MortalPerkPointGained auto
 
 globalvariable property DLC1VampirePerkPoints auto
-
+sound property ED_Art_SoundM_VampAgeAdvance auto
 
 perk property ED_Mechanics_Ab_ChainedBeast_Perk auto
 perk property ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk auto
