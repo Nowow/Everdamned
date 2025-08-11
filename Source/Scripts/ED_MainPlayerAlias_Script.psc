@@ -46,11 +46,14 @@ Event OnRaceSwitchComplete()
 	
 EndEvent
 
-Event OnDeath(Actor akKiller)
+Event OnDying(Actor akKiller)
+	actorbase playerActorBase = playerRef.GetActorBase()
+	if playerActorBase.IsProtected() || playerRef.IsEssential()
+		return
+	endif
 	if playerRef.HasMagicEffectWithKeyword(MagicDamageFire)
 		DLC1HarkonDisintegrate01FXS.Play(playerRef)
-	
-		utility.wait(0.75)
+		utility.wait(1.75)
 		playerRef.SetAlpha (0.0,True)
 		playerRef.AttachAshPile(AshPileObject)
 		
