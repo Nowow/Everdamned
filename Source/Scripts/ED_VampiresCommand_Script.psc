@@ -3,7 +3,7 @@ Scriptname ED_VampiresCommand_Script extends activemagiceffect
 bool __dontAwardExp
 function OnEffectStart(Actor akTarget, Actor akCaster)
 
-	;SCS_In.Play(akTarget as objectreference)
+	ED_SoundOnEffectStart.Play(akTarget)
 	while ED_Mechanics_Quest_VampiresCommand.IsRunning() || ED_Mechanics_Quest_VampiresCommand.IsStopping()
 		__dontAwardExp = true
 		utility.Wait(0.100000)
@@ -38,3 +38,4 @@ referencealias property ED_Target auto
 formlist property ED_Misc_VampiresCommand_SceneControllers_FormList auto
 
 sound property ED_SoundOnEffectEnd auto
+sound property ED_SoundOnEffectStart auto
