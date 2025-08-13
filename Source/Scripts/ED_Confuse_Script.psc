@@ -50,6 +50,7 @@ event OnEffectStart(Actor Target, Actor Caster)
 			return
 		endif
 		
+		ED_Art_VFX_PsychicScream_Orange.Play(playerRef, 5.0)
 		ED_Mechanics_Keyword_DistractionSceneQuestStart.SendStoryEvent(akRef1 = Target)
 		
 	endif
@@ -65,3 +66,7 @@ message property ED_Mechanics_Message_VampiresCommandImmune auto
 message property ED_Mechanics_Message_VampriesWill_ConfusePrompt auto
 spell property ED_Mechanics_Apparation_Spell auto
 spell property ED_Mechanics_VampiresCommandImmunity_Spell auto
+
+visualeffect property ED_Art_VFX_PsychicScream_Orange auto
+
+actor property playerRef auto
