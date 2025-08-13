@@ -7,6 +7,7 @@ Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 actor currentTarget = ED_Target.GetReference() as actor
+actor player = Game.GetPlayer()
 if currentTarget
 	Int i = 0
 	while i < ED_Misc_VampiresCommand_SceneControllers_FormList.GetSize()
@@ -19,7 +20,8 @@ ED_Target.ForceRefTo(akSpeaker)
 if akSpeaker.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_Mesmerized)
 	ED_Mechanics_Global_MesmerizeShouldFollow.SetValue(1)
 else
-	ED_Misc_VampiresCommand_SceneController_Follow_Spell.Cast(game.GetPlayer(), akSpeaker)
+	ED_Art_VFX_Dominate_CasterPoint.Play(player, 5.0)
+	ED_Misc_VampiresCommand_SceneController_Follow_Spell.Cast(player, akSpeaker)
 endif
 ;END CODE
 EndFunction
@@ -34,3 +36,5 @@ formlist property ED_Misc_VampiresCommand_SceneControllers_FormList auto
 Keyword Property ED_Mechanics_Keyword_Mesmerized  Auto  
 
 GlobalVariable Property ED_Mechanics_Global_MesmerizeShouldFollow  Auto  
+
+VisualEffect Property ED_Art_VFX_Dominate_CasterPoint  Auto  

@@ -7,6 +7,7 @@ Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 actor currentTarget = ED_Target.GetReference() as actor
+actor player = Game.GetPlayer()
 if currentTarget
 	Int i = 0
 	while i < ED_Misc_VampiresCommand_SceneControllers_FormList.GetSize()
@@ -14,8 +15,10 @@ if currentTarget
 		i += 1
 	endWhile
 endIf
+
+ED_Art_VFX_Dominate_CasterPoint.Play(player, 5.0)
 ED_Target.ForceRefTo(akSpeaker)
-ED_Misc_VampiresCommand_SceneController_Flee_Spell.Cast(game.GetPlayer(), akSpeaker)
+ED_Misc_VampiresCommand_SceneController_Flee_Spell.Cast(player, akSpeaker)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -25,3 +28,5 @@ EndFunction
 referencealias property ED_Target auto
 spell property ED_Misc_VampiresCommand_SceneController_Flee_Spell auto
 formlist property ED_Misc_VampiresCommand_SceneControllers_FormList auto
+
+VisualEffect Property ED_Art_VFX_Dominate_CasterPoint  Auto  

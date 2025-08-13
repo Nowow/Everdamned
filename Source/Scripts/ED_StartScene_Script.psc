@@ -4,18 +4,16 @@ Scriptname ED_StartScene_Script extends activemagiceffect
 scene property ED_Scene auto
 keyword property MagicInfluence auto
 spell property ED_Mechanics_VampiresCommandImmunity_Spell auto
+spell property ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX auto
+visualeffect property ED_Art_VFX_Dominate_CasterPoint auto
 
 actor TheTarget
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
 	TheTarget = akTarget
+	;ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX.Cast(playerRef)
+	;ED_Art_VFX_Dominate_CasterPoint.Play(playerRef, 5.0)
 	ED_Scene.Start()
 endFunction
 
-;function OnEffectFinish(Actor akTarget, Actor akCaster)
-;	utility.wait(2)
-;	if !(TheTarget.HasMagicEffectWithKeyword(MagicInfluence))
-;		debug.Trace("Everdamned DEBUG: Vampires Command scene ended, and no MagicInfluence detected, making target immune for x sec")
-;		ED_Mechanics_VampiresCommandImmunity_Spell.Cast(TheTarget, TheTarget)
-;	endif
-;endfunction
+actor property playerRef auto
