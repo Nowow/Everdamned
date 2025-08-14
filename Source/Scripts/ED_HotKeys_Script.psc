@@ -100,7 +100,10 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		ED_Art_SoundM_FlameInglitesSwoosh.Play(pl)
+		__targetThing.playidle(resetroot)
+		debug.SendAnimationEvent(__targetThing, "NPC_TurnLeft180")
+		
+		;ED_Art_SoundM_FlameInglitesSwoosh.Play(pl)
 		
 		  
 		;bool __idlePlayed = __targetThing.PlayIdle(IdleSnowElfPrinceAscension)

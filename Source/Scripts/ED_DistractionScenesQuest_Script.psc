@@ -81,6 +81,9 @@ event OnStoryScript(Keyword akKeyword, Location akLocation, ObjectReference akRe
 	
 	int SceneIndex = SceneNo - 1 
 	
+	SceneIndex = 1
+	
+	
 	DistractionScenesArray[SceneIndex].Start()
 
 endevent
