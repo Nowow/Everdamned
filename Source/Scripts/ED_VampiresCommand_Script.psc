@@ -21,8 +21,8 @@ endFunction
 function OnEffectFinish(Actor akTarget, Actor akCaster)
 
 	ED_SoundOnEffectEnd.Play(akTarget as objectreference)
-	if ED_Target
-		Actor TheTarget = ED_Target.GetActorReference()
+	Actor TheTarget = ED_Target.GetActorReference()
+	if TheTarget	
 		Int i = 0
 		while i < ED_Misc_VampiresCommand_SceneControllers_FormList.GetSize()
 			TheTarget.DispelSpell(ED_Misc_VampiresCommand_SceneControllers_FormList.GetAt(i) as spell)
