@@ -723,7 +723,9 @@ function HandleFeedSleep(actor FeedTarget)
 	
 	if !(FeedTarget.IsInFaction(ED_Mechanics_DreamVisited_Fac)) && playerRef.HasPerk(ED_PerkTree_Deception_65_DreamVisitor_Perk)
 		int currentRelationship = FeedTarget.GetRelationshipRank(playerRef)
+		FeedTarget
 		if currentRelationship >= 0
+			ED_Art_Shader_DreamVisitor.Play(FeedTarget, 10.0)
 			FeedTarget.SetRelationshipRank(playerRef, currentRelationship + 1)
 			FeedTarget.AddToFaction(ED_Mechanics_DreamVisited_Fac)
 			ED_Mechanics_Message_DreamVisitor_RelationshipIncreased.Show()
@@ -972,6 +974,7 @@ GlobalVariable Property PlayerIsVampire  Auto
 sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
 formlist property ED_Mechanics_BlueBlood_Track_FormList auto
 faction property ED_Mechanics_DreamVisited_Fac auto
+effectshader property ED_Art_Shader_DreamVisitor auto
 
 message property ED_Mechanics_Message_DreamVisitor_RelationshipIncreased auto
 message property DLC1VampirePerkEarned auto
