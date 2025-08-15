@@ -99,6 +99,19 @@
       "Modifiers": {
         "Spells": ["Everdamned.esp:0x828116"]
       }
+    },
+	{
+      "Comment": "Instinctive Charm application",
+      "Priority": 9,
+      "Class": "Everdamned_InstinctiveCharmProc",
+      "Filters": {
+		"Percentage": 10.0,
+		"Conditions": ["Everdamned.esp:0xC6DC03"],
+        "Attacks": ["Regular", "Power", "Bash"]
+      },
+      "Modifiers": {
+        "Spells": ["Everdamned.esp:0xC6DC04"]
+      }
     }
   ]
 }
