@@ -13,7 +13,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 		if ToggleOnSound
 			ToggleOnSound.Play(akTarget)
 		endif
-		akTarget.AddSpell(AbilityToToggle)
+		akTarget.AddSpell(AbilityToToggle, false)
 	endif
 endevent
 
