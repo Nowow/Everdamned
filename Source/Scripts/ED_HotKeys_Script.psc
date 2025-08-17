@@ -82,6 +82,9 @@ ED_BloodVortexQuest_Script Property ED_Mechanics_Quest_BloodVortex Auto
 
 sound property ED_Art_SoundM_FlameInglitesSwoosh auto
 
+projectile property ED_Art_Projectile_InfluenceShockwave  auto
+spell property ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX auto
+
 int counter
 bool __switch
 art leart
@@ -100,8 +103,18 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		__targetThing.playidle(resetroot)
-		debug.SendAnimationEvent(__targetThing, "NPC_TurnLeft180")
+		;__targetThing.playidle(resetroot)
+		;debug.SendAnimationEvent(__targetThing, "NPC_TurnLeft180")
+		
+		objectreference ancho = pl.placeatme(FXEmptyActivator)
+		ancho.moveto(pl, 0.0, 0.0, 50.0)
+		utility.wait(0.5)
+		
+		ancho.setangle(0.0, 0.0, pl.GetAngleZ() - 180.0)
+		ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX.Cast(ancho)
+		
+		
+		
 		
 		;ED_Art_SoundM_FlameInglitesSwoosh.Play(pl)
 		

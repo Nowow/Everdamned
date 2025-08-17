@@ -73,6 +73,23 @@ subs:
       - name: ShaderEditorID
         type: string
       - name: newParticleCount
-        float: string
+        type: string
       - name: newParticleCount2
-        float: string
+        type: string
+  - name: shPartColor
+    func: DoParticleColor
+    args:
+      - name: ShaderEditorID
+        type: string
+      - name: theKey
+        type: int
+      - name: Rval
+        type: int
+      - name: Gval
+        type: int
+      - name: Bval
+        type: int
+      - name: Aval
+        type: float
+      - name: Timeval
+        type: float

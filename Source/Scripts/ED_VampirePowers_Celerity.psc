@@ -20,6 +20,9 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 		utility.wait(0.1)
 	Endif
 	
+	;VOCShoutFXSlowTimeIn
+	ED_Art_SoundM_CelerityIn.Play(akTarget)
+	akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
 	CeleritySP.cast(akTarget,akTarget)
 		
 	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
@@ -27,7 +30,9 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 Endevent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
+	ED_Art_SoundM_CelerityOut.Play(akTarget)
 	akTarget.DispelSpell(CeleritySP)
+	akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
 	
 	if ActiveNF == true
 		akTarget.AddSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
@@ -47,4 +52,7 @@ MagicEffect Property ExtendedPerceptionME  Auto
 MagicEffect Property ED_VampirePowers_Effect_ExtendedPerceptionTog  Auto  
 SPELL Property CeleritySP  Auto  
 SPELL Property ED_VampirePowers_Pw_NecroticFlesh_Spell Auto  
+explosion property ED_Art_Explosion_TimeDilationShockwave auto
 
+sound property ED_Art_SoundM_CelerityIn auto
+sound property ED_Art_SoundM_CelerityOut auto

@@ -216,3 +216,27 @@ string function DoParticleCount(string ShaderEditorID, float newParticleCount, f
 endfunction
 
 
+string function DoParticlecolor(string ShaderEditorID, int theKey, int Rval, int Gval, int Bval, float Aval, float Timeval) global
+
+	if !ShaderEditorID
+		return "No shader specified"
+	endif
+	
+	effectshader leShader = ED_SKSEnativebindings.LookupSomeFormByEditorID(ShaderEditorID) as effectshader
+	if !leShader
+		return "Shader was not found"
+	endif
+	
+	int[] RGB = new int[3]
+	RGB[0] = Rval
+	RGB[1] = Gval
+	RGB[2] = Bval
+	
+	SetParticleColorKeyData(leShader, theKey, RGB, Aval, Timeval)
+	
+	debug.Trace("Everdamned DEBUG: Setting color for shader " + ShaderEditorID + " " + leShader)
+	debug.Trace("Everdamned DEBUG: Key: " + theKey+ "; R:" + Rval + "; G:" + Gval + "; B:" + Bval + "; Alpha: " + Aval + "; Timekey: " + Timeval)
+	
+endfunction
+
+
