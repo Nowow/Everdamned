@@ -58,3 +58,21 @@ subs:
       - name: modName
         type: int
         default: 1
+
+  - name: shPartText
+    func: DoParticleTexture
+    args:
+      - name: ShaderEditorID
+        type: string
+      - name: newTexturePath
+        type: string
+
+  - name: shPartCount
+    func: DoParticleCount
+    args:
+      - name: ShaderEditorID
+        type: string
+      - name: newParticleCount
+        float: string
+      - name: newParticleCount2
+        float: string

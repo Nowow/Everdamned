@@ -1,5 +1,7 @@
 Scriptname ED_CustomConsoleScript Hidden
 
+import PO3_SKSEFunctions
+
 string function PlayVisualEffectFromString(string editorID) global
 	
 	debug.Trace("Everdamned DEBUG: PlayVisualEffectFromString called!")
@@ -22,7 +24,7 @@ string function PlayVisualEffectFromString(string editorID) global
 		return "Didnt find shi"
 	endif
 	
-	PO3_SKSEFunctions.SetArtObject(levfx, leform)
+	SetArtObject(levfx, leform)
 	
 	
 	
@@ -41,7 +43,7 @@ function StopLeVFX(string editorID) global
 	
 ;	if editorID && editorID != ""
 ;		art leform = ED_SKSEnativebindings.LookupSomeFormByEditorID(editorID) as art
-;		PO3_SKSEFunctions.SetArtObject(levfx, leform)
+;		SetArtObject(levfx, leform)
 ;	endif
 
 	ObjectReference __targetThing = Game.GetCurrentConsoleRef()
@@ -85,7 +87,7 @@ function PlayNext() global
 		visualeffect levfx = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
 		levfx.Stop(__targetThing)
 		
-		PO3_SKSEFunctions.SetArtObject(levfx, ArtIterator.CurrentForm as art)
+		SetArtObject(levfx, ArtIterator.CurrentForm as art)
 		levfx.Play(__targetThing)
 	else
 		__targetThing.placeatme(ArtIterator.CurrentForm)
@@ -109,7 +111,7 @@ function PlayPrevious() global
 		visualeffect levfx = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
 		levfx.Stop(__targetThing)
 		
-		PO3_SKSEFunctions.SetArtObject(levfx, ArtIterator.CurrentForm as art)
+		SetArtObject(levfx, ArtIterator.CurrentForm as art)
 		levfx.Play(__targetThing)
 	else
 		__targetThing.placeatme(ArtIterator.CurrentForm)
@@ -134,7 +136,7 @@ function PlayCurrentFormAgain() global
 		visualeffect levfx = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
 		levfx.Stop(__targetThing)
 		
-		PO3_SKSEFunctions.SetArtObject(levfx, ArtIterator.CurrentForm as art)
+		SetArtObject(levfx, ArtIterator.CurrentForm as art)
 		levfx.Play(__targetThing)
 	else
 		__targetThing.placeatme(ArtIterator.CurrentForm)
@@ -159,3 +161,58 @@ function SelectFormTypeToBrowse(int formTyp) global
 	ArtIterator.SelectedFormType = formTyp
 	ArtIterator.SetCurrentIndex(-1)
 endfunction
+
+; ---------- SHADERS
+
+
+string function DoParticleTexture(string ShaderEditorID, string newTexturePath) global
+	
+	if !ShaderEditorID
+		return "No shader specified"
+	endif
+
+	effectshader leShader = ED_SKSEnativebindings.LookupSomeFormByEditorID(ShaderEditorID) as effectshader
+	if !leShader
+		return "Shader was not found"
+	endif
+	
+	string oldTexture = GetParticleShaderTexture(leshader)
+	
+	if !newTexturePath
+		return "For shader " + leShader + "; Current particle texture path: " + oldTexture
+	endif
+		
+	SetParticleShaderTexture(leshader, newTexturePath)
+	return "For shader " + leShader + "; old particle texture path: " + oldTexture + ", new: " + newTexturePath
+endfunction
+
+string function DoParticleCount(string ShaderEditorID, float newParticleCount, float newParticleCount2) global
+
+	if !ShaderEditorID
+		return "No shader specified"
+	endif
+	
+	effectshader leShader = ED_SKSEnativebindings.LookupSomeFormByEditorID(ShaderEditorID) as effectshader
+	if !leShader
+		return "Shader was not found"
+	endif
+	
+	float oldFullCount = GetParticleFullCount(leShader)
+	float oldPersisentCount = GetParticlePersistentCount(leShader)
+	
+	if !newParticleCount && !newParticleCount2
+		"For shader " + leShader + "nothing new set; Full count: " + oldFullCount + ", Persistent count: " + oldPersisentCount
+	endif
+	
+	if newParticleCount2
+		SetParticleFullCount(leShader, newParticleCount)
+		SetParticlePersistentCount(leShader, newParticleCount2)
+	else
+		SetParticleFullCount(leShader, newParticleCount)
+		SetParticlePersistentCount(leShader, newParticleCount)
+	endif
+	
+	return "For shader " + leShader + "; Old full count: " + oldFullCount + ", old persistent count: " + oldPersisentCount
+endfunction
+
+
