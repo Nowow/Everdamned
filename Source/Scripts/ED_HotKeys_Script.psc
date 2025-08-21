@@ -85,6 +85,8 @@ sound property ED_Art_SoundM_FlameInglitesSwoosh auto
 projectile property ED_Art_Projectile_InfluenceShockwave  auto
 spell property ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX auto
 
+idle property IdleHandCut auto
+
 int counter
 bool __switch
 art leart
@@ -103,15 +105,24 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		;__targetThing.TranslateToRef(pl, 100.0)
+		
+		float playerAngleZsin = math.sin(pl.GetAngleZ())
+		float playerAngleZcos = math.cos(pl.GetAngleZ())
+		float targetX = pl.GetPositionX() + 300.0*playerAngleZsin
+		float targetY = pl.GetPositionY() + 300.0*playerAngleZcos
+		
+		__targetThing.TranslateTo(targetX, targetY, pl.GetPositionZ(),\
+								pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
+								700.0)
+		
+		
+		pl.PlayIdle(IdleHandCut)
+		__targetThing.PlayIdle(IdleHandCut)
+		
 		;__targetThing.playidle(resetroot)
 		;debug.SendAnimationEvent(__targetThing, "NPC_TurnLeft180")
 		
-		objectreference ancho = pl.placeatme(FXEmptyActivator)
-		ancho.moveto(pl, 0.0, 0.0, 50.0)
-		utility.wait(0.5)
-		
-		ancho.setangle(0.0, 0.0, pl.GetAngleZ() - 180.0)
-		ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX.Cast(ancho)
 		
 		
 		
@@ -119,7 +130,7 @@ Event OnKeyDown(int keyCode)
 		;ED_Art_SoundM_FlameInglitesSwoosh.Play(pl)
 		
 		  
-		;bool __idlePlayed = __targetThing.PlayIdle(IdleSnowElfPrinceAscension)
+		
 		;debug.Trace("Everdamned DEBUG: Idle was played: " + __idlePlayed)
 		
 		;ED_Mechanics_Quest_BloodVortex.IncrementActorsDied(__targetThing as actor)
@@ -148,11 +159,15 @@ Event OnKeyDown(int keyCode)
 		;debug.Trace("Everdamned DEBUG: Var: " + __var)
 		
 		if !__switch
-		
+			;__targetThing.playidle(resetroot)	
+			;bool __idlePlayed = __targetThing.PlayIdle(IdleBoyRitual)
+			;utility.wait(0.5)
+			;__targetThing.TranslateToRef(playerRef, 100.0)
+			
 		else
+			
+			
 	
-			;__targetThing.SetAnimationVariableBool("bIdlePlaying", !__var)
-			;debug.SendAnimationEvent(__targetThing, "ed_seduction_NPCSeq_end")
 		endif
 		
 		__switch = !__switch

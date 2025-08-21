@@ -1,0 +1,15 @@
+{
+    "name": "solo_jumpfeed_player",
+    "description": "jumpfeed player solo part",
+    "priority": 4255750,
+    "conditions": [
+        {
+            "condition": "IsForm",
+            "requiredVersion": "1.0.0.0",
+            "Form": {
+                "pluginName": "skyrim.esm",
+                "formID": "7"
+            }
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "name": "solo_jumpfeed_victim",
+    "description": "jumpfeed victim solo part",
+    "priority": 4255749,
+    "conditions": [
+        {
+            "condition": "IsForm",
+            "requiredVersion": "1.0.0.0",
+            "negated": true,
+            "Form": {
+                "pluginName": "skyrim.esm",
+                "formID": "7"
+            }
+        }
+    ]
+}
