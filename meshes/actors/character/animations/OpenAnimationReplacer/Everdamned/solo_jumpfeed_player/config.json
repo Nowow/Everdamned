@@ -2,12 +2,13 @@
     "name": "solo_jumpfeed_player",
     "description": "jumpfeed player solo part",
     "priority": 4255750,
+    "disabled": true,
     "conditions": [
         {
             "condition": "IsInFaction",
             "requiredVersion": "1.0.0.0",
             "Faction": {
-                "pluginName": "skyrim.esm",
+                "pluginName": "Skyrim.esm",
                 "formID": "DB1"
             }
         }

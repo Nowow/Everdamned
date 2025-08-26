@@ -86,9 +86,13 @@ projectile property ED_Art_Projectile_InfluenceShockwave  auto
 spell property ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX auto
 
 idle property IdleHandCut auto
-idle property IdleCannibalFeedStanding_Loose auto
+idle property ED_Idle_FeedKM_Solo_Player_Ground auto
+idle property ED_Idle_FeedKM_Solo_Player_Bleedout auto
+idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
 
 globalvariable property ED_Test_testglobal auto
+globalvariable property ED_Mechanics_Global_FeedType auto
+
 
 
 int counter
@@ -109,20 +113,39 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		;__targetThing.TranslateToRef(pl, 100.0)
-		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())
 		float playerAngleZcos = math.cos(pl.GetAngleZ())
 		float targetX = pl.GetPositionX() + ED_Test_testglobal.GetValue() as float*playerAngleZsin
 		float targetY = pl.GetPositionY() + ED_Test_testglobal.GetValue() as float*playerAngleZcos
 		
-		__targetThing.TranslateTo(targetX, targetY, pl.GetPositionZ(),\
-								pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
-								700.0)
+		;__targetThing.TranslateTo(targetX, targetY, pl.GetPositionZ(),\
+		;						pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
+		;						700.0)
+				
+		debug.Trace("Everdamned DEBUG: bIsSynced: " + __targetThing.GetAnimationVariableBool("bIsSynced"))
+		
+		;pl.SetAnimationVariableBool("bNoStagger", true)
+		
+		; distance 60
+		;pl.PlayIdle(ED_Idle_FeedKM_Solo_Player_Bleedout)
+		;__targetThing.PlayIdle(IdleHandCut)
+		
+		; distance 65
+		;pl.PlayIdle(ED_Idle_FeedKM_Solo_Player_Jumpfeed)
+		;__targetThing.PlayIdle(IdleHandCut)
+		
+		; distance 52
+		;pl.SetDontMove(true)
+		;__targetThing.SetDontMove(true)
+		;pl.PlayIdle(ED_Idle_FeedKM_Solo_Player_Ground)
+		;__targetThing.PlayIdle(IdleHandCut)
 		
 		
-		pl.PlayIdle(IdleCannibalFeedStanding_Loose)
-		__targetThing.PlayIdle(IdleHandCut)
+		
+		
+		
+		
+		
 		
 		;__targetThing.playidle(resetroot)
 		;debug.SendAnimationEvent(__targetThing, "NPC_TurnLeft180")

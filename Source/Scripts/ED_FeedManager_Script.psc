@@ -9,6 +9,7 @@ String property GarkainFeedSounds = "SoundPlay.NPCWerewolfFeedingKill" auto
 String property BreathSounds = "ed_breathSounds" auto
 string property SocialFeedSatiation = "ed_socialfeedsatiation" auto
 string property SocialFeedFinished = "ed_socialfeedfinished" auto
+string property SoloFeedAnimKillVictim = "ed_feedkm_killvictim" auto
 
 
 ;---------- helper functions ---------------
@@ -97,6 +98,7 @@ Function RegisterFeedEvents()
 			RegisterForAnimationEvent(playerRef, BreathSounds)
 			RegisterForAnimationEvent(playerRef, SocialFeedSatiation)
 			RegisterForAnimationEvent(playerRef, SocialFeedFinished)
+			RegisterForAnimationEvent(playerRef, SoloFeedAnimKillVictim)
 			
 		endif
 
@@ -123,6 +125,7 @@ function UnRegisterFeedEvents()
 		UnRegisterForAnimationEvent(playerRef, BreathSounds)
 		UnRegisterForAnimationEvent(playerRef, SocialFeedSatiation)
 		UnRegisterForAnimationEvent(playerRef, SocialFeedFinished)
+		UnRegisterForAnimationEvent(playerRef, SoloFeedAnimKillVictim)
 	
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
 	endif
@@ -130,10 +133,17 @@ endfunction
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 
+	if asEventName == SoloFeedAnimKillVictim
+		; not using KillActor animevent because
+		; if not a paired anim it does not blame player for kill
+		
+		actor __targetThing = Game.GetCurrentConsoleRef() as actor
+		__targetThing.Kill(playerRef)
+		;aFeedTarget.Kill(playerRef)
 	
 	;its sfx, but here so i dont have to propagate victim race to alias script
 	;and timing is not critical so thread locks are not an issue
-	if asEventName == BreathSounds
+	elseif asEventName == BreathSounds
 	
 		BreathSoundsToPlayOnTrigger.Play(playerRef)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught Breath event!")
@@ -918,16 +928,29 @@ state CombatDrain
 	
 	event OnBeginState()
 		debug.Trace("Everdamned DEBUG: Feed Manager entered CombatDrain state")
-	
+		
+		idle backupPlayerSoloIdleToPlay
+		float backupAnimationVictimOffset
+		
 		; tell OAR the animation type
 		if aFeedTarget.IsBleedingOut()
 			; bleedout km
 			debug.Trace("Everdamned DEBUG: Feed Manager determined target IS bleeding out")
 			ED_Mechanics_Global_FeedType.SetValue(1.0)
+			backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Bleedout
+			backupAnimationVictimOffset = 60.0
 		else ;stagger 
 			;jump feed / ground feed
 			debug.Trace("Everdamned DEBUG: Feed Manager determined target is NOT bleeding out, therefore staggered")
 			ED_Mechanics_Global_FeedType.SetValue(2.0)
+			
+			if playerRef.GetActorBase().GetSex() == 0
+				backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Ground
+				backupAnimationVictimOffset = 52.0
+			else
+				backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Jumpfeed
+				backupAnimationVictimOffset = 65.0
+			endif
 		endif
 		
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
@@ -942,17 +965,40 @@ state CombatDrain
 		; any real killmove makes player immune to damage
 		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
+		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
+		bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
 		
-		; the rest of the interaction and actual feed handling would happen in anim event, should it play
-		; P.S.: not really, now here
+		debug.Trace("Everdamned DEBUG: bIsSynced: " + __animPlayed)
 		
-		
-		if __animPlayed
+		if __playerIsSynced && __victimIsSynced
 			ApplyCombatFeedEffects()
 		else
-			ED_Mechanics_Message_CombatFeedFailed.Show()
-			debug.Trace("Everdamned DEBUG: Combat Feed attempt failed")
-			GoToState("")
+			debug.Trace("Everdamned WARNING: Feed Manager does not detect paired feed km playing, using backup solo anims")
+			debug.MessageBox("Everdamned DEBUG: Playing backup feed anims")
+			if __playerIsSynced
+				playerRef.PlayIdle(ResetRoot)
+			elseif __victimIsSynced
+				aFeedTarget.PlayIdle(ResetRoot)
+			endif
+
+			float playerAngleZsin = math.sin(playerRef.GetAngleZ())
+			float playerAngleZcos = math.cos(playerRef.GetAngleZ())
+			float targetX = playerRef.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
+			float targetY = playerRef.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
+		
+			ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
+			
+			aFeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ(),\
+									playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
+									700.0)
+			
+			playerRef.PlayIdle(backupPlayerSoloIdleToPlay)
+			aFeedTarget.PlayIdle(IdleHandCut)
+			ApplyCombatFeedEffects()
+		;else
+		;	ED_Mechanics_Message_CombatFeedFailed.Show()
+		;	debug.Trace("Everdamned DEBUG: Combat Feed attempt failed")
+		;	GoToState("")
 		endif
 	
 	endevent
@@ -965,6 +1011,12 @@ endstate
 
 
 idle property IdleVampireStandingFeedFront_Loose auto
+idle property IdleHandCut auto
+idle property ED_Idle_FeedKM_Solo_Player_Ground auto
+idle property ED_Idle_FeedKM_Solo_Player_Bleedout auto
+idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
+idle property ResetRoot auto
+spell property ED_BeingVampire_VampireFeed_VictimMark_Spell auto
 
 spell property ED_FeralBeast_ApplyHasBeenEaten_Trigger_Spell auto
 Race Property VampireGarkainBeastRace auto

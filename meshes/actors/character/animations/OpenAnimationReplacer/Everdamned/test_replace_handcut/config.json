@@ -2,5 +2,6 @@
     "name": "test_handcut",
     "description": "cobmat bite killmove when target is staggered. uses paired_huga because need player to be vulnerable during killmove, and killmoves make player invincible",
     "priority": 4255516,
+    "disabled": true,
     "conditions": []
 }
