@@ -1,7 +1,7 @@
 {
-    "name": "solo_jumpfeed_victim",
-    "description": "jumpfeed victim solo part",
-    "priority": 4255749,
+    "name": "solo_bleedoutfinisher_victim",
+    "description": "bleedout feed finisher victim solo part",
+    "priority": 4255747,
     "conditions": [
         {
             "condition": "IsInFaction",

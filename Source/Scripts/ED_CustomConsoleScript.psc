@@ -240,3 +240,49 @@ string function DoParticlecolor(string ShaderEditorID, int theKey, int Rval, int
 endfunction
 
 
+string function SendAnimevent(string leevent) global
+
+	actor __targetThing = Game.GetCurrentConsoleRef() as actor
+	
+	if __targetThing
+		debug.SendAnimationEvent(__targetThing, leevent)
+	endif
+	
+endfunction
+
+string function PlayFeedIdle(int idleNum) global
+
+	actor __targetThing = Game.GetCurrentConsoleRef() as actor
+	
+	if !__targetThing
+		return "No target selected"
+	endif
+	
+	actor playerRef = Game.GetPlayer()
+	
+	idle idleToPlay
+	globalvariable FeedTypeVar = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_Mechanics_Global_FeedType") as globalvariable
+	
+	if idleNum == 3
+		;social
+		FeedTypeVar.SetValue(3.0)
+		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+	elseif idleNum == 2
+		;jump feed
+		FeedTypeVar.SetValue(2.0)
+		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+	elseif idleNum == 1
+		;bleedout feed
+		FeedTypeVar.SetValue(1.0)
+		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+	elseif idleNum == 4
+		;overpower feed
+		FeedTypeVar.SetValue(1.0)
+		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+	else
+		return "1: bleedout feed, 2: jump feed, 3: social feed, 4: overpower feed"
+	endif
+	
+	playerRef.PlayIdleWithTarget(idleToPlay, __targetThing)
+	
+endfunction

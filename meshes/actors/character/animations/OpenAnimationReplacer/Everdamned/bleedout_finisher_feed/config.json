@@ -18,11 +18,6 @@
             "Value B": {
                 "value": 1.0
             }
-        },
-        {
-            "condition": "IsFemale",
-            "requiredVersion": "1.0.0.0",
-            "negated": true
         }
     ],
     "pairedConditions": []

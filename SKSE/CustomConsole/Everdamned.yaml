@@ -93,3 +93,15 @@ subs:
         type: float
       - name: Timeval
         type: float
+  - name: sendevent
+    func: SendAnimevent
+    args:
+      - name: leevent
+        type: string
+  - name: feed
+    func: PlayFeedIdle
+    args:
+      - name: idleNum
+        type: int
+        default: 0
+

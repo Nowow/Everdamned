@@ -86,6 +86,10 @@ projectile property ED_Art_Projectile_InfluenceShockwave  auto
 spell property ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX auto
 
 idle property IdleHandCut auto
+idle property IdleCannibalFeedStanding_Loose auto
+
+globalvariable property ED_Test_testglobal auto
+
 
 int counter
 bool __switch
@@ -109,15 +113,15 @@ Event OnKeyDown(int keyCode)
 		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())
 		float playerAngleZcos = math.cos(pl.GetAngleZ())
-		float targetX = pl.GetPositionX() + 300.0*playerAngleZsin
-		float targetY = pl.GetPositionY() + 300.0*playerAngleZcos
+		float targetX = pl.GetPositionX() + ED_Test_testglobal.GetValue() as float*playerAngleZsin
+		float targetY = pl.GetPositionY() + ED_Test_testglobal.GetValue() as float*playerAngleZcos
 		
 		__targetThing.TranslateTo(targetX, targetY, pl.GetPositionZ(),\
 								pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
 								700.0)
 		
 		
-		pl.PlayIdle(IdleHandCut)
+		pl.PlayIdle(IdleCannibalFeedStanding_Loose)
 		__targetThing.PlayIdle(IdleHandCut)
 		
 		;__targetThing.playidle(resetroot)

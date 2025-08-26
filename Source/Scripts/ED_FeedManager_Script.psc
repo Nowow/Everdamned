@@ -433,7 +433,7 @@ endfunction
 function HandleDrainMesmerized(actor FeedTarget)
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Drain Mesmerized call on target " + FeedTarget)
 	
-	; tell OAR that ist jump feed killmove
+	; regular feed animation
 	ED_Mechanics_Global_FeedType.SetValue(0.0)
 	
 	;start actual feed animation
@@ -922,9 +922,11 @@ state CombatDrain
 		; tell OAR the animation type
 		if aFeedTarget.IsBleedingOut()
 			; bleedout km
+			debug.Trace("Everdamned DEBUG: Feed Manager determined target IS bleeding out")
 			ED_Mechanics_Global_FeedType.SetValue(1.0)
 		else ;stagger 
-			;jump feed
+			;jump feed / ground feed
+			debug.Trace("Everdamned DEBUG: Feed Manager determined target is NOT bleeding out, therefore staggered")
 			ED_Mechanics_Global_FeedType.SetValue(2.0)
 		endif
 		

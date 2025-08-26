@@ -1,7 +1,7 @@
 {
     "name": "jump_feed",
     "description": "cobmat bite killmove when target is staggered. uses paired_huga because need player to be vulnerable during killmove, and killmoves make player invincible",
-    "priority": 4255516,
+    "priority": 4255517,
     "ignoreDontConvertAnnotationsToTriggersFlag": true,
     "triggersFromAnnotationsOnly": true,
     "conditions": [

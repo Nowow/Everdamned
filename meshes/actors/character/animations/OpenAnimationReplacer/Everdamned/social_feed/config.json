@@ -1,7 +1,7 @@
 {
     "name": "social feed",
     "description": "long feed animation for use with Eyes of the Moon dialogue feed",
-    "priority": 4255517,
+    "priority": 4255518,
     "ignoreDontConvertAnnotationsToTriggersFlag": true,
     "triggersFromAnnotationsOnly": true,
     "conditions": [

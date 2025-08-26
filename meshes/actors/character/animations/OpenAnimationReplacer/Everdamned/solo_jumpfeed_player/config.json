@@ -4,11 +4,11 @@
     "priority": 4255750,
     "conditions": [
         {
-            "condition": "IsForm",
+            "condition": "IsInFaction",
             "requiredVersion": "1.0.0.0",
-            "Form": {
+            "Faction": {
                 "pluginName": "skyrim.esm",
-                "formID": "7"
+                "formID": "DB1"
             }
         }
     ]

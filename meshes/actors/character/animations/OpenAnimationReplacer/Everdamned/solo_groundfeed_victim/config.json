@@ -1,7 +1,7 @@
 {
-    "name": "solo_jumpfeed_victim",
-    "description": "jumpfeed victim solo part",
-    "priority": 4255749,
+    "name": "solo_groundfeed_victim",
+    "description": "ground feed victim solo part",
+    "priority": 4255751,
     "conditions": [
         {
             "condition": "IsInFaction",

@@ -1,12 +1,11 @@
 {
-    "name": "solo_jumpfeed_victim",
-    "description": "jumpfeed victim solo part",
-    "priority": 4255749,
+    "name": "solo_bleedoutfinisher_player",
+    "description": "bleedout finisher feed player solo part",
+    "priority": 4255748,
     "conditions": [
         {
             "condition": "IsInFaction",
             "requiredVersion": "1.0.0.0",
-            "negated": true,
             "Faction": {
                 "pluginName": "Skyrim.esm",
                 "formID": "DB1"
