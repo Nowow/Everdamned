@@ -143,10 +143,11 @@ state KnowsOnlyPotence
 
 
 	Event OnKeyUp(Int KeyCode, Float HoldTime)
-		if Utility.IsInMenuMode()
+		bool __inMenuMode = Utility.IsInMenuMode()
+		if !__chargeJumpFlag && __inMenuMode
 			return
 		endif
-		if keyCode == __currentHotkeyB && __releaseGate
+		if __releaseGate && keyCode == __currentHotkeyB 
 			__releaseGate = False
 			debug.Trace("Everdamned DEBUG: Hotkey B got released!")
 			if !__hotkeyB_handled
@@ -156,6 +157,13 @@ state KnowsOnlyPotence
 				; jump
 				if __chargeJumpFlag
 					debug.Trace("Everdamned DEBUG: Hotkey B release taps jump key")
+					
+					; wait waits for menu mode to end
+					; releasing in menu mode doesnt work as intended
+					if __inMenuMode
+						utility.wait(0.01)
+					endif
+					
 					TapKey(SpacebarKey)
 					Sound.StopInstance(chargeSoundInstance)
 					utility.wait(0.1)
@@ -312,10 +320,11 @@ state KnowsPotenceAndNF
 
 
 	Event OnKeyUp(Int KeyCode, Float HoldTime)
-		if Utility.IsInMenuMode()
+		bool __inMenuMode = Utility.IsInMenuMode()
+		if !__chargeJumpFlag && __inMenuMode
 			return
 		endif
-		if keyCode == __currentHotkeyB && __releaseGate
+		if __releaseGate && keyCode == __currentHotkeyB 
 			__releaseGate = False
 			debug.Trace("Everdamned DEBUG: Hotkey B got released!")
 			if !__hotkeyB_handled
@@ -327,6 +336,13 @@ state KnowsPotenceAndNF
 				; jump
 				if __chargeJumpFlag
 					debug.Trace("Everdamned DEBUG: Hotkey B release taps jump key")
+					
+					; wait waits for menu mode to end
+					; releasing in menu mode doesnt work as intended
+					if __inMenuMode
+						utility.wait(0.01)
+					endif
+					
 					TapKey(SpacebarKey)
 					Sound.StopInstance(chargeSoundInstance)
 					utility.wait(0.1)

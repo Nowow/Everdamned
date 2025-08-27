@@ -113,6 +113,8 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		Game.SetHudCartMode(true)
+		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())
 		float playerAngleZcos = math.cos(pl.GetAngleZ())
 		float targetX = pl.GetPositionX() + ED_Test_testglobal.GetValue() as float*playerAngleZsin
@@ -122,7 +124,7 @@ Event OnKeyDown(int keyCode)
 		;						pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
 		;						700.0)
 				
-		debug.Trace("Everdamned DEBUG: bIsSynced: " + __targetThing.GetAnimationVariableBool("bIsSynced"))
+		;debug.Trace("Everdamned DEBUG: bIsSynced: " + __targetThing.GetAnimationVariableBool("bIsSynced"))
 		
 		;pl.SetAnimationVariableBool("bNoStagger", true)
 		
