@@ -73,11 +73,11 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	if !__hotkeyB_handled
 		__releaseGate = False
 		__hotkeyB_handled = true
+		
+		;charge release sound
+		;dispel
+		ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 	endif
-	
-	;charge release sound
-	;dispel
-	ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 	
 	;cant unregister in this event handler if dont wait
 	utility.wait(0.1)
@@ -155,6 +155,8 @@ state KnowsOnlyPotence
 				if __chargeJumpFlag
 					debug.Trace("Everdamned DEBUG: Hotkey B release taps jump key")
 					TapKey(SpacebarKey)
+					utility.wait(0.1)
+					ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 					UnRegisterForUpdate()
 					
 				; toggle Deadly Strength	
