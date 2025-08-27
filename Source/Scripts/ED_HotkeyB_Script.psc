@@ -8,6 +8,8 @@ int LShift = 0x2A
 float property TapMaxLength = 0.3 auto
 
 
+int chargeSoundInstance
+
 int __currentHotkeyB
 function RegisterHotkey()
 	__currentHotkeyB = ED_Mechanics_Hotkeys_HotkeyB.GetValue() as int
@@ -76,6 +78,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		
 		;charge release sound
 		;dispel
+		Sound.StopInstance(chargeSoundInstance)
 		ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 	endif
 	
@@ -121,9 +124,8 @@ state KnowsOnlyPotence
 			if !__hotkeyB_handled
 				debug.Trace("Everdamned DEBUG: setting __chargeJumpFlag to true")
 				__chargeJumpFlag = true
-				; play sound
-				; VTMB blood purge good sound
-				
+
+				chargeSoundInstance = ED_Art_SoundM_JumpCharge.Play(playerRef)
 				ED_Mechanics_PotenceJumpBonus1_Spell.Cast(playerRef)
 				RegisterForSingleUpdate(0.3)
 			
@@ -155,6 +157,7 @@ state KnowsOnlyPotence
 				if __chargeJumpFlag
 					debug.Trace("Everdamned DEBUG: Hotkey B release taps jump key")
 					TapKey(SpacebarKey)
+					Sound.StopInstance(chargeSoundInstance)
 					utility.wait(0.1)
 					ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 					UnRegisterForUpdate()
@@ -290,9 +293,8 @@ state KnowsPotenceAndNF
 			if !__hotkeyB_handled
 				debug.Trace("Everdamned DEBUG: setting __chargeJumpFlag to true")
 				__chargeJumpFlag = true
-				; play sound
-				; VTMB blood purge good sound
 				
+				chargeSoundInstance = ED_Art_SoundM_JumpCharge.Play(playerRef)
 				ED_Mechanics_PotenceJumpBonus1_Spell.Cast(playerRef)
 				RegisterForSingleUpdate(0.3)
 			
@@ -326,6 +328,9 @@ state KnowsPotenceAndNF
 				if __chargeJumpFlag
 					debug.Trace("Everdamned DEBUG: Hotkey B release taps jump key")
 					TapKey(SpacebarKey)
+					Sound.StopInstance(chargeSoundInstance)
+					utility.wait(0.1)
+					ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 					UnRegisterForUpdate()
 					
 				elseif __isLShiftPressed
@@ -353,5 +358,7 @@ spell[] property JumpBonusSpellArray auto
 spell property ED_Mechanics_PotenceJumpBonus1_Spell auto
 spell property ED_Mechanics_PotenceJumpBonusCleanser_Spell auto
 spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
+
+sound property ED_Art_SoundM_JumpCharge auto
 
 actor property playerRef auto
