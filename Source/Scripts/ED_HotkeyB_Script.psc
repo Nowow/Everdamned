@@ -79,6 +79,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		;charge release sound
 		;dispel
 		Sound.StopInstance(chargeSoundInstance)
+		ED_Art_Imod_ExtendedPerception_Out.Apply()
 		ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 	endif
 	
@@ -164,9 +165,11 @@ state KnowsOnlyPotence
 						utility.wait(0.01)
 					endif
 					
+					ED_Art_Imod_ExtendedPerception_Out.Apply()
 					TapKey(SpacebarKey)
 					Sound.StopInstance(chargeSoundInstance)
 					utility.wait(0.1)
+					
 					ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 					UnRegisterForUpdate()
 					
@@ -343,6 +346,7 @@ state KnowsPotenceAndNF
 						utility.wait(0.01)
 					endif
 					
+					ED_Art_Imod_ExtendedPerception_Out.Apply()
 					TapKey(SpacebarKey)
 					Sound.StopInstance(chargeSoundInstance)
 					utility.wait(0.1)
@@ -376,5 +380,6 @@ spell property ED_Mechanics_PotenceJumpBonusCleanser_Spell auto
 spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
 
 sound property ED_Art_SoundM_JumpCharge auto
+imagespacemodifier property ED_Art_Imod_ExtendedPerception_Out auto
 
 actor property playerRef auto

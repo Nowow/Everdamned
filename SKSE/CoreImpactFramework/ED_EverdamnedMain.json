@@ -112,6 +112,20 @@
       "Modifiers": {
         "Spells": ["Everdamned.esp:0xC6DC04"]
       }
+    },
+	{
+      "Comment": "Backstab proc FLESHY FX",
+      "Priority": 8,
+      "Class": "Everdamned_InstinctiveCharmProc",
+      "Filters": {
+		"Conditions": ["Everdamned.esp:0xD0AB50"],
+        "Attacks": ["Regular", "Power"]
+      },
+      "Modifiers": {
+		"ExtraSound": ["Everdamned.esp:0xD0AB4D", "Everdamned.esp:0xD0AB4E"],
+        "Spells": ["Everdamned.esp:0xD0AB52"],
+		"PlacedObjects": ["Everdamned.esp:0xC9B52E"]
+      }
     }
   ]
 }
