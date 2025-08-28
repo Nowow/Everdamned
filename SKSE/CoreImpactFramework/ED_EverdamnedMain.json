@@ -116,9 +116,8 @@
 	{
       "Comment": "Backstab proc FLESHY FX",
       "Priority": 8,
-      "Class": "Everdamned_InstinctiveCharmProc",
+      "Class": "Everdamned_BackstabProc",
       "Filters": {
-		"Conditions": ["Everdamned.esp:0xD0AB50"],
         "Attacks": ["Regular", "Power"]
       },
       "Modifiers": {
