@@ -30,9 +30,18 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 Endevent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
-	ED_Art_SoundM_CelerityOut.Play(akTarget)
+
+	if !(akTarget.HasMagicEffect(ED_VampirePowers_Celerity_Effect_SlowTimeAb))
+		debug.Trace("Everdamned DEBUG: Celerity controller ended when no celerity slow time effect present, doing nothing")
+		return
+	endif
+	
+	; outro moved to actual effect
+	; because of feed km interaction
+	
+	;ED_Art_SoundM_CelerityOut.Play(akTarget)
 	akTarget.DispelSpell(CeleritySP)
-	akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
+	;akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
 	
 	if ActiveNF == true
 		akTarget.AddSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
@@ -49,10 +58,12 @@ Endevent
 float property XPgained auto
 SPELL Property ExtendedPerceptionSP  Auto  
 MagicEffect Property ExtendedPerceptionME  Auto  
-MagicEffect Property ED_VampirePowers_Effect_ExtendedPerceptionTog  Auto  
+MagicEffect Property ED_VampirePowers_Effect_ExtendedPerceptionTog  Auto
+MagicEffect Property ED_VampirePowers_Celerity_Effect_SlowTimeAb  Auto
+
 SPELL Property CeleritySP  Auto  
 SPELL Property ED_VampirePowers_Pw_NecroticFlesh_Spell Auto  
 explosion property ED_Art_Explosion_TimeDilationShockwave auto
 
 sound property ED_Art_SoundM_CelerityIn auto
-sound property ED_Art_SoundM_CelerityOut auto
+;sound property ED_Art_SoundM_CelerityOut auto

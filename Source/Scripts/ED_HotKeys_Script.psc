@@ -113,12 +113,10 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
-		__targetThing.SetAnimationVariableBool("bNoStagger", true)
+		;debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
+		;__targetThing.SetAnimationVariableBool("bNoStagger", true)
 		
-		utility.wait(0.5)
-		debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
-		
+		__targetThing.Kill(pl)
 		
 		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())

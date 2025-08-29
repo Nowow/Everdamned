@@ -11,6 +11,7 @@ string property SocialFeedSatiation = "ed_socialfeedsatiation" auto
 string property SocialFeedFinished = "ed_socialfeedfinished" auto
 string property FeedAnimKillVictim = "ed_feedkm_killvictim" auto
 
+;float property CombatFeedFallbackUpdateDelay = 10.0 auto
 
 ;---------- helper functions ---------------
 
@@ -136,10 +137,14 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	if asEventName == FeedAnimKillVictim
 		; not using KillActor animevent because
 		; if not a paired anim it does not blame player for kill
+		; and also to control things before killing
 		
-		;actor __targetThing = Game.GetCurrentConsoleRef() as actor
-		;__targetThing.Kill(playerRef)
+		; ghost and restrained states are controlled
+		; ED_BeingVampire_VampireFeed_VictimMark_Spell
+		; .Kill() works through ghost
 		aFeedTarget.Kill(playerRef)
+		
+		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimKillVictim event!")
 	
 	;its sfx, but here so i dont have to propagate victim race to alias script
 	;and timing is not critical so thread locks are not an issue
@@ -932,6 +937,10 @@ state CombatDrain
 		idle backupPlayerSoloIdleToPlay
 		float backupAnimationVictimOffset
 		
+		; for OAR conditions and controls ghost and unconcious flags
+		; also sets ghost and restrained
+		ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
+		
 		; tell OAR the animation type
 		if aFeedTarget.IsBleedingOut()
 			; bleedout km
@@ -964,12 +973,12 @@ state CombatDrain
 		; paired_HugA doesnt but breaks if started with unsheather weap
 		; any real killmove makes player immune to damage
 		
-		;bool timeWasSlowed = ED_SKSEnativebindings.DispelAllSlowTimeEffects()
-		;if timeWasSlowed
-		;	debug.Trace("Everdamned DEBUG: Feed Manager DISPELLED SLOW TIME EFFECT")
-		;endif
+		bool timeWasSlowed = ED_SKSEnativebindings.DispelAllSlowTimeEffects()
+		if timeWasSlowed
+			debug.Trace("Everdamned DEBUG: Feed Manager DISPELLED SLOW TIME EFFECT")
+		endif
 		
-		ED_SKSEnativebindings.SetTimeSlowdown(0.0, 0.0)
+		;ED_SKSEnativebindings.SetTimeSlowdown(0.0, 0.0)
 		
 		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
@@ -982,25 +991,21 @@ state CombatDrain
 			ApplyCombatFeedEffects()
 		else
 			debug.Trace("Everdamned WARNING: Feed Manager does not detect paired feed km playing, using backup solo anims")
-			debug.MessageBox("Everdamned DEBUG: Playing backup feed anims")
+			debug.Notification("EVD DEBUG: backup FEED anims")
 
 			float playerAngleZsin = math.sin(playerRef.GetAngleZ())
 			float playerAngleZcos = math.cos(playerRef.GetAngleZ())
 			float targetX = playerRef.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
 			float targetY = playerRef.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
-		
-			ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
 			
 			aFeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ(),\
 									playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
 									700.0)
 			
-			;if __playerIsSynced
-				playerRef.PlayIdle(ResetRoot)
-			;elseif __victimIsSynced
-				aFeedTarget.PlayIdle(ResetRoot)
-			;endif
-			
+			; dont know if needed
+			playerRef.PlayIdle(ResetRoot)
+			aFeedTarget.PlayIdle(ResetRoot)
+
 			playerRef.PlayIdle(backupPlayerSoloIdleToPlay)
 			aFeedTarget.PlayIdle(IdleHandCut)
 			ApplyCombatFeedEffects()
@@ -1016,6 +1021,7 @@ state CombatDrain
 	endevent
 	
 endstate
+
 
 
 idle property IdleVampireStandingFeedFront_Loose auto
