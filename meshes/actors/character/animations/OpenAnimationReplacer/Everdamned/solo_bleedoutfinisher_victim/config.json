@@ -30,7 +30,7 @@
             "condition": "HasMagicEffect",
             "requiredVersion": "1.0.0.0",
             "Magic effect": {
-                "pluginName": "everdamned.esp",
+                "pluginName": "Everdamned.esp",
                 "formID": "CEC540"
             },
             "Active effects only": false

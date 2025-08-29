@@ -277,7 +277,7 @@ string function PlayFeedIdle(int idleNum) global
 		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
 	elseif idleNum == 4
 		;overpower feed
-		FeedTypeVar.SetValue(1.0)
+		FeedTypeVar.SetValue(2.0)
 		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
 	else
 		return "1: bleedout feed, 2: jump feed, 3: social feed, 4: overpower feed"
@@ -285,4 +285,8 @@ string function PlayFeedIdle(int idleNum) global
 	
 	playerRef.PlayIdleWithTarget(idleToPlay, __targetThing)
 	
+endfunction
+
+string function SetTimeSlowdown(float worldFactor, float playerFactor) global
+	ED_SKSEnativebindings.SetTimeSlowdown(worldFactor, playerFactor)
 endfunction

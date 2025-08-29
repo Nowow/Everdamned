@@ -104,4 +104,12 @@ subs:
       - name: idleNum
         type: int
         default: 0
-
+  - name: slowtime
+    func: SetTimeSlowdown
+    args:
+      - name: worldFactor
+        type: float
+        default: 1.0
+      - name: playerFactor
+        type: float
+        default: 1.0

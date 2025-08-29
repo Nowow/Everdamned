@@ -9,7 +9,7 @@ String property GarkainFeedSounds = "SoundPlay.NPCWerewolfFeedingKill" auto
 String property BreathSounds = "ed_breathSounds" auto
 string property SocialFeedSatiation = "ed_socialfeedsatiation" auto
 string property SocialFeedFinished = "ed_socialfeedfinished" auto
-string property SoloFeedAnimKillVictim = "ed_feedkm_killvictim" auto
+string property FeedAnimKillVictim = "ed_feedkm_killvictim" auto
 
 
 ;---------- helper functions ---------------
@@ -98,7 +98,7 @@ Function RegisterFeedEvents()
 			RegisterForAnimationEvent(playerRef, BreathSounds)
 			RegisterForAnimationEvent(playerRef, SocialFeedSatiation)
 			RegisterForAnimationEvent(playerRef, SocialFeedFinished)
-			RegisterForAnimationEvent(playerRef, SoloFeedAnimKillVictim)
+			RegisterForAnimationEvent(playerRef, FeedAnimKillVictim)
 			
 		endif
 
@@ -125,7 +125,7 @@ function UnRegisterFeedEvents()
 		UnRegisterForAnimationEvent(playerRef, BreathSounds)
 		UnRegisterForAnimationEvent(playerRef, SocialFeedSatiation)
 		UnRegisterForAnimationEvent(playerRef, SocialFeedFinished)
-		UnRegisterForAnimationEvent(playerRef, SoloFeedAnimKillVictim)
+		UnRegisterForAnimationEvent(playerRef, FeedAnimKillVictim)
 	
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
 	endif
@@ -133,13 +133,13 @@ endfunction
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 
-	if asEventName == SoloFeedAnimKillVictim
+	if asEventName == FeedAnimKillVictim
 		; not using KillActor animevent because
 		; if not a paired anim it does not blame player for kill
 		
-		actor __targetThing = Game.GetCurrentConsoleRef() as actor
-		__targetThing.Kill(playerRef)
-		;aFeedTarget.Kill(playerRef)
+		;actor __targetThing = Game.GetCurrentConsoleRef() as actor
+		;__targetThing.Kill(playerRef)
+		aFeedTarget.Kill(playerRef)
 	
 	;its sfx, but here so i dont have to propagate victim race to alias script
 	;and timing is not critical so thread locks are not an issue
@@ -963,6 +963,14 @@ state CombatDrain
 		; StartVampireFeed forces player to sheathe
 		; paired_HugA doesnt but breaks if started with unsheather weap
 		; any real killmove makes player immune to damage
+		
+		;bool timeWasSlowed = ED_SKSEnativebindings.DispelAllSlowTimeEffects()
+		;if timeWasSlowed
+		;	debug.Trace("Everdamned DEBUG: Feed Manager DISPELLED SLOW TIME EFFECT")
+		;endif
+		
+		ED_SKSEnativebindings.SetTimeSlowdown(0.0, 0.0)
+		
 		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
 		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
@@ -975,11 +983,6 @@ state CombatDrain
 		else
 			debug.Trace("Everdamned WARNING: Feed Manager does not detect paired feed km playing, using backup solo anims")
 			debug.MessageBox("Everdamned DEBUG: Playing backup feed anims")
-			if __playerIsSynced
-				playerRef.PlayIdle(ResetRoot)
-			elseif __victimIsSynced
-				aFeedTarget.PlayIdle(ResetRoot)
-			endif
 
 			float playerAngleZsin = math.sin(playerRef.GetAngleZ())
 			float playerAngleZcos = math.cos(playerRef.GetAngleZ())
@@ -992,6 +995,12 @@ state CombatDrain
 									playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
 									700.0)
 			
+			;if __playerIsSynced
+				playerRef.PlayIdle(ResetRoot)
+			;elseif __victimIsSynced
+				aFeedTarget.PlayIdle(ResetRoot)
+			;endif
+			
 			playerRef.PlayIdle(backupPlayerSoloIdleToPlay)
 			aFeedTarget.PlayIdle(IdleHandCut)
 			ApplyCombatFeedEffects()
@@ -1003,7 +1012,6 @@ state CombatDrain
 	
 	endevent
 	event OnEndState()
-		aFeedTarget = none
 		debug.Trace("Everdamned DEBUG: Feed Manager exited CombatDrain state")
 	endevent
 	

@@ -113,12 +113,25 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		Game.SetHudCartMode(true)
+		debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
+		__targetThing.SetAnimationVariableBool("bNoStagger", true)
+		
+		utility.wait(0.5)
+		debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
+		
+		
 		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())
 		float playerAngleZcos = math.cos(pl.GetAngleZ())
 		float targetX = pl.GetPositionX() + ED_Test_testglobal.GetValue() as float*playerAngleZsin
 		float targetY = pl.GetPositionY() + ED_Test_testglobal.GetValue() as float*playerAngleZcos
+		
+		
+		;pl.pushactoraway(__targetThing, -1)
+		;__targetThing.pushactoraway(pl, -1)
+		;utility.wait(0.1)
+		;debug.Trace("Everdamned DEBUG: constraint result: " + game.addHavokBallAndSocketConstraint(pl, "NPC R Hand [RHnd]", __targetThing, "NPC R Clavicle [RClv]", 0.0, 0.0, 11.0, 0.0, -10.0, 0.0))
+		
 		
 		;__targetThing.TranslateTo(targetX, targetY, pl.GetPositionZ(),\
 		;						pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
