@@ -2,23 +2,27 @@ Scriptname ED_FeedManager_PlayerAlias extends ReferenceAlias
 
 
 String property BleedoutFinisherRustle = "ed_playsound_bleedoutrustle" auto
+String property BleedoutKillBite = "ed_playsound_bleedoutkillbite" auto
 String property BloodgushImpact = "ed_impact_bloodgush" auto
 String property BloodgushImpactShort = "ed_impact_bloodgushshort" auto
 String property FeedDoubletap = "ed_playsound_feeddoubletap" auto
 String property SocialFeedBite = "ed_socialfeedbite" auto
 string property FeedSatiation = "ed_feedsatiation" auto
+string property VLFeed = "ed_playsound_vlfeed" auto
 
 String property SheatheWepons = "ed_sheatheweapons" auto
 
 
 function RegisterFeedSFXEvents()
 	RegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
+	RegisterForAnimationEvent(playerRef, BleedoutKillBite)
 	RegisterForAnimationEvent(playerRef, BloodgushImpact)
 	RegisterForAnimationEvent(playerRef, BloodgushImpactShort)
 	RegisterForAnimationEvent(playerRef, FeedDoubletap)
 	RegisterForAnimationEvent(playerRef, SocialFeedBite)
 	RegisterForAnimationEvent(playerRef, SheatheWepons)
 	RegisterForAnimationEvent(playerRef, FeedSatiation)
+	RegisterForAnimationEvent(playerRef, VLFeed)
 endfunction
 
 Event OnPlayerLoadGame()
@@ -82,6 +86,14 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	elseif asEventName == SocialFeedBite
 		ED_Art_SoundM_SocialFeedBite.Play(playerRef)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedBite event")
+		
+	elseif asEventName == VLFeed
+		ED_Art_SoundM_VampireLordFeed.Play(playerRef)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught VLFeed event")
+		
+	elseif asEventName == BleedoutKillBite
+		ED_Art_SoundM_BleedoutKillBite.Play(playerRef)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught BleedoutKillBite event")
 	
 	elseif asEventName == FeedSatiation
 		ED_Art_SoundM_FeedSatiation.Play(playerRef)
@@ -136,6 +148,8 @@ sound property ED_Art_SoundM_FeedDoubletapJumping auto
 sound property ED_Art_SoundM_BleedoutFinishRustle auto
 sound property ED_Art_SoundM_SocialFeedBite auto
 sound property ED_Art_SoundM_FeedSatiation auto
+sound property ED_Art_SoundM_VampireLordFeed auto
+sound property ED_Art_SoundM_BleedoutKillBite auto
 
 spell property ED_Art_Spell_MouthMuzzleFlash auto
 spell property ED_Art_Spell_MouthMuzzleFlashShort auto
