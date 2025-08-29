@@ -951,14 +951,16 @@ state CombatDrain
 		else ;stagger 
 			;jump feed / ground feed
 			debug.Trace("Everdamned DEBUG: Feed Manager determined target is NOT bleeding out, therefore staggered")
-			ED_Mechanics_Global_FeedType.SetValue(2.0)
+			
 			
 			if playerRef.GetActorBase().GetSex() == 0
 				backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Ground
 				backupAnimationVictimOffset = 52.0
+				ED_Mechanics_Global_FeedType.SetValue(2.0)
 			else
 				backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Jumpfeed
 				backupAnimationVictimOffset = 65.0
+				ED_Mechanics_Global_FeedType.SetValue(4.0)
 			endif
 		endif
 		

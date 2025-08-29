@@ -124,7 +124,8 @@
       "Modifiers": {
 		"ExtraSound": ["Everdamned.esp:0xD0AB4E"],
         "Spells": ["Everdamned.esp:0xD0AB52"],
-		"PlacedObjects": ["Everdamned.esp:0xC9B52E"]
+		"ExtraImpactData": ["Skyrim.esm:0x0D309E"],
+		"PlacedObjects": ["Everdamned.esp:0xD4775E"]
       }
     }
   ]

@@ -23,14 +23,14 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 2.0
+                "value": 4.0
             }
         },
         {
             "condition": "HasMagicEffect",
             "requiredVersion": "1.0.0.0",
             "Magic effect": {
-                "pluginName": "everdamned.esp",
+                "pluginName": "Everdamned.esp",
                 "formID": "CEC540"
             },
             "Active effects only": false
