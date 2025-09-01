@@ -9,10 +9,15 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	ActiveNF = FALSE
 	__target = akTarget
 	
-	if akTarget.HasSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
-		ActiveNF = true
+	if ED_Mechanics_Quest_NecroticFlesh.IsRunning()
 		akTarget.RemoveSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
 	endif
+	
+	
+	;if akTarget.HasSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
+	;	ActiveNF = true
+	;	akTarget.RemoveSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
+	;endif
 	
 	If akTarget.HasMagicEffect(ExtendedPerceptionME)
 		ActiveEP = TRUE
@@ -43,9 +48,14 @@ Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	akTarget.DispelSpell(CeleritySP)
 	;akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
 	
-	if ActiveNF == true
+	if ED_Mechanics_Quest_NecroticFlesh.IsRunning()
 		akTarget.AddSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
 	endif
+	
+	
+	;if ActiveNF == true
+	;	akTarget.AddSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
+	;endif
 	
 	; reminder that second condition is a crutch for celerity hotkey
 	If ActiveEP == true && !(__target.HasMagicEffect(ED_VampirePowers_Effect_ExtendedPerceptionTog))
@@ -64,6 +74,7 @@ MagicEffect Property ED_VampirePowers_Celerity_Effect_SlowTimeAb  Auto
 SPELL Property CeleritySP  Auto  
 SPELL Property ED_VampirePowers_Pw_NecroticFlesh_Spell Auto  
 explosion property ED_Art_Explosion_TimeDilationShockwave auto
+quest property ED_Mechanics_Quest_NecroticFlesh auto
 
 sound property ED_Art_SoundM_CelerityIn auto
 ;sound property ED_Art_SoundM_CelerityOut auto

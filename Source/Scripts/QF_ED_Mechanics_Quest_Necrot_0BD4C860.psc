@@ -1,5 +1,5 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 3
+;NEXT FRAGMENT INDEX 4
 Scriptname QF_ED_Mechanics_Quest_Necrot_0BD4C860 Extends Quest Hidden
 
 ;BEGIN ALIAS PROPERTY ED_Player
@@ -15,6 +15,18 @@ ED_NecroticFleshQuest_Script kmyQuest = __temp as ED_NecroticFleshQuest_Script
 ;END AUTOCAST
 ;BEGIN CODE
 kmyQuest.OnShutdown()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_3
+Function Fragment_3()
+;BEGIN AUTOCAST TYPE ED_NecroticFleshQuest_Script
+Quest __temp = self as Quest
+ED_NecroticFleshQuest_Script kmyQuest = __temp as ED_NecroticFleshQuest_Script
+;END AUTOCAST
+;BEGIN CODE
+; pausing the effect
 ;END CODE
 EndFunction
 ;END FRAGMENT

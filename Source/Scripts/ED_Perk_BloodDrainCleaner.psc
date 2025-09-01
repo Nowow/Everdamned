@@ -10,6 +10,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 			ED_Mechanics_BloodCost_Message_PowersFizzleOut.show()
 		endif
 		CleanerSpell.cast(akTarget, akTarget)
+		ED_Mechanics_Quest_NecroticFlesh.Stop()
 		Game.ShakeCamera(akTarget)
 	
 Endevent
@@ -24,3 +25,4 @@ message property ED_Mechanics_BloodCost_Message_PowersFizzleOut auto
 sound property CleanerSound auto
 imagespacemodifier property ED_Art_Imod_DrainCleaner_DesaturatedLonger auto
 keyword property ED_Mechanics_Keyword_DrainsBloodPool auto
+quest property ED_Mechanics_Quest_NecroticFlesh auto
