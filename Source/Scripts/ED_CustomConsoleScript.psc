@@ -290,3 +290,24 @@ endfunction
 string function SetTimeSlowdown(float worldFactor, float playerFactor) global
 	ED_SKSEnativebindings.SetTimeSlowdown(worldFactor, playerFactor)
 endfunction
+
+string function BlendSkinColor(int r, int g, int b, int blendMode, bool autoLum, float opacity) global
+	
+	actor playerRef = Game.GetPlayer()
+	colorform aColor = playerRef.GetActorBase().GetHairColor()
+	
+	int argb = aColor.GetColor()
+	debug.Trace("Everdamned DEBUG: The COLOR: " + argb)
+	
+	argb = ColorComponent.SetRed(argb, r)
+	argb = ColorComponent.SetGreen(argb, g)
+	argb = ColorComponent.SetBlue(argb, b)
+	
+	debug.Trace("Everdamned DEBUG: The COLOR: " + argb)
+	
+	aColor.SetColor(argb)
+	
+	PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, aColor, blendMode, autoLum, opacity)
+
+endfunction
+

@@ -113,3 +113,24 @@ subs:
       - name: playerFactor
         type: float
         default: 1.0
+  - name: setcolor
+    func: BlendSkinColor
+    args:
+      - name: r
+        type: int
+        default: 1
+      - name: g
+        type: int
+        default: 1
+      - name: b
+        type: int
+        default: 1
+      - name: blendMode
+        type: int
+        default: 1
+      - name: autoLum
+        type: bool
+        default: false
+      - name: opacity
+        type: float
+        default: 1.0
