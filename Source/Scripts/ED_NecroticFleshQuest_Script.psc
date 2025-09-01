@@ -136,10 +136,10 @@ endfunction
 function OnShutdown()
 	playerRef.RemoveSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
 	removeStonyOverlays()
-	ED_Art_Shader_NecroticFleshToggleOff.Play(playerRef, 5.0)
+	ED_Art_Shader_NecroticFleshToggleOff.Play(playerRef, 2.0)
 	;fade in time, full duration = 1.0
 	utility.wait(0.5)
-	ED_Art_Shader_GargoyleStoneChips.Play(playerRef, 5.0)
+	ED_Art_Shader_GargoyleStoneChips.Play(playerRef, 2.0)
 	PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, BlackSkinColor, 0, false, 0.0)
 endfunction
 
