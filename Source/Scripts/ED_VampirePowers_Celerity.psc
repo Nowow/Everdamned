@@ -10,7 +10,9 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	__target = akTarget
 	
 	if ED_Mechanics_Quest_NecroticFlesh.IsRunning()
-		akTarget.RemoveSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
+		ActiveNF =  true
+		ED_Mechanics_Quest_NecroticFlesh.Stop()
+		;akTarget.RemoveSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
 	endif
 	
 	
@@ -48,8 +50,9 @@ Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	akTarget.DispelSpell(CeleritySP)
 	;akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
 	
-	if ED_Mechanics_Quest_NecroticFlesh.IsRunning()
-		akTarget.AddSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
+	if ActiveNF && akTarget.GetActorValue("ED_BloodPool") > 0
+		ED_Mechanics_Quest_NecroticFlesh.Start()
+		;akTarget.AddSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
 	endif
 	
 	

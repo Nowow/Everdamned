@@ -945,7 +945,7 @@ state CombatDrain
 		if aFeedTarget.IsBleedingOut()
 			; bleedout km
 			debug.Trace("Everdamned DEBUG: Feed Manager determined target IS bleeding out")
-			ED_Mechanics_Global_FeedType.SetValue(1.0)
+			ED_Mechanics_Global_FeedType.SetValue(2.0)
 			backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Bleedout
 			backupAnimationVictimOffset = 60.0
 		else ;stagger 
@@ -960,7 +960,7 @@ state CombatDrain
 			else
 				backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Jumpfeed
 				backupAnimationVictimOffset = 65.0
-				ED_Mechanics_Global_FeedType.SetValue(4.0)
+				ED_Mechanics_Global_FeedType.SetValue(2.0)
 			endif
 		endif
 		

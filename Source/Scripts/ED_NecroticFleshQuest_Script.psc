@@ -111,6 +111,8 @@ Function addStonyOverlays()
     debug.Trace("Everdamned DEBUG: Necrotic Flesh Quests adds overlays")
     
     ;_addTexture(npc, faceTextureList, "Face")
+	
+	PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, BlackSkinColor, 0, false, 1.4)
     _addTexture(playerRef, NecroticFleshOverlayPath_Body, "Body")
 
 EndFunction
@@ -127,8 +129,7 @@ function OnStartup()
 	playerRef.AddSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell, false)
 	ED_Art_Shader_NecroticFleshToggleOn.Play(playerRef, 1.0)
 	utility.wait(0.3)
-	PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, BlackSkinColor, 0, false, 1.4)
-	addStonyOverlays()
+	addStonyOverlays() ; and skin blend
 	ED_Art_Shader_NecroticFleshToggleOn.Stop(playerRef)
 	ED_Art_Shader_NecroticFleshToggleOnStoneskin.Play(playerRef, 5.0)
 endfunction
@@ -143,13 +144,15 @@ function OnShutdown()
 	PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, BlackSkinColor, 0, false, 0.0)
 endfunction
 
+
+; unused, properly shutting and starting quest
+; so can use alias as keyword holder. probably should also use as ability holder
 function PauseUnpause()
 	if playerRef.HasSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
 		debug.Trace("Everdamned DEBUG: Necrotic Flesh Quests PAUSES effect")
 		OnShutdown()
 	else
 		debug.Trace("Everdamned DEBUG: Necrotic Flesh Quests UNPAUSES effect")
-		
 		OnStartup()
 	endif
 endfunction

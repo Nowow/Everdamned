@@ -269,7 +269,7 @@ string function PlayFeedIdle(int idleNum) global
 		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
 	elseif idleNum == 2
 		;jump feed
-		FeedTypeVar.SetValue(2.0)
+		FeedTypeVar.SetValue(4.0)
 		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
 	elseif idleNum == 1
 		;bleedout feed
