@@ -311,3 +311,30 @@ string function BlendSkinColor(int r, int g, int b, int blendMode, bool autoLum,
 
 endfunction
 
+string function PlayPairedIdle(string IdleEditorID, bool reverse) global
+	
+	debug.Trace("Everdamned DEBUG: args: " + IdleEditorID + ", " + reverse)
+
+	actor __targetThing = Game.GetCurrentConsoleRef() as actor
+	
+	if !__targetThing
+		return "No target selected"
+	endif
+	
+	idle idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID(IdleEditorID) as idle
+	
+	debug.Trace("Everdamned DEBUG: Idle To Play: " + idleToPlay)
+	
+	if !idleToPlay
+		return "No such idle was found"
+	endif
+	
+	actor playerRef = Game.GetPlayer()
+	
+	if reverse
+		__targetThing.PlayIdleWithTarget(idleToPlay, playerRef)
+	else
+		playerRef.PlayIdleWithTarget(idleToPlay, __targetThing)
+	endif
+	
+endfunction

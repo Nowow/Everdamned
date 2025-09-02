@@ -134,3 +134,12 @@ subs:
       - name: opacity
         type: float
         default: 1.0
+  - name: playpaired
+    func: PlayPairedIdle
+    args:
+      - name: IdleEditorID
+        type: string
+        default: "pa_HugA"
+      - name: reverse
+        type: bool
+        default: false
