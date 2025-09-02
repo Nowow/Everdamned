@@ -93,6 +93,7 @@ idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
 globalvariable property ED_Test_testglobal auto
 globalvariable property ED_Mechanics_Global_FeedType auto
 
+spell property ED_Art_Spell_BackwardsShockwave auto
 
 
 int counter
@@ -116,7 +117,13 @@ Event OnKeyDown(int keyCode)
 		;debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
 		;__targetThing.SetAnimationVariableBool("bNoStagger", true)
 		
-		__targetThing.Kill(pl)
+		objectreference aaa = pl.placeatme(FXEmptyActivator)
+		
+		utility.wait(0.5)
+		
+		;aaa.SetAngle(pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() + 180.0)
+		aaa.moveto(pl)
+		ED_Art_Spell_BackwardsShockwave.Cast(aaa)
 		
 		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())
