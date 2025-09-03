@@ -13,13 +13,13 @@ int property FaceOverlaySlot auto
 
 
 string function _getAppliedBodypaintName(Actor target, bool isFemale, string area, int slot)
-	string nodeName = area + " [ovl" + slot + "]"
+	string nodeName = area + " [Sovl" + slot + "]"
 	return NiOverride.GetNodeOverrideString(target, isFemale, nodeName, 9, 0)
 endfunction
 
 
 int function _find_empty_Slot(Actor target, bool isFemale, string bodyPart)
-	string nodeName = bodyPart + " [ovl0]"
+	string nodeName = bodyPart + " [Sovl0]"
 	int lastOverlay = NiOverride.GetNumBodyOverlays() - 1
 	int n = 0
 	bool full = NiOverride.HasNodeOverride(target, isFemale, nodeName, 9, 0)
@@ -27,7 +27,7 @@ int function _find_empty_Slot(Actor target, bool isFemale, string bodyPart)
 		full = (NiOverride.GetNodeOverrideString(target, isFemale, nodeName, 9, 0) != defaultOverlayPath)
 		while (full)
 			n += 1
-			nodeName = bodyPart + " [ovl" + n + "]"
+			nodeName = bodyPart + " [Sovl" + n + "]"
 			full = NiOverride.HasNodeOverride(target, isFemale, nodeName, 9, 0)
 			Utility.Wait(0.01)
 			if(full)
@@ -58,7 +58,7 @@ Function _addTexture(Actor npc, string texture, string bodyPart, int nifTextureI
     if texture
 		slot = _find_empty_Slot(npc, isFemale, bodyPart)
 		
-		string nodeName = bodyPart + " [ovl" + slot + "]"
+		string nodeName = bodyPart + " [Sovl" + slot + "]"
 
 		debug.Trace("Everdamned DEBUG: Overlay-slot: " + nodeName)
 		debug.Trace("Everdamned DEBUG: overlay index: "+ nifTextureIndex)
@@ -96,7 +96,7 @@ Function _removeTexture(Actor npc, string bodyPart)
 	
     bool isFemale =(npc.GetActorBase().GetSex() != 0)
     string stKey = storageKeyOverride+bodyPart
-	string nodeName = bodyPart + " [ovl" + slot + "]"
+	string nodeName = bodyPart + " [Sovl" + slot + "]"
 	
 	debug.Trace("Everdamned DEBUG: Removing decal: " + _getAppliedBodypaintName(npc, isFemale, bodyPart, slot))
 	

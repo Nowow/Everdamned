@@ -308,6 +308,10 @@ string function BlendSkinColor(int r, int g, int b, int blendMode, bool autoLum,
 	aColor.SetColor(argb)
 	
 	PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, aColor, blendMode, autoLum, opacity)
+	
+	utility.wait(2)
+	PO3_SKSEFunctions.ResetActor3D(playerRef, "PO3_TINT")
+	
 
 endfunction
 

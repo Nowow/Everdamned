@@ -117,13 +117,9 @@ Event OnKeyDown(int keyCode)
 		;debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
 		;__targetThing.SetAnimationVariableBool("bNoStagger", true)
 		
-		objectreference aaa = pl.placeatme(FXEmptyActivator)
+		debug.Trace("Everdamned DEBUG: Has Skin: " + po3_SKSEFunctions.HasSkin(pl))
 		
-		utility.wait(0.5)
 		
-		;aaa.SetAngle(pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() + 180.0)
-		aaa.moveto(pl)
-		ED_Art_Spell_BackwardsShockwave.Cast(aaa)
 		
 		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())
