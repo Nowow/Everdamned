@@ -127,21 +127,22 @@ EndFunction
 
 function OnStartup()
 	playerRef.AddSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell, false)
-	ED_Art_Shader_NecroticFleshToggleOn.Play(playerRef, 1.0)
-	utility.wait(0.3)
-	addStonyOverlays() ; and skin blend
-	ED_Art_Shader_NecroticFleshToggleOn.Stop(playerRef)
 	ED_Art_Shader_NecroticFleshToggleOnStoneskin.Play(playerRef, 5.0)
+	;ED_Art_Shader_NecroticFleshToggleOn.Play(playerRef, 1.0)
+	;utility.wait(0.3)
+	;addStonyOverlays() ; and skin blend
+	;ED_Art_Shader_NecroticFleshToggleOn.Stop(playerRef)
+	
 endfunction
 
 function OnShutdown()
 	playerRef.RemoveSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell)
-	removeStonyOverlays()
-	ED_Art_Shader_NecroticFleshToggleOff.Play(playerRef, 2.0)
+	;removeStonyOverlays()
+	ED_Art_Shader_NecroticFleshToggleOff.Play(playerRef, 5.0)
 	;fade in time, full duration = 1.0
 	utility.wait(0.5)
 	ED_Art_Shader_GargoyleStoneChips.Play(playerRef, 2.0)
-	PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, BlackSkinColor, 0, false, 0.0)
+	;PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, BlackSkinColor, 0, false, 0.0)
 endfunction
 
 

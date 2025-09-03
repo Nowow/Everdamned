@@ -342,3 +342,33 @@ string function PlayPairedIdle(string IdleEditorID, bool reverse) global
 	endif
 	
 endfunction
+
+string function SetupNewTestCharacter() global
+	actor playerRef = Game.GetPlayer()
+	
+	playerRef.SetActorValue("Health", 10000)
+	playerRef.SetActorValue("Magicka", 10000)
+	playerRef.SetActorValue("Stamina", 10000)
+	playerRef.SetActorValue("ED_BloodPool", 10000)
+	
+	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_100_WickedWind_Perk") as perk)
+	utility.wait(0.1)
+	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_10_VigorMortis_Perk") as perk)
+	utility.wait(0.1)
+	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_20_ExtendedPerception_Perk") as perk)
+	utility.wait(0.1)
+	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_30_DeadlyStrength_Perk") as perk)
+	utility.wait(0.1)
+	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_45_NecroticFlesh_Perk") as perk)
+	utility.wait(0.1)
+	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_60_Celerity_Perk") as perk)
+	utility.wait(0.1)
+	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_75_Backstab_Perk") as perk)
+	utility.wait(0.1)
+	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_90_FerociousSurge_Perk") as perk)
+	utility.wait(0.1)
+	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Deception_10_EyesOfTheMoon_Perk") as perk)
+	utility.wait(0.1)
+	
+	debug.Notification("Char setup finished")
+endfunction

@@ -143,3 +143,5 @@ subs:
       - name: reverse
         type: bool
         default: false
+  - name: newchar
+    func: SetupNewTestCharacter
