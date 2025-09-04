@@ -114,8 +114,52 @@
       }
     },
 	{
-      "Comment": "Backstab proc FLESHY FX",
+      "Comment": "Backstab proc GHOST material, so no effects other than push",
       "Priority": 8,
+      "Class": "Everdamned_BackstabProc",
+      "Filters": {
+		"Materials": ["Skyrim.esm:0x100752"],
+		"Conditions": ["Everdamned.esp:0xD0AB50"],
+        "Attacks": ["Power"]
+      },
+      "Modifiers": {
+        "Spells": ["Everdamned.esp:0xD0AB52"]
+      }
+    },
+	{
+      "Comment": "Backstab proc DWARVEN",
+      "Priority": 7,
+      "Class": "Everdamned_BackstabProc",
+      "Filters": {
+		"Materials": ["Skyrim.esm:0x9150B", "Skyrim.esm:0x9644C"],
+		"Conditions": ["Everdamned.esp:0xD0AB50"],
+        "Attacks": ["Power"]
+      },
+      "Modifiers": {
+		"ExtraSound": ["Everdamned.esp:0xDB1C81"],
+        "Spells": ["Everdamned.esp:0xD0AB52"],
+		"ExtraImpactData": ["Skyrim.esm:0x4BB53"]
+      }
+    },
+	{
+      "Comment": "Backstab proc Insects",
+      "Priority": 6,
+      "Class": "Everdamned_BackstabProc",
+      "Filters": {
+		"Materials": ["Skyrim.esm:0x10D5CC"],
+		"Conditions": ["Everdamned.esp:0xD0AB50"],
+        "Attacks": ["Power"]
+      },
+      "Modifiers": {
+		"ExtraSound": ["Everdamned.esp:0xD0AB4E"],
+        "Spells": ["Everdamned.esp:0xD0AB52"],
+		"ExtraImpactData": ["Skyrim.esm:0x10D5CF"],
+		"PlacedObjects": ["Everdamned.esp:0xDB1C82"]
+      }
+    },
+	{
+      "Comment": "Backstab proc FLESHY FX",
+      "Priority": 5,
       "Class": "Everdamned_BackstabProc",
       "Filters": {
 		"Conditions": ["Everdamned.esp:0xD0AB50"],
