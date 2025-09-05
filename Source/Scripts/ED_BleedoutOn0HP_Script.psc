@@ -19,7 +19,8 @@ event OnUpdate()
 	if _target.IsDead()
 		return
 	endif
-	_caster.PushActorAway(_target, -0.5)
+	;_caster.PushActorAway(_target, -0.5)
+	_target.ApplyHavokImpulse(0.0, 0.0, 400.0, 10.0)
 	RegisterForSingleUpdate(0.5)
 endevent
 

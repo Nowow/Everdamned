@@ -117,8 +117,7 @@ Event OnKeyDown(int keyCode)
 		;debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
 		;__targetThing.SetAnimationVariableBool("bNoStagger", true)
 		
-		debug.Trace("Everdamned DEBUG: Has Skin: " + po3_SKSEFunctions.HasSkin(pl))
-		
+		__targetThing.SetRestrained(true)
 		
 		
 		

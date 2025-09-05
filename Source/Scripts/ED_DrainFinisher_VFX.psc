@@ -44,7 +44,7 @@ Event OnUpdate()
 	_vfxDuration = _vfxDurationMax - _timeElapsed
 	
 	;stacking vfx
-	DLC1BatsAbsorbTargetVFX01.Play(_target, _vfxDuration, _player)
+	;DLC1BatsAbsorbTargetVFX01.Play(_target, _vfxDuration, _player)
 	DLC1BatsEatenBloodSplats.Play(_target, _vfxDuration)
 	ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD.Apply(1.0 - 1.0/(1.0+_timeElapsed))
 	
@@ -123,8 +123,16 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 	endif
 	
 
-	;should end it anyway
+	
+	; VERY IMPORTANT WAIT
+	; OR CORPSES WILL RISE
+	utility.wait(1.0)
+	
+	_target.kill(_player)
+	;_target.placeatme(ED_Art_Explosion_Exsanguinate)
+	;_target.ApplyHavokImpulse(0.0, 0.0, 400.0, 100.0)
 	_target.EndDeferredKill()
+	
 	
 EndEvent
 
