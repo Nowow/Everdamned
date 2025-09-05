@@ -128,7 +128,9 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 	; OR CORPSES WILL RISE
 	utility.wait(1.0)
 	
-	_target.kill(_player)
+	if _target.GetActorValue("Health") <= 0.0
+		_target.kill(_player)
+	endif
 	;_target.placeatme(ED_Art_Explosion_Exsanguinate)
 	;_target.ApplyHavokImpulse(0.0, 0.0, 400.0, 100.0)
 	_target.EndDeferredKill()
