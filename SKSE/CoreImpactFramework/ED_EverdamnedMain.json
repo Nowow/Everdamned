@@ -97,7 +97,7 @@
 		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"]
       },
       "Modifiers": {
-        "Spells": ["Everdamned.esp:0x828116"]
+        "Spells": ["Skyrim.esm:0x153BD"]
       }
     },
 	{

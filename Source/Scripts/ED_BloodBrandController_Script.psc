@@ -5,16 +5,19 @@ float property XPgained auto
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
 
-	bool inCombat = akTarget.IsInCombat()
-	debug.Trace("Everdamned DEBUG: Blood Brand in combat " + inCombat)
+	;bool inCombat = akTarget.IsInCombat()
+	;debug.Trace("Everdamned DEBUG: Blood Brand in combat " + inCombat)
 	bool isHostileNow = akTarget.IsHostileToActor(akCaster)
 	debug.Trace("Everdamned DEBUG: Blood Brand hostile " + isHostileNow)
-	bool isEnemy = akTarget.GetFactionReaction(akCaster) == 1 
-	debug.Trace("Everdamned DEBUG: Blood Brand isEnemy " + isEnemy)
-	bool notTeammate = !(akTarget.IsPlayerTeammate())
-	debug.Trace("Everdamned DEBUG: Blood Brand notTeammate " + notTeammate)
 	
-	if ((inCombat && isHostileNow) || (!inCombat && isEnemy)) && notTeammate
+	
+	;bool isEnemy = akTarget.GetFactionReaction(akCaster) == 1 
+	;debug.Trace("Everdamned DEBUG: Blood Brand isEnemy " + isEnemy)
+	;bool notTeammate = !(akTarget.IsPlayerTeammate())
+	;debug.Trace("Everdamned DEBUG: Blood Brand notTeammate " + notTeammate)
+	
+	;if ((inCombat && isHostileNow) || (!inCombat && isEnemy)) && notTeammate
+	if isHostileNow || akCaster.IsSneaking()
 		akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_Hostile, akTarget)
 	else
 		akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_NonHostile, akTarget)
