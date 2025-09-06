@@ -183,6 +183,7 @@
 		"Attacks": ["Regular", "Power"]
       },
       "Modifiers": {
+		"ExtraSound": ["Everdamned.esp:0xDF399A"],
 		"ExtraImpactData": ["Everdamned.esp:0xDF3993"],
 		"Spells": ["Everdamned.esp:0xDF3996"]
       }
