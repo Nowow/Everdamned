@@ -95,6 +95,7 @@ globalvariable property ED_Mechanics_Global_FeedType auto
 
 spell property ED_Art_Spell_BackwardsShockwave auto
 
+visualeffect property ED_Art_VFX_AbsorbBloodPool auto
 
 int counter
 bool __switch
@@ -117,8 +118,12 @@ Event OnKeyDown(int keyCode)
 		;debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
 		;__targetThing.SetAnimationVariableBool("bNoStagger", true)
 		
-		__targetThing.SetRestrained(true)
-		
+		__targetThing.SetSubGraphFloatVariable("fdampRate", 1)
+		pl.SetSubGraphFloatVariable("fdampRate", 1)
+		utility.wait(0.5)
+		ED_Art_VFX_AbsorbBloodPool.Play(__targetThing, 1.0, pl)
+		__targetThing.SetSubGraphFloatVariable("fdampRate", 1)
+		pl.SetSubGraphFloatVariable("fdampRate", 1)
 		
 		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())
