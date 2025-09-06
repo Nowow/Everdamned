@@ -171,6 +171,21 @@
 		"ExtraImpactData": ["Skyrim.esm:0x0D309E"],
 		"PlacedObjects": ["Everdamned.esp:0xD4775E"]
       }
+    },
+	{
+      "Comment": "Blood Resonance proc",
+      "Priority": 5,
+      "Class": "Everdamned_BloodResonance",
+      "Filters": {
+		"Conditions": ["Everdamned.esp:0xDF3995"],
+		"WeaponsType": ["OneHandSword", "TwoHandSword", "OneHandAxe", "TwoHandAxe", "OneHandMace", "TwoHandMace", "Dagger", "HandToHand", "Beast"],
+		"Blocked": ["No"],
+		"Attacks": ["Regular", "Power"]
+      },
+      "Modifiers": {
+		"ExtraImpactData": ["Everdamned.esp:0xDF3993"],
+		"Spells": ["Everdamned.esp:0xDF3996"]
+      }
     }
   ]
 }
