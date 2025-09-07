@@ -115,16 +115,9 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		;debug.Trace("Everdamned DEBUG: bNoStagger" + __targetThing.GetAnimationVariableBool("bNoStagger"))
-		;__targetThing.SetAnimationVariableBool("bNoStagger", true)
-		
-		__targetThing.SetSubGraphFloatVariable("fdampRate", 1)
-		pl.SetSubGraphFloatVariable("fdampRate", 1)
-		utility.wait(0.5)
-		ED_Art_VFX_AbsorbBloodPool.Play(__targetThing, 1.0, pl)
-		__targetThing.SetSubGraphFloatVariable("fdampRate", 1)
-		pl.SetSubGraphFloatVariable("fdampRate", 1)
-		
+		__targetThing.SetMotionType(__targetThing.Motion_Keyframed, false)
+		__targetThing.TranslateTo(pl.GetPositionX(), pl.GetPositionY(), pl.GetPositionZ(), 0, 0, 0, 500.0)
+	
 		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())
 		float playerAngleZcos = math.cos(pl.GetAngleZ())
