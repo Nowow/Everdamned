@@ -120,6 +120,8 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		pl.InterruptCast()
+		
 
 		;objectreference dummy = pl.placeatme(ED_Art_Activator_HavokDummy)
 		
