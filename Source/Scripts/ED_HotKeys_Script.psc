@@ -96,6 +96,7 @@ globalvariable property ED_Mechanics_Global_FeedType auto
 spell property ED_Art_Spell_BackwardsShockwave auto
 
 visualeffect property ED_Art_VFX_AbsorbBloodPool auto
+sound property ED_Art_SoundM_PartingGiftBuildup auto
 
 int counter
 bool __switch
@@ -115,9 +116,7 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		__targetThing.SetMotionType(__targetThing.Motion_Keyframed, false)
-		__targetThing.TranslateTo(pl.GetPositionX(), pl.GetPositionY(), pl.GetPositionZ(), 0, 0, 0, 500.0)
-	
+		ED_Art_SoundM_PartingGiftBuildup.PlayAndWait(__targetThing)
 		
 		float playerAngleZsin = math.sin(pl.GetAngleZ())
 		float playerAngleZcos = math.cos(pl.GetAngleZ())

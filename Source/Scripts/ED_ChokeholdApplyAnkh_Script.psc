@@ -9,23 +9,29 @@ spell property ED_VampireSpells_BloodAnkh_Proc_Spell auto
 actor _target
 actor _caster
 function OnEffectStart(Actor akTarget, Actor akCaster)
+	
+	objectreference lastTarget = ED_PartingGiftLastTarget.GetReference()
+	if lastTarget == akTarget
+		debug.Trace("Everdamned DEBUG: Parting Gift wanted to DOUBLE BLAST!")
+		return
+	endif
+
 	_target = akTarget
 	_caster = akCaster
 	
-	;SCS_RestorationBlood_Cloak
+	debug.Trace("Everdamned DEBUG: Parting Gift effect started on: " + akTarget)
 	
-	utility.wait(0.3)
 	ED_Art_VFX_BloodBrand.Play(akTarget, -1.00000, none)
 	utility.wait(1.0)
 	ED_Art_VFX_WellingBlood.Play(akTarget, -1.00000, none)
-	utility.wait(1.5)
 	ED_Art_VFX_BloodScourge.Play(akTarget, -1.00000, none)
-	utility.Wait(1.0)
-	
-	;need to retarget ashpile, because corpses blown up in the air spawn ashpile midair
-	ED_PartingGiftLastTarget.ForceRefTo(akTarget)
+	ED_Art_SoundM_PartingGiftBuildup.PlayAndWait(akCaster)
+	debug.Trace("Everdamned DEBUG: Parting Gift SOUND SHOULD HAVE PLAYED ALREADY")
 	
 	ED_VampireSpells_BloodAnkh_Proc_Spell.RemoteCast(akTarget, akCaster, none)
+	;need to retarget ashpile, because corpses blown up in the air spawn ashpile midair
+	ED_PartingGiftLastTarget.ForceRefTo(akTarget)
+	debug.Trace("Everdamned DEBUG: Parting Gift effect burst played on: " + akTarget)
 	
 	ED_VampireSpellsVL_Chokehold_PartingGift_AttachAshpileAnchor_Spell.Cast(akTarget)
 	
@@ -52,3 +58,4 @@ endevent
 
 referencealias property ED_PartingGiftLastTarget auto
 spell property ED_VampireSpellsVL_Chokehold_PartingGift_AttachAshpileAnchor_Spell auto
+sound property ED_Art_SoundM_PartingGiftBuildup auto
