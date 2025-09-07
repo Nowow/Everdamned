@@ -98,6 +98,10 @@ spell property ED_Art_Spell_BackwardsShockwave auto
 visualeffect property ED_Art_VFX_AbsorbBloodPool auto
 sound property ED_Art_SoundM_PartingGiftBuildup auto
 
+
+activator property ED_Art_Activator_HavokDummy auto
+
+
 int counter
 bool __switch
 art leart
@@ -116,12 +120,59 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		ED_Art_SoundM_PartingGiftBuildup.PlayAndWait(__targetThing)
+
+		;objectreference dummy = pl.placeatme(ED_Art_Activator_HavokDummy)
 		
-		float playerAngleZsin = math.sin(pl.GetAngleZ())
-		float playerAngleZcos = math.cos(pl.GetAngleZ())
-		float targetX = pl.GetPositionX() + ED_Test_testglobal.GetValue() as float*playerAngleZsin
-		float targetY = pl.GetPositionY() + ED_Test_testglobal.GetValue() as float*playerAngleZcos
+		;dummy.moveto(pl, 0, -100.0, 100.0)
+	
+		;utility.wait(1.0)
+		
+		;string humanoidNode = "NPC R Foot [Rft ]"
+		;string humanoidNode = "NPC R Clavicle [RClv]"
+		
+		;string dummyNode = "AttachDummy"
+		;string humanoidRHand = "NPC L Hand [LHnd]"
+		
+		;debug.Trace("Everdamned DEBUG: Dummy has node " + dummyNode + ": " + dummy.HasNode(dummyNode))
+		
+		;If __targetThing != None && __targetThing.Is3DLoaded()
+		;	debug.Trace("Everdamned DEBUG: cursor target 3d loaded")
+		;	If __targetThing.HasNode(humanoidNode)
+		;		debug.Trace("Everdamned DEBUG: cursor target had node " + humanoidNode + ": " + __targetThing.HasNode(humanoidNode))
+		;		
+		;		dummy.MoveTo(__targetThing, 0, 0, 0)
+		;		__targetThing.forceAddRagdollToWorld()
+		;		pl.forceAddRagdollToWorld()
+		;		;If (game.addHavokBallAndSocketConstraint(__targetThing, humanoidNode, dummy, dummyNode, 0, 0, 0)) == True
+		;		If (game.addHavokBallAndSocketConstraint(__targetThing, humanoidNode, pl, humanoidRHand, 0, 0, 0)) == True
+		;			debug.Trace("Everdamned DEBUG: Ball and Socket constraint successfully added")
+		;			__targetThing.ApplyHavokImpulse(0.0, 0.0, 1.0, 0.1)
+		;		Else
+		;			debug.Trace("Everdamned DEBUG: Ball and Socket FAILED")
+		;		EndIf
+		;	EndIf
+		;EndIf
+		
+		;utility.wait(1.0)
+		;float TheMagnitude = (dummy.GetDistance(pl) / 10)
+		;dummy.SplineTranslateToRef(pl as ObjectReference, TheMagnitude, 100.0)
+		
+		
+		
+		;debug.Trace("Everdamned DEBUG: player has node " + humanoidRHand + ": " + pl.HasNode(humanoidRHand))
+		
+		;while true
+			;utility.wait(0.2)
+			;float TheMagnitude = (dummy.GetDistance(pl) / 10)
+			
+			;float Xc = pl.GetPositionX()
+			;float Yx = pl.GetPositionY()
+			;float Zc = pl.GetPositionZ() + 300.0
+			;dummy.SplineTranslateTo(Xc, Yx, Zc, 0.0, 0.0, 0.0, TheMagnitude, 300.0)
+			
+			;dummy.SplineTranslateToRefNode(pl, humanoidRHand, TheMagnitude, 300.0)
+			
+		;endwhile
 		
 		
 		;pl.pushactoraway(__targetThing, -1)
