@@ -57,6 +57,12 @@ function PlayerBecameVampire()
 	ED_Mechanics_SkillTree_PerkPoints_Global.SetValue(2)
 	DLC1VampirePerkPoints.SetValue(0)
 	
+	;Wine and Revelry
+	if playerRef.GetActorValue("Alchemy") < 50.0
+		debug.Trace("Everdamned DEBUG: Player vampire Alchemy skill is less than 50, registring OnSkillUpdate")
+		PO3_Events_Form.RegisterForSkillIncrease(self)
+	endif
+	
 	RegisterForUpdate(2.0)
 endfunction
 
@@ -277,6 +283,19 @@ Event OnCustomSkillIncrease(string asSkillId)
 	endif
 EndEvent
 
+; For Wine and Revelry displaying message upon achieving 50 alch
+event OnSkillIncrease(int aiSkill)
+	if aiSkill != 16
+		return
+	endif
+	
+	if playerRef.GetActorValue("Alchemy") >= 50.0
+		debug.Trace("Everdamned DEBUG: Player vampire achieved 50 alch, displaying message and unregistering")
+		ED_Mechanics_Message_Alchemy50RecipeUnlock.ShowAsHelpMessage("ed_alchemy50achieved", 7.0, 0.0, 1)
+	
+		PO3_Events_Form.UnregisterForSkillIncrease(self)
+	endif
+endevent
 
 globalvariable property ED_Mechanics_BlueBlood_Global_ChainedBeastAwarded auto
 globalvariable property ED_Mechanics_BlueBlood_Global_EmbraceTheBeastAwarded auto
@@ -285,6 +304,7 @@ globalvariable property ED_Mechanics_SkillTree_Level_Global auto
 globalvariable property ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global auto
 
 message property ED_Mechanics_SkillTree_Message_MortalPerkPointGained auto
+message property ED_Mechanics_Message_Alchemy50RecipeUnlock auto
 
 globalvariable property DLC1VampirePerkPoints auto
 sound property ED_Art_SoundM_VampAgeAdvance auto
