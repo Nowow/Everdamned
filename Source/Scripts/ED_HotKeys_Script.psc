@@ -101,6 +101,7 @@ sound property ED_Art_SoundM_PartingGiftBuildup auto
 
 activator property ED_Art_Activator_HavokDummy auto
 explosion property ED_Art_Explosion_Exsanguinate auto
+spell property ED_VampireSpellsVL_IcyWinds_Release_Spell auto
 
 int counter
 bool __switch
@@ -120,40 +121,42 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		pl.InterruptCast()
+		pl.DoCombatSpellApply(ED_VampireSpellsVL_IcyWinds_Release_Spell, __targetThing)
+		
+		
 		
 
-		objectreference dummy = __targetThing.placeatme(ED_Art_Explosion_Exsanguinate)
+		;objectreference dummy = __targetThing.placeatme(ED_Art_Explosion_Exsanguinate)
 		
-		dummy.moveto(pl, 0, -100.0, 100.0)
+		;dummy.moveto(pl, 0, -100.0, 100.0)
 	
-		utility.wait(1.0)
+		;utility.wait(1.0)
 		
-		string humanoidNode = "NPC R Foot [Rft ]"
+		;string humanoidNode = "NPC R Foot [Rft ]"
 		;string humanoidNode = "NPC R Clavicle [RClv]"
 		
-		string dummyNode = "AttachDummy"
+		;string dummyNode = "AttachDummy"
 		;string humanoidRHand = "NPC L Hand [LHnd]"
 		
-		debug.Trace("Everdamned DEBUG: Dummy has node " + dummyNode + ": " + dummy.HasNode(dummyNode))
+		;debug.Trace("Everdamned DEBUG: Dummy has node " + dummyNode + ": " + dummy.HasNode(dummyNode))
 		
-		If __targetThing != None && __targetThing.Is3DLoaded()
-			debug.Trace("Everdamned DEBUG: cursor target 3d loaded")
-			If __targetThing.HasNode(humanoidNode)
-				debug.Trace("Everdamned DEBUG: cursor target had node " + humanoidNode + ": " + __targetThing.HasNode(humanoidNode))
-				
-				;dummy.MoveTo(__targetThing, 0, 0, 0)
-				__targetThing.forceAddRagdollToWorld()
-				pl.forceAddRagdollToWorld()
-				;If (game.addHavokBallAndSocketConstraint(__targetThing, humanoidNode, dummy, dummyNode, 0, 0, 0)) == True
-				If (game.addHavokBallAndSocketConstraint(__targetThing, humanoidNode, dummy, dummyNode, 0, 0, 0)) == True
-					debug.Trace("Everdamned DEBUG: Ball and Socket constraint successfully added")
-					__targetThing.ApplyHavokImpulse(0.0, 0.0, 1.0, 0.1)
-				Else
-					debug.Trace("Everdamned DEBUG: Ball and Socket FAILED")
-				EndIf
-			EndIf
-		EndIf
+		;If __targetThing != None && __targetThing.Is3DLoaded()
+		;	debug.Trace("Everdamned DEBUG: cursor target 3d loaded")
+		;	If __targetThing.HasNode(humanoidNode)
+		;		debug.Trace("Everdamned DEBUG: cursor target had node " + humanoidNode + ": " + __targetThing.HasNode(humanoidNode))
+		;		
+		;		;dummy.MoveTo(__targetThing, 0, 0, 0)
+		;		__targetThing.forceAddRagdollToWorld()
+		;		pl.forceAddRagdollToWorld()
+		;		;If (game.addHavokBallAndSocketConstraint(__targetThing, humanoidNode, dummy, dummyNode, 0, 0, 0)) == True
+		;		If (game.addHavokBallAndSocketConstraint(__targetThing, humanoidNode, dummy, dummyNode, 0, 0, 0)) == True
+		;			debug.Trace("Everdamned DEBUG: Ball and Socket constraint successfully added")
+		;			__targetThing.ApplyHavokImpulse(0.0, 0.0, 1.0, 0.1)
+		;		Else
+		;			debug.Trace("Everdamned DEBUG: Ball and Socket FAILED")
+		;		EndIf
+		;	EndIf
+		;EndIf
 		
 		;utility.wait(1.0)
 		;float TheMagnitude = (dummy.GetDistance(pl) / 10)

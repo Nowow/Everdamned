@@ -10,8 +10,8 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	_target = akTarget
 	RegisterForSingleUpdate(StartOffset)
 	utility.wait(1.0)
-	ED_Art_VFX_IcyWinds_WispyCloud.Play(_target)
-	SnowStormParticleGeometry.apply(StartOffset)
+	;ED_Art_VFX_IcyWinds_WispyCloud.Play(_target)
+	;SnowStormParticleGeometry.apply(StartOffset)
 endfunction
 
 event OnUpdate()
