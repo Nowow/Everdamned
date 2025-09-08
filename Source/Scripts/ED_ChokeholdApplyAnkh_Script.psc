@@ -21,6 +21,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	debug.Trace("Everdamned DEBUG: Parting Gift effect started on: " + akTarget)
 	
+	ED_Art_SoundM_Release_Blood_SunWarning.Play(akCaster)
 	ED_Art_VFX_BloodBrand.Play(akTarget, -1.00000, none)
 	utility.wait(1.0)
 	ED_Art_VFX_WellingBlood.Play(akTarget, -1.00000, none)
@@ -61,3 +62,4 @@ endevent
 referencealias property ED_PartingGiftLastTarget auto
 spell property ED_VampireSpellsVL_Chokehold_PartingGift_AttachAshpileAnchor_Spell auto
 sound property ED_Art_SoundM_PartingGiftBuildup auto
+sound property ED_Art_SoundM_Release_Blood_SunWarning auto
