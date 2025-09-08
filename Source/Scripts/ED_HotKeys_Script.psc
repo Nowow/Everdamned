@@ -127,9 +127,11 @@ Event OnKeyDown(int keyCode)
 		objectreference aa = __targetThing.placeatme(ED_Art_Hazard_ColdFlamePyre)
 		
 		utility.wait(0.5)
-		ED_Art_VFX_ColdFlameBanishFX.Play(aa)
+		;ED_Art_VFX_ColdFlameBanishFX.Play(aa)
 		
+		debug.Trace("Everdamned DEBUG: aaaa: " + aa )
 		
+		aa.TranslateToRef(pl, 100.0)
 
 		;objectreference dummy = __targetThing.placeatme(ED_Art_Explosion_Exsanguinate)
 		
