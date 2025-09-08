@@ -103,6 +103,9 @@ activator property ED_Art_Activator_HavokDummy auto
 explosion property ED_Art_Explosion_Exsanguinate auto
 spell property ED_VampireSpellsVL_IcyWinds_Release_Spell auto
 
+hazard property ED_Art_Hazard_ColdFlamePyre auto
+visualeffect property ED_Art_VFX_ColdFlameBanishFX auto
+
 int counter
 bool __switch
 art leart
@@ -121,8 +124,10 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		pl.DoCombatSpellApply(ED_VampireSpellsVL_IcyWinds_Release_Spell, __targetThing)
+		objectreference aa = __targetThing.placeatme(ED_Art_Hazard_ColdFlamePyre)
 		
+		utility.wait(0.5)
+		ED_Art_VFX_ColdFlameBanishFX.Play(aa)
 		
 		
 

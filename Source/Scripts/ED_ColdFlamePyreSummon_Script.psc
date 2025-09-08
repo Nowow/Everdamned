@@ -1,20 +1,17 @@
 Scriptname ED_ColdFlamePyreSummon_Script extends activemagiceffect  
 
-effectshader property ED_Art_Shader_ColdFlameBodyPyreDisintegrate3 auto
-effectshader property ED_Art_Shader_ColdFlameAtronachFlameDeath auto
-activator property DefaultAshPile1 auto
 
 spell[] property SummonSpells auto
-
 float property XPgained auto
 
 event oneffectstart(actor akTarget, actor akCaster)
 	
-	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateStart)
 	
+	akTarget.placeatme(ED_Art_Hazard_ColdFlamePyre)
+	utility.wait(1.5)
 	ED_Art_Shader_ColdFlameAtronachFlameDeath.Play(akTarget)
 	
-	utility.wait(utility.RandomFloat(3.0, 5.0))
+	utility.wait(utility.RandomFloat(1.5, 3.5))
 	
 	;ED_Art_Shader_ColdFlameAtronachFlameDeath.Stop(akTarget)
 	
@@ -26,6 +23,7 @@ event oneffectstart(actor akTarget, actor akCaster)
 	
 	utility.wait(2.1)
 	
+	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateStart)
 	spell SummonToCast = SummonSpells[utility.randomint(0, SummonSpells.length - 1)]
 	akCaster.DoCombatSpellApply(SummonToCast, akCaster)
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateEnd)
@@ -34,5 +32,7 @@ event oneffectstart(actor akTarget, actor akCaster)
 	
 endevent
 
-;spell property ED_ColdFlame_ConjureAtronach_Spell auto
-;spell property ED_VampireSpellsVL_ConjureGargoyleUncap_Spell auto
+effectshader property ED_Art_Shader_ColdFlameBodyPyreDisintegrate3 auto
+effectshader property ED_Art_Shader_ColdFlameAtronachFlameDeath auto
+activator property DefaultAshPile1 auto
+hazard property ED_Art_Hazard_ColdFlamePyre auto

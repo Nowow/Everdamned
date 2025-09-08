@@ -407,3 +407,20 @@ string function SetupNewTestCharacter() global
 	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_WingsOfTheStrix_Perk") as perk)
 	debug.Notification("Char setup finished")
 endfunction
+
+string function PlayAnImpactEffect(string editorId, string lenode) global
+	debug.Trace("Everdamned DEBUG: PlayAnImpactEffect evd cc called")
+	impactdataset aa = ED_SKSEnativebindings.LookupSomeFormByEditorID(editorId) as impactdataset
+	if !aa
+		return "Not found"
+	endif
+	
+	ObjectReference __targetThing = Game.GetCurrentConsoleRef() as ObjectReference
+	
+	if !__targetThing
+		return "No target selected"
+	endif
+	
+	return __targetThing.PlayImpactEffect(aa, lenode, 0, 0, -1, 412, true, false)
+	
+endfunction

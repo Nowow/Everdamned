@@ -145,3 +145,11 @@ subs:
         default: false
   - name: newchar
     func: SetupNewTestCharacter
+  - name: impact
+    func: PlayAnImpactEffect
+    args:
+      - name: EditorId
+        type: string
+      - name: lenode
+        type: string
+        default: "NPC Root [Root]"

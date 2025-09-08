@@ -3,8 +3,6 @@ Scriptname ED_ChillingFlamesOfUndeath_Script extends activemagiceffect
 Actor _target
 actor _caster
 
-spell property ED_VampireSpellsVL_ChillingFlamesofUndeath_Proc_Spell auto
-
 bool __doneDid
 event oneffectstart(actor akTarget, actor akCaster)
 
@@ -26,3 +24,7 @@ Event ondying(actor akKiller)
 		ED_VampireSpellsVL_ChillingFlamesofUndeath_Proc_Spell.Cast(_caster, _target)
 	endif
 endevent
+
+
+spell property ED_VampireSpellsVL_ChillingFlamesofUndeath_Proc_Spell auto
+hazard property ED_Art_Hazard_ColdFlamePyre auto
