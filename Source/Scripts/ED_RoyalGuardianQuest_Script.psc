@@ -1,25 +1,14 @@
 Scriptname ED_RoyalGuardianQuest_Script extends Quest  
 
-actorbase property ED_Actor_RoyalGuardian_DeathHound auto
-referencealias Property ED_Attacker auto
-actor property playerRef auto
-spell Property ED_VampirePowersVL_RoyalGuardian_SummonDummy_Spell auto
-spell Property ED_Misc_Spell_DogAmbushKnockbackEnabled auto
-effectshader Property UnsummonDeathFXS auto
-
-;activator property FXEmptyActivator auto
-explosion property ED_Art_Explosion_SummonUndead auto
 
 actor _attacker
 actor _dog
 
+
 function FindNearestAttackerAndSicDog()
 	debug.Trace("Everdamned DEBUG: Royal Guardian Quest: FindNearestAttackerAndSicDog() called")
 	_attacker = ED_Attacker.GetReference() as actor
-	NetImmerse.SetNodeScale(_attacker, "NPC Head [Head]", 5.0, false)
-	
-	;ED_VampirePowersVL_RoyalGuardian_SummonDummy_Spell.Cast(playerRef, _attacker)
-	
+
 	_dog = (_attacker.placeatme(ED_Actor_RoyalGuardian_DeathHound, 1, false, true)) as actor
 	HandleDogPlaced()
 endfunction
@@ -57,3 +46,10 @@ function GetRidOfDog()
 	endif
 endfunction
 
+
+actorbase property ED_Actor_RoyalGuardian_DeathHound auto
+referencealias Property ED_Attacker auto
+actor property playerRef auto
+spell Property ED_Misc_Spell_DogAmbushKnockbackEnabled auto
+effectshader Property UnsummonDeathFXS auto
+explosion property ED_Art_Explosion_SummonUndead auto

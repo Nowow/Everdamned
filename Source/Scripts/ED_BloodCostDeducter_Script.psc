@@ -10,7 +10,8 @@ Event OnSpellCast(Form akSpell)
 	
 endevent
 
-
+; called on racechange in main quest alias script
+; and on perk aquisition
 state UnearthlyWill
 	event OnBeginState()
 		debug.Trace("Everdamned DEBUG: Blood Cost Deducter switched to UnearthlyWill state")

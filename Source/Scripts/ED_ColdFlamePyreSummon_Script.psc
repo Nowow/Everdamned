@@ -18,15 +18,12 @@ event oneffectstart(actor akTarget, actor akCaster)
 	ED_Art_Shader_ColdFlameBodyPyreDisintegrate3.Play(akTarget)
 	akTarget.placeatme(ED_Art_Activator_ColdFlameBanishFX)
 	
-	;akTarget.AttachAshPile(DefaultAshPile1)
-	;akTarget.PlaceAtMe(ED_Art_ImpactSet_ColdFlameFirebolt as form, 1, false, false)
-
-	
 	utility.wait(2.1)
 	
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateStart)
 	spell SummonToCast = SummonSpells[utility.randomint(0, SummonSpells.length - 1)]
 	akCaster.DoCombatSpellApply(SummonToCast, akCaster)
+	akTarget.AttachAshPile()
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateEnd)
 	
 	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)

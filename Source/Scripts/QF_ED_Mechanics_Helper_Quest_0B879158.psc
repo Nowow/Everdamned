@@ -1,5 +1,5 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 10
+;NEXT FRAGMENT INDEX 12
 Scriptname QF_ED_Mechanics_Helper_Quest_0B879158 Extends Quest Hidden
 
 ;BEGIN ALIAS PROPERTY ED_Player
@@ -15,8 +15,16 @@ Game.GetPlayer().AddSpell(ED_VampirePowers_Ab_Presence_Spell)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_6
-Function Fragment_6()
+;BEGIN FRAGMENT Fragment_10
+Function Fragment_10()
+;BEGIN CODE
+(Alias_ED_Player as ED_BloodCostDeducter_Script).GoToState("UnearthlyWill")
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_7
+Function Fragment_7()
 ;BEGIN CODE
 ED_Mechanics_HotKeys_Quest.RegisterHotkeys()
 ;END CODE
@@ -31,14 +39,6 @@ ED_Mechanics_HotKeys_Quest.RegisterHotkeys()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-ED_Mechanics_HotKeys_Quest.RegisterHotkeys()
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_2
 Function Fragment_2()
 ;BEGIN CODE
@@ -47,8 +47,16 @@ ED_Mechanics_HotKeys_Quest.RegisterHotkeys()
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_7
-Function Fragment_7()
+;BEGIN FRAGMENT Fragment_6
+Function Fragment_6()
+;BEGIN CODE
+ED_Mechanics_HotKeys_Quest.RegisterHotkeys()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
 ;BEGIN CODE
 ED_Mechanics_HotKeys_Quest.RegisterHotkeys()
 ;END CODE
