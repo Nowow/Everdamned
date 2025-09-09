@@ -15,7 +15,7 @@ endFunction
 event OnUpdate()
 
 	string _modEventName = "ed_RefreshCommandEffect" + _target.GetFormID() as string
-	debug.Trace("Mod event " + _modEventName + " sent!")
+	debug.Trace("Everdamned DEBUG: Mod event " + _modEventName + " sent!")
 	
 	SendModEvent(_modEventName)
 	_caster.DoCombatSpellApply(ED_VampireSpellsVL_MarchOfUndeath_UnholyStrength_Spell, _target)

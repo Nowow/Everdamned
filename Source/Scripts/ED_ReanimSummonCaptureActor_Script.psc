@@ -16,13 +16,13 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	utility.wait(offsetBeforeAttemptingCapture)
 	if _effectFinished
-		debug.Trace("Summon or reanimate spell didnt try to capture commanded actor because effect finished faster than offset was waited")
+		debug.Trace("Everdamned DEBUG: Summon or reanimate spell didnt try to capture commanded actor because effect finished faster than offset was waited")
 		return
 	endif
 	
 	_commandedActor = GetActiveEffectCommandedActor(self)
 	if _commandedActor
-		debug.Trace("Summon or reanimate spell successfully captured commanded actor " + _commandedActor)
+		debug.Trace("Everdamned DEBUG: Summon or reanimate spell successfully captured commanded actor " + _commandedActor)
 		_originalDuration = self.getduration()
 		
 		;CommandedActorFormIdAsFloat = _commandedActor.GetFormID() as float
@@ -30,7 +30,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		;original duration, can be subject to change because of March Of Flesh
 		
 		string _modEventName = "ed_RefreshCommandEffect" + _commandedActor.GetFormID() as string
-		debug.Trace("Registring for mod event: " + _modEventName) 
+		debug.Trace("Everdamned DEBUG: Registring for mod event: " + _modEventName) 
 		RegisterForModEvent(_modEventName, "OnEDRefreshCommandEffectDuration")
 		
 		actor currentServant = ED_UndyingLoyaltyServant1.GetReference() as actor
@@ -52,14 +52,14 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 		
 	else
-		debug.Trace("Summon or reanimate spell failed to capture commanded actor")
+		debug.Trace("Everdamned DEBUG: Summon or reanimate spell failed to capture commanded actor")
 	endif
 	
 	
 endFunction
 
 event OnEDRefreshCommandEffectDuration(string eventName, string strArg, float numArg, Form sender)
-	debug.Trace("Got the OnEDRefreshCommandEffectDuration CALLBACK for actor " + _commandedActor)
+	debug.Trace("Everdamned DEBUG: Got the OnEDRefreshCommandEffectDuration CALLBACK for actor " + _commandedActor)
 	;debug.Trace("CommandedActorFormIdAsFloat: " + CommandedActorFormIdAsFloat + ", numArg: " + numArg)
 	;if CommandedActorFormIdAsFloat == numArg
 	;	debug.Trace("And FormID matched!")
