@@ -124,14 +124,15 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		objectreference aa = __targetThing.placeatme(ED_Art_Hazard_ColdFlamePyre)
+		string leNode = "NPC L Hand [LHnd]"
+		debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
 		
-		utility.wait(0.5)
-		;ED_Art_VFX_ColdFlameBanishFX.Play(aa)
+		leNode = "NPC Head [Head]"
+		debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
 		
-		debug.Trace("Everdamned DEBUG: aaaa: " + aa )
+		leNode = "MagicEffectsNode"
+		debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
 		
-		aa.TranslateToRef(pl, 100.0)
 
 		;objectreference dummy = __targetThing.placeatme(ED_Art_Explosion_Exsanguinate)
 		
@@ -144,7 +145,6 @@ Event OnKeyDown(int keyCode)
 		
 		;string dummyNode = "AttachDummy"
 		;string humanoidRHand = "NPC L Hand [LHnd]"
-		
 		;debug.Trace("Everdamned DEBUG: Dummy has node " + dummyNode + ": " + dummy.HasNode(dummyNode))
 		
 		;If __targetThing != None && __targetThing.Is3DLoaded()
