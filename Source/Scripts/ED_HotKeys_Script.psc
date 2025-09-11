@@ -108,6 +108,9 @@ visualeffect property ED_Art_VFX_ColdFlameBanishFX auto
 
 referencealias property undyingservant auto
 
+keyword property ED_Mechanics_Keyword_UndyingLoyaltyLaunch auto
+
+
 int counter
 bool __switch
 art leart
@@ -126,10 +129,10 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		ED_Mechanics_Keyword_UndyingLoyaltyLaunch.SendStoryEvent(none, __targetThing, none, 0, 0)
 		
-		objectreference undyingservantobj = undyingservant.GetReference()
-		
-		debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
+		;objectreference undyingservantobj = undyingservant.GetReference()
+		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
 		
 		;string leNode = "NPC L Hand [LHnd]"
 		;debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
