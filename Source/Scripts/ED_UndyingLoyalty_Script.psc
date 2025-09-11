@@ -32,6 +32,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 				debug.Trace("Everdamned DEBUG: Previous Undying Servant was disabled, enabling and moving to player")
 				currentServant.moveto(playerRef)
 				currentServant.enable(true)
+				utility.wait(0.2)
 			endif
 			if !(currentServant.isDead())
 				debug.Trace("Everdamned DEBUG: Previous Undying Servant was not dead, killing it")
