@@ -106,6 +106,8 @@ spell property ED_VampireSpellsVL_IcyWinds_Release_Spell auto
 hazard property ED_Art_Hazard_ColdFlamePyre auto
 visualeffect property ED_Art_VFX_ColdFlameBanishFX auto
 
+referencealias property undyingservant auto
+
 int counter
 bool __switch
 art leart
@@ -124,14 +126,30 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		string leNode = "NPC L Hand [LHnd]"
-		debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
 		
-		leNode = "NPC Head [Head]"
-		debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
+		objectreference undyingservantobj = undyingservant.GetReference()
 		
-		leNode = "MagicEffectsNode"
-		debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
+		debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
+		
+		;string leNode = "NPC L Hand [LHnd]"
+		;debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
+		
+		;leNode = "NPC Head [Head]"
+		;debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
+		
+		;leNode = "MagicEffectsNode"
+		;debug.Trace("Everdamned DEBUG: Target has node " + leNode + ": " + __targetThing.HasNode(leNode))
+		
+		
+		;falmers falmervampire
+		;spriggan
+		;ashman
+		;hulkingdraugr
+		;werebear werewolf
+		;giant
+		;hagraven
+		;skeleton
+		;troll
 		
 
 		;objectreference dummy = __targetThing.placeatme(ED_Art_Explosion_Exsanguinate)

@@ -17,16 +17,13 @@ Event OnRaceSwitchComplete()
 				if currentUndyingServant.IsDisabled()
 					Debug.Trace("Everdamned DEBUG: Undying Servant is disabled, need to summon it back")
 					playerRef.placeatme(ED_Misc_UndyingServant1_Activator_Spawn)
-					; SpawnSummonActivator() that does the summoning, because need to wait for OnLoad?
 				endif
 				
 			else
 				Debug.Trace("Everdamned DEBUG: player switched NOT to Vampire Lord")
 				if !(currentUndyingServant.IsDisabled())
 					Debug.Trace("Everdamned DEBUG: Undying Servant is not disabled, should send it to Oblivion")
-					playerRef.placeatme(ED_Misc_UndyingServant1_Activator_Despawn)
-					; SpawnSendoffActivator() that does the sending, because need to wait for OnLoad?
-					; DoSendToOblivion()
+					currentUndyingServant.placeatme(ED_Misc_UndyingServant1_Activator_Despawn)
 				endif
 				
 			endif

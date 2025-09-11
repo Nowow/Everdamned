@@ -18,6 +18,7 @@ function OnLoad()
 		endif
 		
 	endif
+	utility.wait(4.0)
 	self.Delete()
 endFunction
 
