@@ -7,7 +7,7 @@ float property delayBeforeEnable auto
 function OnLoad()
 
 	actor currentUndyingServant = ED_UndyingLoyaltyServant.GetReference() as actor
-	if currentUndyingServant && currentUndyingServant.IsDisabled()
+	if currentUndyingServant ;&& currentUndyingServant.IsDisabled()
 		debug.Trace("Everdamned DEBUG: Undying Servant Spawner is boutta spawn")
 		currentUndyingServant.moveto(self)
 		utility.wait(delayBeforeEnable)
