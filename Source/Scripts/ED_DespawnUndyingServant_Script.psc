@@ -11,11 +11,13 @@ function OnLoad()
 			debug.Trace("Everdamned DEBUG: Undying Servant Despawner found its servant dead, removing from reference")
 			ED_UndyingLoyaltyServant.Clear()
 		endif
-		if !(currentUndyingServant.IsDisabled())
-			debug.Trace("Everdamned DEBUG: Undying Servant Despawner is boutta send to Oblivion")
-			utility.wait(delayBeforeDisable)
-			currentUndyingServant.disable(true) ;with fade it
-		endif
+		;if !(currentUndyingServant.IsDisabled())
+		debug.Trace("Everdamned DEBUG: Undying Servant Despawner is boutta send to Oblivion")
+		currentUndyingServant.SetRestrained(true)
+		currentUndyingServant.SetAlpha(0.0, true)
+		utility.wait(2.0)
+		currentUndyingServant.moveto(MarkerToStoreServantAt)
+		;endif
 		
 	endif
 	utility.wait(4.0)
@@ -24,3 +26,4 @@ endFunction
 
 ReferenceAlias Property ED_UndyingLoyaltyServant  Auto  
 float property delayBeforeDisable auto
+objectreference property MarkerToStoreServantAt auto

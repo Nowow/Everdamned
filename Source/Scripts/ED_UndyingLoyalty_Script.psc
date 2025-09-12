@@ -26,13 +26,15 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	if _commandedActor
 		debug.Trace("Everdamned DEBUG: Summon or reanimate spell successfully captured commanded actor " + _commandedActor + ", forcing it to Undying Loyalty reference")
 		actor currentServant = ED_UndyingLoyaltyServant1.GetReference() as actor
+		
 		if currentServant != None
-			debug.Trace("Everdamned DEBUG: But Undying Servant reference is currently occupied")
-			if currentServant.isDisabled()
-				debug.Trace("Everdamned DEBUG: Previous Undying Servant was disabled, enabling and moving to player")
-				currentServant.moveto(playerRef)
-				currentServant.enable(true)
-				utility.wait(0.2)
+			cell whereThemAt = currentServant.GetParentCell()
+			debug.Trace("Everdamned DEBUG: But Undying Servant reference is currently occupied and is at " + whereThemAt)
+			if whereThemAt == ED_Cell_Stuffgoeshere
+				debug.Trace("Everdamned DEBUG: Previous Undying Servant was in stash cell, killing spectacularly")
+				playerRef.placeatme(ED_Misc_UndyingServant1_Activator_Spawn)
+				utility.wait(0.5)  ; let it do its thing without overwriting alias
+								   ; i love my race conditions
 			endif
 			if !(currentServant.isDead())
 				debug.Trace("Everdamned DEBUG: Previous Undying Servant was not dead, killing it")
@@ -61,4 +63,7 @@ endFunction
 
 
 ReferenceAlias Property ED_UndyingLoyaltyServant1  Auto  
+objectreference property MarkerToStoreServantAt auto
+cell property ED_Cell_Stuffgoeshere auto
 actor property playerRef auto
+activator property ED_Misc_UndyingServant1_Activator_Spawn auto

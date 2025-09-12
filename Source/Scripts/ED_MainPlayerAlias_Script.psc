@@ -12,17 +12,19 @@ Event OnRaceSwitchComplete()
 		if currentUndyingServant
 			Debug.Trace("Everdamned DEBUG: Main Quest detected Undying Servant alias is filled")
 			
+			cell whereThemAt = currentUndyingServant.GetParentCell()
+			
 			if __raceSwitchedTo == DLC1VampireBeastRace
 				Debug.Trace("Everdamned DEBUG: player switched to Vampire Lord")
-				if currentUndyingServant.IsDisabled()
-					Debug.Trace("Everdamned DEBUG: Undying Servant is disabled, need to summon it back")
+				if whereThemAt == ED_Cell_Stuffgoeshere
+					Debug.Trace("Everdamned DEBUG: Undying Servant is stashed, need to summon it back")
 					playerRef.placeatme(ED_Misc_UndyingServant1_Activator_Spawn)
 				endif
 				
 			else
 				Debug.Trace("Everdamned DEBUG: player switched NOT to Vampire Lord")
-				if !(currentUndyingServant.IsDisabled())
-					Debug.Trace("Everdamned DEBUG: Undying Servant is not disabled, should send it to Oblivion")
+				if !(whereThemAt == ED_Cell_Stuffgoeshere)
+					Debug.Trace("Everdamned DEBUG: Undying Servant was not stashed, should send it to Oblivion")
 					currentUndyingServant.placeatme(ED_Misc_UndyingServant1_Activator_Despawn)
 				endif
 				
@@ -58,7 +60,7 @@ Event OnDying(Actor akKiller)
 endevent
 
 Event OnPlayerLoadGame()
-	Debug.Trace("Everdamned DEBUG: Main Quest detected that player has Undying Loyalty perk")
+	Debug.Trace("Everdamned DEBUG: Main Quest modifies FavorJobsBeggarsAbility to be able to distinguish it from Alchemy LOL")
 	PO3_SKSEFunctions.RemoveMagicEffectFromSpell(FavorJobsBeggarsAbility, ED_Mechanics_Spell_GiftOfCharityTracker_Effect, 0, 0, 3600, 0.0)
 	string[] __condList
 	PO3_SKSEFunctions.AddMagicEffectToSpell(FavorJobsBeggarsAbility, ED_Mechanics_Spell_GiftOfCharityTracker_Effect, 0, 0, 3600, 0.0, __condList)
@@ -68,9 +70,12 @@ endevent
 
 race property DLC1VampireBeastRace auto
 actor property playerRef auto
+
 activator property ED_Misc_UndyingServant1_Activator_Spawn auto
 activator property ED_Misc_UndyingServant1_Activator_Despawn auto
 perk property ED_PerkTreeVL_UndyingLoyalty_Perk auto
+objectreference property MarkerToStoreServantAt auto
+cell property ED_Cell_Stuffgoeshere auto
 
 effectshader property DLC1HarkonDisintegrate01FXS auto
 keyword property MagicDamageFire auto
