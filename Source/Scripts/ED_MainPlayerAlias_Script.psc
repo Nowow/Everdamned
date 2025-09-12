@@ -57,6 +57,15 @@ Event OnDying(Actor akKiller)
 	endif
 endevent
 
+Event OnPlayerLoadGame()
+	Debug.Trace("Everdamned DEBUG: Main Quest detected that player has Undying Loyalty perk")
+	PO3_SKSEFunctions.RemoveMagicEffectFromSpell(FavorJobsBeggarsAbility, ED_Mechanics_Spell_GiftOfCharityTracker_Effect, 0, 0, 3600, 0.0)
+	string[] __condList
+	PO3_SKSEFunctions.AddMagicEffectToSpell(FavorJobsBeggarsAbility, ED_Mechanics_Spell_GiftOfCharityTracker_Effect, 0, 0, 3600, 0.0, __condList)
+		
+	
+endevent
+
 race property DLC1VampireBeastRace auto
 actor property playerRef auto
 activator property ED_Misc_UndyingServant1_Activator_Spawn auto
@@ -71,3 +80,6 @@ ReferenceAlias Property ED_UndyingLoyaltyServant1  Auto
 
 perk property ED_PerkTreeVL_UnearthlyWill_Perk auto
 ED_BloodCostDeducter_Script property ED_Mechanics_Helper_Quest auto
+
+spell property FavorJobsBeggarsAbility auto
+magiceffect property ED_Mechanics_Spell_GiftOfCharityTracker_Effect auto
