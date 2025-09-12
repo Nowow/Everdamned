@@ -285,7 +285,7 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 	
 	elseif akSeduced.IsInFaction(FavorJobsBeggarsFaction)
 			
-			bool PlayerHasCharityBuff = akSeducer.HasMagicEffectWithKeyword(USKPGiftOfCharity)
+			bool PlayerHasCharityBuff = akSeducer.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_GiftOfCharity)
 			
 			if PlayerHasCharityBuff
 				SeductionFactionScore += 20
@@ -474,16 +474,15 @@ FavorJarlsMakeFriendsScript property FavorJarlsMakeFriends auto
 globalvariable property ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState auto
 globalvariable property ED_Mechanics_FeedDialogue_NPCSequenceIndex auto
 
-
 associationtype property Spouse auto
 associationtype property Courting auto
 
 keyword property ED_Mechanics_Keyword_BlueBlood_VIP auto
-keyword property USKPGiftOfCharity auto
 Keyword Property ClothingRich Auto
 Keyword Property ClothingPoor Auto
 Keyword Property VampireKeyword Auto
 keyword property LocTypeInn auto
+keyword property ED_Mechanics_Keyword_GiftOfCharity auto
 
 magiceffect property FortifyPersuasionFFSelf auto
 magiceffect property PerkT01Dibella auto
