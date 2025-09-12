@@ -20,12 +20,15 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	actor prevRef = CommandedRef.GetReference() as Actor
 	CommandedRef.ForceRefTo(akTarget)
 	
-	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	
 	
 	if prevRef == akTarget
 		debug.Trace("Everdamned INFO: Lord's Servant Command effect to the same actor, so its a recast, do nothing")
 		return
 	endif
+	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	
 	if prevRef != none && prevRef != akTarget
 		debug.Trace("Everdamned INFO: Lord's Servant Command effect applied while command reference still filled by other actor, dispelling")
 		prevRef.DispelSpell(ED_VampireSpellsVL_LordsServant_Spell)
@@ -35,7 +38,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	DominateUndeadVFX.Play(akTarget)
 	akTarget.AddToFaction(CharmFaction)
-	akCaster.StopCombat()
+	;akCaster.StopCombat()
 	akTarget.StopCombat()
 	if bMakePlayerTeammate
 		akTarget.SetPlayerTeammate(true, false)
