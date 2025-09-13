@@ -51,7 +51,7 @@ int __jumpBonusLevel
 bool __isLShiftPressed
 
 
-
+hazard __hazardToPlaceOnJump
 event OnUpdate()
 	
 	if !__hotkeyB_handled
@@ -62,6 +62,7 @@ event OnUpdate()
 		
 		debug.Trace("Everdamned DEBUG: Jump bonus will now be level: " + __jumpBonusLevel)
 		
+		__hazardToPlaceOnJump = JumpBonusHazardArray[__jumpBonusLevel]
 		JumpBonusSpellArray[__jumpBonusLevel].Cast(playerRef)
 		RegisterForSingleUpdate(0.3)
 	endif	
@@ -80,6 +81,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		;dispel
 		Sound.StopInstance(chargeSoundInstance)
 		ED_Art_Imod_ExtendedPerception_Out.Apply()
+		playerRef.placeatme(__hazardToPlaceOnJump)
 		ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 	endif
 	
@@ -119,6 +121,7 @@ state KnowsOnlyPotence
 			utility.wait(TapMaxLength)
 			
 			__jumpBonusLevel = 0
+			__hazardToPlaceOnJump = None
 			RegisterForAnimationEvent(playerRef, "JumpUp")
 
 			; pressing long enough to start charging jump
@@ -168,6 +171,7 @@ state KnowsOnlyPotence
 					ED_Art_Imod_ExtendedPerception_Out.Apply()
 					TapKey(SpacebarKey)
 					Sound.StopInstance(chargeSoundInstance)
+					playerRef.placeatme(__hazardToPlaceOnJump)
 					utility.wait(0.1)
 					
 					ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
@@ -298,6 +302,7 @@ state KnowsPotenceAndNF
 			utility.wait(TapMaxLength)
 			
 			__jumpBonusLevel = 0
+			__hazardToPlaceOnJump = None
 			RegisterForAnimationEvent(playerRef, "JumpUp")
 
 			; pressing long enough to start charging jump
@@ -349,7 +354,9 @@ state KnowsPotenceAndNF
 					ED_Art_Imod_ExtendedPerception_Out.Apply()
 					TapKey(SpacebarKey)
 					Sound.StopInstance(chargeSoundInstance)
+					playerRef.placeatme(__hazardToPlaceOnJump)
 					utility.wait(0.1)
+					
 					ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 					UnRegisterForUpdate()
 					
@@ -378,6 +385,7 @@ spell[] property JumpBonusSpellArray auto
 spell property ED_Mechanics_PotenceJumpBonus1_Spell auto
 spell property ED_Mechanics_PotenceJumpBonusCleanser_Spell auto
 spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
+hazard[] property JumpBonusHazardArray auto
 
 sound property ED_Art_SoundM_JumpCharge auto
 imagespacemodifier property ED_Art_Imod_ExtendedPerception_Out auto
