@@ -129,7 +129,7 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		ED_Mechanics_Keyword_UndyingLoyaltyLaunch.SendStoryEvent(none, __targetThing, none, 0, 0)
+		debug.Trace("Everdamned DEBUG: Gravity: " + utility.GetIniFloat("fInAirFallingCharGravityMult:Havok"))
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
