@@ -7,7 +7,7 @@ float property XPgained auto
 event oneffectstart(actor akTarget, actor akCaster)
 	
 	
-	ED_Art_Shader_ColdFlameAtronachFlameDeath.Play(akTarget)
+	;ED_Art_Shader_ColdFlameAtronachFlameDeath.Play(akTarget)
 	utility.wait(1.5)
 	akTarget.placeatme(ED_Art_Hazard_ColdFlamePyre)
 	

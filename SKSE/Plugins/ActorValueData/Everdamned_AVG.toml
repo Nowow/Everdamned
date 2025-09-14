@@ -20,9 +20,14 @@ alias = "Variable08"
 type = "Adaptive"
 alias = "Variable01"
 
-[ED_IcyWindsTarget]
+[ED_FlamesProc]
 type = "Adaptive"
 alias = "Variable02"
+default.formula = "3"
+default.type = "Constant"
+regen.rate = "100"
+regen.delay = "2"
+regen.fixed = true
 
 # 60 * 60 * 24 * 2 = 2 days in seconds / 100
 [ED_HpDrainedTimer]
@@ -45,4 +50,4 @@ default.formula = "GetActorValue('Health', Base) * 0.01"
 default.type = "Constant"
 
 [Include]
-"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_IcyWindsTarget", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct"]
+"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_FlamesProc", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct"]
