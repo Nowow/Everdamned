@@ -1,6 +1,5 @@
 Scriptname ED_VampirePowers_ExtendedPerception extends activemagiceffect  
 
-import debug
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 	bool hasME = akTarget.HasMagicEffectWithKeyword(ED_Mechanics_Keywords_TimeDilation)
