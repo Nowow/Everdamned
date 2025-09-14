@@ -270,8 +270,20 @@ function HandleFeedThrall(actor FeedTarget)
 	; tell OAR that ist vanilla feed animation
 	ED_Mechanics_Global_FeedType.SetValue(0.0)
 	
-	;start actual feed animation
-	PlayerRef.StartVampireFeed(FeedTarget)
+	
+	bool __isVL = playerRef.GetRace() == DLC1VampireBeastRace
+	if __isVL
+		; currently unreachable because need to make bite animation without kill event
+		float headingAngle = FeedTarget.GetHeadingAngle(playerRef) 
+		bool __front = headingAngle >= -90.0 && headingAngle <= 90.0
+		if __front
+			playerRef.PlayIdleWithTarget(VampireLordLeftPairedFeedFront, FeedTarget)
+		else
+			playerRef.PlayIdleWithTarget(VampireLordLeftPairedFeedBack, FeedTarget)
+		endif
+	else
+		PlayerRef.StartVampireFeed(FeedTarget)
+	endif
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -320,9 +332,18 @@ function HandleDrainThrall(actor FeedTarget)
 	; tell OAR that ist vanilla feed animation
 	ED_Mechanics_Global_FeedType.SetValue(0.0)
 	
-	;start actual feed animation
-	PlayerRef.StartVampireFeed(FeedTarget)
-
+	bool __isVL = playerRef.GetRace() == DLC1VampireBeastRace
+	if __isVL
+		float headingAngle = FeedTarget.GetHeadingAngle(playerRef) 
+		bool __front = headingAngle >= -90.0 && headingAngle <= 90.0
+		if __front
+			playerRef.PlayIdleWithTarget(VampireLordLeftPairedFeedFront, FeedTarget)
+		else
+			playerRef.PlayIdleWithTarget(VampireLordLeftPairedFeedBack, FeedTarget)
+		endif
+	else
+		PlayerRef.StartVampireFeed(FeedTarget)
+	endif
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
@@ -1030,7 +1051,8 @@ state CombatDrain
 endstate
 
 
-
+Idle Property VampireLordLeftPairedFeedFront Auto
+Idle Property VampireLordLeftPairedFeedBack Auto
 idle property IdleVampireStandingFeedFront_Loose auto
 idle property IdleHandCut auto
 idle property ED_Idle_FeedKM_Solo_Player_Ground auto
