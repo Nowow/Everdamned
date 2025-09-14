@@ -12,9 +12,10 @@ endevent
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	ED_SKSEnativebindings.SetTimeSlowdown(0.0, 0.0)
 	ED_Art_SoundM_CelerityOut.Play(akTarget)
-	akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
+	ED_Art_VFX_TimeDilationExplosion.play(akTarget, 3.0)
+	;akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
 endevent
 
 
-explosion property ED_Art_Explosion_TimeDilationShockwave auto
+visualeffect property ED_Art_VFX_TimeDilationExplosion auto
 sound property ED_Art_SoundM_CelerityOut auto

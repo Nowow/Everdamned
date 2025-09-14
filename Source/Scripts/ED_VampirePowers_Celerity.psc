@@ -29,7 +29,8 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	;VOCShoutFXSlowTimeIn
 	ED_Art_SoundM_CelerityIn.Play(akTarget)
-	akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
+	ED_Art_VFX_TimeDilationExplosion.play(akTarget, 3.0)
+	;akTarget.placeatme(ED_Art_Explosion_TimeDilationShockwave)
 	CeleritySP.cast(akTarget,akTarget)
 		
 	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
@@ -76,7 +77,7 @@ MagicEffect Property ED_VampirePowers_Celerity_Effect_SlowTimeAb  Auto
 
 SPELL Property CeleritySP  Auto  
 SPELL Property ED_VampirePowers_Pw_NecroticFlesh_Spell Auto  
-explosion property ED_Art_Explosion_TimeDilationShockwave auto
+visualeffect property ED_Art_VFX_TimeDilationExplosion auto
 quest property ED_Mechanics_Quest_NecroticFlesh auto
 
 sound property ED_Art_SoundM_CelerityIn auto

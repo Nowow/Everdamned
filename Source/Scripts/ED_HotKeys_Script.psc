@@ -129,7 +129,7 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		debug.Trace("Everdamned DEBUG: Gravity: " + utility.GetIniFloat("fInAirFallingCharGravityMult:Havok"))
+		
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
@@ -282,13 +282,14 @@ Event OnKeyDown(int keyCode)
 		;debug.Trace("Everdamned DEBUG: Var: " + __var)
 		
 		if !__switch
+			ED_SKSEnativebindings.SetTimeSlowdown(0.25, 0.6)
 			;__targetThing.playidle(resetroot)	
 			;bool __idlePlayed = __targetThing.PlayIdle(IdleBoyRitual)
 			;utility.wait(0.5)
 			;__targetThing.TranslateToRef(playerRef, 100.0)
 			
 		else
-			
+			ED_SKSEnativebindings.SetTimeSlowdown(0.0, 0.0)
 			
 	
 		endif

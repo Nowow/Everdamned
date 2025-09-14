@@ -975,10 +975,15 @@ state CombatDrain
 		; paired_HugA doesnt but breaks if started with unsheather weap
 		; any real killmove makes player immune to damage
 		
-		bool timeWasSlowed = ED_SKSEnativebindings.DispelAllSlowTimeEffects()
-		if timeWasSlowed
-			debug.Trace("Everdamned DEBUG: Feed Manager DISPELLED SLOW TIME EFFECT")
-		endif
+		;bool timeWasSlowed = ED_SKSEnativebindings.DispelAllSlowTimeEffects()
+		ED_SKSEnativebindings.DispelAllSlowTimeEffects()
+		ED_Mechanics_Spell_TimeDilationCleaner.Cast(playerRef)
+		; to let slow
+		utility.wait(0.1)
+		
+		;if timeWasSlowed
+		;	debug.Trace("Everdamned DEBUG: Feed Manager DISPELLED SLOW TIME EFFECT")
+		;endif
 		
 		;ED_SKSEnativebindings.SetTimeSlowdown(0.0, 0.0)
 		
@@ -1067,6 +1072,7 @@ spell property ED_VampirePowers_Amaranth_Spell auto
 spell property ED_VampirePowers_Amaranth_Disintegrate_Spell auto
 spell property ED_VampirePowers_Ab_Masquerade_Spell auto
 spell property ED_Mechanics_DrainAttributeRestore_Spell auto
+spell property ED_Mechanics_Spell_TimeDilationCleaner auto
 
 keyword property ED_Mechanics_Keyword_BystanderStart auto
 keyword property ED_Mechanics_Keyword_PsychicVampireStart auto
