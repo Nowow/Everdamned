@@ -112,7 +112,7 @@ Function addStonyOverlays()
     
     ;_addTexture(npc, faceTextureList, "Face")
 	
-	PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, BlackSkinColor, 0, false, 1.4)
+	;PO3_SKSEFunctions.BlendColorWithSkinTone(playerRef, BlackSkinColor, 0, false, 1.4)
     _addTexture(playerRef, NecroticFleshOverlayPath_Body, "Body")
 
 EndFunction
@@ -130,7 +130,7 @@ function OnStartup()
 	ED_Art_Shader_NecroticFleshToggleOnStoneskin.Play(playerRef, 5.0)
 	;ED_Art_Shader_NecroticFleshToggleOn.Play(playerRef, 1.0)
 	;utility.wait(0.3)
-	;addStonyOverlays() ; and skin blend
+	addStonyOverlays() ; and skin blend
 	;ED_Art_Shader_NecroticFleshToggleOn.Stop(playerRef)
 	
 endfunction

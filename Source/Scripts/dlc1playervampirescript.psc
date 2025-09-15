@@ -55,9 +55,11 @@ function OnRaceSwitchComplete()
 	if self.GetActorReference().GetRace() == VampireLordRace
 		debug.Trace("VAMPIRE: Getting notification that race swap TO vampire is complete.", 0)
 		(self.GetOwningQuest() as dlc1playervampirechangescript).StartTracking()
+		GoToState("InVampireLordForm")
 	else
 		debug.Trace("VAMPIRE: Getting notification that race swap FROM vampire is complete.", 0)
 		(self.GetOwningQuest() as dlc1playervampirechangescript).Shutdown()
+		GoToState("")
 	endIf
 endFunction
 
@@ -83,6 +85,19 @@ function OnPlayerLoadGame()
 	(self.GetOwningQuest() as dlc1playervampirechangescript).HandlePlayerLoadGame()
 endFunction
 
-; Skipped compiler generated GetState
-
-; Skipped compiler generated GotoState
+state InVampireLordForm
+	Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)
+		debug.Trace("Everdamned DEBUG: VL player alias detected armor equipped")
+		
+		armor equippedArmor = akBaseObject as armor
+		if !equippedArmor
+			debug.Trace("Everdamned DEBUG: But it was not armor?")
+		endif
+		
+		bool __validated = ED_SKSEnativebindings.ValidateArmorRace(equippedArmor)
+		debug.Trace("Everdamned DEBUG: Race validated: " + __validated)
+		if !__validated
+			GetActorRef().UnequipItem(equippedArmor)
+		endif
+	endevent
+endstate

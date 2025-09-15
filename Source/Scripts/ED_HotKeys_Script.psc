@@ -110,6 +110,10 @@ referencealias property undyingservant auto
 
 keyword property ED_Mechanics_Keyword_UndyingLoyaltyLaunch auto
 
+armor property DLC1ClothesVampireLordRoyalArmor auto
+armor property ArmorDragonplateCuirass auto
+
+race property DLC1VampireBeastRace auto
 
 int counter
 bool __switch
@@ -129,7 +133,8 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		
+		debug.Trace("Everdamned DEBUG: Race validated: " + ED_SKSEnativebindings.ValidateArmorRace(DLC1ClothesVampireLordRoyalArmor))
+		debug.Trace("Everdamned DEBUG: Race validated: " + ED_SKSEnativebindings.ValidateArmorRace(ArmorDragonplateCuirass))
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
