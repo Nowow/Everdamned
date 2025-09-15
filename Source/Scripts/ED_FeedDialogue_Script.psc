@@ -128,6 +128,13 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		ConditionalsScript.Penalty_LowRelationship = true
 	endif
 	
+	bool __dibellaAmuletWorn = akSeducer.IsEquipped(ReligiousDibellaBeauty)
+	debug.Trace("Everdamned DEBUG: Dibella Amulet equipped: " + __dibellaAmuletWorn)
+	if akSeduced.IsInFaction(PotentialMarriageFaction) && __dibellaAmuletWorn
+		ConditionalsScript.Bonus_Dibella = true
+		__playerSeductionScore += 15
+	endif
+	
 	
 	; has parther that is not seducer
 	bool seducedHasPartner = __relationshipRank < 4 && (akSeduced.HasAssociation(Spouse) || akSeduced.HasAssociation(Courting)) && !(akSeduced.HasAssociation(Spouse, akSeducer))
@@ -292,10 +299,11 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 	
 	elseif akSeduced.IsInFaction(FavorJobsBeggarsFaction)
 			
-			bool PlayerHasCharityBuff = akSeducer.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_GiftOfCharity)
+			SeductionFactionScore += 20
 			
+			bool PlayerHasCharityBuff = akSeducer.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_GiftOfCharity)
 			if PlayerHasCharityBuff
-				SeductionFactionScore += 40
+				SeductionFactionScore += 20
 			endif
 	
 	elseif akSeduced.IsInFaction(JobJarlFaction)
@@ -513,6 +521,8 @@ Perk Property MasterOfTheMind Auto
 Perk Property AspectOfTerror Auto
 Perk Property Rage Auto
 
+armor property ReligiousDibellaBeauty auto
+
 ; crime factions
 Faction Property CrimeFactionReach Auto
 Faction Property CrimeFactionRift Auto
@@ -526,6 +536,7 @@ Faction Property CrimeFactionFalkreath Auto
 
 ; spouse
 Faction Property PlayerMarriedFaction auto
+Faction Property PotentialMarriageFaction auto
 
 ; seduced faction
 faction property ED_Mechanics_FeedDialogue_Seduced_Fac auto
@@ -560,6 +571,8 @@ Faction Property JobJarlFaction Auto
 Faction Property CompanionsFaction Auto
 Faction Property CompanionsCirclePlusKodlak Auto
 Faction property JobBardFaction auto
+
+
 
 FormList Property ED_Mechanics_OrcRace_List Auto
 
