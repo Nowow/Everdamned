@@ -2,22 +2,12 @@
 ;NEXT FRAGMENT INDEX 2
 Scriptname ED_TIF_GoodbyeBuffer_Script Extends TopicInfo Hidden
 
-;BEGIN FRAGMENT Fragment_1
-Function Fragment_1(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
-ThisTopicFinished = true
-;END CODE
-EndFunction
-;END FRAGMENT
-
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
-utility.wait(0.5)
 playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceEnd)
-utility.wait(1.0)
+utility.wait(1.5)
 if !ThisTopicFinished && akSpeaker.IsInDialogueWithPlayer()
 	input.TapKey(input.GetMappedKey("Activate"))
 endif
@@ -32,6 +22,15 @@ endif
 ;	utility.wait(0.1)
 ;endwhile
 ;debug.Trace("Everdamned DEBUG: Timeout: "  + __timeout)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_1
+Function Fragment_1(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+ThisTopicFinished = true
 ;END CODE
 EndFunction
 ;END FRAGMENT

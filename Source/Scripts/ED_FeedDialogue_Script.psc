@@ -317,14 +317,14 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 endfunction
 
 
-Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
+bool Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 
 
 	if akSeduced.IsInFaction(PlayerMarriedFaction)
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
 		ConditionalsScript.SetLastScore(100)
 		debug.Trace("Everdamned INFO: Seduced is married to player, not calculating score, auto success")
-		return
+		return true
 	endif
 	
 	int PlayerSeductionScore = CalculateScore(akSeducer, akSeduced)
@@ -342,10 +342,10 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_TargetHasSomeone: " + ConditionalsScript.Penalty_TargetHasSomeone)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_LowRelationship: " + ConditionalsScript.Penalty_LowRelationship)
 
-	if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
-		debug.trace("Everdamned INFO: Feed dialogue score override engaged, not actually changing results")
-		return
-	endif
+	;if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
+	;	debug.trace("Everdamned INFO: Feed dialogue score override engaged, not actually changing results")
+	;	return true
+	;endif
 	
 	int __relationshipRank = akSeducer.GetRelationshipRank(akSeduced)
 	
@@ -382,6 +382,10 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 		endif
 		
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(1)
+		
+		debug.Trace("Everdamned DEBUG: Feed Dialogue animation sequence index is: " + ED_Mechanics_FeedDialogue_NPCSequenceIndex.GetValue())
+		return true
+		
 	else
 		if __relationshipRank <= 1
 			ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(1,2))
@@ -390,9 +394,11 @@ Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 		endif
 		
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(0)
+		debug.Trace("Everdamned DEBUG: Feed Dialogue animation sequence index is: " + ED_Mechanics_FeedDialogue_NPCSequenceIndex.GetValue())
+		return false
 	endif
 	
-	debug.Trace("Everdamned DEBUG: Feed Dialogue animation sequence index is: " + ED_Mechanics_FeedDialogue_NPCSequenceIndex.GetValue())
+	
 	
 	
 	;if Intimidation_score >= Intimidation_Difficulty_Score
@@ -438,12 +444,17 @@ function DoTheThing()
 	
 	debug.Trace("Everdamned INFO: Roll Feed Dialogue Score quest started successfully, Seducer: " + __Seducer + ", Seduced: " + __Seduced)
 	
-	RollFeedDialogueChecks(__Seducer, __Seduced)
+	bool __success = RollFeedDialogueChecks(__Seducer, __Seduced)
 	
 	; walkaway can still happen, but seduction was successfully applied/failed
 	; moved to PROMPT 2
 	
-	SetCurrentStageID(100)
+	if __success
+		SetCurrentStageID(100)
+	else
+		SetCurrentStageID(150)
+	endif
+	
 	stop()
 endfunction
 

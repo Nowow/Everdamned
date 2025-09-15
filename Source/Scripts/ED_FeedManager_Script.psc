@@ -163,9 +163,10 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedSatiation event, processed target: " + aFeedTarget)\
 
 	elseif asEventName == SocialFeedFinished
-		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = aFeedTarget)
+		bool __bystanderQuestStarted = ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = aFeedTarget)
 		SendModEvent("feedDialogue_SocialFeedFinished")
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedFinished event, Bystander quest started")
+		debug.Trace("Everdamned DEBUG: Feed Manager Bystander quest started: " + __bystanderQuestStarted)
 
 	endif
 endevent

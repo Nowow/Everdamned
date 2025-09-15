@@ -126,11 +126,16 @@ EndFunction
 
 
 function OnStartup()
+	if playerRef.GetActorValue("ED_BloodPool") < 1.0
+		debug.Trace("Everdamned DEBUG: Necrotic Flesh did not happen because player had no blood points")
+		stop()
+	endif
+	
 	playerRef.AddSpell(ED_VampirePowers_Pw_NecroticFlesh_Spell, false)
 	ED_Art_Shader_NecroticFleshToggleOnStoneskin.Play(playerRef, 5.0)
 	;ED_Art_Shader_NecroticFleshToggleOn.Play(playerRef, 1.0)
 	;utility.wait(0.3)
-	addStonyOverlays() ; and skin blend
+	;addStonyOverlays() ; and skin blend
 	;ED_Art_Shader_NecroticFleshToggleOn.Stop(playerRef)
 	
 endfunction
