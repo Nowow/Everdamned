@@ -68,6 +68,7 @@ endFunction
 
 function DineAlone()
 	debug.Trace("Everdamned DEBUG: Vampire is to be dining alone!!!")
+	; hp to be eaaten is reset after each read
 	ED_BloodPoolManager_Quest.SetBonusAfterFeed()
     VampireFeed()
 endfunction

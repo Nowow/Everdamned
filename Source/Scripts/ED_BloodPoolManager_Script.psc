@@ -8,6 +8,13 @@ float property BloodBonus_AbsorptionRate_Mult auto
 float property BloodBonus_PermaBonusThreshold auto
 
 
+
+float threshold_baseline		
+float threshold_minimal
+float threshold_okay
+float threshold_juicy
+float threshold_beefy
+
 function ModBloodPoolMaximum(float _val)
 
 	playerRef.ModAV("ED_BloodPool", _val)
@@ -42,7 +49,7 @@ function SetBonusAfterFeed()
 endfunction
 
 function AtProcessBonus()
-	GoToState("ProcessBonus")
+	GoToState("ProcessBonuses")
 endfunction
 
 bool __doStageOrAgeChange
@@ -124,6 +131,8 @@ state AfterFeed
 	endevent
 endstate
 
+
+
 state ProcessBonuses
 
 	function AtStageOrAgeChange()
@@ -170,12 +179,15 @@ state ProcessBonuses
 		;0.5 - 25% red
 		;<0.5 - faint 10%
 		
-		float threshold_baseline = (__currentPermaBonusThreshold - BloodBonus_AbsorptionRate_Fix)/BloodBonus_AbsorptionRate_Mult
+		threshold_baseline = (__currentPermaBonusThreshold - BloodBonus_AbsorptionRate_Fix)/BloodBonus_AbsorptionRate_Mult
+		if threshold_baseline < 0
+			threshold_baseline = 0
+		endif
 		
-		float threshold_minimal = threshold_baseline / 0.5
-		float threshold_okay = threshold_baseline / 0.35
-		float threshold_juicy = threshold_baseline / 0.2
-		float threshold_beefy = threshold_juicy * 2
+		threshold_minimal = threshold_baseline / 0.5
+		threshold_okay = threshold_baseline / 0.35
+		threshold_juicy = threshold_baseline / 0.2
+		threshold_beefy = threshold_juicy * 2
 		
 		ED_Mechanics_BloodPool_BloodSenseThreshold_Minimal.SetValue(threshold_minimal)
 		ED_Mechanics_BloodPool_BloodSenseThreshold_Okay.SetValue(threshold_okay)
@@ -184,8 +196,8 @@ state ProcessBonuses
 		
 		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Minimal: " + threshold_minimal)
 		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Okay: " + threshold_okay)
-		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Okay: " + threshold_juicy)
-		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Okay: " + threshold_beefy)
+		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Juicy: " + threshold_juicy)
+		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Beefy: " + threshold_beefy)
 		
 	endevent
 	
