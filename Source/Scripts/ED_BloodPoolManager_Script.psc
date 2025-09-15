@@ -120,11 +120,17 @@ state AfterFeed
 		debug.Trace("Everdamned DEBUG: current blood pool bonus: " + __currentBonus + ", HPtoBeEaten bonus: " + __calculatedBonus)
 		if __calculatedBonus > __currentBonus
 			debug.Trace("Everdamned DEBUG: Setting new blood pool bonus!")
-			__currentBonus = __calculatedBonus
-			ED_Mechanics_BloodPool_MaxBonus.SetValue(__currentBonus)
+			;__currentBonus = __calculatedBonus
+			ED_Mechanics_BloodPool_MaxBonus.SetValue(__calculatedBonus)
 			
-			; top up included
-			;playerRef.ForceAV("ED_BloodPool", ED_Mechanics_BloodPool_Total.GetValue() + __currentBonus + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
+			if __calculatedBonus < threshold_baseline
+				Message.ResetHelpMessage("ed_feedwillnotabsorb")
+				ED_Mechanics_Message_FeedNourishment_Worthless.ShowAsHelpMessage("ed_feedwillnotabsorb", 3.0, 5.0, 1)
+			elseif __calculatedBonus >= __currentBonus * 1.3
+				Message.ResetHelpMessage("ed_bloodbonusincreased")
+				ED_Mechanics_Message_FeedNourishment_Increased.ShowAsHelpMessage("ed_bloodbonusincreased", 3.0, 5.0, 1)
+			endif
+			
 		endif
 		
 		GoToState("Postprocess")
@@ -280,6 +286,9 @@ GlobalVariable property ED_Mechanics_BloodPool_BloodSenseThreshold_Minimal auto
 GlobalVariable property ED_Mechanics_BloodPool_BloodSenseThreshold_Okay auto
 GlobalVariable property ED_Mechanics_BloodPool_BloodSenseThreshold_Juicy auto
 GlobalVariable property ED_Mechanics_BloodPool_BloodSenseThreshold_Beefy auto
+
+message property ED_Mechanics_Message_FeedNourishment_Worthless auto
+message property ED_Mechanics_Message_FeedNourishment_Increased auto
 
 actor property playerRef auto
 
