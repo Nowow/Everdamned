@@ -578,7 +578,39 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	
 	float zOffset = FeedTarget.GetHeadingAngle(playerRef)
 	FeedTarget.SetAngle(FeedTarget.GetAngleX(), FeedTarget.GetAngleY(), FeedTarget.GetAngleZ() + zOffset)
-	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
+
+	;playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
+	bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
+
+	bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
+	bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
+	
+	debug.Trace("Everdamned DEBUG: player bIsSynced: " + __playerIsSynced)
+	debug.Trace("Everdamned DEBUG: victim bIsSynced: " + __victimIsSynced)
+	
+	if __playerIsSynced && __victimIsSynced
+	else
+		debug.Trace("Everdamned WARNING: Feed Manager does not detect paired social feed playing, using backup solo anims")
+		debug.Notification("EVD DEBUG: backup FEED anims")
+		
+		float backupAnimationVictimOffset = 60.0  ;  check
+
+		float playerAngleZsin = math.sin(playerRef.GetAngleZ())
+		float playerAngleZcos = math.cos(playerRef.GetAngleZ())
+		float targetX = playerRef.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
+		float targetY = playerRef.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
+		
+		FeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ(),\
+								playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
+								700.0)
+		
+		; dont know if needed
+		playerRef.PlayIdle(ResetRoot)
+		FeedTarget.PlayIdle(ResetRoot)
+
+		playerRef.PlayIdle(ED_Idle_FeedKM_Solo_Player_Social)
+		FeedTarget.PlayIdle(IdleHandCut)
+	endif
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -1062,6 +1094,7 @@ idle property IdleHandCut auto
 idle property ED_Idle_FeedKM_Solo_Player_Ground auto
 idle property ED_Idle_FeedKM_Solo_Player_Bleedout auto
 idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
+idle property ED_Idle_FeedKM_Solo_Player_Social auto
 idle property ResetRoot auto
 spell property ED_BeingVampire_VampireFeed_VictimMark_Spell auto
 

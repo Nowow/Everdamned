@@ -3,6 +3,7 @@ Scriptname ED_FeedDialogueConditionals_Script extends Quest  Conditional
 int property LastScore auto conditional
 int property LastScore_Category auto conditional
 bool property Bonus_Dibella auto conditional
+bool property Bonus_DibellaAmulet auto conditional
 bool property Bonus_Clothes auto conditional
 bool property Bonus_Thane auto conditional
 bool property Bonus_HighRelationship auto conditional

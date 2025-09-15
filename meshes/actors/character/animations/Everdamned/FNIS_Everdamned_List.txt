@@ -199,13 +199,16 @@ s -a ed_seduction_flirt_nervousLookAround2 ed_seduction_nervous_lookaround.hkx
 ' needed because choosing correct idle to replace that behaves CORRECTLY is a pain, this works?
 
 ' feed killmove player solo part bleedout
-b -a,AVbNoStagger,Ted_playsound_bleedoutrustle/0.0,Ted_sheatheweapons/0.01,TNPCSoundPlay.NPCVampireLordFeed/1.933000,Ted_impact_bloodgush/2.867000,TSoundPlay.NPCKillGore/3.700000,Ted_feedkm_killvictim/4.48 ed_feedkms_player_solo_bleedout ed_feedkms_player_solo_bleedout.hkx
+b -a,Ted_playsound_bleedoutrustle/0.0,Ted_sheatheweapons/0.01,TNPCSoundPlay.NPCVampireLordFeed/1.933000,Ted_impact_bloodgush/2.867000,TSoundPlay.NPCKillGore/3.700000,Ted_feedkm_killvictim/4.48 ed_feedkms_player_solo_bleedout ed_feedkms_player_solo_bleedout.hkx
 
 ' feed killmove player solo part jump feed
-b -a,AVbNoStagger,Ted_playsound_feeddoubletap/0.0,Ted_sheatheweapons/0.01,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.4,TKillShove/3.567000,Ted_feedkm_killvictim/3.78 ed_feedkms_player_solo_jumpfeed ed_feedkms_player_solo_jumpfeed.hkx
+b -a,Ted_playsound_feeddoubletap/0.0,Ted_sheatheweapons/0.01,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.4,TKillShove/3.567000,Ted_feedkm_killvictim/3.78 ed_feedkms_player_solo_jumpfeed ed_feedkms_player_solo_jumpfeed.hkx
 
 ' feed killmove player solo part ground
-b -a,AVbNoStagger,TSoundPlay.NPCKillStruggle/0.0,Ted_sheatheweapons/0.01,TSoundPlay.NPCKillBodyfall/0.9,TNPCSoundPlay.NPCVampireLordFeed/1.466000,Ted_impact_bloodgush/2.4,Ted_feedkm_killvictim/4.28 ed_feedkms_player_solo_ground ed_feedkms_player_solo_ground.hkx
+b -a,TSoundPlay.NPCKillStruggle/0.0,Ted_sheatheweapons/0.01,TSoundPlay.NPCKillBodyfall/0.9,TNPCSoundPlay.NPCVampireLordFeed/1.466000,Ted_impact_bloodgush/2.4,Ted_feedkm_killvictim/4.28 ed_feedkms_player_solo_ground ed_feedkms_player_solo_ground.hkx
+
+' feed killmove player solo part ground
+b -a,ac,Ted_sheatheweapons/0.01,Ted_breathSounds/1.067,Ted_playsound_bleedoutrustle/2.5,TSoundPlay.NPCKillStruggle/3.033000,Ted_impact_bloodgushshort/5.233,Ted_socialfeedbite/5.233,Ted_breathSounds/7.767000,Ted_feedsatiation/9.570000,Ted_socialfeedsatiation/9.570000,Ted_playsound_bleedoutrustle/10.233000,Ted_socialfeedfinished/11.99 ed_feedkms_player_solo_social ed_feedkms_player_solo_social.hkx
 
 ' ----------------- END Feed killmoves solo player part ------------------
 

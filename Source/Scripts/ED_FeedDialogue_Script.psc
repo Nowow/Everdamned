@@ -131,7 +131,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	bool __dibellaAmuletWorn = akSeducer.IsEquipped(ReligiousDibellaBeauty)
 	debug.Trace("Everdamned DEBUG: Dibella Amulet equipped: " + __dibellaAmuletWorn)
 	if akSeduced.IsInFaction(PotentialMarriageFaction) && __dibellaAmuletWorn
-		ConditionalsScript.Bonus_Dibella = true
+		ConditionalsScript.Bonus_DibellaAmulet = true
 		__playerSeductionScore += 15
 	endif
 	
@@ -351,6 +351,7 @@ bool Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue LastScore: " + ConditionalsScript.LastScore)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue LastScore_Category: " + ConditionalsScript.LastScore_Category)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Dibella: " + ConditionalsScript.Bonus_Dibella)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_DibellaAmulet: " + ConditionalsScript.Bonus_DibellaAmulet)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Clothes: " + ConditionalsScript.Bonus_Clothes)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Thane: " + ConditionalsScript.Bonus_Thane)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_HighRelationship: " + ConditionalsScript.Bonus_HighRelationship)
