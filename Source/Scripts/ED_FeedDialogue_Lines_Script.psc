@@ -12,13 +12,13 @@ function OnLoad()
 	
 	utility.wait(2.0)
 	
-	Say(FirstTopic, playerRef, false)
+	Say(FirstTopic, playerRef, true)
 	utility.Wait(FirstTopicLength)
 	
 	if SecondTopic
 		Disable()
 		Enable()
-		Say(SecondTopic, playerRef, false)
+		Say(SecondTopic, playerRef, true)
 		debug.Trace("Everdamned DEBUG: Feed Dialogue LINES SECOND topic said!")
 		utility.Wait(SecondTopicLength)
 	endif

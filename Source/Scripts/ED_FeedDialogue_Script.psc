@@ -109,7 +109,14 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	int __relationshipRank = akSeducer.GetRelationshipRank(akSeduced)
 	
 	; from -80 to 0
-	if __relationshipRank > 0 || akSeduced.GetCurrentLocation().HasKeyword(LocTypeInn)
+	
+	bool __isInn = akSeduced.GetCurrentLocation().HasKeyword(LocTypeInn)
+	
+	if __isInn
+		__playerSeductionScore += 20
+	endif
+	
+	if __relationshipRank > 0 || __isInn
 		__playerSeductionScore += (__relationshipRank * 20) - 80
 		if __relationshipRank > 3
 			ConditionalsScript.Bonus_HighRelationship = true
@@ -288,7 +295,7 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 			bool PlayerHasCharityBuff = akSeducer.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_GiftOfCharity)
 			
 			if PlayerHasCharityBuff
-				SeductionFactionScore += 20
+				SeductionFactionScore += 40
 			endif
 	
 	elseif akSeduced.IsInFaction(JobJarlFaction)

@@ -163,7 +163,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedSatiation event, processed target: " + aFeedTarget)\
 
 	elseif asEventName == SocialFeedFinished
-		bool __bystanderQuestStarted = ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = aFeedTarget)
+		bool __bystanderQuestStarted = ED_Mechanics_Keyword_BystanderStart.SendStoryEventAndWait(akRef1 = aFeedTarget)
 		SendModEvent("feedDialogue_SocialFeedFinished")
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedFinished event, Bystander quest started")
 		debug.Trace("Everdamned DEBUG: Feed Manager Bystander quest started: " + __bystanderQuestStarted)
@@ -593,7 +593,10 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 		elseif __lightLevel >= 70.0
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = HighRadius
 		else
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = LowRadius + (24.663*math.pow(2.718,0.04*(__lightLevel - 10.0)) - 25.0)
+			;ED_Mechanics_Global_VampireFeedBystanderRadius.value = LowRadius + (24.663*math.pow(2.718,0.04*(__lightLevel - 10.0)) - 25.0)
+			; using linear here because dotn feel like redoing math just for the exponent
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = LowRadius + ((HighRadius - LowRadius)/60.0)*(__lightLevel - 10.0) 
+			
 		endif
 		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
@@ -609,7 +612,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	; MOVED TO animation event
 	aFeedTarget = FeedTarget
 	
-	;age for 2h
+	;age for 8h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
 
 	;Blue Blood

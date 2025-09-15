@@ -45,7 +45,8 @@ Function CheckBystandersSendAlarmAndStopQuest()
 		Debug.Trace("Everdamned INFO: No Bystander cares about what the player is doing right now")
 	endif
 
-	__displayMessage.Show()
+	Message.ResetHelpMessage("ed_bystanderquestresult")
+	__displayMessage.ShowAsHelpMessage("ed_bystanderquestresult", 3.0, 5.0, 1)
 	
 	stop()
 
