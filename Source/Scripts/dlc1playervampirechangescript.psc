@@ -424,6 +424,11 @@ function PrepShift()
 	game.ShowFirstPersonGeometry(false)
 	self.EstablishLeveledSpells()
 	self.PreloadSpells()
+	
+	spell CurrentEquippedLeftSpellMortal = playerRef.GetEquippedSpell(0)
+	; unequipping left hand spell so that spell cost abilities do not carry over
+	playerRef.UnequipSpell(CurrentEquippedLeftSpellMortal, 0)
+	
 	__prepped = true
 endFunction
 
@@ -611,6 +616,9 @@ function ActuallyShiftBackIfNecessary()
 	else
 		(DialogueGenericVampire as vampirequestscript).LastPower = playerRef.GetEquippedSpell(2)
 	endIf
+	
+	; unequipping left hand spell so that spell cost abilities do not carry over
+	playerRef.UnequipSpell(CurrentEquippedLeftSpell, 0)
 	
 	; TODO: add 
 	playerRef.RemoveSpell(LeveledDrainSpell)
