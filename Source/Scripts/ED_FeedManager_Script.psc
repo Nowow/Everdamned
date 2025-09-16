@@ -420,11 +420,11 @@ function HandleFeedMesmerized(actor FeedTarget)
 		;at 70+ light 30 meters 2000 unit
 		float __lightLevel = PlayerRef.GetLightLevel()
 		if __lightLevel <= 10.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0
 		elseif __lightLevel >= 70.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 1000.0
 		else
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (300.0*math.pow(2.718,0.0335*(__lightLevel - 10.0)) - 310.0)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0 + (83.763*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 70.0)
 		endif
 		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
@@ -490,11 +490,11 @@ function HandleDrainMesmerized(actor FeedTarget)
 		;at 70+ light 30 meters 2000 unit
 		float __lightLevel = PlayerRef.GetLightLevel()
 		if __lightLevel <= 10.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0
 		elseif __lightLevel >= 70.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 1000.0
 		else
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 35.0 + (300.0*math.pow(2.718,0.0335*(__lightLevel - 10.0)) - 310.0)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0 + (83.763*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 70.0)
 		endif
 		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
@@ -766,11 +766,11 @@ function HandleFeedSleep(actor FeedTarget)
 		;at 70+ light 30 meters 2000 unit
 		float __lightLevel = PlayerRef.GetLightLevel()
 		if __lightLevel <= 10.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0
 		elseif __lightLevel >= 70.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 1000.0
 		else
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0 + (172.18*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 179.0)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0 + (83.763*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 70.0)
 		endif
 		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
@@ -838,11 +838,11 @@ function HandleDrainSleep(actor FeedTarget)
 		;at 70+ light 30 meters 2000 unit
 		float __lightLevel = PlayerRef.GetLightLevel()
 		if __lightLevel <= 10.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0
 		elseif __lightLevel >= 70.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 2000.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 1000.0
 		else
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 150.0 + (172.18*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 179.0)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0 + (83.763*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 70.0)
 		endif
 		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
