@@ -407,8 +407,9 @@ function HandleFeedMesmerized(actor FeedTarget)
 	ED_Mechanics_Global_FeedType.SetValue(0.0)
 	
 	;start actual feed animation
-	PlayerRef.StartVampireFeed(FeedTarget)
-	;TODO: mark target as fed upon, when decided how that should impact feeding
+	;PlayerRef.StartVampireFeed(FeedTarget)
+	
+	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
 		
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -474,7 +475,11 @@ function HandleDrainMesmerized(actor FeedTarget)
 	ED_Mechanics_Global_FeedType.SetValue(0.0)
 	
 	;start actual feed animation
-	PlayerRef.StartVampireFeed(FeedTarget)
+	; but it seems to alert everyone around
+	;PlayerRef.StartVampireFeed(FeedTarget)
+	
+	
+	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
