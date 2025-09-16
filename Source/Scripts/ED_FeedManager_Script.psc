@@ -577,30 +577,54 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	;PlayerRef.StartVampireFeed(FeedTarget)
 	
 	float zOffset = FeedTarget.GetHeadingAngle(playerRef)
+	
+	float playerZ = playerRef.GetPositionZ()
+	float targetZ = FeedTarget.GetPositionZ()
+	
+	;if playerZ > targetZ
+	;	FeedTarget.SetPosition(FeedTarget.GetPositionX(), FeedTarget.GetPositionY(), playerRef.GetPositionZ())
+	;else
+	;	playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), FeedTarget.GetPositionZ())
+	;endif
+	;utility.wait(0.01)
 	FeedTarget.SetAngle(FeedTarget.GetAngleX(), FeedTarget.GetAngleY(), FeedTarget.GetAngleZ() + zOffset)
-
-	;playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
+	
+	bool __playerAnimationDriven = playerRef.GetAnimationVariableBool("bAnimationDriven")
+	bool __victimAnimationDriven = aFeedTarget.GetAnimationVariableBool("bAnimationDriven")
+	
+	debug.Trace("Everdamned DEBUG: player bAnimationDriven: " + __playerAnimationDriven)
+	debug.Trace("Everdamned DEBUG: victim bAnimationDriven: " + __victimAnimationDriven)
+	
+	
+	
 	bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
 
 	bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 	bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
+
+	__playerAnimationDriven = playerRef.GetAnimationVariableBool("bAnimationDriven")
+	__victimAnimationDriven = aFeedTarget.GetAnimationVariableBool("bAnimationDriven")
 	
 	debug.Trace("Everdamned DEBUG: player bIsSynced: " + __playerIsSynced)
 	debug.Trace("Everdamned DEBUG: victim bIsSynced: " + __victimIsSynced)
 	
+	debug.Trace("Everdamned DEBUG: player bAnimationDriven: " + __playerAnimationDriven)
+	debug.Trace("Everdamned DEBUG: victim bAnimationDriven: " + __victimAnimationDriven)
+	
+	
 	if __playerIsSynced && __victimIsSynced
-	else
+	elseif false
 		debug.Trace("Everdamned WARNING: Feed Manager does not detect paired social feed playing, using backup solo anims")
 		debug.Notification("EVD DEBUG: backup FEED anims")
 		
-		float backupAnimationVictimOffset = 60.0  ;  check
+		float backupAnimationVictimOffset = 50.0  ;  check
 
 		float playerAngleZsin = math.sin(playerRef.GetAngleZ())
 		float playerAngleZcos = math.cos(playerRef.GetAngleZ())
 		float targetX = playerRef.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
 		float targetY = playerRef.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
 		
-		FeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ(),\
+		FeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ() + 7.0,\
 								playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
 								700.0)
 		
@@ -609,7 +633,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 		FeedTarget.PlayIdle(ResetRoot)
 
 		playerRef.PlayIdle(ED_Idle_FeedKM_Solo_Player_Social)
-		FeedTarget.PlayIdle(IdleHandCut)
+		FeedTarget.PlayIdle(ED_Idle_FeedKM_Solo_Victim_Social)
 	endif
 	
 	; for vampire converting sidequest
@@ -1021,9 +1045,6 @@ state CombatDrain
 			endif
 		endif
 		
-		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
-		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
-		
 		debug.Trace("Everdamned DEBUG: Feed Manager commands combat feeding animation")
 		
 		; using IdleVampireStandingFeedFront_Loose because it 
@@ -1038,16 +1059,25 @@ state CombatDrain
 		; to let slow
 		utility.wait(0.1)
 		
-		;if timeWasSlowed
-		;	debug.Trace("Everdamned DEBUG: Feed Manager DISPELLED SLOW TIME EFFECT")
-		;endif
+		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
+	
+		float playerZ = playerRef.GetPositionZ()
+		float targetZ = aFeedTarget.GetPositionZ()
 		
-		;ED_SKSEnativebindings.SetTimeSlowdown(0.0, 0.0)
-		
+		if playerZ > targetZ
+			aFeedTarget.SetPosition(aFeedTarget.GetPositionX(), aFeedTarget.GetPositionY(), playerRef.GetPositionZ())
+		else
+			playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), aFeedTarget.GetPositionZ())
+		endif
+		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
+				
 		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
 		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 		bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
+		
+		debug.Trace("Everdamned DEBUG: player bIsSynced: " + __playerIsSynced)
+		debug.Trace("Everdamned DEBUG: victim bIsSynced: " + __victimIsSynced)
 		
 		debug.Trace("Everdamned DEBUG: bIsSynced: " + __animPlayed)
 		
@@ -1095,6 +1125,7 @@ idle property ED_Idle_FeedKM_Solo_Player_Ground auto
 idle property ED_Idle_FeedKM_Solo_Player_Bleedout auto
 idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
 idle property ED_Idle_FeedKM_Solo_Player_Social auto
+idle property ED_Idle_FeedKM_Solo_Victim_Social auto
 idle property ResetRoot auto
 spell property ED_BeingVampire_VampireFeed_VictimMark_Spell auto
 

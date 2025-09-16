@@ -89,6 +89,8 @@ idle property IdleHandCut auto
 idle property ED_Idle_FeedKM_Solo_Player_Ground auto
 idle property ED_Idle_FeedKM_Solo_Player_Bleedout auto
 idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
+idle property ED_Idle_FeedKM_Solo_Player_Social auto
+idle property ED_Idle_FeedKM_Solo_Victim_Social auto
 
 globalvariable property ED_Test_testglobal auto
 globalvariable property ED_Mechanics_Global_FeedType auto
@@ -115,6 +117,9 @@ armor property ArmorDragonplateCuirass auto
 
 race property DLC1VampireBeastRace auto
 
+
+
+
 int counter
 bool __switch
 art leart
@@ -133,8 +138,45 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		debug.Trace("Everdamned DEBUG: Race validated: " + ED_SKSEnativebindings.ValidateArmorRace(DLC1ClothesVampireLordRoyalArmor))
-		debug.Trace("Everdamned DEBUG: Race validated: " + ED_SKSEnativebindings.ValidateArmorRace(ArmorDragonplateCuirass))
+		;float backupAnimationVictimOffset = ED_Test_testglobal.GetValue()  ;  check
+
+		;float playerAngleZsin = math.sin(pl.GetAngleZ())
+		;float playerAngleZcos = math.cos(pl.GetAngleZ())
+		;float targetX = pl.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
+		;float targetY = pl.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
+		
+		;__targetThing.TranslateTo(targetX, targetY, pl.GetPositionZ() + 7.0,\
+		;						pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
+		;						700.0)
+		
+		
+		;float playerZ = pl.GetPositionZ()
+		;float targetZ = pl.GetPositionZ()
+		
+		;if math.abs(playerZ - targetZ) > 10.0
+		__targetThing.SetPosition(__targetThing.GetPositionX(), __targetThing.GetPositionY(), pl.GetPositionZ())
+		;endif
+								
+		bool __animPlayed = pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
+		
+		
+		; dont know if needed
+		
+		;__targetThing.SetDontMove(true)
+		;pl.SetDontMove(true)
+		
+		;pl.SetHeadTracking(false)
+		
+		;pl.PlayIdle(ResetRoot)
+		;__targetThing.PlayIdle(ResetRoot)
+
+		;pl.PlayIdle(ED_Idle_FeedKM_Solo_Player_Social)
+		;__targetThing.PlayIdle(ED_Idle_FeedKM_Solo_Victim_Social)
+		
+		;utility.wait(12.0)
+		;__targetThing.SetDontMove(false)
+		;pl.SetDontMove(false)
+		
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
@@ -287,14 +329,14 @@ Event OnKeyDown(int keyCode)
 		;debug.Trace("Everdamned DEBUG: Var: " + __var)
 		
 		if !__switch
-			ED_SKSEnativebindings.SetTimeSlowdown(0.25, 0.6)
+			;ED_SKSEnativebindings.SetTimeSlowdown(0.25, 0.6)
 			;__targetThing.playidle(resetroot)	
 			;bool __idlePlayed = __targetThing.PlayIdle(IdleBoyRitual)
 			;utility.wait(0.5)
 			;__targetThing.TranslateToRef(playerRef, 100.0)
 			
 		else
-			ED_SKSEnativebindings.SetTimeSlowdown(0.0, 0.0)
+			;ED_SKSEnativebindings.SetTimeSlowdown(0.0, 0.0)
 			
 	
 		endif
