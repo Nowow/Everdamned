@@ -141,42 +141,11 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		float backupAnimationVictimOffset = ED_Test_testglobal.GetValue()  ;  check
-
-		float playerAngleZsin = math.sin(pl.GetAngleZ())
-		float playerAngleZcos = math.cos(pl.GetAngleZ())
-		float targetX = pl.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
-		float targetY = pl.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
 		
-		__targetThing.TranslateTo(targetX + ED_Test_testglobalX.GetValue(),\
-							      targetY + ED_Test_testglobalY.GetValue(),\
-								  pl.GetPositionZ() + ED_Test_testglobalZ.GetValue(),\
-								  pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
-								  700.0)
-		
+		ED_Mechanics_FeedDialogue_Message_SomeTestM.ShowAsHelpMessage("ed_alalalallaaa", 5.0, 1.0, 1)
 
 		
-		; dont know if needed
 		
-		__targetThing.SetDontMove(true)
-		;pl.SetDontMove(true)
-		
-		;pl.SetHeadTracking(false)
-		
-		pl.PlayIdle(ResetRoot)
-		__targetThing.PlayIdle(ResetRoot)
-
-		pl.PlayIdle(ED_Idle_FeedKM_Solo_Player_Social)
-		__targetThing.PlayIdle(ED_Idle_FeedKM_Solo_Victim_Social)
-		
-		bool __inIdle = __targetThing.GetAnimationVariableBool("bIdlePlaying")
-		
-		while __inIdle
-			debug.Trace("Everdamned DEBUG: victim is in idle")
-			utility.wait(0.2)
-		endwhile
-		
-		__targetThing.SetDontMove(false)
 		;pl.SetDontMove(false)
 		
 		

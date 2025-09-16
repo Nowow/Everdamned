@@ -145,6 +145,13 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	
 	; faction relationships
 	CalculateFactionDifficulty(akSeducer, akSeduced)
+	
+	if SeductionFactionScore > 0
+		ConditionalsScript.Bonus_Faction = true
+	elseif SeductionFactionScore < 0
+		ConditionalsScript.Penalty_Faction = true
+	endif
+	
 	__playerSeductionScore += SeductionFactionScore
 	
 	; if BlueBlood
@@ -157,29 +164,49 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 
 	; AI data
 	
+	bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(akSeduced, "6")
+	bool __hasRally = PO3_SKSEFunctions.HasMagicEffectWithArchetype(akSeduced, "38")
 	
+	int __morality = akSeduced.GetAV("Morality") as int
+	int __aggression = akSeduced.GetAV("Aggression") as int
+	int __confidence = akSeduced.GetAV("Confidence") as int 
 	
-	__playerSeductionScore += -5 *  (akSeduced.GetAV("Morality") as int)
-	__playerSeductionScore += -10 * (akSeduced.GetAV("Aggression") as int)
+	int __AIscore
 	
-	int seducedCondifence = akSeduced.GetAV("Confidence") as int 
-	if seducedCondifence == 0
-		; cowardly
-		__playerSeductionScore += -20
+	if __hasCalm
+		ConditionalsScript.Bonus_IllusionMood = true
+		__AIscore += -2  * __morality
+	else
+		__AIscore += -10 * __aggression
+		__AIscore += -5  * __morality
 	endif
+
+	
+	if __hasRally
+		__AIscore += 20
+		ConditionalsScript.Bonus_IllusionMood = true
+	elseif __confidence == 0
+		; cowardly
+		__AIscore += -20
+	endif
+	
+	if __AIscore <= -20
+		ConditionalsScript.Penalty_AIData = true
+	endif
+	
+	__playerSeductionScore += __AIscore
 	
 	; PERKS
-	if akSeducer.HasPerk(Allure)
-		__playerSeductionScore += 15
-	endif
 	
 	if akSeducer.HasPerk(Persuasion)
 		__playerSeductionScore += 10
+		ConditionalsScript.Bonus_SpeechPerks = true
 	endif
 	
-	if akSeducer.HasPerk(HypnoticGaze)
-		__playerSeductionScore += 10
-	endif
+	;if akSeducer.HasPerk(HypnoticGaze)
+	;	__playerSeductionScore += 10
+	;	ConditionalsScript.Bonus_IllusionPerks = true
+	;endif
 	
 	;if akSeducer.HasPerk(Intimidation)
 	;	Intimidation_Intimidation_Score_Mod = 15
@@ -238,7 +265,11 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 			__playerSeductionScore += 10
 			ConditionalsScript.Bonus_Dibella = true
 		endif
-	endif	
+		if akSeducer.HasPerk(Allure)
+			__playerSeductionScore += 15
+			ConditionalsScript.Bonus_SpeechPerks = true
+		endif
+	endif
 	
 	
 	if akSeduced.IsInFaction(ED_Mechanics_FeedDialogue_Seduced_Fac)
@@ -304,6 +335,7 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 			bool PlayerHasCharityBuff = akSeducer.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_GiftOfCharity)
 			if PlayerHasCharityBuff
 				SeductionFactionScore += 20
+				ConditionalsScript.Bonus_GiftOfCharity = true
 			endif
 	
 	elseif akSeduced.IsInFaction(JobJarlFaction)
@@ -342,6 +374,8 @@ bool Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 		return true
 	endif
 	
+	ConditionalsScript.ResetFlags()
+	
 	int PlayerSeductionScore = CalculateScore(akSeducer, akSeduced)
 	
 	debug.Trace("Everdamned INFO: Seduction score is: " + PlayerSeductionScore)
@@ -357,7 +391,13 @@ bool Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_HighRelationship: " + ConditionalsScript.Bonus_HighRelationship)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_TargetHasSomeone: " + ConditionalsScript.Penalty_TargetHasSomeone)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_LowRelationship: " + ConditionalsScript.Penalty_LowRelationship)
-
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Faction: " + ConditionalsScript.Bonus_Faction)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_Faction: " + ConditionalsScript.Penalty_Faction)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_GiftOfCharity: " + ConditionalsScript.Bonus_GiftOfCharity)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_IllusionMood: " + ConditionalsScript.Bonus_IllusionMood)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_SpeechPerks: " + ConditionalsScript.Bonus_SpeechPerks)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_AIData: " + ConditionalsScript.Penalty_AIData)
+	
 	;if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
 	;	debug.trace("Everdamned INFO: Feed dialogue score override engaged, not actually changing results")
 	;	return true
