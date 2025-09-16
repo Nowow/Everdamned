@@ -117,6 +117,9 @@ armor property ArmorDragonplateCuirass auto
 
 race property DLC1VampireBeastRace auto
 
+globalvariable property ED_Test_testglobalX auto
+globalvariable property ED_Test_testglobalY auto
+globalvariable property ED_Test_testglobalZ auto
 
 
 
@@ -138,43 +141,42 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		;float backupAnimationVictimOffset = ED_Test_testglobal.GetValue()  ;  check
+		float backupAnimationVictimOffset = ED_Test_testglobal.GetValue()  ;  check
 
-		;float playerAngleZsin = math.sin(pl.GetAngleZ())
-		;float playerAngleZcos = math.cos(pl.GetAngleZ())
-		;float targetX = pl.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
-		;float targetY = pl.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
+		float playerAngleZsin = math.sin(pl.GetAngleZ())
+		float playerAngleZcos = math.cos(pl.GetAngleZ())
+		float targetX = pl.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
+		float targetY = pl.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
 		
-		;__targetThing.TranslateTo(targetX, targetY, pl.GetPositionZ() + 7.0,\
-		;						pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
-		;						700.0)
+		__targetThing.TranslateTo(targetX + ED_Test_testglobalX.GetValue(),\
+							      targetY + ED_Test_testglobalY.GetValue(),\
+								  pl.GetPositionZ() + ED_Test_testglobalZ.GetValue(),\
+								  pl.GetAngleX(), pl.GetAngleY(), pl.GetAngleZ() - 180.0,\
+								  700.0)
 		
-		
-		;float playerZ = pl.GetPositionZ()
-		;float targetZ = pl.GetPositionZ()
-		
-		;if math.abs(playerZ - targetZ) > 10.0
-		__targetThing.SetPosition(__targetThing.GetPositionX(), __targetThing.GetPositionY(), pl.GetPositionZ())
-		;endif
-								
-		bool __animPlayed = pl.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, __targetThing)
-		
+
 		
 		; dont know if needed
 		
-		;__targetThing.SetDontMove(true)
+		__targetThing.SetDontMove(true)
 		;pl.SetDontMove(true)
 		
 		;pl.SetHeadTracking(false)
 		
-		;pl.PlayIdle(ResetRoot)
-		;__targetThing.PlayIdle(ResetRoot)
+		pl.PlayIdle(ResetRoot)
+		__targetThing.PlayIdle(ResetRoot)
 
-		;pl.PlayIdle(ED_Idle_FeedKM_Solo_Player_Social)
-		;__targetThing.PlayIdle(ED_Idle_FeedKM_Solo_Victim_Social)
+		pl.PlayIdle(ED_Idle_FeedKM_Solo_Player_Social)
+		__targetThing.PlayIdle(ED_Idle_FeedKM_Solo_Victim_Social)
 		
-		;utility.wait(12.0)
-		;__targetThing.SetDontMove(false)
+		bool __inIdle = __targetThing.GetAnimationVariableBool("bIdlePlaying")
+		
+		while __inIdle
+			debug.Trace("Everdamned DEBUG: victim is in idle")
+			utility.wait(0.2)
+		endwhile
+		
+		__targetThing.SetDontMove(false)
 		;pl.SetDontMove(false)
 		
 		

@@ -581,39 +581,25 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	float playerZ = playerRef.GetPositionZ()
 	float targetZ = FeedTarget.GetPositionZ()
 	
-	;if playerZ > targetZ
-	;	FeedTarget.SetPosition(FeedTarget.GetPositionX(), FeedTarget.GetPositionY(), playerRef.GetPositionZ())
-	;else
-	;	playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), FeedTarget.GetPositionZ())
-	;endif
+	if playerZ > targetZ
+		FeedTarget.SetPosition(FeedTarget.GetPositionX(), FeedTarget.GetPositionY(), playerRef.GetPositionZ())
+	else
+		playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), FeedTarget.GetPositionZ())
+	endif
 	;utility.wait(0.01)
 	FeedTarget.SetAngle(FeedTarget.GetAngleX(), FeedTarget.GetAngleY(), FeedTarget.GetAngleZ() + zOffset)
-	
-	bool __playerAnimationDriven = playerRef.GetAnimationVariableBool("bAnimationDriven")
-	bool __victimAnimationDriven = aFeedTarget.GetAnimationVariableBool("bAnimationDriven")
-	
-	debug.Trace("Everdamned DEBUG: player bAnimationDriven: " + __playerAnimationDriven)
-	debug.Trace("Everdamned DEBUG: victim bAnimationDriven: " + __victimAnimationDriven)
-	
 	
 	
 	bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
 
 	bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
-	bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
-
-	__playerAnimationDriven = playerRef.GetAnimationVariableBool("bAnimationDriven")
-	__victimAnimationDriven = aFeedTarget.GetAnimationVariableBool("bAnimationDriven")
+	bool __victimIsSynced = FeedTarget.GetAnimationVariableBool("bIsSynced")
 	
 	debug.Trace("Everdamned DEBUG: player bIsSynced: " + __playerIsSynced)
 	debug.Trace("Everdamned DEBUG: victim bIsSynced: " + __victimIsSynced)
 	
-	debug.Trace("Everdamned DEBUG: player bAnimationDriven: " + __playerAnimationDriven)
-	debug.Trace("Everdamned DEBUG: victim bAnimationDriven: " + __victimAnimationDriven)
-	
-	
 	if __playerIsSynced && __victimIsSynced
-	elseif false
+	else
 		debug.Trace("Everdamned WARNING: Feed Manager does not detect paired social feed playing, using backup solo anims")
 		debug.Notification("EVD DEBUG: backup FEED anims")
 		
@@ -624,9 +610,11 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 		float targetX = playerRef.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
 		float targetY = playerRef.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
 		
-		FeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ() + 7.0,\
+		FeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ() + 5.0,\
 								playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
 								700.0)
+		
+		ED_Mechanics_Spell_SetDontMove.Cast(FeedTarget, FeedTarget)
 		
 		; dont know if needed
 		playerRef.PlayIdle(ResetRoot)
@@ -1128,6 +1116,7 @@ idle property ED_Idle_FeedKM_Solo_Player_Social auto
 idle property ED_Idle_FeedKM_Solo_Victim_Social auto
 idle property ResetRoot auto
 spell property ED_BeingVampire_VampireFeed_VictimMark_Spell auto
+spell property ED_Mechanics_Spell_SetDontMove auto
 
 spell property ED_FeralBeast_ApplyHasBeenEaten_Trigger_Spell auto
 Race Property VampireGarkainBeastRace auto
@@ -1163,6 +1152,8 @@ spell property ED_VampirePowers_Amaranth_Disintegrate_Spell auto
 spell property ED_VampirePowers_Ab_Masquerade_Spell auto
 spell property ED_Mechanics_DrainAttributeRestore_Spell auto
 spell property ED_Mechanics_Spell_TimeDilationCleaner auto
+spell property ED_Mechanics_Spell_CheckIfInPairedAnimation auto
+magiceffect property ED_Mechanics_Spell_CheckIfInPairedAnimation_Effect auto
 
 keyword property ED_Mechanics_Keyword_BystanderStart auto
 keyword property ED_Mechanics_Keyword_PsychicVampireStart auto

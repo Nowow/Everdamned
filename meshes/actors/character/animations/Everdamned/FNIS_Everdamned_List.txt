@@ -211,7 +211,7 @@ b -a,TSoundPlay.NPCKillStruggle/0.0,Ted_sheatheweapons/0.01,TSoundPlay.NPCKillBo
 b -a,Ted_sheatheweapons/0.01,Ted_breathSounds/1.067,Ted_playsound_bleedoutrustle/2.5,TSoundPlay.NPCKillStruggle/3.033000,Ted_impact_bloodgushshort/5.233,Ted_socialfeedbite/5.233,Ted_breathSounds/7.767000,Ted_feedsatiation/9.570000,Ted_socialfeedsatiation/9.570000,Ted_playsound_bleedoutrustle/10.233000,Ted_socialfeedfinished/11.99 ed_feedkms_player_solo_social ed_feedkms_player_solo_social.hkx
 
 ' feed killmove victim solo part ground
-b -a ed_feedkms_victim_solo_social ed_feedkms_victim_solo_social.hkx
+b -a,AVbIdlePlaying ed_feedkms_victim_solo_social ed_feedkms_victim_solo_social.hkx
 
 ' ----------------- END Feed killmoves solo player part ------------------
 
