@@ -1,5 +1,6 @@
 Scriptname ED_EyesOfTheMoonRuminate_Script extends activemagiceffect  
 
+bool __idlePlayed
 int __stage
 message __showNext_Message
 
@@ -11,6 +12,26 @@ bool __dibellaBlessing
 bool __dibellaAmulet
 bool __dibellaAgent
 bool __usedIllusion
+
+bool __badTaken
+bool __badSpeech
+bool __badMood
+bool __badLowRelationship
+bool __badFaction
+bool __badClothes
+bool __badNothing
+
+bool __adviceThane
+bool __adviceSpeechEnch
+bool __advicePerks
+bool __adviceMood
+bool __adviceInns
+bool __adviceFaction
+bool __adviceClothes
+bool __adviceCharity
+bool __adviceDibella
+
+
 Event OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate effect started!")
@@ -20,17 +41,88 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	if playerRef.HasMagicEffect(ED_VampirePowers_EyesOfTheMoon_Spell_Ruminate_Effect_StandingMarker)
 		playerRef.PlayIdle(IdleStudy)
+		__idlePlayed = true
 	endif
 	FadeToBlackHoldImod.ApplyCrossFade(3.0)
 	
 	RegisterForSingleUpdate(4.0)
 	
+	SpentCache.Revert()
+	
+	ChooseGoodMessage()
+	if !__showNext_Message
+		ChooseBadMessage()
+		__stage = 1
+	endif
+	
+endevent
+
+
+event OnUpdate()
+
+	if __stage == 0
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 0")
+		
+		message.ResetHelpMessage("ed_ruminate_stage0")
+		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage0", 5.0, 1.0, 1)
+		
+		RegisterForSingleUpdate(utility.randomfloat(7.0,8.5))
+		
+		ChooseBadMessage()
+		
+		__stage = 1
+		
+	elseif __stage == 1
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 1")
+		
+		message.ResetHelpMessage("ed_ruminate_stage1")
+		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage1", 5.0, 1.0, 1)
+		
+		RegisterForSingleUpdate(utility.randomfloat(7.0,8.5))
+		
+		ChooseAdvice()
+		
+		if ConditionalsScript.LastScore_Category ==  4
+			__stage = 2
+			debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate found that you failed to bad last time, you'll get 2 advices")
+		else
+			__stage = 3
+		endif
+			
+		
+		
+	elseif __stage == 2
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 2")
+		
+		message.ResetHelpMessage("ed_ruminate_stage3")
+		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage3", 5.0, 1.0, 1)
+		RegisterForSingleUpdate(utility.randomfloat(7.0,8.5))
+		
+		SpentCache.AddForm(__showNext_Message)
+		ChooseAdvice()
+		
+		__stage = 3
+		
+	else
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 3 - final")
+		
+		message.ResetHelpMessage("ed_ruminate_stage3")
+		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage3", 5.0, 1.0, 1)
+		
+		utility.wait(6.0)
+		self.Dispel()
+	endif
+
+endevent
+
+
+function ChooseGoodMessage()
 	MessageCache.Revert()
 	
 	__hasAllure = playerRef.HasPerk(Allure)
 	__hasPersuasion = playerRef.HasPerk(Persuasion)
 	__hasNobleClothes = playerRef.WornHasKeyword(ClothingRich)
-	__goodSpeech = playerRef.GetActorValue("Speechcraft") >= 60.0
+	__goodSpeech = playerRef.GetActorValue("Speechcraft") >= 60.0 && ConditionalsScript.LastScore_Category < 3
 	__dibellaBlessing = playerRef.HasMagicEffect(FortifyPersuasionFFSelf)
 	__dibellaAgent = playerRef.HasMagicEffect(PerkT01Dibella)
 	__dibellaAmulet = playerRef.IsEquipped(ReligiousDibellaBeauty)
@@ -57,137 +149,125 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 		MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Good_DibellaAgent)
 	endif
 	
-	int __nextMessageIndex = utility.randomint(0, MessageCache.GetSize() - 1)
+	int __cacheSize = MessageCache.GetSize()
+	int __nextMessageIndex = utility.randomint(0, __cacheSize - 1)
 	__showNext_Message = MessageCache.GetAt(__nextMessageIndex) as message
-	debug.Trace("Everdamned DEBUG: Message index: " + __nextMessageIndex + ", message: " + __showNext_Message)
+	debug.Trace("Everdamned DEBUG: Cache size: " + __cacheSize+ ", message index: " + __nextMessageIndex + ", message: " + __showNext_Message)
+
+endfunction
+
+
+function ChooseBadMessage()
+	MessageCache.Revert()
+		
+	__badClothes = !__hasNobleClothes
+	__badSpeech = playerRef.GetActorValue("Speechcraft") < 60.0
+	__badTaken = ConditionalsScript.Penalty_TargetHasSomeone
+	__badLowRelationship = ConditionalsScript.Penalty_LowRelationship
+	__badFaction = ConditionalsScript.Penalty_Faction
+	__badMood = ConditionalsScript.Penalty_AIData
 	
-endevent
+	if __badClothes
+		MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Clothes)
+	endif
+	if __badSpeech
+		MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Speech)
+	endif
+	if __badTaken
+		MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Taken)
+	endif
+	if __badLowRelationship
+		MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_LowRelationship)
+	endif
+	if __badFaction
+		MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Faction)
+	endif
+	if __badMood
+		MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Mood)
+	endif
+	
+	int __cacheSize = MessageCache.GetSize()
+	int __nextMessageIndex = utility.randomint(0, __cacheSize - 1)
+	__showNext_Message = MessageCache.GetAt(__nextMessageIndex) as message
+	debug.Trace("Everdamned DEBUG: Cache size: " + __cacheSize+ ", message index: " + __nextMessageIndex + ", message: " + __showNext_Message)
+	
+	if !__showNext_Message
+		__badNothing = true
+		__showNext_Message = ED_Mechanics_FeedDialogue_Message_Bad_Nothing
+	endif
+endfunction
 
 
-bool __badTaken
-bool __badSpeech
-bool __badMood
-bool __badLowRelationship
-bool __badFaction
-bool __badClothes
-bool __adviceThane
-bool __adviceSpeechEnch
-bool __advicePerks
-bool __adviceMood
-bool __adviceInns
-bool __adviceFaction
-bool __adviceClothes
-bool __adviceCharity
-event OnUpdate()
-
-	if __stage == 0
-		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 0")
+function ChooseAdvice()
+	MessageCache.Revert()
 		
-		message.ResetHelpMessage("ed_ruminate_stage0")
-		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage0", 5.0, 1.0, 1)
-		
-		RegisterForSingleUpdate(utility.randomfloat(7.0,8.5))
-		
-		MessageCache.Revert()
-		
-		__badClothes = !__hasNobleClothes
-		__badSpeech = !__goodSpeech
-		__badTaken = ConditionalsScript.Penalty_TargetHasSomeone
-		__badLowRelationship = ConditionalsScript.Penalty_LowRelationship
-		__badFaction = ConditionalsScript.Penalty_Faction
-		__badMood = ConditionalsScript.Penalty_AIData
-		
-		if __badClothes
-			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Clothes)
-		endif
-		if __badSpeech
-			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Speech)
-		endif
-		if __badTaken
-			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Taken)
-		endif
-		if __badLowRelationship
-			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_LowRelationship)
-		endif
-		if __badFaction
-			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Faction)
-		endif
-		if __badMood
-			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Bad_Mood)
-		endif
-		
-		int __nextMessageIndex = utility.randomint(0, MessageCache.GetSize() - 1)
-		__showNext_Message = MessageCache.GetAt(__nextMessageIndex) as message
-		debug.Trace("Everdamned DEBUG: Message index: " + __nextMessageIndex + ", message: " + __showNext_Message)
-		
-		__stage = 1
-		
-	elseif __stage == 1
-		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 1")
-		
-		message.ResetHelpMessage("ed_ruminate_stage1")
-		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage1", 5.0, 1.0, 1)
-		
-		RegisterForSingleUpdate(utility.randomfloat(7.0,8.5))
-		
-		MessageCache.Revert()
-		
-		__adviceThane = !(ConditionalsScript.Bonus_Thane)
-		__advicePerks = !__hasPersuasion && !__hasAllure
-		__adviceClothes = !__hasNobleClothes &&  __showNext_Message != ED_Mechanics_FeedDialogue_Message_Bad_Clothes
-		__adviceMood = __showNext_Message != ED_Mechanics_FeedDialogue_Message_Bad_Mood
-		__adviceCharity = !(ConditionalsScript.Bonus_GiftOfCharity)
-		__adviceInns = true
-		__adviceFaction = true
-		__adviceSpeechEnch = true
-		
-		if __adviceThane
+	__adviceThane = !(ConditionalsScript.Bonus_Thane)
+	__advicePerks = !__hasPersuasion && !__hasAllure
+	__adviceClothes = !__hasNobleClothes &&  __showNext_Message != ED_Mechanics_FeedDialogue_Message_Bad_Clothes
+	__adviceMood = __showNext_Message != ED_Mechanics_FeedDialogue_Message_Bad_Mood
+	__adviceCharity = !(ConditionalsScript.Bonus_GiftOfCharity)
+	__adviceInns = __badNothing
+	__adviceFaction = true
+	__adviceSpeechEnch = true
+	__adviceDibella = !__dibellaBlessing || !__dibellaAgent || !__dibellaAmulet
+	
+	if __adviceThane
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Thane)
 			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_Thane)
 		endif
-		if __advicePerks
+	endif
+	if __advicePerks
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Perks)
 			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_Perks)
 		endif
-		if __adviceClothes
+	endif
+	if __adviceClothes
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Clothes)
 			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_Clothes)
 		endif
-		if __adviceMood
+	endif
+	if __adviceMood
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Mood)
 			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_Mood)
 		endif
-		if __adviceCharity
+	endif
+	if __adviceCharity
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Charity)
 			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_Charity)
 		endif
-		if __adviceInns
+	endif
+	if __adviceInns
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Inns)
 			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_Inns)
 		endif
-		if __adviceFaction
+	endif
+	if __adviceFaction
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Faction)
 			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_Faction)
 		endif
-		if __adviceSpeechEnch
+	endif
+	if __adviceSpeechEnch
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_SpeechEnch)
 			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_SpeechEnch)
 		endif
-		
-		int __nextMessageIndex = utility.randomint(0, MessageCache.GetSize() - 1)
-		__showNext_Message = MessageCache.GetAt(__nextMessageIndex) as message
-		debug.Trace("Everdamned DEBUG: Message index: " + __nextMessageIndex + ", message: " + __showNext_Message)
-		
-		__stage = 2
-	else
-		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 2 - final")
-		
-		message.ResetHelpMessage("ed_ruminate_stage2")
-		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage2", 5.0, 1.0, 1)
-		
-		utility.wait(6.0)
-		self.Dispel()
 	endif
-
-endevent
+	if __adviceDibella
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Dibella)
+			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_Dibella)
+		endif
+	endif
+	
+	int __cacheSize = MessageCache.GetSize()
+	int __nextMessageIndex = utility.randomint(0, __cacheSize - 1)
+	__showNext_Message = MessageCache.GetAt(__nextMessageIndex) as message
+	debug.Trace("Everdamned DEBUG: Cache size: " + __cacheSize+ ", message index: " + __nextMessageIndex + ", message: " + __showNext_Message)
+endfunction
 
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	
 	ImageSpaceModifier.RemoveCrossFade(2.0)
-	if playerRef.HasMagicEffect(ED_VampirePowers_EyesOfTheMoon_Spell_Ruminate_Effect_StandingMarker)
+	if __idlePlayed
 		playerRef.PlayIdle(IdleStudy_exit)
 	endif
 	
@@ -206,6 +286,7 @@ magiceffect property ED_VampirePowers_EyesOfTheMoon_Spell_Ruminate_Effect_Standi
 ED_FeedDialogueConditionals_Script property ConditionalsScript auto
 
 formlist property MessageCache auto
+formlist property SpentCache auto
 message property ED_Mechanics_FeedDialogue_Message_Good_Speech auto
 message property ED_Mechanics_FeedDialogue_Message_Good_Persuasion auto
 message property ED_Mechanics_FeedDialogue_Message_Good_Illusion auto
@@ -221,6 +302,8 @@ message property ED_Mechanics_FeedDialogue_Message_Bad_Mood auto
 message property ED_Mechanics_FeedDialogue_Message_Bad_LowRelationship auto
 message property ED_Mechanics_FeedDialogue_Message_Bad_Faction auto
 message property ED_Mechanics_FeedDialogue_Message_Bad_Clothes auto
+message property ED_Mechanics_FeedDialogue_Message_Bad_Nothing auto
+
 
 message property ED_Mechanics_FeedDialogue_Message_Advice_Thane auto
 message property ED_Mechanics_FeedDialogue_Message_Advice_SpeechEnch auto
@@ -230,6 +313,8 @@ message property ED_Mechanics_FeedDialogue_Message_Advice_Inns auto
 message property ED_Mechanics_FeedDialogue_Message_Advice_Faction auto
 message property ED_Mechanics_FeedDialogue_Message_Advice_Clothes auto
 message property ED_Mechanics_FeedDialogue_Message_Advice_Charity auto
+message property ED_Mechanics_FeedDialogue_Message_Advice_Dibella auto
+
 
 perk property Allure auto
 perk property Persuasion auto
