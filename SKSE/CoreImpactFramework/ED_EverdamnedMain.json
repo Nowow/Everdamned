@@ -1,10 +1,19 @@
 {
   "ImpactMapping": [
 	{
+      "Comment": "Silver Weapons hit regularly",
+      "Priority": 120,
+	  "Filters": {
+        "Attacks": ["Regular", "Power"],
+		"WeaponKeywords": ["Skyrim.esm:0x10AA1A"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"]
+      },
+	  "Modifiers": {}
+    },
+	{
       "Comment": "When in Necrotic Flesh, exclude magic from other fx",
       "Priority": 110,
 	  "Filters": {
-        "Blocked": ["No"],
 		"WeaponsType": ["Magic"],
 		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"]
       },
@@ -74,6 +83,16 @@
   ],
   "HitMapping": [
 	{
+      "Comment": "No Large Recoil for Silver Weapons",
+      "Priority": 21,
+      "Class": "Everdamned_NecroticFleshRecoil",
+      "Filters": {
+		"WeaponKeywords": ["Skyrim.esm:0x10AA1A"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"]
+      },
+      "Modifiers": {}
+    },
+	{
       "Comment": "Large Recoil on powerattack on hitting Necrotic Flesh, chance to disarm on attached magiceffect",
       "Priority": 20,
       "Class": "Everdamned_NecroticFleshRecoil",
@@ -86,6 +105,16 @@
       "Modifiers": {
         "Spells": ["Everdamned.esp:0x828119"]
       }
+    },
+	{
+      "Comment": "No Recoil for Silver Weapons",
+      "Priority": 11,
+      "Class": "Everdamned_NecroticFleshRecoil2",
+      "Filters": {
+        "WeaponKeywords": ["Skyrim.esm:0x10AA1A"],
+		"Keywords": ["ED_Mechanics_Keyword_NecroticFleshCIF"]
+      },
+      "Modifiers": {}
     },
     {
       "Comment": "Recoil on hitting Necrotic Flesh",
