@@ -586,10 +586,13 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	float playerZ = playerRef.GetPositionZ()
 	float targetZ = FeedTarget.GetPositionZ()
 	
-	if playerZ > targetZ
-		FeedTarget.SetPosition(FeedTarget.GetPositionX(), FeedTarget.GetPositionY(), playerRef.GetPositionZ())
-	else
-		playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), FeedTarget.GetPositionZ())
+	bool __shouldCorrect = math.abs(playerZ - targetZ) >= 5.0
+	if __shouldCorrect
+		if playerZ > targetZ
+			FeedTarget.SetPosition(FeedTarget.GetPositionX(), FeedTarget.GetPositionY(), playerRef.GetPositionZ())
+		else
+			playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), FeedTarget.GetPositionZ())
+		endif
 	endif
 	;utility.wait(0.01)
 	FeedTarget.SetAngle(FeedTarget.GetAngleX(), FeedTarget.GetAngleY(), FeedTarget.GetAngleZ() + zOffset)
