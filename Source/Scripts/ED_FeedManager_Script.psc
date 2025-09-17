@@ -1029,8 +1029,26 @@ state CombatDrain
 			;jump feed / ground feed
 			debug.Trace("Everdamned DEBUG: Feed Manager determined target is NOT bleeding out, therefore staggered")
 			
+			int __animSetting = ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue() as int
+			int __whichAnim
 			
-			if playerRef.GetActorBase().GetSex() == 0
+			if __animSetting == 3
+				__whichAnim = utility.randomint(0, 1)
+			elseif __animSetting == 2
+				if playerRef.GetActorBase().GetSex() == 0
+					__whichAnim = 0  ; ground feed
+				else
+					__whichAnim = 1  ; jump feed
+				endif
+			else
+				if playerRef.GetActorBase().GetSex() == 0
+					__whichAnim = 1  ; jump feed
+				else
+					__whichAnim = 0  ; ground feed
+				endif
+			endif
+			
+			if __whichAnim == 0
 				backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Ground
 				backupAnimationVictimOffset = 52.0
 				ED_Mechanics_Global_FeedType.SetValue(2.0)
@@ -1039,6 +1057,7 @@ state CombatDrain
 				backupAnimationVictimOffset = 65.0
 				ED_Mechanics_Global_FeedType.SetValue(4.0)
 			endif
+			
 		endif
 		
 		debug.Trace("Everdamned DEBUG: Feed Manager commands combat feeding animation")
@@ -1143,6 +1162,7 @@ message property DLC1VampirePerkEarned auto
 message property ED_Mechanics_Message_LifebloodDrained auto
 message property ED_Mechanics_Message_CombatFeedFailed auto
 
+globalvariable property ED_Mechanics_Global_MCM_CombatDrainAnim auto
 globalvariable property ED_Mechanics_Global_FeedType auto
 globalvariable property ED_Mechanics_Global_VampireFeedBystanderRadius auto
 globalvariable property ED_Mechanics_SkillTree_Level_Global auto

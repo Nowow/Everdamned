@@ -135,7 +135,7 @@ function OnStartup()
 	ED_Art_Shader_NecroticFleshToggleOnStoneskin.Play(playerRef, 5.0)
 	;ED_Art_Shader_NecroticFleshToggleOn.Play(playerRef, 1.0)
 	;utility.wait(0.3)
-	;addStonyOverlays() ; and skin blend
+	addStonyOverlays() ; and skin blend
 	;ED_Art_Shader_NecroticFleshToggleOn.Stop(playerRef)
 	
 endfunction
