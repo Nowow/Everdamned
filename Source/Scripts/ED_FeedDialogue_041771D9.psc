@@ -2,6 +2,16 @@
 ;NEXT FRAGMENT INDEX 3
 Scriptname ED_FeedDialogue_041771D9 Extends TopicInfo Hidden
 
+;BEGIN FRAGMENT Fragment_2
+Function Fragment_2(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(1)
+Game.GetPlayer().DispelSpell(ED_VampirePowers_EyesOfTheMoon_Spell_Ruminate_Cooldown)
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_1
 Function Fragment_1(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
@@ -17,15 +27,6 @@ if ED_Mechanics_Quest_RollFeedDialogueScore.IsStageDone(100)
 else
   debug.Trace("Everdamned ERROR: Feed Dialogue determined Score Roll was FAILED")
 endif
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_2
-Function Fragment_2(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
-ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.SetValue(1)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -49,3 +50,5 @@ Actor Property PlayerRef  Auto
 quest property ED_Mechanics_Quest_RollFeedDialogueScore auto
 
 globalvariable property ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState auto
+
+SPELL Property ED_VampirePowers_EyesOfTheMoon_Spell_Ruminate_Cooldown  Auto  

@@ -36,6 +36,8 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate effect started!")
 	
+	ED_VampirePowers_EyesOfTheMoon_Spell_Ruminate_Cooldown.cast(playerRef)
+	
 	Game.ForceThirdPerson()
 	Game.DisablePlayerControls(true, true, true, false, true, true, true, true)
 	
@@ -283,6 +285,7 @@ idle property IdleStudy_exit auto
 imagespacemodifier property FadeToBlackHoldImod auto
 spell property ED_VampirePowers_EyesOfTheMoon_Spell_Ruminate auto
 magiceffect property ED_VampirePowers_EyesOfTheMoon_Spell_Ruminate_Effect_StandingMarker auto
+spell property ED_VampirePowers_EyesOfTheMoon_Spell_Ruminate_Cooldown auto
 ED_FeedDialogueConditionals_Script property ConditionalsScript auto
 
 formlist property MessageCache auto
