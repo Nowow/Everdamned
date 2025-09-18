@@ -1077,7 +1077,7 @@ state CombatDrain
 		ED_SKSEnativebindings.DispelAllSlowTimeEffects()
 		ED_Mechanics_Spell_TimeDilationCleaner.Cast(playerRef)
 		; to let slow
-		utility.wait(0.1)
+		;utility.wait(0.1)
 		
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
 		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
