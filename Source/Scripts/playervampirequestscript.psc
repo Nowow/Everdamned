@@ -464,7 +464,7 @@ function VampireProgression(actor Player, Int VampireStage)
         Player.RemoveSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell)
         Player.AddSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage1_Spell, false)
         
-        if Player.HasPerk(ED_Mechanics_Ab_ChainedBeast_Perk)
+        if Player.HasPerk(ED_Mechanics_Ab_ChainedBeast_Perk) && ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() != 1
             Player.AddSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
         endif
         
@@ -510,6 +510,8 @@ globalvariable property PlayerIsVampire auto
 globalvariable property VampireFeedReady auto
 globalvariable property GameDaysPassed auto
 globalvariable property ED_VampireAge auto
+globalvariable property ED_Mechanics_Global_MCM_DisableFortitudeRevive auto
+
 
 keyword property ED_Mechanics_Keyword_BlockHungerAdvance auto
 

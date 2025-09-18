@@ -88,6 +88,10 @@ Int Cheats_ToggleArmorWatcherVL
 float property Default_Cheats_ToggleArmorWatcherVL auto
 GlobalVariable Property ED_Mechanics_Global_MCM_ToggleArmorWatcherVL Auto
 
+Int Cheats_DisableFortitude
+float property Default_Cheats_DisableFortitude auto
+GlobalVariable Property ED_Mechanics_Global_MCM_DisableFortitudeRevive Auto
+
 
 function OnPageReset(String akPage)
 
@@ -138,6 +142,7 @@ function OnPageReset(String akPage)
 	Cheats_DisableAlchemyPenalty = self.AddToggleOption("Disable penalty to Health restoring potions", ED_Mechanics_Global_MCM_DisableAlchemyPenalty.GetValue() as Bool)
 	Cheats_DisableChainedBeast = self.AddToggleOption("Disable Fortitude transformation", ED_Mechanics_Global_MCM_DisableChainedBeast.GetValue() as Bool)
 	Cheats_ToggleArmorWatcherVL = self.AddToggleOption("Toggle Equip Watcher for VL", ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.GetValue() as Bool)
+	Cheats_DisableFortitude = self.AddToggleOption("Toggle Fortitude", ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	
@@ -233,7 +238,12 @@ function OnOptionDefault(Int akOp)
 		ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.SetValue(Default_Cheats_ToggleArmorWatcherVL)
 		SetToggleOptionValue(Cheats_ToggleArmorWatcherVL, Default_Cheats_ToggleArmorWatcherVL as bool)
 		
+	elseIf akOp == Cheats_DisableFortitude
+		ED_Mechanics_Global_MCM_DisableFortitudeRevive.SetValue(Default_Cheats_DisableFortitude)
+		SetToggleOptionValue(Cheats_DisableFortitude, Default_Cheats_DisableFortitude as bool)
+		
 	endif
+	
 	
 	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
 endfunction
@@ -384,6 +394,12 @@ function OnOptionSelect(Int akOp)
 		ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.SetValue(1 as Float - ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.GetValue())
 		SetToggleOptionValue(Cheats_ToggleArmorWatcherVL, ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.GetValue() as bool)
 		
+	elseif akOp == Cheats_DisableFortitude
+		ED_Mechanics_Global_MCM_DisableFortitudeRevive.SetValue(1 as Float - ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue())
+		SetToggleOptionValue(Cheats_DisableFortitude, ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() as bool)
+		if ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() == 1.0
+			Game.GetPlayer().RemoveSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
+		endif
 	
 	; ------------------------------------------------------------
 	endif
@@ -458,6 +474,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Upon taking fatal damage, you will die as usual instead of turning into Vampire Beast. After getting Embrace The Beast, this setting has no effect")
 	elseIf akOp == Cheats_ToggleArmorWatcherVL
 		self.SetInfoText("Vampire Transformations automatically uneqip any regular armor/weapon if you happen to equip them (accidentally through looting menu, for example)")
+	elseIf akOp == Cheats_DisableFortitude
+		self.SetInfoText("Disable Fortitude and Chained Beast mechanics altogether. Embrace the Beast perk only gives you the change spell.")
 	
 	; ------------------------------------------------------------
 	endif
@@ -487,3 +505,4 @@ EndFunction
 
 ED_BloodMeterUpdate property ED_BloodMeter_Quest auto
 ED_HotKeys_Script property ED_Mechanics_HotKeys_Quest auto
+spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
