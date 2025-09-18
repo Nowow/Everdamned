@@ -121,7 +121,8 @@ globalvariable property ED_Test_testglobalX auto
 globalvariable property ED_Test_testglobalY auto
 globalvariable property ED_Test_testglobalZ auto
 
-
+PlayerVampireQuestScript property PlayerVampireQuest auto
+ED_FeedManager_Script property ED_FeedManager_Quest auto
 
 int counter
 bool __switch
@@ -141,10 +142,11 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		;PlayerVampireQuest.DropToBloodstarved()
+		;PlayerVampireQuest.EatThisActor(__targetThing)
+		ED_FeedManager_Quest.HandleCombatDrain(__targetThing)
 		
-		ED_Mechanics_FeedDialogue_Message_SomeTestM.ShowAsHelpMessage("ed_alalalallaaa", 5.0, 1.0, 1)
 
-		
 		
 		;pl.SetDontMove(false)
 		

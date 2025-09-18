@@ -263,7 +263,12 @@ string function PlayFeedIdle(int idleNum) global
 	idle idleToPlay
 	globalvariable FeedTypeVar = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_Mechanics_Global_FeedType") as globalvariable
 	
-	if idleNum == 3
+	if idleNum == 0
+		;vanilla
+		FeedTypeVar.SetValue(0.0)
+		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+		
+	elseif idleNum == 3
 		;social
 		FeedTypeVar.SetValue(3.0)
 		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle

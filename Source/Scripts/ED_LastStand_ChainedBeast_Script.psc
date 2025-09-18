@@ -36,17 +36,20 @@ endFunction
 bool __planEngaged
 function OnEnterBleedout()
 	
+	debug.Trace("Everdamned DEBUG: Fortitude sees you in bleedout!")
+	
 	if __planEngaged
 		debug.Trace("Everdamned DEBUG: Player Protection Plan ALREADY engaged, return")
 		return
 	endif
+	
 	
 	; just for good measure, conditions are already in spell
 	race playerRace = playerRef.GetRace()
 	bool RaceNotBeast = playerRace != ED_VampireGarkainBeastRace && playerRace != DLC1VampireBeastRace
 	bool IsInSunlight = PlayerRef.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_IsInSunlight)
 	
-	if PlayerProtectionPlan.GetActorRef() == PlayerRef && RaceNotBeast && IsInSunlight
+	if PlayerProtectionPlan.GetActorRef() == PlayerRef && RaceNotBeast && !IsInSunlight
 		__planEngaged = true
 		debug.Trace("Everdamned DEBUG: Player Protection Plan engaged")
 		ED_Mechanics_Global_ChainedBeastAllowed.SetValue(0.0)
@@ -61,6 +64,8 @@ function OnEnterBleedout()
 		if !(PlayerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk))
 			debug.Trace("Everdamned DEBUG: Player Protection Plan started Beast Unchained quest")
 			ED_Mechanics_Ab_BeastUnchained_Quest.Start()
+		else
+			debug.Trace("Everdamned DEBUG: Player Protection Plan just healed")
 		endif
 		PlayerRef.DispelSpell(ED_Mechanics_Ab_BeastUnchained_Spell)
 		__planEngaged = false

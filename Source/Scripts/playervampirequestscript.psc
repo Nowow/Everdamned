@@ -261,7 +261,7 @@ function VampireChange(actor Target)
 	
 endFunction
 
-Bool function Devolve(Bool abForceDevolve, bool dropToLowest = false)
+function Devolve(Bool abForceDevolve, bool dropToLowest = false)
 
     if (FeedTimer >= 3.0 || abForceDevolve == true) && (VampireStatus == 3 || dropToLowest == true)
         VampireFeedReady.SetValue(3 as Float)
@@ -492,6 +492,7 @@ function DropToBloodstarved()
 	
 	; force devolve, drop to lowest
 	Devolve(true, true)
+	
 	
 endfunction
 

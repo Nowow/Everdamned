@@ -60,7 +60,9 @@ Event OnDying(Actor akKiller)
 endevent
 
 Event OnPlayerLoadGame()
-	Debug.Trace("Everdamned DEBUG: Main Quest modifies FavorJobsBeggarsAbility to be able to distinguish it from Alchemy LOL")
+	Debug.Trace("Everdamned INFO: Main Quest modifies FavorJobsBeggarsAbility to be able to distinguish it from Alchemy LOL")
+	Debug.Trace("Everdamned WARNING: RemoveMagicEffectFromSpell MAY FAIL, that OK")
+	; it may fail from time to time, thats ok
 	PO3_SKSEFunctions.RemoveMagicEffectFromSpell(FavorJobsBeggarsAbility, ED_Mechanics_Spell_GiftOfCharityTracker_Effect, 0, 0, 3600, 0.0)
 	string[] __condList
 	PO3_SKSEFunctions.AddMagicEffectToSpell(FavorJobsBeggarsAbility, ED_Mechanics_Spell_GiftOfCharityTracker_Effect, 0, 0, 3600, 0.0, __condList)

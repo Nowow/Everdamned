@@ -1,6 +1,7 @@
 {
     "name": "vampire_feeds",
     "priority": 4255512,
+    "disabled": true,
     "ignoreDontConvertAnnotationsToTriggersFlag": true,
     "triggersFromAnnotationsOnly": true,
     "conditions": [
