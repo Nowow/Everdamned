@@ -611,12 +611,12 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 		debug.Trace("Everdamned WARNING: Feed Manager does not detect paired social feed playing, using backup solo anims")
 		debug.Notification("EVD DEBUG: backup FEED anims")
 		
-		float backupAnimationVictimOffset = 50.0  ;  check
+		float backupAnimationVictimOffsetSocial = 50.0  ;  check
 
 		float playerAngleZsin = math.sin(playerRef.GetAngleZ())
 		float playerAngleZcos = math.cos(playerRef.GetAngleZ())
-		float targetX = playerRef.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
-		float targetY = playerRef.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
+		float targetX = playerRef.GetPositionX() + backupAnimationVictimOffsetSocial*playerAngleZsin
+		float targetY = playerRef.GetPositionY() + backupAnimationVictimOffsetSocial*playerAngleZcos
 		
 		FeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ() + 5.0,\
 								playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
@@ -985,6 +985,41 @@ function ApplyCombatFeedEffects()
 endfunction
 
 
+int __animSetting
+int __whichAnim  ; default 0, ground feed
+float property backupAnimationVictimOffset = 52.0 auto
+idle property backupPlayerSoloIdleToPlay auto
+
+function EstablishNextStaggerDrainType()
+	__animSetting = ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue() as int
+	
+	if __animSetting == 3
+		__whichAnim = utility.randomint(0, 1)
+	elseif __animSetting == 2
+		if playerRef.GetActorBase().GetSex() == 0
+			__whichAnim = 0  ; ground feed
+		else
+			__whichAnim = 1  ; jump feed
+		endif
+	else
+		if playerRef.GetActorBase().GetSex() == 0
+			__whichAnim = 1  ; jump feed
+		else
+			__whichAnim = 0  ; ground feed
+		endif
+	endif
+	
+	if __whichAnim == 0
+		backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Ground
+		backupAnimationVictimOffset = 52.0
+		ED_Mechanics_Global_FeedType.SetValue(2.0)
+	else
+		backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Jumpfeed
+		backupAnimationVictimOffset = 65.0
+		ED_Mechanics_Global_FeedType.SetValue(4.0)
+	endif
+endfunction
+		
 state CombatDrain
 	;handles should do nothing till state is released
 	function HandleFeedThrall(actor FeedTarget)
@@ -1011,9 +1046,6 @@ state CombatDrain
 	event OnBeginState()
 		debug.Trace("Everdamned DEBUG: Feed Manager entered CombatDrain state")
 		
-		idle backupPlayerSoloIdleToPlay
-		float backupAnimationVictimOffset
-		
 		; for OAR conditions and controls ghost and unconcious flags
 		; also sets ghost and restrained
 		ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
@@ -1029,34 +1061,7 @@ state CombatDrain
 			;jump feed / ground feed
 			debug.Trace("Everdamned DEBUG: Feed Manager determined target is NOT bleeding out, therefore staggered")
 			
-			int __animSetting = ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue() as int
-			int __whichAnim
-			
-			if __animSetting == 3
-				__whichAnim = utility.randomint(0, 1)
-			elseif __animSetting == 2
-				if playerRef.GetActorBase().GetSex() == 0
-					__whichAnim = 0  ; ground feed
-				else
-					__whichAnim = 1  ; jump feed
-				endif
-			else
-				if playerRef.GetActorBase().GetSex() == 0
-					__whichAnim = 1  ; jump feed
-				else
-					__whichAnim = 0  ; ground feed
-				endif
-			endif
-			
-			if __whichAnim == 0
-				backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Ground
-				backupAnimationVictimOffset = 52.0
-				ED_Mechanics_Global_FeedType.SetValue(2.0)
-			else
-				backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Jumpfeed
-				backupAnimationVictimOffset = 65.0
-				ED_Mechanics_Global_FeedType.SetValue(4.0)
-			endif
+			; type and settings are predetermined in EstablishNextStaggerDrainType()
 			
 		endif
 		
@@ -1075,6 +1080,25 @@ state CombatDrain
 		utility.wait(0.1)
 		
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
+		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
+		
+		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		
+		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
+		bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
+		
+		debug.Trace("Everdamned DEBUG: player bIsSynced: " + __playerIsSynced)
+		debug.Trace("Everdamned DEBUG: victim bIsSynced: " + __victimIsSynced)
+		
+		if __playerIsSynced && __victimIsSynced
+			; first try success
+			ApplyCombatFeedEffects()
+			return
+		endif
+		
+		; second try, after adjusting
+		
+		
 	
 		float playerZ = playerRef.GetPositionZ()
 		float targetZ = aFeedTarget.GetPositionZ()
@@ -1084,49 +1108,48 @@ state CombatDrain
 		else
 			playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), aFeedTarget.GetPositionZ())
 		endif
-		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
 				
-		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		__animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
-		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
-		bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
+		__playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
+		__victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
 		
 		debug.Trace("Everdamned DEBUG: player bIsSynced: " + __playerIsSynced)
 		debug.Trace("Everdamned DEBUG: victim bIsSynced: " + __victimIsSynced)
-		
-		debug.Trace("Everdamned DEBUG: bIsSynced: " + __animPlayed)
+
 		
 		if __playerIsSynced && __victimIsSynced
 			ApplyCombatFeedEffects()
-		else
-			debug.Trace("Everdamned WARNING: Feed Manager does not detect paired feed km playing, using backup solo anims")
-			debug.Notification("EVD DEBUG: backup FEED anims")
-
-			float playerAngleZsin = math.sin(playerRef.GetAngleZ())
-			float playerAngleZcos = math.cos(playerRef.GetAngleZ())
-			float targetX = playerRef.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
-			float targetY = playerRef.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
-			
-			aFeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ(),\
-									playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
-									700.0)
-			
-			; dont know if needed
-			playerRef.PlayIdle(ResetRoot)
-			aFeedTarget.PlayIdle(ResetRoot)
-
-			playerRef.PlayIdle(backupPlayerSoloIdleToPlay)
-			aFeedTarget.PlayIdle(IdleHandCut)
-			ApplyCombatFeedEffects()
-		;else
-		;	ED_Mechanics_Message_CombatFeedFailed.Show()
-		;	debug.Trace("Everdamned DEBUG: Combat Feed attempt failed")
-		;	GoToState("")
+			return
 		endif
+	
+		; third attempt, solo anims
+		debug.Trace("Everdamned WARNING: Feed Manager does not detect paired feed km playing, using backup solo anims")
+		debug.Notification("EVD DEBUG: backup FEED anims")
+
+		float playerAngleZsin = math.sin(playerRef.GetAngleZ())
+		float playerAngleZcos = math.cos(playerRef.GetAngleZ())
+		float targetX = playerRef.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
+		float targetY = playerRef.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
+		
+		aFeedTarget.TranslateTo(targetX, targetY, playerRef.GetPositionZ(),\
+								playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
+								700.0)
+		
+		; dont know if needed
+		playerRef.PlayIdle(ResetRoot)
+		aFeedTarget.PlayIdle(ResetRoot)
+
+		playerRef.PlayIdle(backupPlayerSoloIdleToPlay)
+		aFeedTarget.PlayIdle(IdleHandCut)
+		ApplyCombatFeedEffects()
 	
 	endevent
 	event OnEndState()
-		debug.Trace("Everdamned DEBUG: Feed Manager exited CombatDrain state")
+		debug.Trace("Everdamned DEBUG: Feed Manager exited CombatDrain state, calculating next combat drain anim type")
+		
+		EstablishNextStaggerDrainType()
+		
 	endevent
 	
 endstate

@@ -440,7 +440,7 @@ function OnOptionHighlight(Int akOp)
 	elseIf akOp == Setting_SameSexPreference
 		self.SetInfoText("Dibella related bonuses (canonically) give advantage when dealing with opposite sex. In this mod, they also give bonuses to seduction through dialogue chances. This changes it to same sex preference")
 	elseIf akOp == Setting_CombatDrainAnim
-		self.SetInfoText("Female animation: jump feed, male: overpower feed. 1: use sex specific animation; 2: use opposite; 3: use both randomly")
+		self.SetInfoText("Female animation: jump feed, male: overpower feed. 1: use sex specific animation; 2: use opposite; 3: use both randomly. Takes effect after next combat drain")
 	elseIf akOp == Setting_SeductionDialogueXPCooldownHours
 		self.SetInfoText("How many hours between you get XP for successful seduction")
 	
