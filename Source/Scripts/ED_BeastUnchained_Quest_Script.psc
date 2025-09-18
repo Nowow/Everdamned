@@ -1,6 +1,8 @@
 Scriptname ED_BeastUnchained_Quest_Script extends Quest  
 
 message property ED_Mechanics_Ab_BeastUnchained_Message_TransformImmenent auto
+message[] property WarningMessages auto
+
 spell property ED_VampirePowers_GarkainBeast_Change auto
 actor property playerRef auto
 
@@ -55,6 +57,20 @@ event OnUpdate()
 		if playerRef.isInCombat() && PlayerVampireQuest.VampireStatus > 3
 			;issue warning if left
 			if __warningsIssued < WarningsCount
+				
+				message.ResetHelpMessage("ed_garkain_transformwarning")
+				WarningMessages[__warningsIssued].ShowAsHelpMessage("ed_garkain_transformwarning", 3.5, 1.0, 1)
+				
+				if __warningsIssued == 0
+					ED_Art_Imad_BloodlustIn.Apply(1.0)
+					utility.wait(0.83)
+					ED_Art_Imad_BloodlustIn.PopTo(ED_Art_Imad_BloodlustMain, 1.0)  
+				elseif __warningsIssued == 1
+					Game.ShakeCamera(akTarget)
+				elseif __warningsIssued == 2
+					
+				endif
+			
 				__warningsIssued += 1
 				debug.Trace("Everdamned DEBUG: warnings issued: " + __warningsIssued)
 				
@@ -97,3 +113,8 @@ function Shutdown()
 	__isShuttingDown = false
 	stop()
 endfunction
+
+
+imagespacemodifier property ED_Art_Imad_BloodlustIn auto
+imagespacemodifier property ED_Art_Imad_BloodlustMain auto
+imagespacemodifier property ED_Art_Imad_BloodlustOut auto
