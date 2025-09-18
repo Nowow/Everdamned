@@ -3,6 +3,10 @@ Scriptname PlayerVampireGarkainScript extends ReferenceAlias
 Race Property VampireGarkainBeastRace auto
 
 Event OnRaceSwitchComplete()
+	if GetActorReference() == game.GetPlayer()
+		game.GetPlayer().GetActorBase().SetInvulnerable(false)
+		game.GetPlayer().SetGhost(false)
+	endif
 	if (GetActorReference().GetRace() == VampireGarkainBeastRace)
  		Debug.Trace("Garkain: Getting notification that race swap TO garkain is complete.")
 		(GetOwningQuest() as ED_PlayerVampireGarkainChangeScript).StartTracking()

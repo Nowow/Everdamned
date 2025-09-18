@@ -155,6 +155,8 @@ Function InitialShift()
 	endif
    
     ; actual switch
+	playerRef.GetActorBase().SetInvulnerable(true)
+	playerRef.SetGhost(true)
     playerRef.SetRace(ED_VampireGarkainBeastRace)
 EndFunction
 

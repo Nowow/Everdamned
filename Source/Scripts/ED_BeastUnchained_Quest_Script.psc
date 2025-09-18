@@ -26,6 +26,7 @@ function SetupTracking()
 	;show message with little lag
 	
 	utility.wait(0.5)
+	ED_Art_SoundM_BeastAwakens.Play(playerRef)
 	message.ResetHelpMessage("ed_garkain_transformimmenent")
 	ED_Mechanics_Ab_BeastUnchained_Message_TransformImmenent.ShowAsHelpMessage("ed_garkain_transformimmenent", 5.0, 1.0, 1)
 	
@@ -45,6 +46,7 @@ function TransformImmenent()
 	endif
 endfunction
 
+bool __bloodlustImadPlayed
 event OnUpdate()
 	; transform pending
 	if GetStage() == 10
@@ -58,17 +60,20 @@ event OnUpdate()
 			;issue warning if left
 			if __warningsIssued < WarningsCount
 				
+				ED_Art_SoundM_BeastRumble.Play(playerRef)
 				message.ResetHelpMessage("ed_garkain_transformwarning")
 				WarningMessages[__warningsIssued].ShowAsHelpMessage("ed_garkain_transformwarning", 3.5, 1.0, 1)
 				
+				
 				if __warningsIssued == 0
+					__bloodlustImadPlayed = true
 					ED_Art_Imad_BloodlustIn.Apply(1.0)
-					utility.wait(0.83)
-					ED_Art_Imad_BloodlustIn.PopTo(ED_Art_Imad_BloodlustMain, 1.0)  
+					utility.wait(1.5)
+					ED_Art_Imad_BloodlustIn.PopTo(ED_Art_Imad_BloodlustMain, 1.0)
 				elseif __warningsIssued == 1
-					Game.ShakeCamera(akTarget)
+					Game.ShakeCamera(playerRef)
 				elseif __warningsIssued == 2
-					
+					ED_Art_Imad_LostSanityLong.Apply(1.0)
 				endif
 			
 				__warningsIssued += 1
@@ -108,6 +113,10 @@ function Shutdown()
 	__isShuttingDown = true
 	debug.Trace("Everdamned DEBUG:  Beast Unchained Quest shuts down")
 	
+	if __bloodlustImadPlayed
+		ED_Art_Imad_BloodlustMain.PopTo(ED_Art_Imad_BloodlustOut, 1.0)
+	endif
+	
 	__warningsIssued = 0
 	__trackingStarted = false
 	__isShuttingDown = false
@@ -118,3 +127,7 @@ endfunction
 imagespacemodifier property ED_Art_Imad_BloodlustIn auto
 imagespacemodifier property ED_Art_Imad_BloodlustMain auto
 imagespacemodifier property ED_Art_Imad_BloodlustOut auto
+imagespacemodifier property ED_Art_Imad_LostSanityLong auto
+
+sound property ED_Art_SoundM_BeastAwakens auto
+sound property ED_Art_SoundM_BeastRumble auto
