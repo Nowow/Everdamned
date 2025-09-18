@@ -668,7 +668,7 @@ function ActuallyShiftBackIfNecessary()
 		game.SendWereWolfTransformation()
 	endIf
 	
-	; todo: nohate spell if it will exist
+
 	if PlayerVampireQuest.VampireStatus < 4 || ED_Mechanics_Global_DisableHate.GetValue() == 1 as Float || playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 		playerRef.SetAttackActorOnSight(false)
 		Int i = 0

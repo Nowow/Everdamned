@@ -20,6 +20,11 @@ EndEvent
 
 state InVampireBeastForm
 	Event OnObjectEquipped(Form akBaseObject, ObjectReference akReference)
+	
+		if ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.GetValue() != 1.0
+			return
+		endif
+		
 		debug.Trace("Everdamned DEBUG: V Beast player alias detected armor equipped")
 		
 		armor equippedArmor = akBaseObject as armor
@@ -34,3 +39,7 @@ state InVampireBeastForm
 		endif
 	endevent
 endstate
+
+
+globalvariable property ED_Mechanics_Global_MCM_ToggleArmorWatcherVL auto
+

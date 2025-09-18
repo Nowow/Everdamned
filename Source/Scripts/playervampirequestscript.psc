@@ -92,7 +92,7 @@ endFunction
 
 function StartHate(actor Player)
 
-    if ED_Mechanics_Global_DisableHate.GetValue() == 0 as Float && !Player.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell as form)
+    if ED_Mechanics_Global_DisableHate.GetValue() == 0 as Float && !(Player.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell as form))
         debug.Trace("Everdamned INFO: You become hated due to stage 4")
         Player.AddtoFaction(VampirePCFaction)
         Int i = 0

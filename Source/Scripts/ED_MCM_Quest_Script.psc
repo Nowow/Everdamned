@@ -93,11 +93,19 @@ function OnPageReset(String akPage)
 
 	self.SetCursorFillMode(self.TOP_TO_BOTTOM)
 	self.SetCursorPosition(0)
-	self.AddHeaderOption("Blood Bar", 0)
+	
+	; ------------------------------------------------------------
+	; settings
+	self.AddHeaderOption("Settings", 0)
+	
+	Setting_SameSexPreference = self.AddToggleOption("Same sex preference for seduction", ED_Mechanics_Global_MCM_SameSexPreference.GetValue() as Bool)
+	Setting_CombatDrainAnim = self.AddSliderOption("Combat Drain type", ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue(), "Type {0}")
+	Setting_SeductionDialogueXPCooldownHours = self.AddSliderOption("Speech XP Seduction cooldown", ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.GetValue(), "{0} hours")
 	
 	; ------------------------------------------------------------
 	; Blood Meter
-	
+	self.AddEmptyOption()
+	self.AddHeaderOption("Blood Bar", 0)
 	BloodMeter_Enable = self.AddToggleOption("Enable blood pool bar", ED_Mechanics_BloodMeter_Enable_Global.GetValue() as Bool)
 	
 	BloodMeter_X = self.AddSliderOption("Blood pool bar X coordinate", ED_Mechanics_BloodMeter_X_Global.GetValue())
@@ -105,38 +113,36 @@ function OnPageReset(String akPage)
 	BloodMeter_Scale = self.AddSliderOption("Blood pool bar scale", ED_Mechanics_BloodMeter_Scale_Global.GetValue())
 	BloodMeter_FillDirection = self.AddSliderOption("Blood pool bar fill direction", ED_Mechanics_BloodMeter_FillDirection_Global.GetValue())
 	BloodMeter_Opacity = self.AddSliderOption("Blood pool bar opacity", ED_Mechanics_BloodMeter_Opacity_Global.GetValue())
-	BloodMeter_DisplayTime = self.AddSliderOption("Seconds to fade when incative", ED_Mechanics_BloodMeter_DisplayTime_Global.GetValue())
+	BloodMeter_DisplayTime = self.AddSliderOption("Seconds to fade when incative", ED_Mechanics_BloodMeter_DisplayTime_Global.GetValue(), "{0} seconds")
 	
 	; ------------------------------------------------------------
 	; Hotkeys
+	
 	self.AddEmptyOption()
-	self.AddHeaderOption("Hotkeys", 0)
-	Hotkeys_TestKey = AddKeyMapOption("Test hotkey", ED_Test_Hotkey.GetValue() as int)
+	self.SetCursorPosition(1)
+	self.AddHeaderOption("Compatibility/Cheats", 0)
+	
 	Hotkeys_HotkeyA = AddKeyMapOption("Celerity Hotkey", ED_Mechanics_Hotkeys_HotkeyA.GetValue() as int)
 	Hotkeys_HotkeyB = AddKeyMapOption("Potence Hotkey", ED_Mechanics_Hotkeys_HotkeyB.GetValue() as int)
 	
-	; ------------------------------------------------------------
-	; settings
-	self.AddEmptyOption()
-	self.AddHeaderOption("Settings", 0)
-	
-	Setting_SameSexPreference = self.AddToggleOption("Same sex preferency for seduction", ED_Mechanics_Global_MCM_SameSexPreference.GetValue() as Bool)
-	Setting_CombatDrainAnim = self.AddSliderOption("Which combat drain anim to use", ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue())
-	Setting_SeductionDialogueXPCooldownHours = self.AddSliderOption("Speech XP for Seduction cooldown, hours", ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.GetValue())
 	
 	; ------------------------------------------------------------
 	; cheats/compatibility
+	
 	self.AddEmptyOption()
-	self.AddHeaderOption("Compatibility/Cheats", 0)
+	self.AddHeaderOption("Hotkeys", 0)
 	
 	Cheats_NecromageToggle = self.AddToggleOption("Disable Restoration healing penalty", ED_Mechanics_Global_MCM_NecromageToggle.GetValue() as Bool)
 	Cheats_DisableHate = self.AddToggleOption("Disable hate when Blood Starved", ED_Mechanics_Global_MCM_DisableHate.GetValue() as Bool)
 	Cheats_DisableScorchingSun = self.AddToggleOption("Disable Sun burning", ED_Mechanics_Global_MCM_DisableScorchingSun.GetValue() as Bool)
 	Cheats_DisableAlchemyPenalty = self.AddToggleOption("Disable penalty to Health restoring potions", ED_Mechanics_Global_MCM_DisableAlchemyPenalty.GetValue() as Bool)
 	Cheats_DisableChainedBeast = self.AddToggleOption("Disable Fortitude transformation", ED_Mechanics_Global_MCM_DisableChainedBeast.GetValue() as Bool)
-	Cheats_ToggleArmorWatcherVL = self.AddToggleOption("Disable Equip Watcher for VL", ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.GetValue() as Bool)
+	Cheats_ToggleArmorWatcherVL = self.AddToggleOption("Toggle Equip Watcher for VL", ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
+	
+	self.AddEmptyOption()
+	
 endFunction
 
 
@@ -171,7 +177,7 @@ function OnOptionDefault(Int akOp)
 	
 	elseIf akOp == BloodMeter_DisplayTime
 		ED_Mechanics_BloodMeter_DisplayTime_Global.SetValue(Default_BloodMeter_DisplayTime as Float)
-		self.SetSliderOptionValue(BloodMeter_DisplayTime, Default_BloodMeter_DisplayTime as Float)
+		self.SetSliderOptionValue(BloodMeter_DisplayTime, Default_BloodMeter_DisplayTime as Float, "{0} seconds")
 	
 	; ------------------------------------------------------------
 	; Hotkeys
@@ -194,11 +200,11 @@ function OnOptionDefault(Int akOp)
 	
 	elseIf akOp == Setting_CombatDrainAnim
 		ED_Mechanics_Global_MCM_CombatDrainAnim.SetValue(Default_Setting_CombatDrainAnim as Float)
-		self.SetSliderOptionValue(Setting_CombatDrainAnim, Default_Setting_CombatDrainAnim)
+		self.SetSliderOptionValue(Setting_CombatDrainAnim, Default_Setting_CombatDrainAnim, "Type {0}")
 	
 	elseIf akOp == Setting_SeductionDialogueXPCooldownHours
 		ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.SetValue(Default_Setting_SeductionDialogueXPCooldownHours as Float)
-		self.SetSliderOptionValue(Setting_SeductionDialogueXPCooldownHours, Default_Setting_SeductionDialogueXPCooldownHours)
+		self.SetSliderOptionValue(Setting_SeductionDialogueXPCooldownHours, Default_Setting_SeductionDialogueXPCooldownHours, "{0} hours")
 	
 	; ------------------------------------------------------------
 	; cheats
@@ -319,18 +325,18 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 	
 	elseIf akOp == BloodMeter_DisplayTime
 		ED_Mechanics_BloodMeter_DisplayTime_Global.SetValue(akValue)
-		self.SetSliderOptionValue(BloodMeter_DisplayTime, akValue)
+		self.SetSliderOptionValue(BloodMeter_DisplayTime, akValue, "{0} seconds")
 		
 	; ------------------------------------------------------------
 	; settings
 	
 	elseIf akOp == Setting_CombatDrainAnim
 		ED_Mechanics_Global_MCM_CombatDrainAnim.SetValue(akValue)
-		self.SetSliderOptionValue(Setting_CombatDrainAnim, akValue)
+		self.SetSliderOptionValue(Setting_CombatDrainAnim, akValue, "Type {0}")
 	
 	elseIf akOp == Setting_SeductionDialogueXPCooldownHours
 		ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.SetValue(akValue)
-		self.SetSliderOptionValue(Setting_SeductionDialogueXPCooldownHours, akValue)
+		self.SetSliderOptionValue(Setting_SeductionDialogueXPCooldownHours, akValue, "{0} hours")
 	
 	; ------------------------------------------------------------
 	
@@ -349,7 +355,7 @@ function OnOptionSelect(Int akOp)
 	; ------------------------------------------------------------
 	; settings
 	elseif akOp == Setting_SameSexPreference
-		ED_Mechanics_Global_MCM_NecromageToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_SameSexPreference.GetValue())
+		ED_Mechanics_Global_MCM_SameSexPreference.SetValue(1 as Float - ED_Mechanics_Global_MCM_SameSexPreference.GetValue())
 		SetToggleOptionValue(Setting_SameSexPreference, ED_Mechanics_Global_MCM_SameSexPreference.GetValue() as bool)
 	
 	; ------------------------------------------------------------
@@ -433,7 +439,7 @@ function OnOptionHighlight(Int akOp)
 	; settings
 	elseIf akOp == Setting_SameSexPreference
 		self.SetInfoText("Dibella related bonuses (canonically) give advantage when dealing with opposite sex. In this mod, they also give bonuses to seduction through dialogue chances. This changes it to same sex preference")
-	elseIf akOp == Setting_SameSexPreference
+	elseIf akOp == Setting_CombatDrainAnim
 		self.SetInfoText("Female animation: jump feed, male: overpower feed. 1: use sex specific animation; 2: use opposite; 3: use both randomly")
 	elseIf akOp == Setting_SeductionDialogueXPCooldownHours
 		self.SetInfoText("How many hours between you get XP for successful seduction")
