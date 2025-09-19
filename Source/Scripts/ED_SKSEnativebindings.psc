@@ -21,6 +21,8 @@ function SetTimeSlowdown(float worldFactor, float playerFactor) global native
 
 bool function ValidateArmorRace(armor leArmor) global native
 
+function AddThisMuchXP(int theXP) global native
+
 
 function StopAllShadersExceptThis(effectshader a_effectShader, keyword someKeyword, effectshader ED_TestShader2_empty) global native
 

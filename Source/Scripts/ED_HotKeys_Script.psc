@@ -121,8 +121,7 @@ globalvariable property ED_Test_testglobalX auto
 globalvariable property ED_Test_testglobalY auto
 globalvariable property ED_Test_testglobalZ auto
 
-PlayerVampireQuestScript property PlayerVampireQuest auto
-ED_FeedManager_Script property ED_FeedManager_Quest auto
+
 
 int counter
 bool __switch
@@ -142,7 +141,9 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-
+		
+		CustomSkills.IncrementSkill("EverdamnedXP")
+		ED_SKSEnativebindings.AddThisMuchXP(600)
 		
 		;pl.SetDontMove(false)
 		

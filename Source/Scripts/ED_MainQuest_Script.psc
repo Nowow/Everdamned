@@ -1,5 +1,7 @@
 Scriptname ED_MainQuest_Script extends Quest  
 
+import CustomSkills
+
 ; should be true when player is vampire, false when not/cured.
 ; set to true on first call of GainAgeExpirience()
 bool isAging
@@ -7,18 +9,12 @@ bool HasShownAgeMessage
 int NextMessageIndex = 0
 int property MaxAge auto
 
-import CustomSkills
-
-actor property playerRef auto
-globalvariable property ED_Mechanics_VampireAge auto
-globalvariable property ED_Mechanics_VampireAgeRate auto
-globalvariable property ED_Mechanics_VampireAgeCurrentExp auto
-globalvariable property ED_Mechanics_VampireAgeCurrentLvlUpThreshold auto
-globalvariable property ED_Mechanics_VampireAgeLvlUpExpIncrement auto
-globalvariable property ED_Mechanics_Global_ChainedBeastAllowed auto
 
 
-;spell[] property Age_Scaling_Display_Spell_List auto
+
+
+int property BaseSkillLevel = 10 auto
+
 perk[] property Age_Scaling_Perk_List auto
 
 message property ED_Mechanics_Message_AgeLvlUpNotification auto
@@ -44,7 +40,8 @@ function PlayerBecameVampire()
 	RewardBlueBloodRewardsIfNeeded()
 	
 	; initial skill level
-	ED_Mechanics_SkillTree_Level_Global.SetValue(10)
+	__lastUpdateSkillLevel = BaseSkillLevel
+	ED_Mechanics_SkillTree_Level_Global.SetValue(BaseSkillLevel)
 	
 	; absorbing exp
 	playerRef.SetActorValue("ED_VampireSkillExpBuffer", 3000.0)
@@ -244,43 +241,65 @@ function RewardBlueBloodRewardsIfNeeded()
 endfunction
 
 bool __skillLvlupLock
+int __lastUpdateSkillLevel
 Event OnCustomSkillIncrease(string asSkillId)
-	if __skillLvlupLock
+	
+	if asSkillId != "EverdamnedMain"
 		return
 	endif
-	if asSkillId == "EverdamnedMain"
-		__skillLvlupLock = true
-		debug.Trace("Everdamned INFO: Vampire skill just leveld up!")
-		
-		int __newSkillLevel = ED_Mechanics_SkillTree_Level_Global.GetValue() as int
-		int __alreadyGrantedPerkPoints = ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.GetValue() as int
-		int __perkPointsForThisSkillLevel = __newSkillLevel / 5
-		int __perkPointsToGive = __perkPointsForThisSkillLevel - __alreadyGrantedPerkPoints
-		
-		if __perkPointsToGive > 0
-			ED_Mechanics_SkillTree_PerkPoints_Global.Mod(__perkPointsToGive)
-			ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.Mod(__perkPointsToGive)
-			ED_Mechanics_SkillTree_Message_MortalPerkPointGained.Show()
-		endif
-		
-		if playerRef.HasSpell(ED_VampirePowers_Ab_Presence_Spell)
-			playerRef.RemoveSpell(ED_VampirePowers_Ab_Presence_Spell)
-			playerRef.AddSpell(ED_VampirePowers_Ab_Presence_Spell, false)
-		endif
-		
-		;UISkillIncreaseSD
-		
-		; 30 mortal perks in total
-		;18 perk points from skill levelling
-		;2 perk points from start
-		;10 perk points from ageing
-		
-		; 23 VL perks in total
-		;10 per aging
-		;rest from biting
-		
-		__skillLvlupLock = false
+	
+	int __everyNthLevelXP = ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue() as int
+	int __newSkillLevel = ED_Mechanics_SkillTree_Level_Global.GetValue() as int
+	ED_SKSEnativebindings.AddThisMuchXP(__newSkillLevel/__everyNthLevelXP)
+	
+	int cntr
+	while __skillLvlupLock && cntr < 50
+		cntr += 1
+		utility.wait(0.1)
+	endwhile
+	
+	if cntr >= 50
+		debug.Trace("Everdamned ERROR: Custom Skill Update event waited more than 5 seconds, wtf!!!!!")
+		return
 	endif
+	
+	__skillLvlupLock = true
+	
+	if __newSkillLevel == __lastUpdateSkillLevel
+		debug.Trace("Everdamned INFO: Custom Skill Update event exits because its same skill level of " + __newSkillLevel)
+		return
+	endif
+	__newSkillLevel = __lastUpdateSkillLevel
+	
+	debug.Trace("Everdamned INFO: Vampire skill just leveld up!")
+	
+	int __alreadyGrantedPerkPoints = ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.GetValue() as int
+	int __perkPointsForThisSkillLevel = __newSkillLevel / 5
+	int __perkPointsToGive = __perkPointsForThisSkillLevel - __alreadyGrantedPerkPoints
+	
+	if __perkPointsToGive > 0
+		ED_Mechanics_SkillTree_PerkPoints_Global.Mod(__perkPointsToGive)
+		ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.Mod(__perkPointsToGive)
+		ED_Mechanics_SkillTree_Message_MortalPerkPointGained.Show()
+	endif
+	
+	if playerRef.HasSpell(ED_VampirePowers_Ab_Presence_Spell)
+		playerRef.RemoveSpell(ED_VampirePowers_Ab_Presence_Spell)
+		playerRef.AddSpell(ED_VampirePowers_Ab_Presence_Spell, false)
+	endif
+	
+	;UISkillIncreaseSD
+	
+	; 30 mortal perks in total
+	;18 perk points from skill levelling
+	;2 perk points from start
+	;10 perk points from ageing
+	
+	; 23 VL perks in total
+	;10 per aging
+	;rest from biting
+	
+	
 EndEvent
 
 ; For Wine and Revelry displaying message upon achieving 50 alch
@@ -302,6 +321,7 @@ globalvariable property ED_Mechanics_BlueBlood_Global_EmbraceTheBeastAwarded aut
 globalvariable property ED_Mechanics_SkillTree_PerkPoints_Global auto
 globalvariable property ED_Mechanics_SkillTree_Level_Global auto
 globalvariable property ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global auto
+globalvariable property ED_Mechanics_SkillTree_DenominatorXP_Global auto
 
 message property ED_Mechanics_SkillTree_Message_MortalPerkPointGained auto
 message property ED_Mechanics_Message_Alchemy50RecipeUnlock auto
@@ -317,4 +337,13 @@ spell property ED_VampirePowers_Ab_Presence_Spell auto
 formlist property ED_Mechanics_FormList_MortalPerkTreePerks auto
 formlist property ED_Mechanics_FormList_VLPerkTreePerks auto
 
+globalvariable property ED_Mechanics_VampireAge auto
+globalvariable property ED_Mechanics_VampireAgeRate auto
+globalvariable property ED_Mechanics_VampireAgeCurrentExp auto
+globalvariable property ED_Mechanics_VampireAgeCurrentLvlUpThreshold auto
+globalvariable property ED_Mechanics_VampireAgeLvlUpExpIncrement auto
+globalvariable property ED_Mechanics_Global_ChainedBeastAllowed auto
+
 ED_HotKeys_Script property ED_Mechanics_HotKeys_Quest auto
+
+actor property playerRef auto
