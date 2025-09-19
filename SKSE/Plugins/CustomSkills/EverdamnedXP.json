@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Exit-9B/CustomSkills/main/docs/schema/CustomSkill.json",
+  "version": 1,
+  "skydome": {
+    "model": "Interface/Everdamned/EDvampireskydome.nif",
+    "cameraRightPoint": 2
+  },
+  "showMenu": "Everdamned.esp|F74681",
+  "debugReload": "Everdamned.esp|F74682",
+  "perkPoints": "Everdamned.esp|F74683",
+  "skills": [
+	{
+      "id": "EverdamnedXP",
+      "name": "XP for Vampiric Curse",
+      "description": "here to provide experience for vampire skill",
+      "level": "Everdamned.esp|F7467D",
+      "ratio": "Everdamned.esp|F7467F",
+      "legendary": "Everdamned.esp|F7467E",
+      "color": null,
+      "showLevelup": "Everdamned.esp|F74680",
+      "experienceFormula": {
+        "useMult": 1.0,
+        "useOffset": 0.0,
+        "improveMult": 1.9,
+        "improveOffset": 100.0,
+        "enableXPPerRank": true
+      },
+      "nodes": []
+    }
+  ]
+}
