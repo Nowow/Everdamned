@@ -142,10 +142,6 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		;PlayerVampireQuest.DropToBloodstarved()
-		;PlayerVampireQuest.EatThisActor(__targetThing)
-		ED_FeedManager_Quest.HandleCombatDrain(__targetThing)
-		
 
 		
 		;pl.SetDontMove(false)
