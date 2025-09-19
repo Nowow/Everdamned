@@ -61,6 +61,10 @@ Int Setting_SeductionDialogueXPCooldownHours
 float property Default_Setting_SeductionDialogueXPCooldownHours auto
 GlobalVariable Property ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours Auto
 
+Int Setting_LevelXPDenominator
+float property Default_Setting_LevelXPDenominator auto
+GlobalVariable Property ED_Mechanics_SkillTree_DenominatorXP_Global Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -109,6 +113,7 @@ function OnPageReset(String akPage)
 	Setting_SameSexPreference = self.AddToggleOption("Same sex preference for seduction", ED_Mechanics_Global_MCM_SameSexPreference.GetValue() as Bool)
 	Setting_CombatDrainAnim = self.AddSliderOption("Combat Drain type", ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue(), "Type {0}")
 	Setting_SeductionDialogueXPCooldownHours = self.AddSliderOption("Speech XP Seduction cooldown", ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.GetValue(), "{0} hours")
+	Setting_LevelXPDenominator = self.AddSliderOption("Level XP gain lower", ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue(), "{0} times")
 	
 	; ------------------------------------------------------------
 	; Blood Meter
@@ -216,6 +221,10 @@ function OnOptionDefault(Int akOp)
 		ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.SetValue(Default_Setting_SeductionDialogueXPCooldownHours as Float)
 		self.SetSliderOptionValue(Setting_SeductionDialogueXPCooldownHours, Default_Setting_SeductionDialogueXPCooldownHours, "{0} hours")
 	
+	elseIf akOp == Setting_LevelXPDenominator
+		ED_Mechanics_SkillTree_DenominatorXP_Global.SetValue(Default_Setting_LevelXPDenominator as Float)
+		self.SetSliderOptionValue(Setting_LevelXPDenominator, Default_Setting_LevelXPDenominator, "{0} times")
+	
 	; ------------------------------------------------------------
 	; cheats
 	
@@ -312,6 +321,12 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogDefaultValue(Default_Setting_SeductionDialogueXPCooldownHours)
 		self.SetSliderDialogRange(0.000000, 24.0000)
 		self.SetSliderDialogInterval(1.00000)
+		
+	elseIf akOp == Setting_LevelXPDenominator
+		self.SetSliderDialogStartValue(ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue())
+		self.SetSliderDialogDefaultValue(Default_Setting_LevelXPDenominator)
+		self.SetSliderDialogRange(0.500000, 4.0000)
+		self.SetSliderDialogInterval(0.10000)
 	
 	; ------------------------------------------------------------
 	
@@ -356,6 +371,10 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 	elseIf akOp == Setting_SeductionDialogueXPCooldownHours
 		ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.SetValue(akValue)
 		self.SetSliderOptionValue(Setting_SeductionDialogueXPCooldownHours, akValue, "{0} hours")
+		
+	elseIf akOp == Setting_LevelXPDenominator
+		ED_Mechanics_SkillTree_DenominatorXP_Global.SetValue(akValue)
+		self.SetSliderOptionValue(Setting_LevelXPDenominator, akValue, "{0} times")
 	
 	; ------------------------------------------------------------
 	
