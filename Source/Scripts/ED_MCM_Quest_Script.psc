@@ -68,6 +68,10 @@ Int Cheats_NecromageToggle
 float property Default_Cheats_NecromageToggle auto
 GlobalVariable Property ED_Mechanics_Global_MCM_NecromageToggle Auto
 
+Int Cheats_MasterOfTheMindToggle
+float property Default_Cheats_MasterOfTheMindToggle auto
+GlobalVariable Property ED_Mechanics_Global_MCM_MasterOfTheMindToggle Auto
+
 Int Cheats_DisableHate
 float property Default_Cheats_DisableHate auto
 GlobalVariable Property ED_Mechanics_Global_MCM_DisableHate Auto
@@ -137,6 +141,7 @@ function OnPageReset(String akPage)
 	self.AddHeaderOption("Hotkeys", 0)
 	
 	Cheats_NecromageToggle = self.AddToggleOption("Disable Restoration healing penalty", ED_Mechanics_Global_MCM_NecromageToggle.GetValue() as Bool)
+	Cheats_MasterOfTheMindToggle = self.AddToggleOption("Mimic Master of the Mind", ED_Mechanics_Global_MCM_MasterOfTheMindToggle.GetValue() as Bool)
 	Cheats_DisableHate = self.AddToggleOption("Disable hate when Blood Starved", ED_Mechanics_Global_MCM_DisableHate.GetValue() as Bool)
 	Cheats_DisableScorchingSun = self.AddToggleOption("Disable Sun burning", ED_Mechanics_Global_MCM_DisableScorchingSun.GetValue() as Bool)
 	Cheats_DisableAlchemyPenalty = self.AddToggleOption("Disable penalty to Health restoring potions", ED_Mechanics_Global_MCM_DisableAlchemyPenalty.GetValue() as Bool)
@@ -217,6 +222,10 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Cheats_NecromageToggle
 		ED_Mechanics_Global_MCM_NecromageToggle.SetValue(Default_Cheats_NecromageToggle)
 		SetToggleOptionValue(Cheats_NecromageToggle, Default_Cheats_NecromageToggle as bool)
+	
+	elseIf akOp == Cheats_MasterOfTheMindToggle
+		ED_Mechanics_Global_MCM_MasterOfTheMindToggle.SetValue(Default_Cheats_MasterOfTheMindToggle)
+		SetToggleOptionValue(Cheats_MasterOfTheMindToggle, Default_Cheats_MasterOfTheMindToggle as bool)
 		
 	elseIf akOp == Cheats_DisableHate
 		ED_Mechanics_Global_MCM_DisableHate.SetValue(Default_Cheats_DisableHate)
@@ -373,6 +382,10 @@ function OnOptionSelect(Int akOp)
 	elseif akOp == Cheats_NecromageToggle
 		ED_Mechanics_Global_MCM_NecromageToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_NecromageToggle.GetValue())
 		SetToggleOptionValue(Cheats_NecromageToggle, ED_Mechanics_Global_MCM_NecromageToggle.GetValue() as bool)
+		
+	elseif akOp == Cheats_MasterOfTheMindToggle
+		ED_Mechanics_Global_MCM_MasterOfTheMindToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_MasterOfTheMindToggle.GetValue())
+		SetToggleOptionValue(Cheats_MasterOfTheMindToggle, ED_Mechanics_Global_MCM_MasterOfTheMindToggle.GetValue() as bool)
 	
 	elseif akOp == Cheats_DisableHate
 		ED_Mechanics_Global_MCM_DisableHate.SetValue(1 as Float - ED_Mechanics_Global_MCM_DisableHate.GetValue())
@@ -463,7 +476,9 @@ function OnOptionHighlight(Int akOp)
 	; ------------------------------------------------------------
 	; cheats
 	elseIf akOp == Cheats_NecromageToggle
-		self.SetInfoText("Disables healing penalty, as if you got the Necromage perk. Can be necessary for compatibility with perk overhauls or if you dont feel like getting the perk properly but want to heal with Restoration")
+		self.SetInfoText("Disables healing penalty, as if you got the Necromage perk. Use if perk is unattainable due to perk overhaul compatibility")
+	elseIf akOp == Cheats_NecromageToggle
+		self.SetInfoText("Vampiric effects that would affect undead, daedra and automatons on the basis of having vanilla Master of the Mind perk now do regardless. Use if perk is unattainable due to perk overhaul compatibility")
 	elseIf akOp == Cheats_DisableHate
 		self.SetInfoText("Disable hate when Blood Starved. Takes effect next time you become Blood Starved")
 	elseIf akOp == Cheats_DisableScorchingSun
