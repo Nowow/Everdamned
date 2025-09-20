@@ -63,7 +63,7 @@
           "links": [
             "Exsanguinate",
             "ExpertHemomancy",
-            "Kindred"
+            "Transfusion"
           ]
         },
         {
@@ -76,18 +76,18 @@
         {
           "id": "Kindred",
           "perk": "Everdamned.esp|69D202",
-          "x": -4.8,
-          "y": 2.17,
-          "links": [
-            "Transfusion"
-          ]
+		  "x": -4.93,
+		  "y": 3.37,
+          "links": []
         },
         {
           "id": "Transfusion",
           "perk": "Everdamned.esp|69D201",
-          "x": -4.93,
-          "y": 3.37,
-          "links": []
+          "x": -4.8,
+          "y": 2.17,
+          "links": [
+			"Kindred"
+		  ]
         },
         {
           "id": "ExpertHemomancy",
