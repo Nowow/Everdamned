@@ -248,6 +248,9 @@ Event OnCustomSkillIncrease(string asSkillId)
 		return
 	endif
 	
+	; is a race condition, but do not know of another way to do this
+	; adding XP directly, even here, INSIDE papyrus skill increment event
+	; will actually show up on HUD message and properly proc levelup and rest
 	int __everyNthLevelXP = ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue() as int
 	int __newSkillLevel = ED_Mechanics_SkillTree_Level_Global.GetValue() as int
 	ED_SKSEnativebindings.AddThisMuchXP(__newSkillLevel/__everyNthLevelXP)

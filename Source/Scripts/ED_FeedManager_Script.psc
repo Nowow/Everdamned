@@ -478,8 +478,18 @@ function HandleDrainMesmerized(actor FeedTarget)
 	; but it seems to alert everyone around
 	;PlayerRef.StartVampireFeed(FeedTarget)
 	
-	
-	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
+	bool __isVL = playerRef.GetRace() == DLC1VampireBeastRace
+	if __isVL
+		float headingAngle = FeedTarget.GetHeadingAngle(playerRef) 
+		bool __front = headingAngle >= -90.0 && headingAngle <= 90.0
+		if __front
+			playerRef.PlayIdleWithTarget(VampireLordLeftPairedFeedFront, FeedTarget)
+		else
+			playerRef.PlayIdleWithTarget(VampireLordLeftPairedFeedBack, FeedTarget)
+		endif
+	else
+		PlayerRef.StartVampireFeed(FeedTarget)
+	endif
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False

@@ -135,6 +135,7 @@
       "Class": "Everdamned_InstinctiveCharmProc",
       "Filters": {
 		"Percentage": 10.0,
+		"Blocked": ["No"],
 		"Conditions": ["Everdamned.esp:0xC6DC03"],
         "Attacks": ["Regular", "Power", "Bash"]
       },

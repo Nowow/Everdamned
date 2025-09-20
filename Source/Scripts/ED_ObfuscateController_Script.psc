@@ -6,7 +6,7 @@ bool __sneaking
 float property AgeToAllowWalking auto
 
 Event OnEffectStart(Actor Target, Actor Caster)
-	
+	__target = Target
 	; at certain age dont have to crouch 
 	if Target.IsSneaking() || ED_Mechanics_VampireAge.value >= AgeToAllowWalking
 		ED_VampirePowers_Pw_Obfuscate_Insiv_Spell.cast(Target, Target)
@@ -15,7 +15,6 @@ Event OnEffectStart(Actor Target, Actor Caster)
 	
 	; at certain age dont have to crouch 
 	if ED_Mechanics_VampireAge.value < AgeToAllowWalking 
-		__target = Target
 		RegisterForAnimationEvent(__target, "tailSneakIdle")
 		RegisterForAnimationEvent(__target, "tailSneakLocomotion")
 		RegisterForAnimationEvent(__target, "tailMTIdle")
@@ -44,12 +43,21 @@ event OnAnimationEvent(ObjectReference akSource, string asEventName)
 endevent
 
 event OnHit(ObjectReference akAggressor, Form akSource, Projectile akProjectile, bool abPowerAttack, bool abSneakAttack, bool abBashAttack, bool abHitBlocked)
-  __target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
-  self.dispel()
+	if abHitBlocked
+		return
+	endif
+	
+	spell spellHit = akSource as spell
+	if spellHit && !(spellHit.IsHostile())
+		return
+	endif
+	
+	__target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
+	self.dispel()
 endevent
 
 Event OnEffectFinish(Actor Target, Actor Caster)
-	Target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
+	__target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
 endevent
 
 float property XPgained auto

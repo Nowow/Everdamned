@@ -137,12 +137,12 @@
           "x": 3.46,
           "y": 1.2,
           "links": [
-            "VampiresWill",
+            "PsychicEchoes",
             "Auspex"
           ]
         },
         {
-          "id": "VampiresWill",
+          "id": "PsychicEchoes",
           "perk": "Everdamned.esp|24E846",
           "x": 4.25,
           "y": 1.83,
@@ -194,7 +194,8 @@
           "x": 3.06,
           "y": 4.29,
           "links": [
-            "Dominate"
+            "Dominate",
+			"Masquerade"
           ]
         },
 		{
