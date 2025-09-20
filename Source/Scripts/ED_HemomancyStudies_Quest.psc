@@ -102,18 +102,24 @@ state LearningAdept
 
 		debug.Trace("Everdamned DEBUG: Hemomancy spell was cast")
 		
-		int hemXP = 1
-		__HemomancyXPneededToAdvance -= hemXP 
+		int __xp = (akSpell as spell).GetPerk().GetNthEntryPriority(0) / 10
+		if __xp < 1
+			__xp = 1
+		endif
+		debug.Trace("Everdamned DEBUG: Player gets " + __xp + " hemomancy XP")
+		
+		__HemomancyXPneededToAdvance -= __xp
 		if __HemomancyXPneededToAdvance > 0
 			__learnLock = false
 			return
 		endif
 		__readyToProgress = true
+		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 15
 		
 		; now called from FeedManager, because actual hemomancy advancement 
 		; comes from feeding after getting enough exp
-		;AdvanceHemomancy()
+		; stage 80 calls AdvanceHemomancy(), stage set from feed manager
 		
 		__learnLock = false
 	endevent
@@ -169,6 +175,8 @@ state LearningExpert
 		
 		if playerRef.hasperk(ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk)
 			; otherwise trying to advance again immediately
+			; because since we are here it means that we have not taught player
+			; a new spell yet
 			debug.Trace("Everdamned INFO: And calling Hemomancy Advance in new state because player has the perk")
 			__readyToProgress = true
 			AdvanceHemomancy()
@@ -188,13 +196,19 @@ state LearningExpert
 
 		debug.Trace("Everdamned DEBUG: Hemomancy spell was cast")
 		
-		int hemXP = 1
-		__HemomancyXPneededToAdvance -= hemXP 
+		int __xp = (akSpell as spell).GetPerk().GetNthEntryPriority(0) / 10
+		if __xp < 1
+			__xp = 1
+		endif
+		debug.Trace("Everdamned DEBUG: Player gets " + __xp + " hemomancy XP")
+		
+		__HemomancyXPneededToAdvance -= __xp
 		if __HemomancyXPneededToAdvance > 0
 			__learnLock = false
 			return
 		endif
 		__readyToProgress = true
+		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 30
 		
 		; now called from FeedManager, because actual hemomancy advancement 
@@ -279,13 +293,19 @@ state LearningMaster
 
 		debug.Trace("Everdamned DEBUG: Hemomancy spell was cast")
 		
-		int hemXP = 1
-		__HemomancyXPneededToAdvance -= hemXP 
+		int __xp = (akSpell as spell).GetPerk().GetNthEntryPriority(0) / 10
+		if __xp < 1
+			__xp = 1
+		endif
+		debug.Trace("Everdamned DEBUG: Player gets " + __xp + " hemomancy XP")
+		
+		__HemomancyXPneededToAdvance -= __xp
 		if __HemomancyXPneededToAdvance > 0
 			__learnLock = false
 			return
 		endif
 		__readyToProgress = true
+		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 50
 		
 		; now called from FeedManager, because actual hemomancy advancement 
@@ -303,5 +323,7 @@ keyword property ED_Mechanics_Keyword_Hemomancy auto
 perk property ED_PerkTree_BloodMagic_20_AdeptHemomancy auto
 perk property ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk auto
 perk property ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk auto
+
+message property ED_Mechanics_Message_HemomancyReadyToAdvance auto
 
 quest property ED_Mechanics_Hemomancy_Quest auto
