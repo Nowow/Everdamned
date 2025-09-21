@@ -121,6 +121,11 @@ globalvariable property ED_Test_testglobalX auto
 globalvariable property ED_Test_testglobalY auto
 globalvariable property ED_Test_testglobalZ auto
 
+message property ED_Mechanics_Message_AgeLvlUp_1to2 auto
+message property ED_Mechanics_Message_AgeLvlUp_2to3 auto
+message property ED_Mechanics_Message_AgeLvlUp_3to4 auto
+message property ED_Mechanics_Message_AgeLvlUp_4to5 auto
+message property ED_Mechanics_Message_AgeLvlUp_5to6 auto
 
 
 int counter
@@ -141,11 +146,17 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		ED_Mechanics_Message_AgeLvlUp_1to2.Show()
+		utility.wait(1.0)
+		ED_Mechanics_Message_AgeLvlUp_2to3.Show()
+		utility.wait(1.0)
+		ED_Mechanics_Message_AgeLvlUp_3to4.Show()
+		utility.wait(1.0)
+		ED_Mechanics_Message_AgeLvlUp_4to5.Show()
+		utility.wait(1.0)
+		ED_Mechanics_Message_AgeLvlUp_5to6.Show()
 		
-		CustomSkills.IncrementSkill("EverdamnedXP")
-		ED_SKSEnativebindings.AddThisMuchXP(600)
 		
-		;pl.SetDontMove(false)
 		
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
