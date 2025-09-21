@@ -128,26 +128,26 @@
           "x": 2.15,
           "y": 0.61,
           "links": [
+            "VampiresWill"
+          ]
+        },
+		{
+          "id": "VampiresWill",
+          "perk": "Everdamned.esp|24E846",
+          "x": 3.2,
+          "y": 1.2,
+          "links": [
             "Presence"
           ]
         },
         {
           "id": "Presence",
           "perk": "Everdamned.esp|6AC503",
-          "x": 3.46,
-          "y": 1.2,
+          "x": 4.1,
+          "y": 2.0,		  
           "links": [
-            "PsychicEchoes",
+            "Mesmerize",
             "Auspex"
-          ]
-        },
-        {
-          "id": "PsychicEchoes",
-          "perk": "Everdamned.esp|24E846",
-          "x": 4.25,
-          "y": 1.83,
-          "links": [
-            "Mesmerize"
           ]
         },
         {
@@ -288,8 +288,8 @@
         {
           "id": "Auspex",
           "perk": "Everdamned.esp|6AC506",
-          "x": 2,
-          "y": 2,
+          "x": 2.3,
+          "y": 2.4,
           "links": []
         }
       ]
