@@ -401,7 +401,7 @@ endFunction
 function PrepShift()
 
 	VampireChange.Apply(1.00000)
-	VampireIMODSound.Play(playerRef as objectreference)
+	VampireIMODSound.Play(playerRef)
 	game.SetInCharGen(true, true, false)
 	; TODO: activation blocker converted, check if no more work necessary
 	playerRef.AddPerk(DLC1VampireActivationBlocker)
