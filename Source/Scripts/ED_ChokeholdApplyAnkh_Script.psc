@@ -35,6 +35,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	debug.Trace("Everdamned DEBUG: Parting Gift effect burst played on: " + akTarget)
 	
 	akTarget.SetAlpha(0.000000, false)
+	akTarget.kill()
 
 	ED_VampireSpellsVL_Chokehold_PartingGift_AttachAshpileAnchor_Spell.Cast(akTarget)
 	
