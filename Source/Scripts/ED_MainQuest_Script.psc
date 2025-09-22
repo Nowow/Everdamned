@@ -159,6 +159,11 @@ function SetUpAgeAppropriateRewards()
 		i += 1
 	endWhile
 	
+	if playerRef.HasPerk(ED_PerkTree_Disciplines_30_DeadlyStrength_Perk)
+		playerRef.RemoveSpell(ED_Mechanics_UnlockDisplayAb_Potence)
+		playerRef.AddSpell(ED_Mechanics_UnlockDisplayAb_Potence, false)
+	endif
+	
 	
 endfunction
 
@@ -219,6 +224,9 @@ function TearDownRewards()
 	;	playerRef.RemovePerk(__perkToDelete)
 	;	i += 1
 	;endwhile
+	
+	playerRef.RemoveSpell(ED_VampirePowers_Ab_Presence_Spell)
+	playerRef.RemoveSpell(ED_Mechanics_UnlockDisplayAb_Potence)
 	
 	CustomSkills_FormExt.UnregisterForCustomSkillIncrease(self)
 	
@@ -336,6 +344,9 @@ perk property ED_Mechanics_Ab_ChainedBeast_Perk auto
 perk property ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk auto
 spell property ED_Mechanics_Ab_ChainedBeast_Spell auto
 spell property ED_VampirePowers_Ab_Presence_Spell auto
+spell property ED_Mechanics_UnlockDisplayAb_Potence auto
+perk property ED_PerkTree_Disciplines_30_DeadlyStrength_Perk auto
+
 
 formlist property ED_Mechanics_FormList_MortalPerkTreePerks auto
 formlist property ED_Mechanics_FormList_VLPerkTreePerks auto
