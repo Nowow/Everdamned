@@ -410,6 +410,22 @@ string function SetupNewTestCharacter() global
 	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_Vanilla_ConjureGargoyle_Perk") as perk)
 	utility.wait(0.1)
 	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_WingsOfTheStrix_Perk") as perk)
+	
+	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodSeed_Spell") as spell)
+	utility.wait(0.1)
+	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodBrand_Spell") as spell)
+	utility.wait(0.1)
+	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodGarden_Spell") as spell)
+	utility.wait(0.1)
+	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodScourge_Spell") as spell)
+	utility.wait(0.1)
+	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodScourge_AnkhSwitchAb_Spell") as spell)
+	utility.wait(0.1)
+	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodVortex_Spell") as spell)
+	utility.wait(0.1)
+	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodBoil_Spell") as spell)
+	utility.wait(0.1)
+	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BorrowedTime_Spell") as spell)
 	debug.Notification("Char setup finished")
 endfunction
 
