@@ -29,6 +29,8 @@ float fMaxBloodPoolValue
 float fMeterPercent
 float fLastMeterPercent
 
+string WidgetRoot
+
 bool bShouldFadeWhenIdle
 int iDisplayIterationsNeededUntilFade = 3
 int iDisplayIterationsRemaining
@@ -48,7 +50,9 @@ endEvent
 
 Event OnGameReload()
 	utility.wait(1.0)
-	ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
+	widgetRoot = ExposureMeter.WidgetRoot
+	debug.Trace("Everdamned DEBUG: " + widgetRoot)
+	ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(widgetRoot + ".setPercent")
 	StartUpdating()
 endEvent
 
@@ -61,6 +65,8 @@ function StartUpdating()
 	;utility.wait(1.0)
 	;ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(true)
 	
+	widgetRoot = ExposureMeter.WidgetRoot
+	debug.Trace("Everdamned DEBUG: " + widgetRoot)
 	UpdateMeterBasicSettings()
 	
 	; registration happens in UpdateMeterBasicSettings
@@ -78,6 +84,13 @@ endEvent
 
 
 function UpdateMeter()
+	
+	string currentWidgetRoot = ExposureMeter.WidgetRoot
+	if currentWidgetRoot != WidgetRoot
+		ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
+		debug.Trace("Everdamned DEBUG: Widget root changed from: " + WidgetRoot + " to " + currentWidgetRoot)
+		WidgetRoot = currentWidgetRoot
+	endif
 	
 	fThisBloodPoolValue = PlayerRef.GetActorValue("ED_BloodPool")
 	; for display effect
@@ -116,6 +129,7 @@ function UpdateMeter()
 	; but OnUpdate manages to fire anyway
 	; consider switching to RegisterForUpdate
 	if ED_Mechanics_BloodMeter_Enable_Global.value == 0
+
 		ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(false)
 		ExposureMeter.Alpha = 0.0
 	else
@@ -152,12 +166,22 @@ function UpdateMeterBasicSettings()
 		bShouldFadeWhenIdle = false
 	endif
 	
+	fThisBloodPoolValue = PlayerRef.GetActorValue("ED_BloodPool")
+	fMaxBloodPoolValue = ED_Mechanics_BloodPool_Total.GetValue()
+	fMeterPercent = ((fThisBloodPoolValue)/(fMaxBloodPoolValue))
+	
+	
+	ExposureMeter.SetPercent(fMeterPercent)
+	
+	
 	if ED_Mechanics_BloodMeter_Enable_Global.value == 0
 		ExposureMeter.Alpha = 0.0
+		
 		ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(false)
 		UnregisterForUpdate()
 	else
 		ExposureMeter.Alpha = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
+		ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
 		ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(true)
 		RegisterForSingleUpdate(BloodMeter_UpdateRate)
 	endif
