@@ -127,6 +127,8 @@ message property ED_Mechanics_Message_AgeLvlUp_3to4 auto
 message property ED_Mechanics_Message_AgeLvlUp_4to5 auto
 message property ED_Mechanics_Message_AgeLvlUp_5to6 auto
 
+ED_BloodMeter property ExposureMeter auto
+
 
 int counter
 bool __switch
@@ -146,18 +148,7 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		ED_Mechanics_Message_AgeLvlUp_1to2.Show()
-		utility.wait(1.0)
-		ED_Mechanics_Message_AgeLvlUp_2to3.Show()
-		utility.wait(1.0)
-		ED_Mechanics_Message_AgeLvlUp_3to4.Show()
-		utility.wait(1.0)
-		ED_Mechanics_Message_AgeLvlUp_4to5.Show()
-		utility.wait(1.0)
-		ED_Mechanics_Message_AgeLvlUp_5to6.Show()
-		
-		
-		
+		ED_SKSEnativebindings.SetBloodMeterPercent(ExposureMeter.WidgetRoot)
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)

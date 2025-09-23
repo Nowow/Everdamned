@@ -79,6 +79,8 @@ function UpdateMeter()
 	fMeterPercent = ((fThisBloodPoolValue)/(fMaxBloodPoolValue))
 	
 	ExposureMeter.SetPercent(fMeterPercent)
+	debug.Trace("Everdamned DEBUG: WidgetRoot: " + ExposureMeter.WidgetRoot)
+	debug.Trace("Everdamned DEBUG: HUD_MENU: " + ExposureMeter.HUD_MENU)
 	
 	Int _primaryColor = 11141120
 	ExposureMeter.SetColors(_primaryColor, 3276800)
