@@ -39,19 +39,27 @@ int iDisplayIterationsRemaining
 ; EVENTS ------------------------------------------------------------------------------------------
 
 
-Event OnInit()	
+Event OnInit()
+	utility.wait(1.0)
+	ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
 	StartUpdating()
 endEvent
 
 
 Event OnGameReload()
+	utility.wait(1.0)
+	ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
 	StartUpdating()
 endEvent
 
 
 function StartUpdating()
 
-	debug.Trace("Blood meter started updating!")
+	debug.Trace("Everdamned DEBUG: Blood Meter widget starts updating!")
+	
+	;ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
+	;utility.wait(1.0)
+	;ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(true)
 	
 	UpdateMeterBasicSettings()
 	
@@ -61,7 +69,7 @@ endFunction
 
 
 Event OnUpdate()
-		UpdateMeter()
+	UpdateMeter()
 endEvent
 
 
@@ -75,18 +83,16 @@ function UpdateMeter()
 	; for display effect
 	ED_Mechanics_BloodPool_Current.SetValue(fThisBloodPoolValue)
 	
-	fMaxBloodPoolValue = ED_Mechanics_BloodPool_Total.GetValue()
-	fMeterPercent = ((fThisBloodPoolValue)/(fMaxBloodPoolValue))
+	;fMaxBloodPoolValue = ED_Mechanics_BloodPool_Total.GetValue()
+	;fMeterPercent = ((fThisBloodPoolValue)/(fMaxBloodPoolValue))
 	
-	ExposureMeter.SetPercent(fMeterPercent)
-	debug.Trace("Everdamned DEBUG: WidgetRoot: " + ExposureMeter.WidgetRoot)
-	debug.Trace("Everdamned DEBUG: HUD_MENU: " + ExposureMeter.HUD_MENU)
+	;ExposureMeter.SetPercent(fMeterPercent)
+	;debug.Trace("Everdamned DEBUG: WidgetRoot: " + ExposureMeter.WidgetRoot)
+	;debug.Trace("Everdamned DEBUG: HUD_MENU: " + ExposureMeter.HUD_MENU)
 	
 	Int _primaryColor = 11141120
 	ExposureMeter.SetColors(_primaryColor, 3276800)
 
-	
-	
 	float fNewOpacity = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
 	if bShouldFadeWhenIdle
 		if fLastMeterPercent == fMeterPercent
@@ -108,8 +114,9 @@ function UpdateMeter()
 	
 	; here on occasion UpdateMeterBasicSettings unregisters due to Enabled change
 	; but OnUpdate manages to fire anyway
-	; consider switching to OnUpdate
+	; consider switching to RegisterForUpdate
 	if ED_Mechanics_BloodMeter_Enable_Global.value == 0
+		ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(false)
 		ExposureMeter.Alpha = 0.0
 	else
 		RegisterForSingleUpdate(BloodMeter_UpdateRate)
@@ -118,6 +125,7 @@ function UpdateMeter()
 endFunction
 
 function UpdateMeterBasicSettings()
+
 	ExposureMeter.HAnchor = "left" 
 	ExposureMeter.VAnchor = "bottom" 
 	ExposureMeter.X = ED_Mechanics_BloodMeter_X_Global.GetValue() ; Default is 67
@@ -146,9 +154,11 @@ function UpdateMeterBasicSettings()
 	
 	if ED_Mechanics_BloodMeter_Enable_Global.value == 0
 		ExposureMeter.Alpha = 0.0
+		ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(false)
 		UnregisterForUpdate()
 	else
 		ExposureMeter.Alpha = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
+		ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(true)
 		RegisterForSingleUpdate(BloodMeter_UpdateRate)
 	endif
 	
