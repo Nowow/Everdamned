@@ -148,7 +148,11 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		ED_SKSEnativebindings.SetBloodMeterPercent(ExposureMeter.WidgetRoot)
+		ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
+		
+		utility.wait(1.0)
+		
+		ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(true)
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)

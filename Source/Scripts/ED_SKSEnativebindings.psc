@@ -23,7 +23,9 @@ bool function ValidateArmorRace(armor leArmor) global native
 
 function AddThisMuchXP(int theXP) global native
 
-function SetBloodMeterPercent(string widget_root) global native
+function CommunicateCurrentWidgetRoot(string widget_root) global native
+
+function ToggleBloodPoolUpdateLoop(bool toggleOn) global native
 
 
 function StopAllShadersExceptThis(effectshader a_effectShader, keyword someKeyword, effectshader ED_TestShader2_empty) global native
