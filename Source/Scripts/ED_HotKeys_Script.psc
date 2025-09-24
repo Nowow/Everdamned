@@ -130,6 +130,7 @@ message property ED_Mechanics_Message_AgeLvlUp_5to6 auto
 ED_BloodMeter property ExposureMeter auto
 
 
+
 int counter
 bool __switch
 art leart
@@ -147,12 +148,8 @@ Event OnKeyDown(int keyCode)
 		actor __targetThing = Game.GetCurrentConsoleRef() as actor
 		
 		actor pl = Game.GetPlayer()
+	
 		
-		ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
-		
-		utility.wait(1.0)
-		
-		ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(true)
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)

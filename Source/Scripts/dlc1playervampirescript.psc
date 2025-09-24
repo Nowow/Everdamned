@@ -97,6 +97,7 @@ state InVampireLordForm
 		armor equippedArmor = akBaseObject as armor
 		if !equippedArmor
 			debug.Trace("Everdamned DEBUG: But it was not armor?")
+			return
 		endif
 		
 		bool __validated = ED_SKSEnativebindings.ValidateArmorRace(equippedArmor)

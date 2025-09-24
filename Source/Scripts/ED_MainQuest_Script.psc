@@ -278,6 +278,7 @@ Event OnCustomSkillIncrease(string asSkillId)
 	
 	if __newSkillLevel == __lastUpdateSkillLevel
 		debug.Trace("Everdamned INFO: Custom Skill Update event exits because its same skill level of " + __newSkillLevel)
+		__skillLvlupLock = false
 		return
 	endif
 	__newSkillLevel = __lastUpdateSkillLevel
@@ -310,6 +311,7 @@ Event OnCustomSkillIncrease(string asSkillId)
 	;10 per aging
 	;rest from biting
 	
+	__skillLvlupLock = false
 	
 EndEvent
 

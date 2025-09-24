@@ -31,6 +31,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		debug.Trace("Everdamned DEBUG: Summon or reanimate spell failed to capture commanded actor")
 	endif
 	
+	Game.AdvanceSkill("Conjuration", 200.0)
 	
 endFunction
 

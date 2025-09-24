@@ -12,7 +12,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 endfunction
 
 event OnUpdate()
-	Debug.Trace("ED_IcyWindsSelf actor value: " + _target.getactorvalue("ED_IcyWindsSelf"))
+	;Debug.Trace("ED_IcyWindsSelf actor value: " + _target.getactorvalue("ED_IcyWindsSelf"))
 	ED_VampireSpellsVL_IcyWinds_FrostHazard_Spell.Cast(_target)
 	RegisterForSingleUpdate(SpawnRate)
 endevent
@@ -20,7 +20,8 @@ endevent
 function OnEffectFinish(Actor akTarget, Actor akCaster)
 	
 	if akTarget.GetActorValue("ED_IcyWindsSelf") <= ReleaseChargeTime
-		ED_VampireSpellsVL_IcyWinds_Release_Spell.Cast(akTarget)
+		akTarget.DoCombatSpellApply(ED_VampireSpellsVL_IcyWinds_Release_Spell, akTarget)
+		;ED_VampireSpellsVL_IcyWinds_Release_Spell.Cast(akTarget)
 	endif 
 	
 	_target.restoreactorvalue("ED_IcyWindsSelf", 9999.0)

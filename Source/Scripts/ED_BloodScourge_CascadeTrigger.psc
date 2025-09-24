@@ -10,8 +10,8 @@ Actor TheTarget
 
 function OnDying(Actor akKiller)
 
-	Nova.RemoteCast(TheTarget as objectreference, TheCaster, none)
-	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	;Nova.RemoteCast(TheTarget as objectreference, TheCaster, none)
+	theCaster.DoCombatSpellApply(Nova, TheTarget)
 	self.Dispel()
 endFunction
 
@@ -19,5 +19,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 
 	TheCaster = akCaster
 	TheTarget = akTarget
+	
+	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 	
 endFunction
