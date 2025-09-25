@@ -7,9 +7,11 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 		if akCaster.HasPerk(ED_PerkTreeVL_UndyingLoyalty_Perk)
 			debug.Trace("Everdamned DEBUG: Lords Servant casts Undying Loyaly!")
 			ED_VampireSpellsVL_LordsServant_Spell_UndyingLoyalty.Cast(akCaster, akTarget) 
+			Game.AdvanceSkill("Conjuration", 200.0)
 		else
 			debug.Trace("Everdamned DEBUG: Lords Servant casts Reanimate!")
 			ED_VampireSpellsVL_LordsServant_Spell_Reanimate.Cast(akCaster, akTarget)
+			Game.AdvanceSkill("Conjuration", 200.0)
 		endif
 	else
 		debug.Trace("Everdamned DEBUG: Lords Servant casts Command Undead!")

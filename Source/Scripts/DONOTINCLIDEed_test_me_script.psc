@@ -14,7 +14,7 @@ event OnEffectStart(Actor akTarget, Actor akCaster)
 	;currentAVInfo = ActorValueInfo.GetActorValueInfoByName(AVName)
 	
 	;debug.Trace("Everdamned DEBUG: Currently Checked AV: " + AVName)
-	RegisterForUpdate(1.0)
+	RegisterForUpdate(0.5)
 
 endevent
 
