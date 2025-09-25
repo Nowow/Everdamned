@@ -149,7 +149,7 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 	
-		
+		pl.PlaySubGraphAnimation( "KillFX" )
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
