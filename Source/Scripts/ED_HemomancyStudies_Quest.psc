@@ -91,11 +91,11 @@ state LearningAdept
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
-		if __readyToProgress || __learnLock
+		if __readyToProgress || __learnLock || !akSpell
 			return
 		endif
 		__learnLock = true
-		if !akSpell.haskeyword(ED_Mechanics_Keyword_Hemomancy) || !(playerRef.hasperk(ED_PerkTree_BloodMagic_20_AdeptHemomancy))
+		if !(akSpell.haskeyword(ED_Mechanics_Keyword_Hemomancy)) || !(playerRef.hasperk(ED_PerkTree_BloodMagic_20_AdeptHemomancy))
 			__learnLock = false
 			return
 		endif
@@ -185,11 +185,11 @@ state LearningExpert
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
-		if __readyToProgress || __learnLock
+		if __readyToProgress || __learnLock || !akSpell
 			return
 		endif
 		__learnLock = true
-		if !akSpell.haskeyword(ED_Mechanics_Keyword_Hemomancy) || !(playerRef.hasperk(ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk))
+		if !(akSpell.haskeyword(ED_Mechanics_Keyword_Hemomancy)) || !(playerRef.hasperk(ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk))
 			__learnLock = false
 			return
 		endif
@@ -282,11 +282,11 @@ state LearningMaster
 	endfunction
 	
 	Event OnSpellCast(Form akSpell)
-		if __readyToProgress || __learnLock
+		if __readyToProgress || __learnLock || !akSpell
 			return
 		endif
 		__learnLock = true
-		if !akSpell.haskeyword(ED_Mechanics_Keyword_Hemomancy) || !(playerRef.hasperk(ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk))
+		if !(akSpell.haskeyword(ED_Mechanics_Keyword_Hemomancy)) || !(playerRef.hasperk(ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk))
 			__learnLock = false
 			return
 		endif

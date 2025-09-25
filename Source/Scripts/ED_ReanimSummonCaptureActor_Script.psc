@@ -49,6 +49,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		
 		ED_UndyingLoyaltyServant1.ForceRefTo(_commandedActor)
 		
+		Game.AdvanceSkill("Conjuration", 100.0)
 		CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 		
 	else

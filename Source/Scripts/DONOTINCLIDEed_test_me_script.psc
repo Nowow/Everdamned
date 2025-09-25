@@ -37,8 +37,8 @@ endfunction
 
 event OnUpdate()
 
-	checkSkill("Destruction")
-	;checkSkill("Conjuration")
+	;checkSkill("Destruction")
+	checkSkill("Conjuration")
 	;checkSkill("Alteration")
 	
 endevent

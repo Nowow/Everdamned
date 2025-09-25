@@ -23,6 +23,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 		return
 	endif
 	
+	Game.AdvanceSkill("Conjuration", 100.0)
 	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 	
 	if prevRef != none && prevRef != akTarget
