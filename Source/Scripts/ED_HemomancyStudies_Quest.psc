@@ -324,6 +324,8 @@ perk property ED_PerkTree_BloodMagic_20_AdeptHemomancy auto
 perk property ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk auto
 perk property ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk auto
 
+formlist property ED_Mechanics_FormList_HemomancyRewards auto
+
 message property ED_Mechanics_Message_HemomancyReadyToAdvance auto
 
 quest property ED_Mechanics_Hemomancy_Quest auto

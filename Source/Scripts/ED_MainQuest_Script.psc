@@ -205,25 +205,34 @@ function TearDownRewards()
 	; BIG TODO: remove hemomancy, because its awarded through quest, not perks
 	
 	i = 0
-	int __perklistSize
+	int __listSize
 	perk __perkToDelete
 	
-	__perklistSize = ED_Mechanics_FormList_MortalPerkTreePerks.GetSize() 
+	__listSize = ED_Mechanics_FormList_MortalPerkTreePerks.GetSize() 
 	
-	while i < __perklistSize
+	while i < __listSize
 		__perkToDelete = ED_Mechanics_FormList_MortalPerkTreePerks.GetAt(i) as perk
 		playerRef.RemovePerk(__perkToDelete)
 		i += 1
 	endwhile
 	
 	;i = 0
-	;__perklistSize = ED_Mechanics_FormList_VLPerkTreePerks.GetSize() 
+	;__listSize = ED_Mechanics_FormList_VLPerkTreePerks.GetSize() 
 	
-	;while i < __perklistSize
+	;while i < __listSize
 	;	__perkToDelete = ED_Mechanics_FormList_VLPerkTreePerks.GetAt(i) as perk
 	;	playerRef.RemovePerk(__perkToDelete)
 	;	i += 1
 	;endwhile
+	
+	spell __spellToRemove
+	i = 0
+	__listSize = ED_Mechanics_FormList_HemomancyRewards.GetSize() 
+	while i < __listSize
+		__spellToRemove = ED_Mechanics_FormList_HemomancyRewards.GetAt(i) as spell
+		playerRef.RemoveSpell(__spellToRemove)
+		i += 1
+	endwhile
 	
 	playerRef.RemoveSpell(ED_VampirePowers_Ab_Presence_Spell)
 	playerRef.RemoveSpell(ED_Mechanics_UnlockDisplayAb_Potence)
@@ -349,9 +358,9 @@ spell property ED_VampirePowers_Ab_Presence_Spell auto
 spell property ED_Mechanics_UnlockDisplayAb_Potence auto
 perk property ED_PerkTree_Disciplines_30_DeadlyStrength_Perk auto
 
-
 formlist property ED_Mechanics_FormList_MortalPerkTreePerks auto
 formlist property ED_Mechanics_FormList_VLPerkTreePerks auto
+formlist property ED_Mechanics_FormList_HemomancyRewards auto
 
 globalvariable property ED_Mechanics_VampireAge auto
 globalvariable property ED_Mechanics_VampireAgeRate auto
