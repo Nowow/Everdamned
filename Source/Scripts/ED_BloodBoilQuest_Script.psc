@@ -35,6 +35,11 @@ endfunction
 
 function StartScene()
 
+	if _target.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_TerminalEffect) || _target.IsEssential()
+		debug.Trace("Everdamned DEBUG: Blood Boil quest shuts down early because is essential or already going to burst, from something else probably!")
+		SetCurrentStageID(100)
+		return
+	endif
 	ED_Art_SoundM_Wassail.Play(_target)
 	_caster.DoCombatSpellApply(ED_VampireSpells_BloodBoil_Burst_Spell, _target)
 	
@@ -132,6 +137,7 @@ Message property ED_Mechanics_Message_BloodBoil_FailAliasFilled auto
 sound property ED_Art_SoundM_Wassail auto
 keyword property ActorTypeNPC auto
 explosion property DLC1VampChangeExplosion auto
+keyword property ED_Mechanics_Keyword_TerminalEffect auto
 
 actor _target
 actor _caster

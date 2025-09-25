@@ -11,7 +11,8 @@ float property XPgained auto
 function OnUpdate()
 
 	HealthThreshold += _healthThresholdSetting
-	if HealthThreshold as Float > TheTarget.GetActorValue("Health") && !TheTarget.IsEssential()
+	bool __willBurstAnyway = TheTarget.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_TerminalEffect)
+	if HealthThreshold as Float > TheTarget.GetActorValue("Health") && !TheTarget.IsEssential() && !__willBurstAnyway
 		self.UnregisterForUpdate()
 		;Bool IsRaze = TheTarget.HasEffectKeyword(SCS_Raze)
 		TheTarget.Kill(TheCaster)
@@ -68,3 +69,4 @@ explosion property ED_Art_Explosion_Gutwrench_NoBones auto
 activator property AshPileObject auto
 formlist property ProhibitedCreatures auto
 keyword property ActorTypeNPC auto
+keyword property ED_Mechanics_Keyword_TerminalEffect auto

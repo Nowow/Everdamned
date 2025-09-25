@@ -15,7 +15,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	; doing it in papyrus because dont trust spell side conditions, feels like they might give start+stops
 	; also because dont trust papyrus functions to be equivalent to CK 
-	if _target.GetActorValuePercentage("Health") < 0.51
+	if _target.GetActorValuePercentage("Health") < 0.51 && !(_target.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_TerminalEffect))
 		if ED_Mechanics_Quest_BloodBoil.IsStopped()
 			debug.Trace("Everdamned DEBUG: Blood Boil Burn starts Burst quest right away!")
 			ED_Mechanics_Keyword_BloodBoil_StartQuest.SendStoryEvent(None, _target)
@@ -52,3 +52,4 @@ Message property ED_Mechanics_Message_BloodBoil_FailAliasFilled auto
 sound property ED_Art_SoundM_MasterSpellHit auto
 quest property ED_Mechanics_Quest_BloodBoil auto
 keyword property ED_Mechanics_Keyword_BloodBoil_StartQuest auto
+keyword property ED_Mechanics_Keyword_TerminalEffect auto
