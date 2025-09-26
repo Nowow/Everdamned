@@ -65,6 +65,10 @@ Int Setting_LevelXPDenominator
 float property Default_Setting_LevelXPDenominator auto
 GlobalVariable Property ED_Mechanics_SkillTree_DenominatorXP_Global Auto
 
+Int Setting_DisableBloodstarvedTint
+float property Default_Setting_DisableBloodstarvedTint auto
+GlobalVariable Property ED_Mechanics_Global_MCM_DisableBloodstarvedTint Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -114,6 +118,7 @@ function OnPageReset(String akPage)
 	Setting_CombatDrainAnim = self.AddSliderOption("Combat Drain type", ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue(), "Type {0}")
 	Setting_SeductionDialogueXPCooldownHours = self.AddSliderOption("Speech XP Seduction cooldown", ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.GetValue(), "{0} hours")
 	Setting_LevelXPDenominator = self.AddSliderOption("Level XP gain lower", ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue(), "{0} times")
+	Setting_DisableBloodstarvedTint = self.AddToggleOption("No red tint when Blood Starved ", ED_Mechanics_Global_MCM_DisableBloodstarvedTint.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	; Blood Meter
@@ -224,6 +229,11 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Setting_LevelXPDenominator
 		ED_Mechanics_SkillTree_DenominatorXP_Global.SetValue(Default_Setting_LevelXPDenominator as Float)
 		self.SetSliderOptionValue(Setting_LevelXPDenominator, Default_Setting_LevelXPDenominator, "{0} times")
+		
+	elseIf akOp == Setting_DisableBloodstarvedTint
+		ED_Mechanics_Global_MCM_SameSexPreference.SetValue(Default_Setting_DisableBloodstarvedTint)
+		SetToggleOptionValue(Setting_DisableBloodstarvedTint, Default_Setting_DisableBloodstarvedTint as bool)
+	
 	
 	; ------------------------------------------------------------
 	; cheats
@@ -395,6 +405,10 @@ function OnOptionSelect(Int akOp)
 	elseif akOp == Setting_SameSexPreference
 		ED_Mechanics_Global_MCM_SameSexPreference.SetValue(1 as Float - ED_Mechanics_Global_MCM_SameSexPreference.GetValue())
 		SetToggleOptionValue(Setting_SameSexPreference, ED_Mechanics_Global_MCM_SameSexPreference.GetValue() as bool)
+		
+	elseif akOp == Setting_DisableBloodstarvedTint
+		ED_Mechanics_Global_MCM_DisableBloodstarvedTint.SetValue(1 as Float - ED_Mechanics_Global_MCM_DisableBloodstarvedTint.GetValue())
+		SetToggleOptionValue(Setting_DisableBloodstarvedTint, ED_Mechanics_Global_MCM_DisableBloodstarvedTint.GetValue() as bool)
 	
 	; ------------------------------------------------------------
 	; cheats
@@ -491,6 +505,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Female animation: jump feed, male: overpower feed. 1: use sex specific animation; 2: use opposite; 3: use both randomly. Takes effect after next combat drain")
 	elseIf akOp == Setting_SeductionDialogueXPCooldownHours
 		self.SetInfoText("How many hours between you get XP for successful seduction")
+	elseIf akOp == Setting_DisableBloodstarvedTint
+		self.SetInfoText("Disable red tint when in combat while Blood Starved")
 	
 	; ------------------------------------------------------------
 	; cheats
