@@ -334,6 +334,8 @@ function VampireProgression(actor Player, Int VampireStage)
         
         Player.RemoveSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
         
+		ED_Mechanics_Global_CombatFeedThreshold.SetValue(0.30)
+		
         if VampireStatus != VampireStage
             debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
             ED_BloodPoolManager_Quest.AtStageOrAgeChange()
@@ -367,6 +369,8 @@ function VampireProgression(actor Player, Int VampireStage)
         Player.AddSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell, false)
         
         Player.RemoveSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
+		
+		ED_Mechanics_Global_CombatFeedThreshold.SetValue(0.40)
         
         if VampireStatus != VampireStage
             debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
@@ -405,6 +409,8 @@ function VampireProgression(actor Player, Int VampireStage)
         Player.AddSpell(ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell, false)
         
         Player.RemoveSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
+		
+		ED_Mechanics_Global_CombatFeedThreshold.SetValue(0.50)
         
         if VampireStatus != VampireStage
             debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
@@ -467,6 +473,8 @@ function VampireProgression(actor Player, Int VampireStage)
         if Player.HasPerk(ED_Mechanics_Ab_ChainedBeast_Perk) && ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() != 1
             Player.AddSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
         endif
+		
+		ED_Mechanics_Global_CombatFeedThreshold.SetValue(0.25)
         
         if VampireStatus != VampireStage
             debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
@@ -511,7 +519,7 @@ globalvariable property VampireFeedReady auto
 globalvariable property GameDaysPassed auto
 globalvariable property ED_VampireAge auto
 globalvariable property ED_Mechanics_Global_MCM_DisableFortitudeRevive auto
-
+globalvariable property ED_Mechanics_Global_CombatFeedThreshold auto
 
 keyword property ED_Mechanics_Keyword_BlockHungerAdvance auto
 
