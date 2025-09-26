@@ -4,7 +4,6 @@ actor _victim
 
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
-	debug.Trace("Everdamned DEBUG: Hazard spell effect started")
 	_victim = akTarget
 endFunction
 

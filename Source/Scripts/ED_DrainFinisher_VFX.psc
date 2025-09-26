@@ -44,7 +44,6 @@ Event OnUpdate()
 	_vfxDuration = _vfxDurationMax - _timeElapsed
 	
 	;stacking vfx
-	;DLC1BatsAbsorbTargetVFX01.Play(_target, _vfxDuration, _player)
 	DLC1BatsEatenBloodSplats.Play(_target, _vfxDuration)
 	ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD.Apply(1.0 - 1.0/(1.0+_timeElapsed))
 	
@@ -161,6 +160,7 @@ activator property ED_Art_Ashpile_RedGoo auto
 VisualEffect Property DLC1BatsAbsorbTargetVFX01 auto
 VisualEffect Property ED_Art_VFX_AbsorbBloodExsanguinate auto
 visualeffect property DLC1VampireBatsVFX auto
+visualeffect property ED_Art_VFX_Flaywind auto
 
 EffectShader Property DLC1BatsEatenBloodSplats Auto
 EffectShader Property DLC1VampBatsEatenByBatsSkinFXS Auto

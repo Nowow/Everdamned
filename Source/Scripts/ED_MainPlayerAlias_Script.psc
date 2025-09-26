@@ -46,17 +46,31 @@ Event OnRaceSwitchComplete()
 EndEvent
 
 Event OnDying(Actor akKiller)
+	
 	actorbase playerActorBase = playerRef.GetActorBase()
 	if playerActorBase.IsProtected() || playerRef.IsEssential()
 		return
 	endif
-	if playerRef.HasMagicEffectWithKeyword(MagicDamageFire)
+	
+	ED_Art_SoundM_LolUDied.Play(playerRef)
+	ED_Art_SoundM_DeathSounds.Play(playerRef)
+	
+	if ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue() != 0.0
+		return
+	endif
+	
+	if playerRef.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_BurningInSun)
 		DLC1HarkonDisintegrate01FXS.Play(playerRef)
 		utility.wait(1.75)
 		playerRef.SetAlpha (0.0,True)
 		playerRef.AttachAshPile(AshPileObject)
-		
+	else
+		ShockDisintegrate01FXS.Play(playerRef)
+		utility.wait(1.75)
+		playerRef.SetAlpha (0.0,True)
+		playerRef.AttachAshPile()
 	endif
+	
 endevent
 
 Event OnPlayerLoadGame()
@@ -78,10 +92,16 @@ activator property ED_Misc_UndyingServant1_Activator_Despawn auto
 perk property ED_PerkTreeVL_UndyingLoyalty_Perk auto
 objectreference property MarkerToStoreServantAt auto
 cell property ED_Cell_Stuffgoeshere auto
+globalvariable property ED_Mechanics_Global_MCM_DisableDisintegrate auto
 
 effectshader property DLC1HarkonDisintegrate01FXS auto
-keyword property MagicDamageFire auto
+effectshader property ShockDisintegrate01FXS auto
+
+;keyword property MagicDamageFire auto
+keyword property ED_Mechanics_Keyword_BurningInSun auto
 activator property AshPileObject auto
+sound property ED_Art_SoundM_LolUDied auto
+sound property ED_Art_SoundM_DeathSounds auto
 
 ReferenceAlias Property ED_UndyingLoyaltyServant1  Auto  
 

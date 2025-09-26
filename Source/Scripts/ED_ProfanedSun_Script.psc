@@ -19,11 +19,11 @@ function OnUpdate()
 	debug.Trace("Everdamned DEBUG: Profaned Sun target: " + _target)
 	if _target != none
 		TheSun.TranslateToRef(_target, 200.0, 0.000000)
+		if _target.IsDead()
+			ED_LastBloodBrandedActor.Clear()
+		endif
 	endif
 	RegisterForSingleUpdate(1.0)
-	if _target.IsDead()
-		ED_LastBloodBrandedActor.Clear()
-	endif
 endFunction
 
 function OnEffectStart(Actor akTarget, Actor akCaster)

@@ -89,6 +89,7 @@ event OnUpdate()
 		ExtraDuration = 0.0
 		RegisterForSingleUpdate(__aaa)
 		debug.Trace("Everdamned INFO: Blood vortex EXTENDED for " + __aaa + " seconds")
+		return
 	endif
 	
 	if !__shutdownMutex && GetCurrentStageID() != 100
@@ -132,6 +133,12 @@ function IncrementActorsDied(actor AbsorbedActor)
 	
 	ED_Art_VFX_BloodVortex_AbsorbCastPoint.Play(TheOrbRef, 5.0, AbsorbedActor)
 	ED_Art_VFX_BloodVortex_AbsorbTargetPoint.Play(AbsorbedActor, 5.0, TheOrbRef)
+	
+	float fCurrentRangeValue = TheOrbRef.GetDistance(AbsorbedActor)
+	fCurrentRangeValue = ((fCurrentRangeValue) / 2048.0)
+
+	;TheOrbRef.SetSubGraphFloatVariable("fAbsorbRangeValue",fCurrentRangeValue)
+	AbsorbedActor.SetSubGraphFloatVariable("fAbsorbRangeValue",fCurrentRangeValue)
 	
 	if ActorsDied >= VictimsNeededToTransform
 		__transformHappened = true

@@ -626,7 +626,11 @@ function ActuallyShiftBackIfNecessary()
 	playerRef.RemoveSpell(LeveledAbility)
 
 	playerRef.RemoveSpell(DLC1VampiresGrip)
-	playerRef.RemoveSpell(DLC1ConjureGargoyleLeftHand)
+	;playerRef.RemoveSpell(DLC1ConjureGargoyleLeftHand)
+	;player has this in mortal form as well
+	if playerRef.HasPerk(DLC1GargoylePerk) && !playerRef.HasSpell(DLC1ConjureGargoyleLeftHand)
+		playerRef.AddSpell(DLC1ConjureGargoyleLeftHand, false)
+	endIf
 	
 	playerRef.RemoveSpell(DLC1VampireDetectLife)
 	playerRef.RemoveSpell(DLC1VampireMistform)

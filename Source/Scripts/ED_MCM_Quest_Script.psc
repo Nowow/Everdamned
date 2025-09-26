@@ -69,6 +69,10 @@ Int Setting_DisableBloodstarvedTint
 float property Default_Setting_DisableBloodstarvedTint auto
 GlobalVariable Property ED_Mechanics_Global_MCM_DisableBloodstarvedTint Auto
 
+Int Setting_DisableDisintegrate
+float property Default_Setting_DisableDisintegrate auto
+GlobalVariable Property ED_Mechanics_Global_MCM_DisableDisintegrate Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -119,6 +123,7 @@ function OnPageReset(String akPage)
 	Setting_SeductionDialogueXPCooldownHours = self.AddSliderOption("Speech XP Seduction cooldown", ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.GetValue(), "{0} hours")
 	Setting_LevelXPDenominator = self.AddSliderOption("Level XP gain lower", ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue(), "{0} times")
 	Setting_DisableBloodstarvedTint = self.AddToggleOption("No red tint when Blood Starved ", ED_Mechanics_Global_MCM_DisableBloodstarvedTint.GetValue() as Bool)
+	Setting_DisableDisintegrate = self.AddToggleOption("No disintegrate on death ", ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	; Blood Meter
@@ -233,6 +238,10 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Setting_DisableBloodstarvedTint
 		ED_Mechanics_Global_MCM_SameSexPreference.SetValue(Default_Setting_DisableBloodstarvedTint)
 		SetToggleOptionValue(Setting_DisableBloodstarvedTint, Default_Setting_DisableBloodstarvedTint as bool)
+		
+	elseIf akOp == Setting_DisableDisintegrate
+		ED_Mechanics_Global_MCM_DisableDisintegrate.SetValue(Default_Setting_DisableDisintegrate)
+		SetToggleOptionValue(Setting_DisableDisintegrate, Default_Setting_DisableDisintegrate as bool)
 	
 	
 	; ------------------------------------------------------------
@@ -409,6 +418,10 @@ function OnOptionSelect(Int akOp)
 	elseif akOp == Setting_DisableBloodstarvedTint
 		ED_Mechanics_Global_MCM_DisableBloodstarvedTint.SetValue(1 as Float - ED_Mechanics_Global_MCM_DisableBloodstarvedTint.GetValue())
 		SetToggleOptionValue(Setting_DisableBloodstarvedTint, ED_Mechanics_Global_MCM_DisableBloodstarvedTint.GetValue() as bool)
+		
+	elseif akOp == Setting_DisableDisintegrate
+		ED_Mechanics_Global_MCM_DisableDisintegrate.SetValue(1 as Float - ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue())
+		SetToggleOptionValue(Setting_DisableDisintegrate, ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue() as bool)
 	
 	; ------------------------------------------------------------
 	; cheats
@@ -507,6 +520,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("How many hours between you get XP for successful seduction")
 	elseIf akOp == Setting_DisableBloodstarvedTint
 		self.SetInfoText("Disable red tint when in combat while Blood Starved")
+	elseIf akOp == Setting_DisableDisintegrate
+		self.SetInfoText("Disable disintegrate into ashpile on death for you, in case you need it for compatibility with other vampire/npc mod")
 	
 	; ------------------------------------------------------------
 	; cheats
