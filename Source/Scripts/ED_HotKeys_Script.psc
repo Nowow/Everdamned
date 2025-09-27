@@ -128,6 +128,7 @@ message property ED_Mechanics_Message_AgeLvlUp_4to5 auto
 message property ED_Mechanics_Message_AgeLvlUp_5to6 auto
 
 activator property ED_Art_Activator_BloodTentacle auto
+keyword property ED_Mechanics_Keyword_TentacleHitStart auto
 
 
 int counter
@@ -148,23 +149,9 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 	
-		objectreference __tentacle = pl.placeatme(ED_Art_Activator_BloodTentacle, 1, false, true)
+		bool __started = ED_Mechanics_Keyword_TentacleHitStart.SendStoryEventAndWait(none, __targetThing)
+		debug.Trace("Everdamned DEBUG: tentacle hit quest started: " + __started)
 		
-		float playerAngleZsin = math.sin(pl.GetAngleZ())
-		float playerAngleZcos = math.cos(pl.GetAngleZ())
-		float targetXOffset = 200.0*playerAngleZsin
-		float targetYOffset = 200.0*playerAngleZcos
-		
-		__tentacle.setscale(0.7)
-		__tentacle.moveto(pl, targetXOffset, targetYOffset, __tentacle.GetPositionZ() - 70.0)
-		
-		__tentacle.setangle(0,0,__tentacle.GetAngleZ())
-		
-		__tentacle.enable()
-		
-		utility.wait(4.0)
-		__tentacle.disable()
-		__tentacle.delete()
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
 		

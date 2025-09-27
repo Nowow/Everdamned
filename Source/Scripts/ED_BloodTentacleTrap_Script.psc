@@ -25,6 +25,27 @@ string property stopDamage = "stopDamage" auto hidden
 ;-----------------------------------
 
 
+function HitThatGuy(actor victim)
+	int counter
+	debug.Trace("Everdamned DEBUG: HitThatGuy called! " + self)
+	while !is3dloaded() && counter < 50
+		counter += 1
+		utility.wait(0.1)
+	endwhile
+	
+	debug.Trace("Everdamned DEBUG: HitThatGuy 3d loaded????! " + is3dloaded())
+		
+	if counter >= 50
+		debug.Trace("Everdamned ERROR: Blood Tentacle ref couldnt load 3d for 5 seconds for some reason")
+		disable()
+		delete()
+		return
+	endif
+	
+	self.Activate(Self)
+endfunction
+
+
 Function fireTrap()
 	;PlayAnimationAndWait( "reset", "off" )
 	;Basic wind up and fire once checking
@@ -87,11 +108,11 @@ auto State Idle
 
 	endevent
 	
-	Event onTriggerEnter(ObjectReference triggerRef)
-		if selfTrigger && acceptableTrigger(triggerRef)
-			self.Activate(Self)
-		endif
-	endEvent
+;	Event onTriggerEnter(ObjectReference triggerRef)
+;		if selfTrigger && acceptableTrigger(triggerRef)
+;			self.Activate(Self)
+;		endif
+;	endEvent
 endstate
 
 State DoOnce															;Type Do Once
@@ -108,11 +129,14 @@ State Reset
 
 	Event OnBeginState()
 		overrideLoop = True
-		GoToState ( "Idle" )
-		hitBase = (self as objectReference) as TrapHitBase
-		if hitbase
-			hitBase.goToState("CannotHit")
-		endif
+		hitBase.goToState("CannotHit")
+		disable(true)
+		delete()
+		;GoToState ( "Idle" )
+		;hitBase = (self as objectReference) as TrapHitBase
+		;if hitbase
+		;	hitBase.goToState("CannotHit")
+		;endif
 	endEvent
 	
 	Event OnActivate( objectReference activateRef )
