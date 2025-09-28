@@ -7,7 +7,7 @@ Scriptname ED_BloodTentacleTrap_Script extends MovingTrap
 ;If activated while in the process of stopping, it should be able to handle that.
 ;================================================================
 
-
+ED_BloodTentacleTrapHit_Script property ED_TrapHitBase auto hidden
 
 import debug
 import utility
@@ -72,10 +72,10 @@ Function fireTrap()
 
 		PlayAnimation("Trigger01")
 		WaitForAnimationEvent(startDamage)
-		hitBase.goToState("CanHit")
+		ED_TrapHitBase.goToState("CanHit")
 		finishedPlaying = True
 		WaitForAnimationEvent(stopDamage)
-		hitBase.goToState("CannotHit")
+		ED_TrapHitBase.goToState("CannotHit")
 		WaitForAnimationEvent("done")
 		if (loop == TRUE)			;Reset Limiter
 			resetLimiter()
@@ -129,7 +129,7 @@ State Reset
 
 	Event OnBeginState()
 		overrideLoop = True
-		hitBase.goToState("CannotHit")
+		ED_TrapHitBase.goToState("CannotHit")
 		disable(true)
 		delete()
 		;GoToState ( "Idle" )
@@ -182,4 +182,54 @@ bool function acceptableTrigger(objectReference triggerRef)
 	endif
 
 endFunction
+
+;int Function ResolveLeveledDamage (int damage)
+Function ResolveLeveledDamage()
+	int damageLevel
+	int damage
+	damageLevel = CalculateEncounterLevel(TrapLevel)
+	
+	damage = LvlDamage1
+	
+	if (damageLevel > LvlThreshold1 && damageLevel <= LvlThreshold2)
+		damage = LvlDamage2
+		;Trace("damage threshold =")
+		;Trace("2")
+	endif
+	if (damageLevel > LvlThreshold2 && damageLevel <= LvlThreshold3)
+		damage = LvlDamage3
+		;Trace("damage threshold =")
+		;Trace("3")
+	endif
+	if (damageLevel > LvlThreshold3 && damageLevel <= LvlThreshold4)
+		damage = LvlDamage4
+		;Trace("damage threshold =")
+		;Trace("4")
+	endif
+	if (damageLevel > LvlThreshold4 && damageLevel <= LvlThreshold5)
+		damage = LvlDamage5
+		;Trace("damage threshold =")
+		;Trace("5")
+	endif
+	if (damageLevel > LvlThreshold5)
+		damage = LvlDamage6
+		;Trace("damage threshold =")
+		;Trace("6")
+	endif
+	
+	;Trace("damage =")
+	;Trace(damage)
+	
+	;return damage
+	;hitBase = (self as objectReference) as TrapHitBase
+	;if hitbase
+	;	hitBase.damage = damage
+	;endif
+	
+	ED_TrapHitBase = (self as objectReference) as ED_BloodTentacleTrapHit_Script
+	if ED_TrapHitBase
+		ED_TrapHitBase.damage = damage
+	endif
+	
+EndFunction
 
