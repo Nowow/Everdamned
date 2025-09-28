@@ -38,13 +38,15 @@ function HitThatGuy(actor victim)
 		return
 	endif
 	__victim = victim
-	__anchor = ED_TentacleAnchor.GetReference()
+	__anchor = ED_TentacleAnchor.GetReference().placeatme(FXEmptyActivator)
 	
 	actor pl = Game.GetPlayer()
 		
 	__tanchor= victim.placeatme(FXEmptyActivator)
 	
-	; PLAY SHADER
+	__anchor.moveto(__anchor, 0, 0, 20.0)
+	__tanchor.moveto(__tanchor, 0, 0, 20.0)
+	ED_Art_Shader_BloodAnkh.Play(self, 10.0)
 
 	self.Activate(Self)
 endfunction
@@ -73,7 +75,7 @@ Function fireTrap()
 		PlayAnimation("Trigger01")
 		WaitForAnimationEvent(startDamage)
 		finishedPlaying = True
-		utility.wait(0.2)
+		;utility.wait(0.2)
 		SpellToHitThemWith.cast(__anchor, __tanchor)
 		TrapHitSound.play( self as ObjectReference)
 		;__victim.ProcessTrapHit(self, 10.0, 1000.0, 0.0, 0.0, 1000.0, 0.0, 0.0, 0.0, 0, 0.0)
@@ -144,14 +146,16 @@ Function ResolveLeveledDamage()
 
 	
 		
-	SpellToHitThemWith = ED_TEST_VoiceFireBreath3
+	SpellToHitThemWith = ED_Mechanics_Spell_BloodTentacleHit_Level1
 	
 EndFunction
 
 referencealias property ED_TentacleAnchor auto
-spell property ED_TEST_VoiceFireBreath3 auto
+spell property ED_Mechanics_Spell_BloodTentacleHit_Level1 auto
 activator property FXEmptyActivator auto
 sound property TrapHitSound auto
 actor property playerRef auto
 globalvariable property ED_Mechanics_SkillTree_Level_Global auto
 spell[] property HitSpellArray auto
+globalvariable property ED_TEST_Global1 auto
+effectshader property ED_Art_Shader_BloodAnkh auto
