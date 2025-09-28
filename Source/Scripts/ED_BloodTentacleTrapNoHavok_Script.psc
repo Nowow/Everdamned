@@ -38,10 +38,7 @@ function HitThatGuy(actor victim)
 		return
 	endif
 	__victim = victim
-	__anchor = ED_TentacleAnchor.GetReference().placeatme(FXEmptyActivator)
-	
-	actor pl = Game.GetPlayer()
-		
+	__anchor = ED_TentacleAnchor.GetReference().placeatme(FXEmptyActivator)	
 	__tanchor= victim.placeatme(FXEmptyActivator)
 	
 	__anchor.moveto(__anchor, 0, 0, 20.0)
@@ -49,7 +46,17 @@ function HitThatGuy(actor victim)
 	ED_Art_Shader_BloodAnkh.Play(self, 10.0)
 
 	self.Activate(Self)
+	
+	RegisterForSingleUpdate(10.0)
 endfunction
+
+event OnUpdate()
+	if IsDeleted()
+		debug.Trace("Everdamned ERROR: Blood Tentacle " + self + " failsafe delete update found its not yet marker for delete")
+		disable()
+		delete()
+	endif
+endevent
 
 
 Function fireTrap()
@@ -62,15 +69,12 @@ Function fireTrap()
 	endif
 	wait( initialDelay )		;wait for windup
 	
-	
 	if (fireOnlyOnce == True)	;If this can be fired only once then disarm
 		trapDisarmed = True
 	endif
 
-	
 	;Trap Guts
 	while(finishedPlaying == False && isLoaded == TRUE)
-		;TRACE("playing anim Single")
 
 		PlayAnimation("Trigger01")
 		WaitForAnimationEvent(startDamage)
@@ -79,7 +83,7 @@ Function fireTrap()
 		SpellToHitThemWith.cast(__anchor, __tanchor)
 		TrapHitSound.play( self as ObjectReference)
 		if hitFX
-			hitFX.fire(self, hitFxAmmo)
+			hitFX.fire(__tanchor, hitFxAmmo)
 		endif
 		game.ShakeCamera(__tanchor, 0.5, 0.5)
 		
@@ -117,7 +121,17 @@ auto State Idle
 		GoToState ( "DoOnce" )							
 		ResetLimiter()
 		FireTrap()
+		
+		
+		__anchor.disable()
+		__anchor.delete()
+		__tanchor.disable()
+		__tanchor.delete()
+		utility.wait(2.0)
+		disable(true)
+		delete()
 
+		debug.Trace("Everdamned DEBUG: Blood Tentacle deleted all anchors and itself")
 	endevent
 
 endstate
@@ -136,8 +150,6 @@ State Reset
 
 	Event OnBeginState()
 		overrideLoop = True
-		disable(true)
-		delete()
 	endEvent
 	
 	Event OnActivate( objectReference activateRef )
