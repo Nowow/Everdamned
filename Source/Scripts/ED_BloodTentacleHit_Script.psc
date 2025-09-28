@@ -12,7 +12,7 @@ function Slap()
 	__tentacle.setangle(0.0, 0.0, __victim.GetAngleZ() + __headingangle)
 	__tentacle.enable()
 	
-	ED_BloodTentacleTrap_Script TentacleScript = __tentacle as ED_BloodTentacleTrap_Script
+	ED_BloodTentacleTrapNoHavok_Script TentacleScript = __tentacle as ED_BloodTentacleTrapNoHavok_Script
 	if !TentacleScript
 		debug.Trace("Everdamned ERROR: Tentacle Hit Quest COULD NOT get ahold of tentacle script")
 		stop()
