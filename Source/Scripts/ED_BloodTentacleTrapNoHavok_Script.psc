@@ -53,16 +53,6 @@ function HitThatGuy(actor victim)
 	GoToState ( "DoOnce" )							
 	ResetLimiter()
 	FireTrap()
-		
-	__anchor.disable()
-	__anchor.delete()
-	__tanchor.disable()
-	__tanchor.delete()
-	utility.wait(2.0)
-	disable(true)
-	delete()
-
-	debug.Trace("Everdamned DEBUG: Blood Tentacle deleted all anchors and itself")
 	
 endfunction
 
@@ -106,23 +96,42 @@ Function fireTrap()
 		utility.wait(0.01)  ; cant cast without wait second spell for some reason
 		ED_Mechanics_Spell_BloodTentacleHitHazard.cast(__anchor, __tanchor)
 		
-		
+		self.Activate(Self)
+
 		;__victim.ProcessTrapHit(self, 10.0, 1000.0, 0.0, 0.0, 1000.0, 0.0, 0.0, 0.0, 0, 0.0)
 		;WaitForAnimationEvent(stopDamage)
-		WaitForAnimationEvent("done")
-		if (loop == TRUE)			;Reset Limiter
-			resetLimiter()
-		endif
-		wait(0.0)
 	endWhile
+
+	utility.wait(0.5) ; for all proc scripts to trigger and get the anchor point
+	; after that quest is free to stop
+
+endFunction
+
+function WrapUp()
+	
+	WaitForAnimationEvent("done")
+	if (loop == TRUE)			;Reset Limiter
+		resetLimiter()
+	endif
+	wait(0.0)
+
 	
 	if isLoaded 	
 		isFiring = false
-
 		goToState("Reset")
 	endif
 	
-endFunction
+	__anchor.disable()
+	__anchor.delete()
+	__tanchor.disable()
+	__tanchor.delete()
+	;utility.wait(2.0)
+	disable(true)
+	delete()
+
+	debug.Trace("Everdamned DEBUG: Blood Tentacle deleted all anchors and itself")
+	
+endfunction
 
 Function ResetLimiter()
 	finishedPlaying = False
@@ -133,6 +142,7 @@ auto State Idle
 	event onActivate (objectReference activateRef)
 		debug.Trace("Everdamned DEBUG: Blood Tentacle in Idle state onActivate triggered by: " + activateRef)
 		lastActivateRef = activateRef
+		WrapUp()
 	endevent
 
 endstate
