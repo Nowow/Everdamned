@@ -129,7 +129,7 @@ message property ED_Mechanics_Message_AgeLvlUp_5to6 auto
 
 activator property ED_Art_Activator_BloodTentacle auto
 keyword property ED_Mechanics_Keyword_TentacleHitStart auto
-
+hazard property ED_Art_Hazard_BloodSpill2 auto
 
 int counter
 bool __switch
@@ -148,7 +148,9 @@ Event OnKeyDown(int keyCode)
 		actor __targetThing = Game.GetCurrentConsoleRef() as actor
 		
 		actor pl = Game.GetPlayer()
-	
+		
+		pl.placeatme(ED_Art_Hazard_BloodSpill2)
+		
 		bool __started = ED_Mechanics_Keyword_TentacleHitStart.SendStoryEventAndWait(none, __targetThing)
 		debug.Trace("Everdamned DEBUG: tentacle hit quest started: " + __started)
 		
