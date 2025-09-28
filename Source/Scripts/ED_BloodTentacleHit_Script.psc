@@ -21,9 +21,8 @@ function Slap()
 	
 	__tentacle.placeatme(ED_Art_Explosion_Gutwrench_NoBones)
 	TentacleScript.HitThatGuy(__victim)
-	
-	;__tentacle.disable()
-	;__tentacle.delete()
+
+	debug.Trace("Everdamned DEBUG: Blood Tentacle Quest did all it needed, stopping")
 	Stop()
 endfunction
 

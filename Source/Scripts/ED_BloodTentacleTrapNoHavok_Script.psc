@@ -45,14 +45,30 @@ function HitThatGuy(actor victim)
 	__tanchor.moveto(__tanchor, 0, 0, 20.0)
 	ED_Art_Shader_BloodAnkh.Play(self, 10.0)
 
-	self.Activate(Self)
+	RegisterForSingleUpdate(10.0)  ; failsafe
+	;self.Activate(Self)
 	
-	RegisterForSingleUpdate(10.0)
+
+
+	GoToState ( "DoOnce" )							
+	ResetLimiter()
+	FireTrap()
+		
+	__anchor.disable()
+	__anchor.delete()
+	__tanchor.disable()
+	__tanchor.delete()
+	utility.wait(2.0)
+	disable(true)
+	delete()
+
+	debug.Trace("Everdamned DEBUG: Blood Tentacle deleted all anchors and itself")
+	
 endfunction
 
 event OnUpdate()
-	if IsDeleted()
-		debug.Trace("Everdamned ERROR: Blood Tentacle " + self + " failsafe delete update found its not yet marker for delete")
+	if !IsDeleted()
+		debug.Trace("Everdamned ERROR: Blood Tentacle " + self + " failsafe delete update found its not yet marked for delete")
 		disable()
 		delete()
 	endif
@@ -117,21 +133,6 @@ auto State Idle
 	event onActivate (objectReference activateRef)
 		debug.Trace("Everdamned DEBUG: Blood Tentacle in Idle state onActivate triggered by: " + activateRef)
 		lastActivateRef = activateRef
-
-		GoToState ( "DoOnce" )							
-		ResetLimiter()
-		FireTrap()
-		
-		
-		__anchor.disable()
-		__anchor.delete()
-		__tanchor.disable()
-		__tanchor.delete()
-		utility.wait(2.0)
-		disable(true)
-		delete()
-
-		debug.Trace("Everdamned DEBUG: Blood Tentacle deleted all anchors and itself")
 	endevent
 
 endstate
