@@ -17,7 +17,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	;debug.Trace("Everdamned DEBUG: Blood Brand notTeammate " + notTeammate)
 	
 	if akTarget.IsDead()
-		akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_Reanimate, akTarget)
+		akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_BurnCorpse, akTarget)
 		
 	;if ((inCombat && isHostileNow) || (!inCombat && isEnemy)) && notTeammate
 	elseif isHostileNow || akCaster.IsSneaking()
@@ -36,6 +36,6 @@ endFunction
 
 spell property ED_VampireSpells_BloodBrand_Spell_Hostile auto
 spell property ED_VampireSpells_BloodBrand_Spell_NonHostile auto
-spell property ED_VampireSpells_BloodBrand_Spell_Reanimate auto
+spell property ED_VampireSpells_BloodBrand_Spell_BurnCorpse auto
 perk property ED_PerkTree_BloodMagic_65_Transfusion_Perk auto
 visualeffect property ED_Art_VFX_Transfusion auto
