@@ -108,6 +108,7 @@ Function fireTrap()
 endFunction
 
 function WrapUp()
+	debug.Trace("Everdamned DEBUG: Blood Tentacle " + self + " WRAP UP reached")
 	
 	WaitForAnimationEvent("done")
 	if (loop == TRUE)			;Reset Limiter
@@ -152,7 +153,7 @@ State DoOnce															;Type Do Once
 	Event OnActivate( objectReference activateRef )
 		debug.Trace("Everdamned DEBUG: Blood Tentacle in DoOnce state onActivate triggered by: " + activateRef)
 		lastActivateRef = activateRef
-		
+		WrapUp()
 	EndEvent
 
 endstate
@@ -165,6 +166,7 @@ State Reset
 	
 	Event OnActivate( objectReference activateRef )
 		lastActivateRef = activateRef
+		WrapUp()
 	EndEvent
 	
 endState
