@@ -151,15 +151,33 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		debug.Trace("Everdamned DEBUG: CritStage_GooStart")
+		__targetThing.SetCriticalStage(__targetThing.CritStage_GooStart)
+		
+		utility.wait(5.0)
+		
+		debug.Trace("Everdamned DEBUG: CritStage_GooEnd")
+		__targetThing.SetCriticalStage(__targetThing.CritStage_GooEnd)
+		
+		utility.wait(2.0)
+		
+		debug.Trace("Everdamned DEBUG: CritStage_DisintegrateStart")
+		__targetThing.SetCriticalStage(__targetThing.CritStage_DisintegrateStart )
+		
+		utility.wait(5.0)
+		
+		debug.Trace("Everdamned DEBUG: CritStage_DisintegrateEnd ")
+		__targetThing.SetCriticalStage(__targetThing.CritStage_DisintegrateEnd  )
+		
 		;objectreference __anchor= pl.placeatme(FXEmptyActivator)
 		;objectreference __tanchor= __targetThing.placeatme(FXEmptyActivator)
 		
 		;ED_TEST_VoiceFireBreath3.remotecast(__anchor, pl, __tanchor)
 		
-		objectreference __anchor = pl.placeatme(ED_Art_Hazard_BloodSpill2)
+		;objectreference __anchor = pl.placeatme(ED_Art_Hazard_BloodSpill2)
 		
-		bool __started = ED_Mechanics_Keyword_TentacleHitStart.SendStoryEventAndWait(none, __anchor)
-		debug.Trace("Everdamned DEBUG: tentacle hit quest started: " + __started)
+		;bool __started = ED_Mechanics_Keyword_TentacleHitStart.SendStoryEventAndWait(none, __anchor)
+		;debug.Trace("Everdamned DEBUG: tentacle hit quest started: " + __started)
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
