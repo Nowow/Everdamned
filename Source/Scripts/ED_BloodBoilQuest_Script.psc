@@ -1,7 +1,7 @@
 Scriptname ED_BloodBoilQuest_Script extends Quest  
 
 
-float property BoilingDuration = 6.0 auto
+float property BoilingDuration = 4.0 auto
 
 bool IsHumanoid
 function Setup()
@@ -69,11 +69,13 @@ event OnUpdate()
 		StartScene()
 		SetCurrentStageID(10)
 		RegisterForSingleUpdate(BoilingDuration)
+		utility.wait(1.5)
+		ED_Art_Shader_BodyBurstBuildup.Play(_target)
 		return
 	endif
 	
 	if _target.isdead()
-		debug.trace("Everdamned DEBUG: Blood Boil Quest determined that target is dead, not blowing up. Should not be, because essential")
+		debug.trace("Everdamned WARNING: Blood Boil Quest determined that target is dead, not blowing up. Should not be, because ghost")
 		SetCurrentStageID(100)
 		return
 	endif
@@ -131,6 +133,7 @@ spell property ED_VampireSpells_BloodBoil_Burst_Spell auto
 activator property AshPile auto
 activator property FXEmptyActivator auto
 
+effectshader property ED_Art_Shader_BodyBurstBuildup auto
 scene property ED_BoilingScene auto
 Hazard property ED_Art_Hazard_Bones auto
 Message property ED_Mechanics_Message_BloodBoil_FailAliasFilled auto
