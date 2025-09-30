@@ -86,7 +86,7 @@ Function fireTrap()
 		WaitForAnimationEvent(startDamage)
 		finishedPlaying = True
 		utility.wait(0.2)
-		SpellToHitThemWith.cast(__anchor, __tanchor)
+		SpellToHitThemWith.remotecast(__anchor, playerRef, __tanchor)
 		TrapHitSound.play( self as ObjectReference)
 		if hitFX
 			hitFX.fire(__tanchor, hitFxAmmo)
@@ -94,7 +94,7 @@ Function fireTrap()
 		game.ShakeCamera(__tanchor, 0.5, 0.5)
 		
 		utility.wait(0.01)  ; cant cast without wait second spell for some reason
-		ED_Mechanics_Spell_BloodTentacleHitHazard.cast(__anchor, __tanchor)
+		ED_Mechanics_Spell_BloodTentacleHitHazard.remotecast(__anchor, playerRef, __tanchor)
 		
 		self.Activate(Self)
 

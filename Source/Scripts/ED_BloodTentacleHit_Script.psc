@@ -19,7 +19,7 @@ function Slap()
 		return
 	endif
 	
-	__tentacle.placeatme(ED_Art_Explosion_Gutwrench_NoBones)
+	__tentacle.placeatme(ED_Art_Explosion_BloodTentacleEmergeFX)
 	TentacleScript.HitThatGuy(__victim)
 
 	debug.Trace("Everdamned DEBUG: Blood Tentacle Quest did all it needed, stopping")
@@ -28,4 +28,4 @@ endfunction
 
 referencealias property ED_Victim auto
 referencealias property ED_Tentacle auto
-explosion property ED_Art_Explosion_Gutwrench_NoBones auto
+explosion property ED_Art_Explosion_BloodTentacleEmergeFX auto

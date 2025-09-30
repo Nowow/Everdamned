@@ -12,13 +12,20 @@ event OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	;akTarget.SetGhost(true)
 	
+	;debug.Trace("Everdamned DEBUG: Burn Corpse started "  + __anchor)
+	
 	__anchor = akTarget.placeatme(FXEmptyActivator)
-	debug.Trace("Everdamned DEBUG: Burn Corpse started "  + __anchor)
 	
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateStart)
 	
 	utility.wait(1.0)
-	ED_Mechanics_Spell_SpawnBloodSpill.remotecast(akTarget, akCaster)
+	;ED_Mechanics_Spell_SpawnBloodSpill.remotecast(akTarget, akCaster)
+	
+	if !(akCaster.HasSpell(ED_VampireSpells_BloodTendril_SpellAb))
+		return
+	endif
+	
+	
 	utility.wait(4.0)
 	
 	akTarget.SetAlpha(0.0, true)
@@ -52,12 +59,15 @@ event OnUpdate()
 endevent
 
 event OnEffectFinish(Actor akTarget, Actor akCaster)
-	__anchor.disable()
-	__anchor.delete()
-	debug.Trace("Everdamned DEBUG: Burn Corpse finished")
+	if __anchor
+		__anchor.disable()
+		__anchor.delete()
+	endif
+	;debug.Trace("Everdamned DEBUG: Burn Corpse finished")
 endevent
 
 
 activator property FXEmptyActivator auto
 spell property ED_Mechanics_Spell_SpawnBloodSpill auto
 keyword property ED_Mechanics_Keyword_TentacleHitStart auto
+spell property ED_VampireSpells_BloodTendril_SpellAb auto

@@ -132,6 +132,8 @@ keyword property ED_Mechanics_Keyword_TentacleHitStart auto
 hazard property ED_Art_Hazard_BloodSpill2 auto
 
 spell property ED_TEST_VoiceFireBreath3 auto
+spell property ED_Mechanics_Spell_BloodTentacleHitHazard auto
+
 
 int counter
 bool __switch
@@ -151,15 +153,17 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		;objectreference __anchor= pl.placeatme(FXEmptyActivator)
+		objectreference __anchor= pl.placeatme(FXEmptyActivator)
+		ED_Mechanics_Spell_BloodTentacleHitHazard.remotecast(__anchor, pl, __targetThing)
+		
 		;objectreference __tanchor= __targetThing.placeatme(FXEmptyActivator)
 		
 		;ED_TEST_VoiceFireBreath3.remotecast(__anchor, pl, __tanchor)
 		
-		objectreference __anchor = pl.placeatme(ED_Art_Hazard_BloodSpill2)
+		;objectreference __anchor = pl.placeatme(ED_Art_Hazard_BloodSpill2)
 		
-		bool __started = ED_Mechanics_Keyword_TentacleHitStart.SendStoryEventAndWait(none, __anchor)
-		debug.Trace("Everdamned DEBUG: tentacle hit quest started: " + __started)
+		;bool __started = ED_Mechanics_Keyword_TentacleHitStart.SendStoryEventAndWait(none, __anchor)
+		;debug.Trace("Everdamned DEBUG: tentacle hit quest started: " + __started)
 		
 		;objectreference undyingservantobj = undyingservant.GetReference()
 		;debug.Trace("Everdamned DEBUG: Undying servant: " + undyingservantobj)
