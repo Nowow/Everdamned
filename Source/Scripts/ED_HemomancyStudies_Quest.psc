@@ -114,6 +114,7 @@ state LearningAdept
 			return
 		endif
 		__readyToProgress = true
+		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 15
 		
@@ -208,6 +209,7 @@ state LearningExpert
 			return
 		endif
 		__readyToProgress = true
+		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 30
 		
@@ -305,6 +307,7 @@ state LearningMaster
 			return
 		endif
 		__readyToProgress = true
+		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 50
 		
@@ -327,5 +330,6 @@ perk property ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk auto
 formlist property ED_Mechanics_FormList_HemomancyRewards auto
 
 message property ED_Mechanics_Message_HemomancyReadyToAdvance auto
+effectshader property ED_Art_Shader_NewHemomancyAvailable auto
 
 quest property ED_Mechanics_Hemomancy_Quest auto
