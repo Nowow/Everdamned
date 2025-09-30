@@ -4,6 +4,9 @@ Event OnLoad()
 	if AbFX
 		AbFX.play(self)
 	endif
+	if aVFX
+		aVFX.play(self)
+	endif
 endevent
 
 EVENT onDying(actor myKiller)
@@ -16,4 +19,5 @@ ENDEVENT
 
 effectshader property AtronachUnsummonDeathFXS auto
 effectshader property AbFX auto
+visualeffect property aVFX auto
 sound property DeathSound auto
