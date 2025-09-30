@@ -132,7 +132,7 @@ keyword property ED_Mechanics_Keyword_TentacleHitStart auto
 hazard property ED_Art_Hazard_BloodSpill2 auto
 
 spell property ED_TEST_VoiceFireBreath3 auto
-spell property ED_Mechanics_Spell_BloodTentacleHitHazard auto
+spell property ED_Mechanics_Spell_BloodTentacleHit_Level1 auto
 
 
 int counter
@@ -154,9 +154,9 @@ Event OnKeyDown(int keyCode)
 		actor pl = Game.GetPlayer()
 		
 		objectreference __anchor= pl.placeatme(FXEmptyActivator)
-		ED_Mechanics_Spell_BloodTentacleHitHazard.remotecast(__anchor, pl, __targetThing)
-		
-		;objectreference __tanchor= __targetThing.placeatme(FXEmptyActivator)
+		objectreference __tanchor= __targetThing.placeatme(FXEmptyActivator)
+		utility.wait(0.2)
+		ED_Mechanics_Spell_BloodTentacleHit_Level1.cast(__anchor, pl, __tanchor)
 		
 		;ED_TEST_VoiceFireBreath3.remotecast(__anchor, pl, __tanchor)
 		

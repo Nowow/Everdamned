@@ -19,6 +19,7 @@ event OnEffectStart(Actor akTarget, Actor akCaster)
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateStart)
 	
 	utility.wait(1.0)
+	__anchor.placeatme(ED_Art_Hazard_BloodSpill2)
 	;ED_Mechanics_Spell_SpawnBloodSpill.remotecast(akTarget, akCaster)
 	
 	if !(akCaster.HasSpell(ED_VampireSpells_BloodTendril_SpellAb))
@@ -71,3 +72,4 @@ activator property FXEmptyActivator auto
 spell property ED_Mechanics_Spell_SpawnBloodSpill auto
 keyword property ED_Mechanics_Keyword_TentacleHitStart auto
 spell property ED_VampireSpells_BloodTendril_SpellAb auto
+hazard property ED_Art_Hazard_BloodSpill2 auto

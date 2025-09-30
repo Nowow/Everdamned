@@ -7,8 +7,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 
 	;bool inCombat = akTarget.IsInCombat()
 	;debug.Trace("Everdamned DEBUG: Blood Brand in combat " + inCombat)
-	bool isHostileNow = akTarget.IsHostileToActor(akCaster)
-	debug.Trace("Everdamned DEBUG: Blood Brand hostile " + isHostileNow)
+	;debug.Trace("Everdamned DEBUG: Blood Brand hostile " + isHostileNow)
 	
 	
 	;bool isEnemy = akTarget.GetFactionReaction(akCaster) == 1 
@@ -19,14 +18,17 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	if akTarget.IsDead()
 		akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_BurnCorpse, akTarget)
 		
-	;if ((inCombat && isHostileNow) || (!inCombat && isEnemy)) && notTeammate
-	elseif isHostileNow || akCaster.IsSneaking()
-		akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_Hostile, akTarget)
+
 	elseif akCaster.HasPerk(ED_PerkTree_BloodMagic_65_Transfusion_Perk)
-		ED_Art_VFX_Transfusion.Play(akTarget, 5.0, akCaster)
-		akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_NonHostile, akTarget)
+		bool isHostileNow = akTarget.IsHostileToActor(akCaster)
+		if isHostileNow || akCaster.IsSneaking()
+			akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_Hostile, akTarget)
+		else 
+			ED_Art_VFX_Transfusion.Play(akTarget, 5.0, akCaster)
+			akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_NonHostile, akTarget)
+		endif
 	else
-		return
+		akCaster.DoCombatSpellApply(ED_VampireSpells_BloodBrand_Spell_Hostile, akTarget)
 	endif
 	
 	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
