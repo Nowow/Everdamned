@@ -20,12 +20,7 @@ event OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	utility.wait(1.0)
 	__anchor.placeatme(ED_Art_Hazard_BloodSpill2)
-	;ED_Mechanics_Spell_SpawnBloodSpill.remotecast(akTarget, akCaster)
-	
-	if !(akCaster.HasSpell(ED_VampireSpells_BloodTendril_SpellAb))
-		return
-	endif
-	
+	;ED_Mechanics_Spell_SpawnBloodSpill.remotecast(akTarget, akCaster)	
 	
 	utility.wait(4.0)
 	
@@ -33,6 +28,12 @@ event OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	;akTarget.SetGhost(false)
 	akTarget.SetCriticalStage(akTarget.CritStage_DisintegrateEnd)
+	
+		
+	if !(akCaster.HasSpell(ED_VampireSpells_BloodTendril_SpellAb))
+		dispel()
+		return
+	endif
 	
 	;bool __started = ED_Mechanics_Keyword_TentacleHitStart.SendStoryEventAndWait(none, __anchor)
 	
