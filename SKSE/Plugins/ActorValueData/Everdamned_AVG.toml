@@ -7,10 +7,10 @@ type = "Functional"
 alias = "Variable06"
 get = "(GetKeywordString('PlayerKeyword') != 0) * GetGlobalValueParam(playerVampireSkill)"
 
-[ED_VampireSkill40p]
+[ED_VampireSkill1p]
 type = "Functional"
 alias = "Variable05"
-get = "(GetKeywordString('PlayerKeyword') != 0) * GetGlobalValueParam(playerVampireSkill) * 0.4"
+get = "(GetKeywordString('PlayerKeyword') != 0) * GetGlobalValueParam(playerVampireSkill) * 0.01"
 
 [ED_BloodPool]
 type = "Adaptive"
