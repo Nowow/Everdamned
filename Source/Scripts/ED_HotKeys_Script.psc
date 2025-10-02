@@ -134,6 +134,8 @@ hazard property ED_Art_Hazard_BloodSpill2 auto
 spell property ED_TEST_VoiceFireBreath3 auto
 spell property ED_Mechanics_Spell_BloodTentacleHit_Level1 auto
 
+miscobject property DA04Extractor auto
+
 
 int counter
 bool __switch
@@ -153,6 +155,7 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 
+		pl.additem(DA04Extractor, 1)
 		
 		;ED_TEST_VoiceFireBreath3.remotecast(__anchor, pl, __tanchor)
 		

@@ -108,6 +108,10 @@ Int Cheats_DisableFortitude
 float property Default_Cheats_DisableFortitude auto
 GlobalVariable Property ED_Mechanics_Global_MCM_DisableFortitudeRevive Auto
 
+Int Cheats_ToggleExtractor
+float property Default_Cheats_ToggleExtractor auto
+GlobalVariable Property ED_Mechanics_Global_MCM_ExtractorToggle Auto
+
 
 function OnPageReset(String akPage)
 
@@ -163,6 +167,7 @@ function OnPageReset(String akPage)
 	Cheats_DisableChainedBeast = self.AddToggleOption("Disable Fortitude transformation", ED_Mechanics_Global_MCM_DisableChainedBeast.GetValue() as Bool)
 	Cheats_ToggleArmorWatcherVL = self.AddToggleOption("Toggle Equip Watcher for VL", ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.GetValue() as Bool)
 	Cheats_DisableFortitude = self.AddToggleOption("Toggle Fortitude", ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() as Bool)
+	Cheats_ToggleExtractor = self.AddToggleOption("Force have blood extractor", ED_Mechanics_Global_MCM_ExtractorToggle.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	
@@ -278,6 +283,10 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Cheats_DisableFortitude
 		ED_Mechanics_Global_MCM_DisableFortitudeRevive.SetValue(Default_Cheats_DisableFortitude)
 		SetToggleOptionValue(Cheats_DisableFortitude, Default_Cheats_DisableFortitude as bool)
+		
+	elseIf akOp == Cheats_ToggleExtractor
+		ED_Mechanics_Global_MCM_ExtractorToggle.SetValue(Default_Cheats_ToggleExtractor)
+		SetToggleOptionValue(Cheats_ToggleExtractor, Default_Cheats_ToggleExtractor as bool)
 		
 	endif
 	
@@ -459,6 +468,10 @@ function OnOptionSelect(Int akOp)
 		if ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() == 1.0
 			Game.GetPlayer().RemoveSpell(ED_Mechanics_Ab_ChainedBeast_Spell)
 		endif
+		
+	elseif akOp == Cheats_ToggleExtractor
+		ED_Mechanics_Global_MCM_ExtractorToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_ExtractorToggle.GetValue())
+		SetToggleOptionValue(Cheats_ToggleExtractor, ED_Mechanics_Global_MCM_ExtractorToggle.GetValue() as bool)
 	
 	; ------------------------------------------------------------
 	endif
@@ -541,6 +554,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Vampire Transformations automatically uneqip any regular armor/weapon if you happen to equip them (accidentally through looting menu, for example)")
 	elseIf akOp == Cheats_DisableFortitude
 		self.SetInfoText("Disable Fortitude and Chained Beast mechanics altogether. Embrace the Beast perk only gives you the change spell.")
+	elseIf akOp == Cheats_ToggleExtractor
+		self.SetInfoText("Allow extracting Blood Potions from Blood Dolls (victims of seduction through dialogue several times) without having Septimus essense extractor")
 	
 	; ------------------------------------------------------------
 	endif

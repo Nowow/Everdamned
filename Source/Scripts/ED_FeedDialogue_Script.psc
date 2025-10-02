@@ -378,6 +378,15 @@ bool Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	
 	int PlayerSeductionScore = CalculateScore(akSeducer, akSeduced)
 	
+	if  ED_Mechanics_Global_BloodExtractorAquired.GetValue() == 0.0 \
+	    && akSeduced.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac) == 2 \
+	    && DA04.IsStageDone(40)  ; septimus gave player the extractor
+	   
+		debug.Trace("Everdamned INFO: Seduction Roll shows message about blood extraction")
+		ED_Mechanics_Message_BloodExtractorAquired.Show()
+		ED_Mechanics_Global_BloodExtractorAquired.SetValue(1.0)
+	endif
+	
 	debug.Trace("Everdamned INFO: Seduction score is: " + PlayerSeductionScore)
 	
 	ConditionalsScript.SetLastScore(PlayerSeductionScore)
@@ -540,6 +549,10 @@ FavorJarlsMakeFriendsScript property FavorJarlsMakeFriends auto
 
 globalvariable property ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState auto
 globalvariable property ED_Mechanics_FeedDialogue_NPCSequenceIndex auto
+
+globalvariable property ED_Mechanics_Global_BloodExtractorAquired auto
+message property ED_Mechanics_Message_BloodExtractorAquired auto
+quest property DA04 auto
 
 associationtype property Spouse auto
 associationtype property Courting auto
