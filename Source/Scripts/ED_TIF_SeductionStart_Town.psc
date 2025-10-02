@@ -10,6 +10,8 @@ ED_FeedDialogue_Target.ForceRefTo(akSpeaker)
 
 ED_Mechanics_Keyword_RollFeedDialogueScore.SendStoryEvent(None, playerRef, akSpeaker, 0, 0)
 
+playerRef.SheatheWeapon()
+
 ; here because needs to exist before controller scene starts
 ED_FeedDialogue_StartLocMarker.ForceRefTo(akSpeaker.PlaceAtMe(FXEmptyActivator))
 

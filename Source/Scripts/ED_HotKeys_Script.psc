@@ -152,11 +152,7 @@ Event OnKeyDown(int keyCode)
 		actor __targetThing = Game.GetCurrentConsoleRef() as actor
 		
 		actor pl = Game.GetPlayer()
-		
-		objectreference __anchor= pl.placeatme(FXEmptyActivator)
-		objectreference __tanchor= __targetThing.placeatme(FXEmptyActivator)
-		utility.wait(0.2)
-		ED_Mechanics_Spell_BloodTentacleHit_Level1.cast(__anchor, pl, __tanchor)
+
 		
 		;ED_TEST_VoiceFireBreath3.remotecast(__anchor, pl, __tanchor)
 		

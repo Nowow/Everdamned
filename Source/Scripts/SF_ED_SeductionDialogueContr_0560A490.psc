@@ -1,41 +1,6 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 26
+;NEXT FRAGMENT INDEX 27
 Scriptname SF_ED_SeductionDialogueContr_0560A490 Extends Scene Hidden
-
-;BEGIN FRAGMENT Fragment_8
-Function Fragment_8()
-;BEGIN CODE
-int cntr
-
-; mega haxx with anim var, see FNIS file
-
-if playerRef.GetAnimationVariableBool("bIdlePlaying") 
-	playerRef.PlayIdle(ResetRoot)
-endif
-
-while playerRef.GetAnimationVariableBool("bIdlePlaying") &&  cntr <= 30
-	playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceEnd)
-	cntr = cntr + 1
-	utility.wait(0.5)
-endwhile
-debug.Trace("Everdamned DEBUG: Feed Dialogue Controller Scene Phase 1 ENDED, cntr: " + cntr)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
-;BEGIN CODE
-debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene ended")
-sceneTarget.ClearLookAt()
-
-objectreference packageStartMarker = ED_FeedDialogue_StartLocMarker.GetReference()
-ED_FeedDialogue_StartLocMarker.Clear()
-packageStartMarker.Disable()
-packageStartMarker.Delete()
-;END CODE
-EndFunction
-;END FRAGMENT
 
 ;BEGIN FRAGMENT Fragment_1
 Function Fragment_1()
@@ -54,6 +19,27 @@ sceneTarget = ED_FeedDialogue_Target.GetReference() as actor
 ED_Mechanics_FeedDialogue_CrutchAnimTrigger_Spell.Cast(sceneTarget, sceneTarget)
 
 sceneTarget.SetLookAt(playerRef)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_8
+Function Fragment_8()
+;BEGIN CODE
+int cntr
+
+; mega haxx with anim var, see FNIS file
+
+if playerRef.GetAnimationVariableBool("bIdlePlaying") 
+	playerRef.PlayIdle(ResetRoot)
+endif
+
+while playerRef.GetAnimationVariableBool("bIdlePlaying") &&  cntr <= 30
+	playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceEnd)
+	cntr = cntr + 1
+	utility.wait(0.5)
+endwhile
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller Scene Phase 1 ENDED, cntr: " + cntr)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -78,6 +64,7 @@ while sceneTarget.GetAnimationVariableBool("bIdlePlaying") &&  cntr <= 30
 	utility.wait(1.0)
 endwhile
 
+SendModEvent("feedDialogue_SocialFeedFinished")
 
 int __walkawayState = ED_Mechanics_FeedDialogue_Global_SeductionWalkawayState.GetValue() as int 
 
@@ -122,6 +109,20 @@ else
 	endif
 		
 endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN CODE
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene ended")
+sceneTarget.ClearLookAt()
+
+objectreference packageStartMarker = ED_FeedDialogue_StartLocMarker.GetReference()
+ED_FeedDialogue_StartLocMarker.Clear()
+packageStartMarker.Disable()
+packageStartMarker.Delete()
 ;END CODE
 EndFunction
 ;END FRAGMENT
