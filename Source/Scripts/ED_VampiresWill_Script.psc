@@ -13,8 +13,8 @@ Event OnEffectStart(Actor Target, Actor Caster)
 		__currentTarget.dispelspell(ED_VampirePowers_Pw_VampiresWill_Spell)
 	endif
 	
-	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
-	Game.AdvanceSkill("Illusion", 100.0)
+	;CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	;Game.AdvanceSkill("Illusion", 100.0)
 EndEvent
 
 

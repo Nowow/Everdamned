@@ -17,7 +17,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	TheTarget = akTarget
 	;ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX.Cast(playerRef)
 	;ED_Art_VFX_Dominate_CasterPoint.Play(playerRef, 5.0)
-	ED_Scene.Start()
+	ED_Scene.ForceStart()
 	
 	;failsafe. should have done the whole thing as a quest tho
 	utility.wait(0.5)
