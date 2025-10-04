@@ -214,7 +214,8 @@ function Shutdown()
 	
 	; adding here because it is attached to mortal vampire races, but not to VL
 	; consider adding it to VL to not do this
-	playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
+	; UPD: not doing it because of khajiit
+	;playerRef.RemoveSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell)
 	self.UnloadSpells()
 	game.EnablePlayerControls(false, false, true, true, true, false, false, false, 1)
 	self.Stop()

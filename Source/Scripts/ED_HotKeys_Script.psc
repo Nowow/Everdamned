@@ -155,7 +155,9 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 
-		pl.additem(DA04Extractor, 1)
+		debug.Trace("Everdamned DEBUG: " + __targetThing.GetActorBase().GetName())
+
+		;pl.additem(DA04Extractor, 1)
 		
 		;ED_TEST_VoiceFireBreath3.remotecast(__anchor, pl, __tanchor)
 		

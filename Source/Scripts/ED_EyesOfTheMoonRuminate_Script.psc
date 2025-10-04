@@ -30,6 +30,7 @@ bool __adviceFaction
 bool __adviceClothes
 bool __adviceCharity
 bool __adviceDibella
+bool __adviceBloodDoll
 
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
@@ -212,6 +213,7 @@ function ChooseAdvice()
 	__adviceFaction = true
 	__adviceSpeechEnch = true
 	__adviceDibella = !__dibellaBlessing || !__dibellaAgent || !__dibellaAmulet
+	__adviceBloodDoll = true
 	
 	if __adviceThane
 		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Thane)
@@ -256,6 +258,11 @@ function ChooseAdvice()
 	if __adviceDibella
 		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_Dibella)
 			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_Dibella)
+		endif
+	endif
+	if __adviceBloodDoll
+		if !SpentCache.HasForm(ED_Mechanics_FeedDialogue_Message_Advice_BloodDoll)
+			MessageCache.AddForm(ED_Mechanics_FeedDialogue_Message_Advice_BloodDoll)
 		endif
 	endif
 	
@@ -317,6 +324,7 @@ message property ED_Mechanics_FeedDialogue_Message_Advice_Faction auto
 message property ED_Mechanics_FeedDialogue_Message_Advice_Clothes auto
 message property ED_Mechanics_FeedDialogue_Message_Advice_Charity auto
 message property ED_Mechanics_FeedDialogue_Message_Advice_Dibella auto
+message property ED_Mechanics_FeedDialogue_Message_Advice_BloodDoll auto
 
 
 perk property Allure auto

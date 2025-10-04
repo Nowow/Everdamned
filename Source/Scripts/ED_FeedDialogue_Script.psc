@@ -271,6 +271,13 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		endif
 	endif
 	
+	int seducedLevel = akSeduced.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac)
+	
+	if seducedLevel == 2
+		__playerSeductionScore += 200
+	elseif seducedLevel == 0 || seducedLevel == 1
+		__playerSeductionScore += 40
+	endif
 	
 	if akSeduced.IsInFaction(ED_Mechanics_FeedDialogue_Seduced_Fac)
 		__playerSeductionScore += 40

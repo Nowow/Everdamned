@@ -230,6 +230,11 @@ function VampireChange(actor Target)
         ED_Mechanics_Message_RaceBroken.Show()
         Target.SetRace(NordRaceVampire)
     endIf
+	
+	if PlayerRace == KhajiitRace
+		PlayerRef.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
+	endif
+	
     VampireCureDisease.Cast(Target as objectreference, none)
     VampireStatus = 1
     self.VampireProgression(playerRef, 1)
@@ -587,5 +592,6 @@ magiceffect property DLC1VampireChangeEffect auto
 race property NordRaceVampire auto
 race property NordRace auto
 race property CureRace auto
+race property KhajiitRace auto
 
 actor property playerRef auto
