@@ -149,7 +149,7 @@ function VampireCure(actor Player)
     Player.RemoveSpell(ED_BeingVampire_Ab_Status_Stage3_Spell)
     Player.RemoveSpell(ED_BeingVampire_Ab_Status_Stage4_Spell)
 	
-	Player.RemoveSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell)
+	;Player.RemoveSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell)
     Player.RemoveSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell)
     Player.RemoveSpell(ED_BeingVampire_Vanilla_Ab_PassivesHolder_Spell_WasChampionOfTheNight)
 	Player.RemoveSpell(ED_BeingVampire_Ab_HealingDampenController_Spell)
@@ -306,7 +306,7 @@ function VampireProgression(actor Player, Int VampireStage)
     ; TODO: move all that somewhere out of here. maybe leave abilities and move spells elsewhere
     ; TODO: make it so AgeOrStageChange only triggers when actually stages are changed, not when called on the same stage
     ;removing permanent passives for some reason, maybe because of the way progession is used in vanilla scripts
-    Player.RemoveSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell)
+    ;Player.RemoveSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell)
     Player.RemoveSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell)
     
     ; for reference if need apply same mechanic
@@ -492,7 +492,7 @@ function VampireProgression(actor Player, Int VampireStage)
     ;idk why the unplug-plug but...
     utility.Wait(0.50000)
     Player.AddSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell, false)
-    Player.AddSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell, false)
+    ;Player.AddSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell, false)
 
 endFunction
 
