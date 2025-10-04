@@ -269,7 +269,7 @@ Function StartTracking()
 	; for EmbraceTheBeast
 	RegisterForAnimationEvent(playerRef, "SoundPlay.NPCWerewolfFeedingKill")
 	
-	; TODO: maybe dont need to call here, just rely on OnRaceSwitchComplete in ED_FeedManager_PlayerAlias script
+	; maybe dont need to call here, just rely on OnRaceSwitchComplete in ED_FeedManager_PlayerAlias script
 	ED_FeedManager_Quest.RegisterFeedEvents()
 	
     SetStage(10) ; we're done with the transformation handling
@@ -370,7 +370,7 @@ Function ActuallyShiftBackIfNecessary()
     Game.SetInCharGen(true, true, false)
 	
 	UnRegisterForAnimationEvent(playerRef, "SoundPlay.NPCWerewolfFeedingKill")
-	; TODO: maybe dont need it, since game automatically unregisters animevents on racechange
+	; maybe dont need it, since game automatically unregisters animevents on racechange
 	ED_FeedManager_Quest.UnRegisterFeedEvents()
 	
     UnRegisterForUpdate() ; just in case
@@ -462,7 +462,6 @@ Function Shutdown()
 EndFunction
 
 ; feeding moved to feedmanager, here only for EmbraceTheBeast
-; TODO: probably should not register for animevent if player has the perk
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 
 	if (asEventName == "SoundPlay.NPCWerewolfFeedingKill")
@@ -473,7 +472,6 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		__killmoveStarted = true
 		utility.wait(2)
 		
-		; TODO: make it less fast
 		if !(playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)) && GetStage() < 80
 			debug.Trace("Everdamned INFO: Untamed Garkain just Brutalized/killfed on an actor, reverting to mortal when out of combat")
 			Message.ResetHelpMessage("ed_garkain_thirstquenched")

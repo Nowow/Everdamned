@@ -106,10 +106,7 @@ state KnowsOnlyPotence
 			__chargeJumpFlag = False
 			
 			debug.Trace("Everdamned DEBUG: Hotkey B was pressed in KnowsOnlyPotence state! ---------------------------------------------")
-			
-			;TODO: handle player having or not having certain spells for hotkeys
-			
-			
+
 			if __hotkeyB_handled
 				__releaseGate = False
 				__hotkeyB_handled = false

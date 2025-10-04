@@ -201,9 +201,7 @@ function TearDownRewards()
 	
 	; all perk rewards are contained in perks
 	; all vampire spells are either removed in VampireCure() or are contained in Age perks
-	; TODO: blue blood rewards should be removed as well
-	; BIG TODO: remove hemomancy, because its awarded through quest, not perks
-	
+
 	i = 0
 	int __listSize
 	perk __perkToDelete
@@ -242,10 +240,8 @@ function TearDownRewards()
 		i += 1
 	endwhile
 	
-	
-	
-	playerRef.RemoveSpell(ED_VampirePowers_Ab_Presence_Spell)
-	playerRef.RemoveSpell(ED_Mechanics_UnlockDisplayAb_Potence)
+	playerRef.removeperk(ED_Mechanics_Ab_ChainedBeast_Perk)
+	playerRef.removeperk(ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk)
 	
 	CustomSkills_FormExt.UnregisterForCustomSkillIncrease(self)
 	

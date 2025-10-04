@@ -192,6 +192,9 @@ function VampireCure(actor Player)
 	
 	if ED_Mechanics_BlueBlood_Quest.IsRunning()
 		ED_Mechanics_BlueBlood_Quest.SetObjectiveDisplayed(10, false)
+		ED_Mechanics_BlueBlood_Quest.SetObjectiveDisplayed(20, false)
+		ED_Mechanics_BlueBlood_Quest.SetObjectiveDisplayed(30, false)
+		ED_Mechanics_BlueBlood_Quest.SetObjectiveDisplayed(40, false)
 	endif
 	
 endFunction
@@ -304,7 +307,6 @@ endFunction
 function VampireProgression(actor Player, Int VampireStage)
 
     ; TODO: move all that somewhere out of here. maybe leave abilities and move spells elsewhere
-    ; TODO: make it so AgeOrStageChange only triggers when actually stages are changed, not when called on the same stage
     ;removing permanent passives for some reason, maybe because of the way progession is used in vanilla scripts
     ;Player.RemoveSpell(ED_BeingVampire_Ab_TrespassingCurse_Spell)
     Player.RemoveSpell(ED_BeingVampire_Ab_MoonlitWaters_Spell)

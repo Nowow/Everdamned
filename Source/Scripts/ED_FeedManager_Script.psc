@@ -185,7 +185,6 @@ function HandleBeastBite()
 	
 	;retrieving actor
 	;latent function, would wait for quest to start and fill the alias
-	; TODO: check for quest not being started already, although that is unexpected behavior
 	ED_Mechanics_Quest_BeastFeedVictimFinder.Start()
 	actor FeedTarget = ED_FeedVictim.GetReference() as actor
 	debug.Trace("Everdamned DEBUG: Feed Manager got actor " + FeedTarget + " captured by ED_Mechanics_Quest_BeastFeedVictimFinder")
@@ -319,7 +318,6 @@ function HandleFeedThrall(actor FeedTarget)
 		endIf
 	else
 		; blue blood stops only on vampire cure?
-		; todo: blue blood stop
 		;psychic vampire check
 		ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
@@ -738,9 +736,6 @@ function HandleDialogueIntimidation(actor FeedTarget)
 	
 	;age for 3h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
-	
-	;TODO: Vamp XP
-
 
 	;Blue Blood
 	if !(ED_BlueBlood_Quest_quest.IsStopped())
