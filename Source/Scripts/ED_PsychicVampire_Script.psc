@@ -7,7 +7,6 @@ message[] property skillMessageArray auto
 string[] property skillNameArray auto
 
 
-	; TODO:
 	;gives temporary faster levelling buff insead of flat points
 	;based on skill difference
 	;for non-unique PC skill vs target random(current, CalcMaxLVL) scaled skill

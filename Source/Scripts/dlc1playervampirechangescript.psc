@@ -235,7 +235,7 @@ function UnregisterForEvents()
 	self.UnRegisterForAnimationEvent(playerRef as objectreference, LandStart)
 	self.UnRegisterForAnimationEvent(playerRef as objectreference, TransformToHuman)
 	
-	; TODO: maybe dont need it, since game automatically unregisters animevents on racechange
+	;maybe dont need it, since game automatically unregisters animevents on racechange
 	ED_FeedManager_Quest.UnRegisterFeedEvents()
 
 endFunction
@@ -290,7 +290,7 @@ function RegisterForEvents()
 	self.RegisterForAnimationEvent(playerRef as objectreference, LandStart)
 	self.RegisterForAnimationEvent(playerRef as objectreference, TransformToHuman)
 	
-	; TODO: maybe dont need to call here, just rely on OnRaceSwitchComplete in ED_FeedManager_PlayerAlias script
+	;maybe dont need to call here, just rely on OnRaceSwitchComplete in ED_FeedManager_PlayerAlias script
 	ED_FeedManager_Quest.RegisterFeedEvents()
 	
 endFunction
@@ -358,7 +358,7 @@ function StartTracking()
 		HunterFaction.SetPlayerEnemy(true)
 	endIf
 	game.SetPlayerReportCrime(false)
-	; TODO: do we need that?
+	;do we need that?
 	__durationWarningTime = self.RealTimeSecondsToGameTimeDays(DurationWarningTimeSeconds)
 	__UnearthlyWillExtensionTime = self.RealTimeSecondsToGameTimeDays(UnearthlyWillExtensionTimeSeconds)
 	
@@ -387,7 +387,7 @@ function StartTracking()
 	endIf
 	
 	Float currentTime = GameDaysPassed.GetValue()
-	; TODO: ??? needed?
+	; ??? needed?
 	Float regressTime = currentTime + self.RealTimeSecondsToGameTimeDays(StandardDurationSeconds)
 	if playerRef.HasPerk(DLC1UnearthlyWill)
 		regressTime += __UnearthlyWillExtensionTime
@@ -404,7 +404,6 @@ function PrepShift()
 	VampireChange.Apply(1.00000)
 	VampireIMODSound.Play(playerRef)
 	game.SetInCharGen(true, true, false)
-	; TODO: activation blocker converted, check if no more work necessary
 	playerRef.AddPerk(DLC1VampireActivationBlocker)
 	game.SetBeastForm(true)
 	game.EnableFastTravel(false)
@@ -621,7 +620,6 @@ function ActuallyShiftBackIfNecessary()
 	; unequipping left hand spell so that spell cost abilities do not carry over
 	playerRef.UnequipSpell(CurrentEquippedLeftSpell, 0)
 	
-	; TODO: add 
 	playerRef.RemoveSpell(LeveledDrainSpell)
 	playerRef.RemoveSpell(LeveledRaiseDeadSpell)
 	playerRef.RemoveSpell(LeveledAbility)

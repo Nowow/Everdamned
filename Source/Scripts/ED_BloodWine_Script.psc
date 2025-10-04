@@ -7,7 +7,6 @@ event OnEffectStart(Actor akTarget, Actor akCaster)
 		ED_Mechanics_Message_CantSateWithWine.ShowAsHelpMessage("ed_bloodwine_toothirsty", 5.0, 1.0, 1)
 		
 		return
-		; TODO: add some SFX
 	endif
 	
 	ED_Art_VFX_BloodWineIngestion.play(akTarget, 5.0)

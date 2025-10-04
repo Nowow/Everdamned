@@ -32,18 +32,21 @@ function ProcessVIP(actorbase TheVIP)
 		ED_Mechanics_BlueBlood_Global_ChainedBeastAwarded.SetValue(1)
 		playerRef.addperk(ED_Mechanics_Ab_ChainedBeast_Perk)
 		playerRef.addspell(ED_Mechanics_Ab_ChainedBeast_Spell)
+		SetObjectiveDisplayed(20)
 		debug.Trace("Everdamned DEBUG: Blue Blood quest rewarded player with Chained Beast")
 		
 	elseif VIPsTasted == Reward_EmbraceTheBeast
 		ED_Mechanics_BlueBlood_Global_EmbraceTheBeastAwarded.SetValue(1)
 		playerRef.addperk(ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk)
 		setstage(150)
+		SetObjectiveDisplayed(30)
 		debug.Trace("Everdamned DEBUG: Blue Blood quest rewarded player with Embrace The Beast")
 		
 	elseif VIPsTasted == Reward_PerkPoints
 		ED_Mechanics_BlueBlood_Global_PerkPointsAwarded.SetValue(1)
 		game.AddPerkPoints(ThatMuchPerkPoints)
-		ED_Mechanics_BlueBlood_Message_PerkPointsAdded.Show()
+		ED_Mechanics_BlueBlood_Message_PerkPointsAdded.Show(ThatMuchPerkPoints as float)
+		SetObjectiveDisplayed(40)
 		debug.Trace("Everdamned DEBUG: Blue Blood quest rewarded player with Perk Points")
 	endif
 	

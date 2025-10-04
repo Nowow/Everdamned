@@ -3,7 +3,6 @@ Scriptname ED_Confuse_Script extends activemagiceffect
 
 event OnEffectStart(Actor Target, Actor Caster)
 
-	; TODO: redo to Confusion cooldown
 	if Target.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_ConfusionImmune)
 		debug.Trace("Everdamned DEBUG: Confusion will not be applied due to Confusion immunity")
 		MEssage.ResetHelpMessage("ed_confusion_immunity")

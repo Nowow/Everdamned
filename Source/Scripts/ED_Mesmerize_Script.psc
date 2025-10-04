@@ -28,7 +28,7 @@ EVENT OnEffectStart(Actor Target, Actor Caster)
 	Target.SetLookAt(Caster)
 	__target = Target
 	
-	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
+	;CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 	
 endEVENT
 
