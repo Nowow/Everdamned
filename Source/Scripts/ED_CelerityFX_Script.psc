@@ -6,7 +6,8 @@ float property slowdownPlayer auto
 
 
 Event OnEffectStart(Actor akTarget, Actor akCaster)
-	ED_SKSEnativebindings.SetTimeSlowdown(slowdownWorld, slowdownPlayer)
+	ED_SKSEnativebindings.SetTimeSlowdown(slowdownWorld, GetMagnitude())
+	debug.Notification(GetMagnitude())
 endevent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
