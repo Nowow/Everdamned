@@ -104,6 +104,9 @@ subs:
       - name: idleNum
         type: int
         default: 0
+      - name: solo
+        type: bool
+        default: false
   - name: slowtime
     func: SetTimeSlowdown
     args:

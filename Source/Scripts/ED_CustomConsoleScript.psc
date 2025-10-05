@@ -1,12 +1,13 @@
 Scriptname ED_CustomConsoleScript Hidden
 
 import PO3_SKSEFunctions
+import ED_SKSEnativebindings
 
 string function PlayVisualEffectFromString(string editorID) global
 	
 	debug.Trace("Everdamned DEBUG: PlayVisualEffectFromString called!")
 	
-	visualeffect levfx = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
+	visualeffect levfx = LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
 	debug.Trace("Everdamned DEBUG: PlayVisualEffectFromString got this form: " + levfx)
 	
 	ObjectReference __targetThing = Game.GetCurrentConsoleRef()
@@ -17,7 +18,7 @@ string function PlayVisualEffectFromString(string editorID) global
 	
 	;levfx.Stop(__targetThing)
 	
-	art leform = ED_SKSEnativebindings.LookupSomeFormByEditorID(editorID) as art
+	art leform = LookupSomeFormByEditorID(editorID) as art
 	debug.Trace("Everdamned DEBUG: PlayVisualEffectFromString got this form: " + leform)
 	
 	if !leform
@@ -39,10 +40,10 @@ string function PlayVisualEffectFromString(string editorID) global
 endfunction
 
 function StopLeVFX(string editorID) global
-	visualeffect levfx = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
+	visualeffect levfx = LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
 	
 ;	if editorID && editorID != ""
-;		art leform = ED_SKSEnativebindings.LookupSomeFormByEditorID(editorID) as art
+;		art leform = LookupSomeFormByEditorID(editorID) as art
 ;		SetArtObject(levfx, leform)
 ;	endif
 
@@ -84,7 +85,7 @@ function PlayNext() global
 	
 	if ArtIterator.SelectedFormType == 1
 		
-		visualeffect levfx = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
+		visualeffect levfx = LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
 		levfx.Stop(__targetThing)
 		
 		SetArtObject(levfx, ArtIterator.CurrentForm as art)
@@ -108,7 +109,7 @@ function PlayPrevious() global
 	
 	if ArtIterator.SelectedFormType == 1
 	
-		visualeffect levfx = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
+		visualeffect levfx = LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
 		levfx.Stop(__targetThing)
 		
 		SetArtObject(levfx, ArtIterator.CurrentForm as art)
@@ -133,7 +134,7 @@ function PlayCurrentFormAgain() global
 	
 	if ArtIterator.SelectedFormType == 1
 	
-		visualeffect levfx = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
+		visualeffect levfx = LookupSomeFormByEditorID("ED_TEST_Vfx") as visualeffect
 		levfx.Stop(__targetThing)
 		
 		SetArtObject(levfx, ArtIterator.CurrentForm as art)
@@ -171,7 +172,7 @@ string function DoParticleTexture(string ShaderEditorID, string newTexturePath) 
 		return "No shader specified"
 	endif
 
-	effectshader leShader = ED_SKSEnativebindings.LookupSomeFormByEditorID(ShaderEditorID) as effectshader
+	effectshader leShader = LookupSomeFormByEditorID(ShaderEditorID) as effectshader
 	if !leShader
 		return "Shader was not found"
 	endif
@@ -192,7 +193,7 @@ string function DoParticleCount(string ShaderEditorID, float newParticleCount, f
 		return "No shader specified"
 	endif
 	
-	effectshader leShader = ED_SKSEnativebindings.LookupSomeFormByEditorID(ShaderEditorID) as effectshader
+	effectshader leShader = LookupSomeFormByEditorID(ShaderEditorID) as effectshader
 	if !leShader
 		return "Shader was not found"
 	endif
@@ -222,7 +223,7 @@ string function DoParticlecolor(string ShaderEditorID, int theKey, int Rval, int
 		return "No shader specified"
 	endif
 	
-	effectshader leShader = ED_SKSEnativebindings.LookupSomeFormByEditorID(ShaderEditorID) as effectshader
+	effectshader leShader = LookupSomeFormByEditorID(ShaderEditorID) as effectshader
 	if !leShader
 		return "Shader was not found"
 	endif
@@ -250,7 +251,7 @@ string function SendAnimevent(string leevent) global
 	
 endfunction
 
-string function PlayFeedIdle(int idleNum) global
+string function PlayFeedIdle(int idleNum, bool solo) global
 
 	actor __targetThing = Game.GetCurrentConsoleRef() as actor
 	
@@ -261,39 +262,125 @@ string function PlayFeedIdle(int idleNum) global
 	actor playerRef = Game.GetPlayer()
 	
 	idle idleToPlay
-	globalvariable FeedTypeVar = ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_Mechanics_Global_FeedType") as globalvariable
+	idle idleToPlaySoloVictim
+	idle idleToPlaySoloPlayer
+	float backupAnimationVictimOffset
+	
+	
+	globalvariable FeedTypeVar = LookupSomeFormByEditorID("ED_Mechanics_Global_FeedType") as globalvariable
+	
+	idle IdleHandCut = LookupSomeFormByEditorID("IdleHandCut") as idle
+	idle ED_Idle_FeedKM_Solo_Player_Ground = LookupSomeFormByEditorID("ED_Idle_FeedKM_Solo_Player_Ground") as idle
+	idle ED_Idle_FeedKM_Solo_Player_Jumpfeed = LookupSomeFormByEditorID("ED_Idle_FeedKM_Solo_Player_Jumpfeed") as idle
+	idle ED_Idle_FeedKM_Solo_Player_Bleedout = LookupSomeFormByEditorID("ED_Idle_FeedKM_Solo_Player_Bleedout") as idle
+	idle ED_Idle_FeedKM_Solo_Victim_Social = LookupSomeFormByEditorID("ED_Idle_FeedKM_Solo_Victim_Social") as idle
+	idle ED_Idle_FeedKM_Solo_Player_Social = LookupSomeFormByEditorID("ED_Idle_FeedKM_Solo_Player_Social") as idle	
+	idle ResetRoot = LookupSomeFormByEditorID("ResetRoot") as idle
+	
+	spell ED_Mechanics_Spell_SetDontMove = LookupSomeFormByEditorID("ED_Mechanics_Spell_SetDontMove") as spell
+	spell ED_BeingVampire_VampireFeed_VictimMark_Spell = LookupSomeFormByEditorID("ED_BeingVampire_VampireFeed_VictimMark_Spell") as spell
+	
 	
 	if idleNum == 0
 		;vanilla
+		solo = false
 		FeedTypeVar.SetValue(0.0)
-		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+		idleToPlay = LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
 		
 	elseif idleNum == 3
-		;social
 		FeedTypeVar.SetValue(3.0)
-		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+	
+		backupAnimationVictimOffset = 50.0  
+		
+		idleToPlaySoloPlayer = ED_Idle_FeedKM_Solo_Player_Social
+		idleToPlaySoloVictim = ED_Idle_FeedKM_Solo_Victim_Social
+		
+		; paired
+		idleToPlay = LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+		
 	elseif idleNum == 2
 		;jump feed
 		FeedTypeVar.SetValue(4.0)
-		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+		
+		idleToPlaySoloPlayer = ED_Idle_FeedKM_Solo_Player_Jumpfeed
+		idleToPlaySoloVictim = IdleHandCut
+		backupAnimationVictimOffset = 65.0
+		
+		; paired
+		idleToPlay = LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+		
 	elseif idleNum == 1
 		;bleedout feed
 		FeedTypeVar.SetValue(1.0)
-		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+		
+		backupAnimationVictimOffset = 60.0
+		idleToPlaySoloPlayer = ED_Idle_FeedKM_Solo_Player_Bleedout
+		idleToPlaySoloVictim = IdleHandCut
+		
+		; paired
+		idleToPlay = LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+		
 	elseif idleNum == 4
 		;overpower feed
 		FeedTypeVar.SetValue(2.0)
-		idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+		
+		idleToPlaySoloPlayer = ED_Idle_FeedKM_Solo_Player_Ground
+		idleToPlaySoloVictim = IdleHandCut
+		backupAnimationVictimOffset = 52.0
+		
+		; paired
+		idleToPlay = LookupSomeFormByEditorID("IdleVampireStandingFeedFront_Loose") as idle
+		
 	else
 		return "1: bleedout feed, 2: jump feed, 3: social feed, 4: overpower feed"
 	endif
 	
-	playerRef.PlayIdleWithTarget(idleToPlay, __targetThing)
+	float zOffset = __targetThing.GetHeadingAngle(playerRef)
+	__targetThing.SetAngle(__targetThing.GetAngleX(), __targetThing.GetAngleY(), __targetThing.GetAngleZ() + zOffset)
+			
+	ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, __targetThing)
+	
+	if solo
+		
+		float playerZ = playerRef.GetPositionZ()
+		float targetZ = __targetThing.GetPositionZ()
+		
+		if playerZ > targetZ
+			__targetThing.SetPosition(__targetThing.GetPositionX(), __targetThing.GetPositionY(), playerRef.GetPositionZ())
+		else
+			playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), __targetThing.GetPositionZ())
+		endif
+				
+		float playerAngleZsin = math.sin(playerRef.GetAngleZ())
+		float playerAngleZcos = math.cos(playerRef.GetAngleZ())
+		float targetX = playerRef.GetPositionX() + backupAnimationVictimOffset*playerAngleZsin
+		float targetY = playerRef.GetPositionY() + backupAnimationVictimOffset*playerAngleZcos
+		
+		__targetThing.TranslateTo(targetX, targetY, playerRef.GetPositionZ(),\
+								playerRef.GetAngleX(), playerRef.GetAngleY(), playerRef.GetAngleZ() - 180.0,\
+								700.0)
+		
+		ED_Mechanics_Spell_SetDontMove.Cast(__targetThing, __targetThing)
+		
+		; dont know if needed
+		playerRef.PlayIdle(ResetRoot)
+		__targetThing.PlayIdle(ResetRoot)
+		
+		playerRef.PlayIdle(idleToPlaySoloPlayer)
+		__targetThing.PlayIdle(idleToPlaySoloVictim)
+	else
+		playerRef.PlayIdleWithTarget(idleToPlay, __targetThing)
+		
+		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
+		bool __victimIsSynced = __targetThing.GetAnimationVariableBool("bIsSynced")
+		debug.Trace("Everdamned DEBUG: player bIsSynced: " + __playerIsSynced)
+		debug.Trace("Everdamned DEBUG: victim bIsSynced: " + __victimIsSynced)
+	endif
 	
 endfunction
 
 string function SetTimeSlowdown(float worldFactor, float playerFactor) global
-	ED_SKSEnativebindings.SetTimeSlowdown(worldFactor, playerFactor)
+	SetTimeSlowdown(worldFactor, playerFactor)
 endfunction
 
 string function BlendSkinColor(int r, int g, int b, int blendMode, bool autoLum, float opacity) global
@@ -330,7 +417,7 @@ string function PlayPairedIdle(string IdleEditorID, bool reverse) global
 		return "No target selected"
 	endif
 	
-	idle idleToPlay = ED_SKSEnativebindings.LookupSomeFormByEditorID(IdleEditorID) as idle
+	idle idleToPlay = LookupSomeFormByEditorID(IdleEditorID) as idle
 	
 	debug.Trace("Everdamned DEBUG: Idle To Play: " + idleToPlay)
 	
@@ -356,82 +443,82 @@ string function SetupNewTestCharacter() global
 	playerRef.SetActorValue("Stamina", 10000)
 	playerRef.SetActorValue("ED_BloodPool", 10000)
 	
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_100_WickedWind_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTree_Disciplines_100_WickedWind_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_10_VigorMortis_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTree_Disciplines_10_VigorMortis_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_20_ExtendedPerception_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTree_Disciplines_20_ExtendedPerception_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_30_DeadlyStrength_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTree_Disciplines_30_DeadlyStrength_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_45_NecroticFlesh_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTree_Disciplines_45_NecroticFlesh_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_60_Celerity_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTree_Disciplines_60_Celerity_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_75_Backstab_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTree_Disciplines_75_Backstab_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Disciplines_90_FerociousSurge_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTree_Disciplines_90_FerociousSurge_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTree_Deception_10_EyesOfTheMoon_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTree_Deception_10_EyesOfTheMoon_Perk") as perk)
 	utility.wait(0.1)
 	
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_FountainOfLife_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_FountainOfLife_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_CommandUndead_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_CommandUndead_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_Echolocation_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_Echolocation_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_FlamesOfColdharbour_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_FlamesOfColdharbour_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_Gutwrench_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_Gutwrench_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_IcyWinds_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_IcyWinds_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_Maelstrom_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_Maelstrom_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_MarchingFlesh_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_MarchingFlesh_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_MistForm_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_MistForm_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_NightCloak_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_NightCloak_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_PartingGift_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_PartingGift_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_ShamblingHordes_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_ShamblingHordes_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_Tremble_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_Tremble_Perk") as perk)
 	utility.wait(0.1)
-	;playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_UndyingLoyalty_Perk") as perk)
+	;playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_UndyingLoyalty_Perk") as perk)
 	;utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_UnearthlyWill_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_UnearthlyWill_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_Vanilla_Chokehold_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_Vanilla_Chokehold_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_Vanilla_ConjureGargoyle_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_Vanilla_ConjureGargoyle_Perk") as perk)
 	utility.wait(0.1)
-	playerRef.addperk(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_PerkTreeVL_WingsOfTheStrix_Perk") as perk)
+	playerRef.addperk(LookupSomeFormByEditorID("ED_PerkTreeVL_WingsOfTheStrix_Perk") as perk)
 	
-	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodSeed_Spell") as spell)
+	playerRef.addspell(LookupSomeFormByEditorID("ED_VampireSpells_BloodSeed_Spell") as spell)
 	utility.wait(0.1)
-	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodBrand_Spell") as spell)
+	playerRef.addspell(LookupSomeFormByEditorID("ED_VampireSpells_BloodBrand_Spell") as spell)
 	utility.wait(0.1)
-	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodGarden_Spell") as spell)
+	playerRef.addspell(LookupSomeFormByEditorID("ED_VampireSpells_BloodGarden_Spell") as spell)
 	utility.wait(0.1)
-	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodScourge_Spell") as spell)
+	playerRef.addspell(LookupSomeFormByEditorID("ED_VampireSpells_BloodScourge_Spell") as spell)
 	utility.wait(0.1)
-	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodScourge_AnkhSwitchAb_Spell") as spell)
+	playerRef.addspell(LookupSomeFormByEditorID("ED_VampireSpells_BloodScourge_AnkhSwitchAb_Spell") as spell)
 	utility.wait(0.1)
-	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodVortex_Spell") as spell)
+	playerRef.addspell(LookupSomeFormByEditorID("ED_VampireSpells_BloodVortex_Spell") as spell)
 	utility.wait(0.1)
-	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BloodBoil_Spell") as spell)
+	playerRef.addspell(LookupSomeFormByEditorID("ED_VampireSpells_BloodBoil_Spell") as spell)
 	utility.wait(0.1)
-	playerRef.addspell(ED_SKSEnativebindings.LookupSomeFormByEditorID("ED_VampireSpells_BorrowedTime_Spell") as spell)
+	playerRef.addspell(LookupSomeFormByEditorID("ED_VampireSpells_BorrowedTime_Spell") as spell)
 	debug.Notification("Char setup finished")
 endfunction
 
 string function PlayAnImpactEffect(string editorId, string lenode) global
 	debug.Trace("Everdamned DEBUG: PlayAnImpactEffect evd cc called")
-	impactdataset aa = ED_SKSEnativebindings.LookupSomeFormByEditorID(editorId) as impactdataset
+	impactdataset aa = LookupSomeFormByEditorID(editorId) as impactdataset
 	if !aa
 		return "Not found"
 	endif
