@@ -16,9 +16,13 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 		endif
 	else
 		if ED_Mechanics_SkillTree_Level_Global.GetValue() >= akTarget.GetLevel()
-		
-			debug.Trace("Everdamned DEBUG: Lords Servant casts Command Undead!")
-			ED_VampireSpellsVL_LordsServant_Spell_CommandUndead.Cast(akCaster, akTarget)
+			if akCaster.GetActorValue("ED_BloodPool") >= 100.0
+				debug.Trace("Everdamned DEBUG: Lords Servant casts Command Undead!")
+				ED_VampireSpellsVL_LordsServant_Spell_CommandUndead.Cast(akCaster, akTarget)
+				akCaster.DamageActorValue("ED_BloodPool", 100.0)
+			else
+				ED_Mechanics_Message_NotEnoughBloodPoints.Show()
+			endif
 		else
 			; is too powerful to be subjugated.
 			debug.Notification(akTarget.GetActorBase().GetName() + " is too powerful to be subjugated.")
@@ -34,5 +38,6 @@ spell property ED_VampireSpellsVL_LordsServant_Spell_UndyingLoyalty auto
 globalvariable property ED_Mechanics_Global_UndyingLoyaltyPrimer auto
 globalvariable property ED_Mechanics_SkillTree_Level_Global auto
 visualeffect property ED_Art_VFX_LordsServantCharged auto 
+message property ED_Mechanics_Message_NotEnoughBloodPoints auto
 
 keyword property MagicNoReanimate auto
