@@ -267,6 +267,8 @@ function VampireChange(actor Target)
         VC01.SetStage(25)
     endIf
 	
+	playerRef.SendVampirismStateChanged(true)
+	
 endFunction
 
 function Devolve(Bool abForceDevolve, bool dropToLowest = false)
