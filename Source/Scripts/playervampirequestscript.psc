@@ -234,9 +234,16 @@ function VampireChange(actor Target)
         Target.SetRace(NordRaceVampire)
     endIf
 	
-	if PlayerRace == KhajiitRace
-		PlayerRef.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
+	If !(Target.HasSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell))
+		Target.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
+		debug.Trace("Everdamned DEBUG: Player vampire race DOES NOT have Vamp Sight (probably Khajiit), addint it manually ")
 	endif
+	
+	
+	
+	;if PlayerRace == KhajiitRace
+	;	PlayerRef.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
+	;endif
 	
     VampireCureDisease.Cast(Target as objectreference, none)
     VampireStatus = 1

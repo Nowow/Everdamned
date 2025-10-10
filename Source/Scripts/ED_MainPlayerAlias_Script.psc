@@ -47,6 +47,10 @@ EndEvent
 
 Event OnDying(Actor akKiller)
 	
+	if PlayerIsVampire.GetValue() != 1.0
+		return
+	endif
+	
 	actorbase playerActorBase = playerRef.GetActorBase()
 	if playerActorBase.IsProtected() || playerRef.IsEssential()
 		return
@@ -81,8 +85,10 @@ Event OnPlayerLoadGame()
 	string[] __condList
 	PO3_SKSEFunctions.AddMagicEffectToSpell(FavorJobsBeggarsAbility, ED_Mechanics_Spell_GiftOfCharityTracker_Effect, 0, 0, 3600, 0.0, __condList)
 		
-	
 endevent
+
+
+globalvariable property PlayerIsVampire auto
 
 race property DLC1VampireBeastRace auto
 actor property playerRef auto
