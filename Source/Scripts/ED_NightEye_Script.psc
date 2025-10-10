@@ -22,9 +22,11 @@ float __levelDiff
 bool __finishing
 
 
+
 ImageSpaceModifier[] property ImodArrayByStrength auto
 
-
+int MaxLevel
+int MinLevel
 int function GetDarknessLevel()
 	float lightLevel = playerRef.GetLightLevel()
 	
@@ -36,11 +38,34 @@ int function GetDarknessLevel()
 		DarknessLevel = 0.1 ; because ceiling
 	endif
 	
-	return math.ceiling(DarknessLevel*10)
+	int levell = math.ceiling(DarknessLevel*MaxLevel)
+	if levell < MinLevel
+		levell = MinLevel
+	endif
+	
+	return levell
 endfunction
+
+state AdaptiveDisabled
+	int function GetDarknessLevel()
+		return MaxLevel
+	endfunction
+	event OnUpdate()
+	endevent
+endstate
 
 Event OnEffectStart(Actor Target, Actor Caster)
 	
+
+	MaxLevel = ED_Mechanics_Global_MCM_NightSightMaxLevel.GetValue() as int
+	MinLevel = ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue() as int
+	
+	if ED_Mechanics_Global_MCM_NightSightDisableAdaptive.GetValue() == 1.0
+		debug.Trace("Everdamned Debug: Vampires Sight not adaptive")
+		GoToState("AdaptiveDisabled")
+	endif
+	
+
 	__currentDarknessLevel = GetDarknessLevel() - 1
 	
 	debug.Trace("Everdamned DEBUG: starting darkness level: " + __currentDarknessLevel)
@@ -59,6 +84,7 @@ EndEvent
 
 event OnUpdate()
 	__nextDarknessLevel = GetDarknessLevel() - 1
+	;debug.Trace("Everdamned DEBUG: Current darkness level " + __nextDarknessLevel)
 	__levelDiff = math.abs(__currentDarknessLevel - __nextDarknessLevel)
 	if __levelDiff < 2
 		registerforsingleupdate(1)
@@ -98,3 +124,6 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 endEvent
 
 actor property playerRef auto
+globalvariable property ED_Mechanics_Global_MCM_NightSightDisableAdaptive auto
+globalvariable property ED_Mechanics_Global_MCM_NightSightMaxLevel auto
+globalvariable property ED_Mechanics_Global_MCM_NightSightMinLevel auto

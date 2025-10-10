@@ -73,6 +73,18 @@ Int Setting_DisableDisintegrate
 float property Default_Setting_DisableDisintegrate auto
 GlobalVariable Property ED_Mechanics_Global_MCM_DisableDisintegrate Auto
 
+Int Setting_NightSightMaxLevel
+float property Default_Setting_NightSightMaxLevel auto
+GlobalVariable Property ED_Mechanics_Global_MCM_NightSightMaxLevel Auto
+
+Int Setting_NightSightMinLevel
+float property Default_Setting_NightSightMinLevel auto
+GlobalVariable Property ED_Mechanics_Global_MCM_NightSightMinLevel Auto
+
+Int Setting_NightSightDisableAdaptive
+float property Default_Setting_NightSightDisableAdaptive auto
+GlobalVariable Property ED_Mechanics_Global_MCM_NightSightDisableAdaptive Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -128,6 +140,14 @@ function OnPageReset(String akPage)
 	Setting_LevelXPDenominator = self.AddSliderOption("Level XP gain lower", ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue(), "{0} times")
 	Setting_DisableBloodstarvedTint = self.AddToggleOption("No red tint when Blood Starved ", ED_Mechanics_Global_MCM_DisableBloodstarvedTint.GetValue() as Bool)
 	Setting_DisableDisintegrate = self.AddToggleOption("No disintegrate on death ", ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue() as Bool)
+	
+	; ------------------------------------------------------------
+	; Night Sight
+	self.AddEmptyOption()
+	self.AddHeaderOption("Night Sight", 0)
+	Setting_NightSightMaxLevel = self.AddSliderOption("Strength max level", ED_Mechanics_Global_MCM_NightSightMaxLevel.GetValue())
+	Setting_NightSightMinLevel = self.AddSliderOption("Strength min level", ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue())
+	Setting_NightSightDisableAdaptive = self.AddToggleOption("Disable adaptive strength ", ED_Mechanics_Global_MCM_NightSightDisableAdaptive.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	; Blood Meter
@@ -248,7 +268,18 @@ function OnOptionDefault(Int akOp)
 		ED_Mechanics_Global_MCM_DisableDisintegrate.SetValue(Default_Setting_DisableDisintegrate)
 		SetToggleOptionValue(Setting_DisableDisintegrate, Default_Setting_DisableDisintegrate as bool)
 	
-	
+	elseIf akOp == Setting_NightSightMaxLevel
+		ED_Mechanics_Global_MCM_NightSightMaxLevel.SetValue(Default_Setting_NightSightMaxLevel as Float)
+		self.SetSliderOptionValue(Setting_NightSightMaxLevel, Default_Setting_NightSightMaxLevel)
+		
+	elseIf akOp == Setting_NightSightMinLevel
+		ED_Mechanics_Global_MCM_NightSightMinLevel.SetValue(Default_Setting_NightSightMinLevel as Float)
+		self.SetSliderOptionValue(Setting_NightSightMinLevel, Default_Setting_NightSightMinLevel)
+		
+	elseIf akOp == Setting_NightSightDisableAdaptive
+		ED_Mechanics_Global_MCM_NightSightDisableAdaptive.SetValue(Default_Setting_NightSightDisableAdaptive)
+		SetToggleOptionValue(Setting_NightSightDisableAdaptive, Default_Setting_NightSightDisableAdaptive as bool)
+
 	; ------------------------------------------------------------
 	; cheats
 	
@@ -355,6 +386,18 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogDefaultValue(Default_Setting_LevelXPDenominator)
 		self.SetSliderDialogRange(0.500000, 4.0000)
 		self.SetSliderDialogInterval(0.10000)
+		
+	elseIf akOp == Setting_NightSightMaxLevel
+		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_NightSightMaxLevel.GetValue())
+		self.SetSliderDialogDefaultValue(Default_Setting_NightSightMaxLevel)
+		self.SetSliderDialogRange(1.0, 10.0)
+		self.SetSliderDialogInterval(1.0)
+		
+	elseIf akOp == Setting_NightSightMinLevel
+		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue())
+		self.SetSliderDialogDefaultValue(Default_Setting_NightSightMinLevel)
+		self.SetSliderDialogRange(1.0, 10.0)
+		self.SetSliderDialogInterval(1.0)
 	
 	; ------------------------------------------------------------
 	
@@ -403,6 +446,20 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 	elseIf akOp == Setting_LevelXPDenominator
 		ED_Mechanics_SkillTree_DenominatorXP_Global.SetValue(akValue)
 		self.SetSliderOptionValue(Setting_LevelXPDenominator, akValue, "{0} times")
+		
+	elseIf akOp == Setting_NightSightMaxLevel
+		if akValue < ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue()
+			akValue = ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue()
+		endif
+		ED_Mechanics_Global_MCM_NightSightMaxLevel.SetValue(akValue)
+		self.SetSliderOptionValue(Setting_NightSightMaxLevel, akValue)
+		
+	elseIf akOp == Setting_NightSightMinLevel
+		if akValue > ED_Mechanics_Global_MCM_NightSightMaxLevel.GetValue()
+			akValue = ED_Mechanics_Global_MCM_NightSightMaxLevel.GetValue()
+		endif
+		ED_Mechanics_Global_MCM_NightSightMinLevel.SetValue(akValue)
+		self.SetSliderOptionValue(Setting_NightSightMinLevel, akValue)
 	
 	; ------------------------------------------------------------
 	
@@ -431,6 +488,10 @@ function OnOptionSelect(Int akOp)
 	elseif akOp == Setting_DisableDisintegrate
 		ED_Mechanics_Global_MCM_DisableDisintegrate.SetValue(1 as Float - ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue())
 		SetToggleOptionValue(Setting_DisableDisintegrate, ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue() as bool)
+		
+	elseif akOp == Setting_NightSightDisableAdaptive
+		ED_Mechanics_Global_MCM_NightSightDisableAdaptive.SetValue(1 as Float - ED_Mechanics_Global_MCM_NightSightDisableAdaptive.GetValue())
+		SetToggleOptionValue(Setting_NightSightDisableAdaptive, ED_Mechanics_Global_MCM_NightSightDisableAdaptive.GetValue() as bool)
 	
 	; ------------------------------------------------------------
 	; cheats
@@ -535,6 +596,12 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Disable red tint when in combat while Blood Starved")
 	elseIf akOp == Setting_DisableDisintegrate
 		self.SetInfoText("Disable disintegrate into ashpile on death for you, in case you need it for compatibility with other vampire/npc mod")
+	elseIf akOp == Setting_NightSightMaxLevel
+		self.SetInfoText("Maximum strength of Vampire's Sight night vision. Can't be lower than minimum strength setting. Takes effect on next cast.")
+	elseIf akOp == Setting_NightSightMinLevel
+		self.SetInfoText("Minimum strength of Vampire's Sight night vision. Can't be higher than maximum strength setting. Takes effect on next cast.")
+	elseIf akOp == Setting_NightSightDisableAdaptive
+		self.SetInfoText("Disable Vampire's Sight night vision adaptive strength. Use if your lightning mods make it behave improperly. If disabled, maximum strength setting will be used at all times. Takes effect on next cast.")
 	
 	; ------------------------------------------------------------
 	; cheats
