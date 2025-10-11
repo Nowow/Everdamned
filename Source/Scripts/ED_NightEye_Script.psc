@@ -14,6 +14,7 @@ float property maxLightlevel = 90.0 auto
 Float Property fImodStrength auto
 float property fDelay auto
 float property AdjustPerLevelSeconds = 0.5 auto
+float property StrengthModifier = 1.0 auto
 
 float __currentStrength
 int __currentDarknessLevel = 5
@@ -24,6 +25,9 @@ bool __finishing
 
 
 ImageSpaceModifier[] property ImodArrayByStrength auto
+ImageSpaceModifier[] property ImodTransitionArray auto
+ImageSpaceModifier[] property ImodStartArray auto
+imagespacemodifier property ED_Art_Imod_NightVision_Transition_0to5 auto
 
 int MaxLevel
 int MinLevel
