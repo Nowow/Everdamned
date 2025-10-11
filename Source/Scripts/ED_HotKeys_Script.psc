@@ -136,6 +136,12 @@ spell property ED_Mechanics_Spell_BloodTentacleHit_Level1 auto
 
 miscobject property DA04Extractor auto
 
+imagespacemodifier property ED_Art_Imod_NightVision_1 auto
+imagespacemodifier property ED_Art_Imod_NightVision_Transition_1to5 auto
+imagespacemodifier property ED_Art_Imod_NightVision_5 auto
+imagespacemodifier property ED_Art_Imod_NightVision_Transition_5to1 auto
+
+
 
 int counter
 bool __switch
@@ -155,7 +161,19 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 
-		debug.Trace("Everdamned DEBUG: " + __targetThing.GetActorBase().GetName())
+		ED_Art_Imod_NightVision_1.Apply()
+		utility.wait(2.0)
+		ED_Art_Imod_NightVision_1.PopTo(ED_Art_Imod_NightVision_Transition_1to5)
+		utility.wait(4.0)
+		ED_Art_Imod_NightVision_Transition_1to5.PopTo(ED_Art_Imod_NightVision_5)
+		
+		utility.wait(2.0)
+		ED_Art_Imod_NightVision_5.PopTo(ED_Art_Imod_NightVision_Transition_5to1)
+		utility.wait(4.0)
+		ED_Art_Imod_NightVision_Transition_5to1.PopTo(ED_Art_Imod_NightVision_1)
+		utility.wait(2.0)
+		ED_Art_Imod_NightVision_1.Remove()
+		;debug.Trace("Everdamned DEBUG: " + __targetThing.GetActorBase().GetName())
 
 		;pl.additem(DA04Extractor, 1)
 		
