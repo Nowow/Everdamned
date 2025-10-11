@@ -85,6 +85,10 @@ Int Setting_NightSightDisableAdaptive
 float property Default_Setting_NightSightDisableAdaptive auto
 GlobalVariable Property ED_Mechanics_Global_MCM_NightSightDisableAdaptive Auto
 
+Int Setting_NightSightStrengthMult
+float property Default_Setting_NightSightStrengthMult auto
+GlobalVariable Property ED_Mechanics_Global_MCM_NightSightStrengthMult Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -147,7 +151,8 @@ function OnPageReset(String akPage)
 	self.AddHeaderOption("Night Sight", 0)
 	Setting_NightSightMaxLevel = self.AddSliderOption("Strength max level", ED_Mechanics_Global_MCM_NightSightMaxLevel.GetValue())
 	Setting_NightSightMinLevel = self.AddSliderOption("Strength min level", ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue())
-	Setting_NightSightDisableAdaptive = self.AddToggleOption("Disable adaptive strength ", ED_Mechanics_Global_MCM_NightSightDisableAdaptive.GetValue() as Bool)
+	Setting_NightSightDisableAdaptive = self.AddToggleOption("Disable adaptive strength", ED_Mechanics_Global_MCM_NightSightDisableAdaptive.GetValue() as Bool)
+	Setting_NightSightStrengthMult = self.AddSliderOption("Strength %", ED_Mechanics_Global_MCM_NightSightStrengthMult.GetValue())
 	
 	; ------------------------------------------------------------
 	; Blood Meter
@@ -279,6 +284,10 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Setting_NightSightDisableAdaptive
 		ED_Mechanics_Global_MCM_NightSightDisableAdaptive.SetValue(Default_Setting_NightSightDisableAdaptive)
 		SetToggleOptionValue(Setting_NightSightDisableAdaptive, Default_Setting_NightSightDisableAdaptive as bool)
+		
+	elseIf akOp == Setting_NightSightStrengthMult
+		ED_Mechanics_Global_MCM_NightSightStrengthMult.SetValue(Default_Setting_NightSightStrengthMult as Float)
+		self.SetSliderOptionValue(Setting_NightSightStrengthMult, Default_Setting_NightSightStrengthMult * 100.0)
 
 	; ------------------------------------------------------------
 	; cheats
@@ -390,14 +399,20 @@ function OnOptionSliderOpen(Int akOp)
 	elseIf akOp == Setting_NightSightMaxLevel
 		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_NightSightMaxLevel.GetValue())
 		self.SetSliderDialogDefaultValue(Default_Setting_NightSightMaxLevel)
-		self.SetSliderDialogRange(1.0, 10.0)
+		self.SetSliderDialogRange(1.0, 5.0)
 		self.SetSliderDialogInterval(1.0)
 		
 	elseIf akOp == Setting_NightSightMinLevel
 		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue())
 		self.SetSliderDialogDefaultValue(Default_Setting_NightSightMinLevel)
-		self.SetSliderDialogRange(1.0, 10.0)
+		self.SetSliderDialogRange(1.0, 5.0)
 		self.SetSliderDialogInterval(1.0)
+	
+	elseIf akOp == Setting_NightSightStrengthMult
+		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_NightSightStrengthMult.GetValue())
+		self.SetSliderDialogDefaultValue(Default_Setting_NightSightStrengthMult * 100.0)
+		self.SetSliderDialogRange(50, 200)
+		self.SetSliderDialogInterval(1)
 	
 	; ------------------------------------------------------------
 	
@@ -460,6 +475,11 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 		endif
 		ED_Mechanics_Global_MCM_NightSightMinLevel.SetValue(akValue)
 		self.SetSliderOptionValue(Setting_NightSightMinLevel, akValue)
+		
+	elseIf akOp == Setting_NightSightStrengthMult
+		akValue = akValue / 100.0
+		ED_Mechanics_Global_MCM_NightSightStrengthMult.SetValue(akValue)
+		self.SetSliderOptionValue(Setting_NightSightStrengthMult, akValue)
 	
 	; ------------------------------------------------------------
 	
@@ -602,6 +622,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Minimum strength of Vampire's Sight night vision. Can't be higher than maximum strength setting. Takes effect on next cast.")
 	elseIf akOp == Setting_NightSightDisableAdaptive
 		self.SetInfoText("Disable Vampire's Sight night vision adaptive strength. Use if your lightning mods make it behave improperly. If disabled, maximum strength setting will be used at all times. Takes effect on next cast.")
+	elseIf akOp == Setting_NightSightStrengthMult
+		self.SetInfoText("Vampire's Sight night vision overral effectiveness.")
 	
 	; ------------------------------------------------------------
 	; cheats

@@ -13,7 +13,7 @@ globalvariable property NightEyeTransitionGlobal auto
 float property maxLightlevel = 90.0 auto
 Float Property fImodStrength auto
 float property fDelay auto
-float property AdjustPerLevelSeconds = 0.5 auto
+float property AdjustPerLevelSeconds = 1.0 auto
 float property StrengthModifier = 1.0 auto
 
 float __currentStrength
@@ -27,7 +27,6 @@ bool __finishing
 ImageSpaceModifier[] property ImodArrayByStrength auto
 ImageSpaceModifier[] property ImodTransitionArray auto
 ImageSpaceModifier[] property ImodStartArray auto
-imagespacemodifier property ED_Art_Imod_NightVision_Transition_0to5 auto
 
 int MaxLevel
 int MinLevel
@@ -35,6 +34,8 @@ int function GetDarknessLevel()
 	float lightLevel = playerRef.GetLightLevel()
 	
 	float DarknessLevel = (maxLightlevel - lightLevel) / maxLightlevel
+	
+	;debug.Trace("Everdamned DEBUG: Darkness Percent raw: " + DarknessLevel )
 
 	if DarknessLevel > 1.0 
 		DarknessLevel = 1.0
@@ -42,10 +43,14 @@ int function GetDarknessLevel()
 		DarknessLevel = 0.1 ; because ceiling
 	endif
 	
+	;debug.Trace("Everdamned DEBUG: Darkness Percent raw adjusted: " + DarknessLevel )
+	
 	int levell = math.ceiling(DarknessLevel*MaxLevel)
 	if levell < MinLevel
 		levell = MinLevel
 	endif
+	
+	;debug.Trace("Everdamned DEBUG: Darkness Level raw: " + levell )
 	
 	return levell
 endfunction
@@ -62,7 +67,7 @@ imagespacemodifier __lastImod
 imagespacemodifier __nextImod
 Event OnEffectStart(Actor Target, Actor Caster)
 	
-
+	StrengthModifier = ED_Mechanics_Global_MCM_NightSightStrengthMult.GetValue()
 	MaxLevel = ED_Mechanics_Global_MCM_NightSightMaxLevel.GetValue() as int
 	MinLevel = ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue() as int
 	
@@ -71,9 +76,10 @@ Event OnEffectStart(Actor Target, Actor Caster)
 		GoToState("AdaptiveDisabled")
 	endif
 	
-
+	
 	__currentDarknessLevel = GetDarknessLevel() - 1
 	
+	imagespacemodifier __startImod = ImodStartArray[__currentDarknessLevel]
 	__nextImod = ImodArrayByStrength[__currentDarknessLevel]
 	__lastImod = __nextImod
 	
@@ -82,9 +88,10 @@ Event OnEffectStart(Actor Target, Actor Caster)
 	int instanceID = IntroSoundFX.play((target as objectReference))
 	
 	; just blur and secondary stuff
-	introFX.apply(1.0) 
-	__nextImod.ApplyCrossFade(0.88)
-	utility.wait(0.88)
+	introFX.apply(1.0)
+	__startImod.Apply(StrengthModifier)
+	utility.wait(1.0)
+	__startImod.PopTo(__nextImod, StrengthModifier)
 	
 	registerforsingleupdate(1)
 	
@@ -93,9 +100,11 @@ EndEvent
 
 event OnUpdate()
 	__nextDarknessLevel = GetDarknessLevel() - 1
+	debug.Trace("Everdamned DEBUG: Darkness Level adjusted: " + __nextDarknessLevel )
 	;debug.Trace("Everdamned DEBUG: Current darkness level " + __nextDarknessLevel)
-	__levelDiff = math.abs(__currentDarknessLevel - __nextDarknessLevel)
-	if __levelDiff < 2
+	__levelDiff = __currentDarknessLevel - __nextDarknessLevel
+	
+	if __levelDiff == 0
 		registerforsingleupdate(1)
 		return
 	endif
@@ -105,15 +114,29 @@ event OnUpdate()
 		return
 	endif
 	
-	float __delay = __levelDiff*AdjustPerLevelSeconds
+	float __delay = math.abs(__levelDiff)*AdjustPerLevelSeconds + 0.2
 
-	__currentDarknessLevel = __nextDarknessLevel
-	__nextImod = ImodArrayByStrength[__currentDarknessLevel]
-	__nextImod.ApplyCrossFade(__delay)
+	int __transImodIndex = 4*__currentDarknessLevel + __nextDarknessLevel
+	if __levelDiff < 0
+		__transImodIndex -= 1
+	endif
+	imagespacemodifier __transitionImod = ImodTransitionArray[__transImodIndex]	
+	debug.Trace("Everdamned DEBUG: Vampires Sight transition IMAD index is: " + __transitionImod)
+	
+	
+	__nextImod = ImodArrayByStrength[__nextDarknessLevel]
+	
+	__lastImod.PopTo(__transitionImod, StrengthModifier)
 	utility.wait(__delay)
-	__lastImod.Remove()
+	__transitionImod.PopTo(__nextImod, StrengthModifier)
+	
+	;__nextImod.ApplyCrossFade(__delay)
+	;utility.wait(__delay)
+	;__lastImod.Remove()
 	;__nextImod.PopTo(__nextImod)
 	;ImageSpaceModifier.RemoveCrossFade()
+	
+	__currentDarknessLevel = __nextDarknessLevel
 	__lastImod = __nextImod
 	
 	
@@ -127,8 +150,9 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 	__finishing = true
 	int instanceID = OutroSoundFX.play((target as objectReference))         ; play OutroSoundFX sound from my self
 	
-	__currentStrength = 0.5*(__currentDarknessLevel + 1)/10.0
-	ImodArrayByStrength[__currentDarknessLevel].PopTo(OutroFX, __currentStrength)
+	;__currentStrength = 0.5*(__currentDarknessLevel + 1)/10.0
+	__currentStrength = (__currentDarknessLevel + 1)/10.0  ; max half strength cuz
+	ImodArrayByStrength[__currentDarknessLevel].PopTo(OutroFX, __currentStrength * StrengthModifier)
 	
 	debug.Trace("Everdamned DEBUG: Vampires Sight outro imod played at strength: " + __currentStrength)
 	introFX.remove()
@@ -139,3 +163,4 @@ actor property playerRef auto
 globalvariable property ED_Mechanics_Global_MCM_NightSightDisableAdaptive auto
 globalvariable property ED_Mechanics_Global_MCM_NightSightMaxLevel auto
 globalvariable property ED_Mechanics_Global_MCM_NightSightMinLevel auto
+globalvariable property ED_Mechanics_Global_MCM_NightSightStrengthMult auto
