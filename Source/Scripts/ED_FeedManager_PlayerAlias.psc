@@ -25,44 +25,34 @@ function RegisterFeedSFXEvents()
 	RegisterForAnimationEvent(playerRef, VLFeed)
 endfunction
 
-Event OnPlayerLoadGame()
-	Debug.Trace("Everdamned INFO: Feed Manager player alias OnPlayerLoadGame() called ")
-	
+function StartListening()
 	ED_FeedManager_Script FeedManager = GetOwningQuest() as ED_FeedManager_Script
 	
 	; feed km processing for VL and garkain
 	FeedManager.RegisterFeedEvents()
 	
 	; feed km processing for mortal feed killmoves, separate to be separate thread
-	
 	race playerRace = playerRef.GetRace()
 	if FeedManager.PlayerIsVampire.value == 1 && playerRace != VampireGarkainBeastRace && playerRace != DLC1VampireBeastRace
-		
 		; using for custom feed anim sound events		
 		RegisterFeedSFXEvents()
-
 	endif
+endfunction
+
+Event OnPlayerLoadGame()
+	Debug.Trace("Everdamned INFO: Feed Manager player alias OnPlayerLoadGame() called ")
+	StartListening()
 EndEvent
 
 Event OnRaceSwitchComplete()
  	Debug.Trace("Everdamned INFO: Feed Manager player alias OnRaceSwitchComplete() called ")
-	
-	ED_FeedManager_Script FeedManager = GetOwningQuest() as ED_FeedManager_Script
-	
-	; feed km processing for VL and garkain
-	FeedManager.RegisterFeedEvents()
-	
-	; feed km processing for mortal feed killmoves, separate to be separate thread
-	race playerRace = playerRef.GetRace()
-	if FeedManager.PlayerIsVampire.value == 1 && playerRace != VampireGarkainBeastRace && playerRace != DLC1VampireBeastRace
-		
-		; using for custom feed anim sound events		
-		RegisterFeedSFXEvents()
-
-	endif
-	
+	StartListening()
 EndEvent
 
+event OnVampirismStateChanged(bool abIsVampire)
+	debug.Trace("Everdamned INFO: Feed Manager Player Alias script caught that player became a vampire, registring feed events")
+	StartListening()
+endevent
 
 ;  handles animations baked in .hkx, for sfx and other stuff directly related to playing animation
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)

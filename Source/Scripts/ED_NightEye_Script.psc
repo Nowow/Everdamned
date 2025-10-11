@@ -54,6 +54,8 @@ state AdaptiveDisabled
 	endevent
 endstate
 
+imagespacemodifier __lastImod
+imagespacemodifier __nextImod
 Event OnEffectStart(Actor Target, Actor Caster)
 	
 
@@ -68,13 +70,16 @@ Event OnEffectStart(Actor Target, Actor Caster)
 
 	__currentDarknessLevel = GetDarknessLevel() - 1
 	
+	__nextImod = ImodArrayByStrength[__currentDarknessLevel]
+	__lastImod = __nextImod
+	
 	debug.Trace("Everdamned DEBUG: starting darkness level: " + __currentDarknessLevel)
 
 	int instanceID = IntroSoundFX.play((target as objectReference))
 	
 	; just blur and secondary stuff
 	introFX.apply(1.0) 
-	ImodArrayByStrength[__currentDarknessLevel].ApplyCrossFade(0.88)
+	__nextImod.ApplyCrossFade(0.88)
 	utility.wait(0.88)
 	
 	registerforsingleupdate(1)
@@ -98,11 +103,14 @@ event OnUpdate()
 	
 	float __delay = __levelDiff*AdjustPerLevelSeconds
 
-	int __old = __currentDarknessLevel - 0
 	__currentDarknessLevel = __nextDarknessLevel
-	ImodArrayByStrength[__nextDarknessLevel].ApplyCrossFade(__delay)
+	__nextImod = ImodArrayByStrength[__currentDarknessLevel]
+	__nextImod.ApplyCrossFade(__delay)
 	utility.wait(__delay)
-	ImodArrayByStrength[__old].Remove()
+	__lastImod.Remove()
+	;__nextImod.PopTo(__nextImod)
+	;ImageSpaceModifier.RemoveCrossFade()
+	__lastImod = __nextImod
 	
 	
 	if !__finishing

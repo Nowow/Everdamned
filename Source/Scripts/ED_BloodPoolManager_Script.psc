@@ -79,7 +79,7 @@ state StageOrAgeChange
 		
 		float _calcMaxAv
 		; each age adds 150 to pool? maybe should add more?
-		_calcMaxAv = 150.0 * (VampireAge as float)
+		_calcMaxAv = 125.0 + 175.0* (VampireAge as float)
 		debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated " + _calcMaxAv + " pool based on Age")
 		; Base pool values for progression, full for Sated, half for Starved
 		_calcMaxAv = _calcMaxAv - ((_calcMaxAv / 6.0) * ((VampireStatus - 1) as float))
