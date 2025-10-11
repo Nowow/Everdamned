@@ -34,6 +34,20 @@
                 "formID": "CEC540"
             },
             "Active effects only": false
+        },
+        {
+            "condition": "CompareValues",
+            "requiredVersion": "1.0.0.0",
+            "Value A": {
+                "form": {
+                    "pluginName": "Everdamned.esp",
+                    "formID": "0D1CF3"
+                }
+            },
+            "Comparison": "==",
+            "Value B": {
+                "value": 0.0
+            }
         }
     ]
 }

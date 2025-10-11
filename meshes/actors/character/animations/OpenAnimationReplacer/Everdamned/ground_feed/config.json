@@ -18,6 +18,20 @@
             "Value B": {
                 "value": 2.0
             }
+        },
+        {
+            "condition": "CompareValues",
+            "requiredVersion": "1.0.0.0",
+            "Value A": {
+                "form": {
+                    "pluginName": "Everdamned.esp",
+                    "formID": "D1CF3"
+                }
+            },
+            "Comparison": "==",
+            "Value B": {
+                "value": 0.0
+            }
         }
     ],
     "pairedConditions": []

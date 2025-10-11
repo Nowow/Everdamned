@@ -104,6 +104,9 @@ Function RegisterFeedEvents()
 		endif
 
 	endif
+	
+	EstablishNextStaggerDrainType()
+	
 EndFunction
 
 ; probably unneeded because game automatically unregisters on race change
@@ -997,31 +1000,41 @@ idle property backupPlayerSoloIdleToPlay auto
 
 function EstablishNextStaggerDrainType()
 	__animSetting = ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue() as int
-	
+	debug.Trace("Everdamned DEBUG: Setting global: " + __animSetting)
 	if __animSetting == 3
 		__whichAnim = utility.randomint(0, 1)
 	elseif __animSetting == 2
 		if playerRef.GetActorBase().GetSex() == 0
-			__whichAnim = 0  ; ground feed
-		else
 			__whichAnim = 1  ; jump feed
+			debug.Trace("Everdamned DEBUG: Setting 2, type now: " + __whichAnim)
+
+		else
+			__whichAnim = 0  ; ground feed
+			debug.Trace("Everdamned DEBUG: Setting 2, type now: " + __whichAnim)
 		endif
 	else
 		if playerRef.GetActorBase().GetSex() == 0
-			__whichAnim = 1  ; jump feed
-		else
 			__whichAnim = 0  ; ground feed
+			debug.Trace("Everdamned DEBUG: Setting !2, type now: " + __whichAnim)
+			
+		else
+			__whichAnim = 1  ; jump feed
+			debug.Trace("Everdamned DEBUG: Setting !2, type now: " + __whichAnim)
 		endif
 	endif
 	
 	if __whichAnim == 0
 		backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Ground
 		backupAnimationVictimOffset = 52.0
-		ED_Mechanics_Global_FeedType.SetValue(2.0)
+		ED_Mechanics_Global_CombatFeedType.SetValue(0.0)
+		;ED_Mechanics_Global_FeedType.SetValue(2.0)
+		debug.Trace("Everdamned DEBUG: Ground feed!")
 	else
 		backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Jumpfeed
 		backupAnimationVictimOffset = 65.0
-		ED_Mechanics_Global_FeedType.SetValue(4.0)
+		ED_Mechanics_Global_CombatFeedType.SetValue(1.0)
+		;ED_Mechanics_Global_FeedType.SetValue(4.0)
+		debug.Trace("Everdamned DEBUG: Jump feed!")
 	endif
 endfunction
 		
@@ -1053,6 +1066,7 @@ state CombatDrain
 		
 		; for OAR conditions and controls ghost and unconcious flags
 		; also sets ghost and restrained
+		
 		ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
 		
 		; tell OAR the animation type
@@ -1065,7 +1079,7 @@ state CombatDrain
 		else ;stagger 
 			;jump feed / ground feed
 			debug.Trace("Everdamned DEBUG: Feed Manager determined target is NOT bleeding out, therefore staggered")
-			
+			ED_Mechanics_Global_FeedType.SetValue(2.0)
 			; type and settings are predetermined in EstablishNextStaggerDrainType()
 			
 		endif
@@ -1192,6 +1206,7 @@ message property ED_Mechanics_Message_CombatFeedFailed auto
 
 globalvariable property ED_Mechanics_Global_MCM_CombatDrainAnim auto
 globalvariable property ED_Mechanics_Global_FeedType auto
+globalvariable property ED_Mechanics_Global_CombatFeedType auto
 globalvariable property ED_Mechanics_Global_VampireFeedBystanderRadius auto
 globalvariable property ED_Mechanics_SkillTree_Level_Global auto
 globalvariable property DLC1VampireBloodPoints auto
