@@ -1014,6 +1014,7 @@ endfunction
 int __animSetting
 int __whichAnim  ; default 0, ground feed
 float property backupAnimationVictimOffset = 52.0 auto
+float property havokForcetoApply = 52.0 auto
 idle property backupPlayerSoloIdleToPlay auto
 idle property backupVictimSoloIdleToPlay auto
 

@@ -100,7 +100,7 @@ EndEvent
 
 event OnUpdate()
 	__nextDarknessLevel = GetDarknessLevel() - 1
-	debug.Trace("Everdamned DEBUG: Darkness Level adjusted: " + __nextDarknessLevel )
+	;debug.Trace("Everdamned DEBUG: Darkness Level adjusted: " + __nextDarknessLevel )
 	;debug.Trace("Everdamned DEBUG: Current darkness level " + __nextDarknessLevel)
 	__levelDiff = __currentDarknessLevel - __nextDarknessLevel
 	
