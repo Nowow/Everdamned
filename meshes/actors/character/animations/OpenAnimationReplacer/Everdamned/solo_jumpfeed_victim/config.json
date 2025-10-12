@@ -2,6 +2,7 @@
     "name": "solo_jumpfeed_victim",
     "description": "jumpfeed victim solo part",
     "priority": 4255749,
+    "disabled": true,
     "conditions": [
         {
             "condition": "IsInFaction",
@@ -41,7 +42,7 @@
             "Value A": {
                 "form": {
                     "pluginName": "Everdamned.esp",
-                    "formID": "0D1CF3\u0000"
+                    "formID": "D1CF3"
                 }
             },
             "Comparison": "==",

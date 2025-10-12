@@ -10,6 +10,7 @@ String property BreathSounds = "ed_breathSounds" auto
 string property SocialFeedSatiation = "ed_socialfeedsatiation" auto
 string property SocialFeedFinished = "ed_socialfeedfinished" auto
 string property FeedAnimKillVictim = "ed_feedkm_killvictim" auto
+String property SheatheWepons = "ed_sheatheweapons" auto
 
 ;float property CombatFeedFallbackUpdateDelay = 10.0 auto
 
@@ -100,6 +101,7 @@ Function RegisterFeedEvents()
 			RegisterForAnimationEvent(playerRef, SocialFeedSatiation)
 			RegisterForAnimationEvent(playerRef, SocialFeedFinished)
 			RegisterForAnimationEvent(playerRef, FeedAnimKillVictim)
+			RegisterForAnimationEvent(playerRef, SheatheWepons)
 			
 		endif
 
@@ -130,11 +132,15 @@ function UnRegisterFeedEvents()
 		UnRegisterForAnimationEvent(playerRef, SocialFeedSatiation)
 		UnRegisterForAnimationEvent(playerRef, SocialFeedFinished)
 		UnRegisterForAnimationEvent(playerRef, FeedAnimKillVictim)
+		UnRegisterForAnimationEvent(playerRef, SheatheWepons)
 	
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
 	endif
 endfunction
 
+weapon LeftWeaponIfAny
+armor ShieldIfAny
+weapon RightWeaponIfAny
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 
 	if asEventName == FeedAnimKillVictim
@@ -146,11 +152,23 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		; ED_BeingVampire_VampireFeed_VictimMark_Spell
 		; .Kill() works through ghost
 		aFeedTarget.Kill(playerRef)
-		
+		Game.SetPlayerAIDriven(false)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimKillVictim event!")
 	
 	;its sfx, but here so i dont have to propagate victim race to alias script
 	;and timing is not critical so thread locks are not an issue
+	elseif asEventName == SheatheWepons
+		LeftWeaponIfAny = playerRef.GetEquippedWeapon(true)
+		if !LeftWeaponIfAny
+			ShieldIfAny = playerRef.GetEquippedShield()
+		endif
+		RightWeaponIfAny = playerRef.GetEquippedWeapon(false)
+		playerRef.UnequipItemEx(LeftWeaponIfAny, 1)
+		playerRef.UnequipItemEx(ShieldIfAny, 1)
+		playerRef.UnequipItemEx(RightWeaponIfAny, 2)
+		
+		debug.Trace("Everdamned DEBUG: Feed Manager caught SheatheWepons event")
+		
 	elseif asEventName == BreathSounds
 	
 		BreathSoundsToPlayOnTrigger.Play(playerRef)
@@ -997,6 +1015,7 @@ int __animSetting
 int __whichAnim  ; default 0, ground feed
 float property backupAnimationVictimOffset = 52.0 auto
 idle property backupPlayerSoloIdleToPlay auto
+idle property backupVictimSoloIdleToPlay auto
 
 function EstablishNextStaggerDrainType()
 	__animSetting = ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue() as int
@@ -1022,15 +1041,17 @@ function EstablishNextStaggerDrainType()
 			debug.Trace("Everdamned DEBUG: Setting !2, type now: " + __whichAnim)
 		endif
 	endif
-	
+
 	if __whichAnim == 0
 		backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Ground
+		backupVictimSoloIdleToPlay = ED_Idle_FeedKM_Solo_Victim_Ground
 		backupAnimationVictimOffset = 52.0
 		ED_Mechanics_Global_CombatFeedType.SetValue(0.0)
 		;ED_Mechanics_Global_FeedType.SetValue(2.0)
 		debug.Trace("Everdamned DEBUG: Ground feed!")
 	else
 		backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Jumpfeed
+		backupVictimSoloIdleToPlay = ED_Idle_FeedKM_Solo_Victim_Jumpfeed
 		backupAnimationVictimOffset = 65.0
 		ED_Mechanics_Global_CombatFeedType.SetValue(1.0)
 		;ED_Mechanics_Global_FeedType.SetValue(4.0)
@@ -1068,6 +1089,8 @@ state CombatDrain
 		; also sets ghost and restrained
 		
 		ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
+		Game.SetPlayerAIDriven(true)
+		playerRef.SheatheWeapon()
 		
 		; tell OAR the animation type
 		if aFeedTarget.IsBleedingOut()
@@ -1075,6 +1098,7 @@ state CombatDrain
 			debug.Trace("Everdamned DEBUG: Feed Manager determined target IS bleeding out")
 			ED_Mechanics_Global_FeedType.SetValue(1.0)
 			backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Bleedout
+			backupVictimSoloIdleToPlay = ED_Idle_FeedKM_Solo_Victim_Bleedout
 			backupAnimationVictimOffset = 60.0
 		else ;stagger 
 			;jump feed / ground feed
@@ -1141,10 +1165,12 @@ state CombatDrain
 			ApplyCombatFeedEffects()
 			return
 		endif
-	
+		
 		; third attempt, solo anims
 		debug.Trace("Everdamned WARNING: Feed Manager does not detect paired feed km playing, using backup solo anims")
 		debug.Notification("EVD DEBUG: backup FEED anims")
+		;playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(false), 1)
+		;playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(true), 2)
 
 		float playerAngleZsin = math.sin(playerRef.GetAngleZ())
 		float playerAngleZcos = math.cos(playerRef.GetAngleZ())
@@ -1160,13 +1186,24 @@ state CombatDrain
 		aFeedTarget.PlayIdle(ResetRoot)
 
 		playerRef.PlayIdle(backupPlayerSoloIdleToPlay)
-		aFeedTarget.PlayIdle(IdleHandCut)
+		aFeedTarget.PlayIdle(backupVictimSoloIdleToPlay)
 		ApplyCombatFeedEffects()
 	
 	endevent
 	event OnEndState()
 		debug.Trace("Everdamned DEBUG: Feed Manager exited CombatDrain state, calculating next combat drain anim type")
 		
+		;debug.Notification("AI driven OFF")
+		; re-equipping necessary because otherwise player cant swing
+		; unless reequips manually
+		playerRef.EquipItemEx(RightWeaponIfAny, 1)
+		playerRef.EquipItemEx(LeftWeaponIfAny, 2)
+		playerRef.EquipItemEx(ShieldIfAny, 2)
+		playerRef.DrawWeapon()
+		Game.SetPlayerAIDriven(false)
+		RightWeaponIfAny = none
+		LeftWeaponIfAny = none
+		ShieldIfAny = none
 		EstablishNextStaggerDrainType()
 		
 	endevent
@@ -1183,6 +1220,10 @@ idle property ED_Idle_FeedKM_Solo_Player_Bleedout auto
 idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
 idle property ED_Idle_FeedKM_Solo_Player_Social auto
 idle property ED_Idle_FeedKM_Solo_Victim_Social auto
+idle property ED_Idle_FeedKM_Solo_Victim_Bleedout auto
+idle property ED_Idle_FeedKM_Solo_Victim_Ground auto
+idle property ED_Idle_FeedKM_Solo_Victim_Jumpfeed auto
+
 idle property ResetRoot auto
 spell property ED_BeingVampire_VampireFeed_VictimMark_Spell auto
 spell property ED_Mechanics_Spell_SetDontMove auto

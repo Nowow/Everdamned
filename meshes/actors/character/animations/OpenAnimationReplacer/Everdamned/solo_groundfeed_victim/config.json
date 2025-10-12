@@ -2,6 +2,7 @@
     "name": "solo_groundfeed_victim",
     "description": "ground feed victim solo part",
     "priority": 4255751,
+    "disabled": true,
     "conditions": [
         {
             "condition": "IsInFaction",
@@ -41,7 +42,7 @@
             "Value A": {
                 "form": {
                     "pluginName": "Everdamned.esp",
-                    "formID": "0D1CF3"
+                    "formID": "D1CF3"
                 }
             },
             "Comparison": "==",

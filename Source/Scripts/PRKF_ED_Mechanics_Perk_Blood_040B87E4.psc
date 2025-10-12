@@ -18,3 +18,5 @@ Topic Property OuchTopic  Auto
 Scene Property SOMESCENE  Auto  
 
 ReferenceAlias Property SOMEALIAS  Auto  
+
+ED_FeedManager_Script property ED_FeedManager_Quest auto

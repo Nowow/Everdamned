@@ -10,8 +10,6 @@ String property SocialFeedBite = "ed_socialfeedbite" auto
 string property FeedSatiation = "ed_feedsatiation" auto
 string property VLFeed = "ed_playsound_vlfeed" auto
 
-String property SheatheWepons = "ed_sheatheweapons" auto
-
 
 function RegisterFeedSFXEvents()
 	RegisterForAnimationEvent(playerRef, BleedoutFinisherRustle)
@@ -20,7 +18,6 @@ function RegisterFeedSFXEvents()
 	RegisterForAnimationEvent(playerRef, BloodgushImpactShort)
 	RegisterForAnimationEvent(playerRef, FeedDoubletap)
 	RegisterForAnimationEvent(playerRef, SocialFeedBite)
-	RegisterForAnimationEvent(playerRef, SheatheWepons)
 	RegisterForAnimationEvent(playerRef, FeedSatiation)
 	RegisterForAnimationEvent(playerRef, VLFeed)
 endfunction
@@ -92,12 +89,6 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	elseif asEventName == BleedoutFinisherRustle
 		ED_Art_SoundM_BleedoutFinishRustle.Play(playerRef)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught BleedoutFinisherRustle event")
-	
-	elseif asEventName == SheatheWepons
-		
-		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(false), 1)
-		playerRef.UnequipItemEx(playerRef.GetEquippedWeapon(true), 2)
-		debug.Trace("Everdamned DEBUG: Feed Manager caught SheatheWepons event")
 	
 	endif
 endevent
