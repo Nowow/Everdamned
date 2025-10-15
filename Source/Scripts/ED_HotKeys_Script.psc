@@ -160,19 +160,30 @@ Event OnKeyDown(int keyCode)
 		actor __targetThing = Game.GetCurrentConsoleRef() as actor
 		
 		actor pl = Game.GetPlayer()
-
-		ED_Art_Imod_NightVision_1.Apply()
-		utility.wait(2.0)
-		ED_Art_Imod_NightVision_1.PopTo(ED_Art_Imod_NightVision_Transition_1to5)
-		utility.wait(4.0)
-		ED_Art_Imod_NightVision_Transition_1to5.PopTo(ED_Art_Imod_NightVision_5)
 		
-		utility.wait(2.0)
-		ED_Art_Imod_NightVision_5.PopTo(ED_Art_Imod_NightVision_Transition_5to1)
-		utility.wait(4.0)
-		ED_Art_Imod_NightVision_Transition_5to1.PopTo(ED_Art_Imod_NightVision_1)
-		utility.wait(2.0)
-		ED_Art_Imod_NightVision_1.Remove()
+		debug.Trace("Everdamned DEBUG: Current Mod value: " + pl.GetActorValue("ED_BloodPoolPermanent"))
+		
+		pl.ModAV("ED_BloodPool",-1*pl.GetActorValue("ED_BloodPoolPermanent"))
+		
+		debug.Trace("Everdamned DEBUG: Current Mod value: " + pl.GetActorValue("ED_BloodPoolPermanent"))
+	
+		;debug.Trace("Everdamned DEBUG: GetActorValue " + pl.GetActorValue("ED_BloodPool"))
+		;debug.Trace("Everdamned DEBUG: GetBaseActorValue" + pl.GetBaseActorValue("ED_BloodPool"))
+		;debug.Trace("Everdamned DEBUG: GetActorValueMax" + pl.GetActorValueMax("ED_BloodPool"))
+		;debug.Trace("Everdamned DEBUG: GetActorValuePercentage" + pl.GetActorValuePercentage("ED_BloodPool"))
+
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPToPCVE is" + game.GetGameSettingFloat("fDiffMultHPToPCVE") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPByPCVE is" + game.GetGameSettingFloat("fDiffMultHPByPCVE") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPToPCE is" + game.GetGameSettingFloat("fDiffMultHPToPCE") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPByPCE is" + game.GetGameSettingFloat("fDiffMultHPByPCE") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPToPCN is" + game.GetGameSettingFloat("fDiffMultHPToPCN") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPByPCN is" + game.GetGameSettingFloat("fDiffMultHPByPCN") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPToPCH is" + game.GetGameSettingFloat("fDiffMultHPToPCH") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPByPCH is" + game.GetGameSettingFloat("fDiffMultHPByPCH") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPToPCVH is" + game.GetGameSettingFloat("fDiffMultHPToPCVH") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPByPCVH is" + game.GetGameSettingFloat("fDiffMultHPByPCVH") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPToPCL is" + game.GetGameSettingFloat("fDiffMultHPToPCL") )
+		;debug.Trace("Everdamned DEBUG: Setting fDiffMultHPByPCL is" + game.GetGameSettingFloat("fDiffMultHPByPCL") )
 		;debug.Trace("Everdamned DEBUG: " + __targetThing.GetActorBase().GetName())
 
 		;pl.additem(DA04Extractor, 1)

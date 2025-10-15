@@ -112,6 +112,7 @@ event OnSleepStop(Bool abInterrupted)
 	debug.Trace("Everdamned INFO: Player vampire is aging upon waking up from current age of " + ED_Mechanics_VampireAge.value)
 	LvlUpAge()
 	Age_Message_List[NextMessageIndex].Show()
+	ED_BloodPoolManager_Quest.AtStageOrAgeChange()
 	
 	if ED_Mechanics_VampireAge.value >= MaxAge
 		debug.Trace("Everdamned INFO: Player vampire has reached max age currently set as " + MaxAge + ", stopping aging")
@@ -276,7 +277,10 @@ Event OnCustomSkillIncrease(string asSkillId)
 	; will actually show up on HUD message and properly proc levelup and rest
 	int __everyNthLevelXP = ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue() as int
 	int __newSkillLevel = ED_Mechanics_SkillTree_Level_Global.GetValue() as int
+	debug.Trace("Everdamned DEBUG: Main Quest __everyNthLevelXP: " + __everyNthLevelXP + ", __newSkillLevel: " + __newSkillLevel)
 	ED_SKSEnativebindings.AddThisMuchXP(__newSkillLevel/__everyNthLevelXP)
+	debug.Trace("Everdamned DEBUG: Main Quest adds level XP at skill lvlup: " + __newSkillLevel/__everyNthLevelXP)
+	
 	
 	int cntr
 	while __skillLvlupLock && cntr < 50
@@ -296,13 +300,16 @@ Event OnCustomSkillIncrease(string asSkillId)
 		__skillLvlupLock = false
 		return
 	endif
-	__newSkillLevel = __lastUpdateSkillLevel
+	__lastUpdateSkillLevel = __newSkillLevel
 	
-	debug.Trace("Everdamned INFO: Vampire skill just leveld up!")
+	debug.Trace("Everdamned INFO: Vampire skill just leveld up! new skill level: " + __newSkillLevel)
 	
 	int __alreadyGrantedPerkPoints = ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.GetValue() as int
 	int __perkPointsForThisSkillLevel = __newSkillLevel / 5
 	int __perkPointsToGive = __perkPointsForThisSkillLevel - __alreadyGrantedPerkPoints
+	debug.Trace("Everdamned DEBUG: Main Quest __alreadyGrantedPerkPoints: " + __alreadyGrantedPerkPoints)
+	debug.Trace("Everdamned DEBUG: Main Quest __perkPointsForThisSkillLevel: " + __perkPointsForThisSkillLevel)
+	debug.Trace("Everdamned DEBUG: Main Quest __perkPointsToGive: " + __perkPointsToGive)
 	
 	if __perkPointsToGive > 0
 		ED_Mechanics_SkillTree_PerkPoints_Global.Mod(__perkPointsToGive)
@@ -377,5 +384,6 @@ globalvariable property ED_Mechanics_VampireAgeLvlUpExpIncrement auto
 globalvariable property ED_Mechanics_Global_ChainedBeastAllowed auto
 
 ED_HotKeys_Script property ED_Mechanics_HotKeys_Quest auto
+ED_BloodPoolManager_Script property ED_BloodPoolManager_Quest auto
 
 actor property playerRef auto

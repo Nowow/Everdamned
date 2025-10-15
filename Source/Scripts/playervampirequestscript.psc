@@ -18,7 +18,7 @@ quest property ED_Mechanics_BloodCost_Quest auto
 
 
 function OnUpdateGameTime()
-
+	debug.Trace("Everdamned DEBUG: Player Vampire Quest regular update is happening")
     ED_BloodPoolManager_Quest.AtProcessBonus()
     FeedTimer = (GameDaysPassed.value - LastFeedTime) * 24.0100 / ED_Mechanics_Global_DelayBetweenStages.GetValue()
 	
@@ -197,6 +197,8 @@ function VampireCure(actor Player)
 		ED_Mechanics_BlueBlood_Quest.SetObjectiveDisplayed(40, false)
 	endif
 	
+	playerRef.SendVampirismStateChanged(false)
+	
 endFunction
 
 function VampireFeedBedRoll()
@@ -239,8 +241,6 @@ function VampireChange(actor Target)
 		debug.Trace("Everdamned DEBUG: Player vampire race DOES NOT have Vamp Sight (probably Khajiit), addint it manually ")
 	endif
 	
-	
-	
 	;if PlayerRace == KhajiitRace
 	;	PlayerRef.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
 	;endif
@@ -248,7 +248,7 @@ function VampireChange(actor Target)
     VampireCureDisease.Cast(Target as objectreference, none)
     VampireStatus = 1
     self.VampireProgression(playerRef, 1)
-	ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+	ED_BloodPoolManager_Quest.AtStageOrAgeChange(1)
     self.RegisterForUpdateGameTime(3 as Float)
     LastFeedTime = GameDaysPassed.value
     PlayerIsVampire.SetValue(1 as Float)
@@ -354,7 +354,7 @@ function VampireProgression(actor Player, Int VampireStage)
 		
         if VampireStatus != VampireStage
             debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
-            ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+            ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage)
         endif
         
     elseIf VampireStage == 3
@@ -390,7 +390,7 @@ function VampireProgression(actor Player, Int VampireStage)
         
         if VampireStatus != VampireStage
             debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
-            ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+            ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage)
         endif
         
         ;Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
@@ -430,7 +430,7 @@ function VampireProgression(actor Player, Int VampireStage)
         
         if VampireStatus != VampireStage
             debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
-            ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+            ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage)
         endif
         
         ;Player.AddSpell(ED_BeingVampire_Vanilla_VampiricDrain, false)
@@ -494,7 +494,7 @@ function VampireProgression(actor Player, Int VampireStage)
         
         if VampireStatus != VampireStage
             debug.Trace("Everdamned DEBUG: Vamprire Progression is called to actually change stage")
-            ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+            ED_BloodPoolManager_Quest.AtStageOrAgeChange(VampireStage)
         endif
         
     endIf

@@ -121,15 +121,24 @@ event OnUpdate()
 		__transImodIndex -= 1
 	endif
 	imagespacemodifier __transitionImod = ImodTransitionArray[__transImodIndex]	
-	debug.Trace("Everdamned DEBUG: Vampires Sight transition IMAD index is: " + __transitionImod)
+	;debug.Trace("Everdamned DEBUG: Vampires Sight transition IMAD index is: " + __transitionImod)
 	
 	
 	__nextImod = ImodArrayByStrength[__nextDarknessLevel]
 	
-	__lastImod.PopTo(__transitionImod, StrengthModifier)
+	imagespacemodifier __cache = __lastImod
+	__lastImod = __transitionImod
+	__cache.PopTo(__transitionImod, StrengthModifier)
+	debug.Trace("Everdamned DEBUG: Vampires Sight pops from " + __cache + " to " + __transitionImod)
 	utility.wait(__delay)
-	__transitionImod.PopTo(__nextImod, StrengthModifier)
 	
+	if __finishing
+		return
+	endif
+	
+	__lastImod = __nextImod
+	__transitionImod.PopTo(__nextImod, StrengthModifier)
+	debug.Trace("Everdamned DEBUG: Vampires Sight pops from " + __transitionImod + " to " + __nextImod)
 	;__nextImod.ApplyCrossFade(__delay)
 	;utility.wait(__delay)
 	;__lastImod.Remove()
@@ -137,7 +146,6 @@ event OnUpdate()
 	;ImageSpaceModifier.RemoveCrossFade()
 	
 	__currentDarknessLevel = __nextDarknessLevel
-	__lastImod = __nextImod
 	
 	
 	if !__finishing
@@ -148,11 +156,12 @@ endevent
 Event OnEffectFinish(Actor Target, Actor Caster)
 	
 	__finishing = true
+	debug.Trace("Everdamned DEBUG: Vampires Sight outro")
 	int instanceID = OutroSoundFX.play((target as objectReference))         ; play OutroSoundFX sound from my self
 	
 	;__currentStrength = 0.5*(__currentDarknessLevel + 1)/10.0
 	__currentStrength = (__currentDarknessLevel + 1)/10.0  ; max half strength cuz
-	ImodArrayByStrength[__currentDarknessLevel].PopTo(OutroFX, __currentStrength * StrengthModifier)
+	__lastImod.PopTo(OutroFX, __currentStrength * StrengthModifier)
 	
 	debug.Trace("Everdamned DEBUG: Vampires Sight outro imod played at strength: " + __currentStrength)
 	introFX.remove()

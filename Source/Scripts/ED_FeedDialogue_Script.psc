@@ -84,6 +84,7 @@ bool function CheckIfThanePrivilege(Actor akSeduced)
 		
 	EndIf
 	
+	Debug.Trace("Everdamned INFO: Feed Score: NO thane priviliges")
 	return False
 	
 endfunction
@@ -114,6 +115,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	
 	if __isInn
 		__playerSeductionScore += 20
+		Debug.Trace("Everdamned INFO: Feed Score: Bonus for INN; " + __playerSeductionScore)
 	endif
 	
 	if __relationshipRank > 0 || __isInn
@@ -121,18 +123,23 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		if __relationshipRank > 3
 			ConditionalsScript.Bonus_HighRelationship = true
 		endif
+		
 	;becomes -110
 	else
 		; you are unaquainted, really hard to seduce. separate fail responses
+		Debug.Trace("Everdamned INFO: Feed Score: unaquainted, not INN")
 		__playerSeductionScore += -30
 		ConditionalsScript.Penalty_LowRelationship = true
 	endif
+	
+	Debug.Trace("Everdamned INFO: Feed Score: Relationship factored in; " + __playerSeductionScore)
 	
 	bool __dibellaAmuletWorn = akSeducer.IsEquipped(ReligiousDibellaBeauty)
 	debug.Trace("Everdamned DEBUG: Dibella Amulet equipped: " + __dibellaAmuletWorn)
 	if akSeduced.IsInFaction(PotentialMarriageFaction) && __dibellaAmuletWorn
 		ConditionalsScript.Bonus_DibellaAmulet = true
 		__playerSeductionScore += 15
+		Debug.Trace("Everdamned INFO: Feed Score: Potential Marriage Faction sees Amulet of Dibella; " + __playerSeductionScore)
 	endif
 	
 	
@@ -141,6 +148,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	if seducedHasPartner
 		__playerSeductionScore += akSeduced.GetHighestRelationshipRank() * -10
 		ConditionalsScript.Penalty_TargetHasSomeone = true
+		Debug.Trace("Everdamned INFO: Feed Score: seduced has partner; " + __playerSeductionScore)
 	endif
 	
 	; faction relationships
@@ -153,14 +161,17 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	endif
 	
 	__playerSeductionScore += SeductionFactionScore
+	Debug.Trace("Everdamned INFO: Feed Score: Faction factored in; " + __playerSeductionScore)
 	
 	; if BlueBlood
 	if akSeduced.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
 		__playerSeductionScore += -20
+		Debug.Trace("Everdamned INFO: Feed Score: Blue blood factored in; " + __playerSeductionScore)
 	endif
 	
 	; personal modifiers
 	__playerSeductionScore += GetPersonalModifier(akSeduced)
+	Debug.Trace("Everdamned INFO: Feed Score: Personal modifiers factored in; " + __playerSeductionScore)
 
 	; AI data
 	
@@ -176,6 +187,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	if __hasCalm
 		ConditionalsScript.Bonus_IllusionMood = true
 		__AIscore += -2  * __morality
+		Debug.Trace("Everdamned INFO: Feed Score: Target under calm; ")
 	else
 		__AIscore += -10 * __aggression
 		__AIscore += -5  * __morality
@@ -185,9 +197,11 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	if __hasRally
 		__AIscore += 20
 		ConditionalsScript.Bonus_IllusionMood = true
+		Debug.Trace("Everdamned INFO: Feed Score: target under Rally; ")
 	elseif __confidence == 0
 		; cowardly
 		__AIscore += -20
+		Debug.Trace("Everdamned INFO: Feed Score: Target is cowardly; ")
 	endif
 	
 	if __AIscore <= -20
@@ -196,11 +210,14 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	
 	__playerSeductionScore += __AIscore
 	
+	Debug.Trace("Everdamned INFO: Feed Score: AI data and illusion factored in; " + __playerSeductionScore)
+	
 	; PERKS
 	
 	if akSeducer.HasPerk(Persuasion)
 		__playerSeductionScore += 10
 		ConditionalsScript.Bonus_SpeechPerks = true
+		Debug.Trace("Everdamned INFO: Feed Score: Player has Persuasion; " + __playerSeductionScore)
 	endif
 	
 	;if akSeducer.HasPerk(HypnoticGaze)
@@ -220,15 +237,19 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	if akSeducer.WornHasKeyword(ClothingRich)
 		__playerSeductionScore += 20
 		ConditionalsScript.Bonus_Clothes = true
+		Debug.Trace("Everdamned INFO: Feed Score: Player got RICH clothes; " + __playerSeductionScore)
 	elseif akSeducer.WornHasKeyword(ClothingPoor)
 		__playerSeductionScore += -20
+		Debug.Trace("Everdamned INFO: Feed Score: Player got TRASH clothes; " + __playerSeductionScore)
 	endif
 	
 	if akSeduced.WornHasKeyword(ClothingRich)
 		__playerSeductionScore -= 20
 		ConditionalsScript.Bonus_Clothes = false
+		Debug.Trace("Everdamned INFO: Feed Score: SEDUCED got RICH clothes; " + __playerSeductionScore)
 	elseif akSeduced.WornHasKeyword(ClothingPoor)
 		__playerSeductionScore += 20
+		Debug.Trace("Everdamned INFO: Feed Score: SEDUCED got TRASH clothes; " + __playerSeductionScore)
 	endif
 	
 	; if thane
@@ -236,6 +257,8 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		__playerSeductionScore += 20
 		ConditionalsScript.Bonus_Thane = true
 	endif
+	
+	Debug.Trace("Everdamned INFO: Feed Score: Thane privilege factored in; " + __playerSeductionScore)
 		
 	;race match
 	bool HasDibellasBlessing = akSeducer.HasMagicEffect(FortifyPersuasionFFSelf)
@@ -244,10 +267,12 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	string seducedRace = akSeduced.GetLeveledActorBase().GetRace().GetName()
 	
 	if playerRace != seducedRace
+		Debug.Trace("Everdamned INFO: Feed Score: Different race, oops; ")
 		if HasDibellasBlessing
 			ConditionalsScript.Bonus_Dibella = true
 		else
 			__playerSeductionScore += -10
+			Debug.Trace("Everdamned INFO: Feed Score: And no Dibellas blessing; " + __playerSeductionScore)
 		endif
 	endif 
 	
@@ -259,15 +284,17 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	same_sex_pref = ED_Mechanics_FeedDialogue_SameSexRelationshipPreference_Setting.GetValue() as int
 	
 	if (same_sex_pref == 1 && pc_sex == target_sex) || (same_sex_pref == 0 && pc_sex != target_sex)
-		__playerSeductionScore += 10
+		
 		; agent of dibella
 		if akSeducer.HasMagicEffect(PerkT01Dibella)
-			__playerSeductionScore += 10
+			__playerSeductionScore += 20
 			ConditionalsScript.Bonus_Dibella = true
+			Debug.Trace("Everdamned INFO: Feed Score: Wooing chosen sex with AGENT OF DIBELLA; " + __playerSeductionScore)
 		endif
 		if akSeducer.HasPerk(Allure)
 			__playerSeductionScore += 15
 			ConditionalsScript.Bonus_SpeechPerks = true
+			Debug.Trace("Everdamned INFO: Feed Score: Wooing chosen sex with Allure; " + __playerSeductionScore)
 		endif
 	endif
 	
@@ -278,15 +305,15 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	elseif seducedLevel == 0 || seducedLevel == 1
 		__playerSeductionScore += 40
 	endif
-	
-	if akSeduced.IsInFaction(ED_Mechanics_FeedDialogue_Seduced_Fac)
-		__playerSeductionScore += 40
-	endif
+	Debug.Trace("Everdamned INFO: Feed Score: Seduced level factored in; " + __playerSeductionScore)
 	
 	__playerSeductionScore += ED_Mechanics_FeedDialogue_DifficultyModifier_Setting.GetValue() as int
+	Debug.Trace("Everdamned INFO: Feed Score: Difficulty mod setting factored in; " + __playerSeductionScore)
 	
 	; add some random
 	__playerSeductionScore += Utility.RandomInt(-10,10)
+	
+	Debug.Trace("Everdamned INFO: Feed Score: Some random level factored in; " + __playerSeductionScore)
 	
 	; also ork scary
 	;if ED_Mechanics_OrcRace_List.HasForm(akSeducer.GetLeveledActorBase().GetRace()) && !ED_Mechanics_OrcRace_List.HasForm(akSeduced.GetLeveledActorBase().GetRace())

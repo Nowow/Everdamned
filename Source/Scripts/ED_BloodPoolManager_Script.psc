@@ -17,7 +17,10 @@ float threshold_beefy
 
 function ModBloodPoolMaximum(float _val)
 
-	playerRef.ModAV("ED_BloodPool", _val)
+	; adjusts Perma? AV instead of base, bad results
+	;playerRef.ModAV("ED_BloodPool", _val)
+	
+	playerRef.SetActorValue("ED_BloodPool", playerRef.GetActorValue("ED_BloodPool") + _val)
 	if _val < 0
 		playerRef.RestoreAV("ED_BloodPool", _val)
 	else
@@ -29,18 +32,25 @@ endfunction
 
 function ReconstructBloodPoolAV()
 	
-	debug.Trace("Everdamned DEBUG: Blood Pool Manager sets blood pool with this components: " + ED_Mechanics_BloodPool_Base.GetValue() + ", " + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ", " + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
+	float __basePool = ED_Mechanics_BloodPool_Base.GetValue()
+	float __bonusPool = ED_Mechanics_BloodPool_MaxBonus.GetValue()
+	float __permaBonusPool = ED_Mechanics_BloodPool_MaxPermaBonus.GetValue()
+	float __totalPool = __basePool + __bonusPool + __permaBonusPool
 	
-	ED_Mechanics_BloodPool_Total.SetValue(ED_Mechanics_BloodPool_Base.GetValue() + ED_Mechanics_BloodPool_MaxBonus.GetValue() + ED_Mechanics_BloodPool_MaxPermaBonus.GetValue())
+	debug.Trace("Everdamned DEBUG: Blood Pool Manager sets blood pool with this components: " + __basePool + ", " + __bonusPool + ", " + __permaBonusPool)
+	
+	
+	ED_Mechanics_BloodPool_Total.SetValue(__totalPool)
 
-	playerRef.SetAV("ED_BloodPool", ED_Mechanics_BloodPool_Total.GetValue())
+	playerRef.SetAV("ED_BloodPool", __totalPool)
 	; top up, cant reconstruct keeping current value because not thread safe
 	playerRef.RestoreAV("ED_BloodPool", 9999.0)
 	
 endfunction
 
-
-function AtStageOrAgeChange()
+int NewVampireStatus
+function AtStageOrAgeChange(int VStatus = -1)
+	NewVampireStatus = VStatus
 	GoToState("StageOrAgeChange")
 endfunction
 
@@ -56,9 +66,10 @@ bool __doStageOrAgeChange
 bool __doAfterFeed
 bool __doProcessBonus
 state StageOrAgeChange
-	function AtStageOrAgeChange()
+	function AtStageOrAgeChange(int VStatus = -1)
+		NewVampireStatus = VStatus
 		__doStageOrAgeChange = true
-		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in StageOrAgeChange state")
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in StageOrAgeChange state, NewVampireStatus: " + NewVampireStatus)
 	endfunction
 	function SetBonusAfterFeed()
 		__doAfterFeed = true
@@ -73,7 +84,13 @@ state StageOrAgeChange
 		debug.Trace("Everdamned DEBUG: Blood Pool Manager entered StageOrAgeChange state")
 		int VampireStatus
 		int VampireAge
-		VampireStatus = PlayerVampireQuest.VampireStatus
+		if NewVampireStatus != -1
+			VampireStatus = NewVampireStatus
+			debug.Trace("Everdamned DEBUG: Blood Pool Manager using NewVampireStatus which is: " + NewVampireStatus)
+		else
+			VampireStatus = PlayerVampireQuest.VampireStatus
+			debug.Trace("Everdamned DEBUG: Blood Pool Manager using PlayerVampireQuest.VampireStatus which is: " + VampireStatus)
+		endif
 		VampireAge = ED_Mechanics_VampireAge.GetValue() as int
 		debug.Trace("Everdamned DEBUG: Blood Pool Manager is doing adjustments for Status " + VampireStatus + " and Age " + VampireAge)
 		
@@ -88,16 +105,17 @@ state StageOrAgeChange
 		ED_Mechanics_BloodPool_Base.SetValue(_calcMaxAv)
 		debug.Trace("Everdamned DEBUG: Blood Pool Manager set base blood pool to " + _calcMaxAv)
 		
-		;utility.wait(0.2) ; waiting to release lock for any other calls to this script to do their thing, mainly AtStageOrAgeChange()
+		;utility.wait(0.2) ; waiting to release lock for any other calls to this script to do their thing, mainly AtStageOrAgeChange(int VStatus = -1)
 		GoToState("Postprocess")
 	endevent
 	
 endstate
 
 state AfterFeed
-	function AtStageOrAgeChange()
+	function AtStageOrAgeChange(int VStatus = -1)
+		NewVampireStatus = VStatus
 		__doStageOrAgeChange = true
-		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in AfterFeed state")
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in AfterFeed state, NewVampireStatus: " + NewVampireStatus)
 	endfunction
 	function SetBonusAfterFeed()
 		__doAfterFeed = true
@@ -141,9 +159,10 @@ endstate
 
 state ProcessBonuses
 
-	function AtStageOrAgeChange()
+	function AtStageOrAgeChange(int VStatus = -1)
+		NewVampireStatus = VStatus
 		__doStageOrAgeChange = true
-		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in ProcessBonuses state")
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in ProcessBonuses state, NewVampireStatus: " + NewVampireStatus)
 	endfunction
 	function SetBonusAfterFeed()
 		__doAfterFeed = true
@@ -155,6 +174,7 @@ state ProcessBonuses
 	endfunction
 
 	event OnBeginState()
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager entered state ProcessBonuses")
 		float _incrementPermaBonus
 		float _decrementBonus
 		float __currentBonus = ED_Mechanics_BloodPool_MaxBonus.GetValue()
@@ -167,6 +187,12 @@ state ProcessBonuses
 			_incrementPermaBonus -= __currentPermaBonusThreshold
 		else
 			_incrementPermaBonus = 0
+		endif
+		if _incrementPermaBonus > __currentBonus
+			_incrementPermaBonus = __currentBonus
+		endif
+		if _decrementBonus > __currentBonus
+			_decrementBonus = __currentBonus
 		endif
 		
 		ED_Mechanics_BloodPool_MaxPermaBonus.Mod(_incrementPermaBonus)
@@ -204,15 +230,16 @@ state ProcessBonuses
 		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Okay: " + threshold_okay)
 		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Juicy: " + threshold_juicy)
 		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Beefy: " + threshold_beefy)
-		
+		GoToState("PostPostprocess")
 	endevent
 	
 endstate
 
 state Postprocess
-	function AtStageOrAgeChange()
+	function AtStageOrAgeChange(int VStatus = -1)
+		NewVampireStatus = VStatus
 		__doStageOrAgeChange = true
-		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in Postprocess state")
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in Postprocess state, NewVampireStatus: " + NewVampireStatus)
 	endfunction
 	function SetBonusAfterFeed()
 		__doAfterFeed = true
@@ -251,9 +278,10 @@ endstate
 ;im so sorry...
 
 state PostPostprocess
-	function AtStageOrAgeChange()
+	function AtStageOrAgeChange(int VStatus = -1)
+		NewVampireStatus = VStatus
 		__doStageOrAgeChange = true
-		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in PostPostprocess state")
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager is alerted to do AtStageOrAgeChange while in PostPostprocess state, NewVampireStatus: " + NewVampireStatus)
 	endfunction
 	function SetBonusAfterFeed()
 		__doAfterFeed = true

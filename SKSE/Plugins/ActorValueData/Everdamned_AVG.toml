@@ -58,5 +58,26 @@ alias = "Variable03"
 default.formula = "GetActorValue('Health', Base) * 0.01"
 default.type = "Constant"
 
+[ED_ActHealthPct]
+type = "Functional"
+alias = "OneHandedSkillAdvance"
+get = "GetActorValue('Health', All) / GetActorValue('Health', Max)"
+
+[ED_BloodPoolMax]
+type = "Functional"
+get = "GetActorValue('ED_BloodPool', Max)"
+
+[ED_BloodPoolDamage]
+type = "Functional"
+get = "GetActorValue('ED_BloodPool', Damage)"
+
+[ED_BloodPoolTemporary]
+type = "Functional"
+get = "GetActorValue('ED_BloodPool', Temporary)"
+
+[ED_BloodPoolPermanent]
+type = "Functional"
+get = "GetActorValue('ED_BloodPool', Permanent)"
+
 [Include]
-"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_FlamesProc", "ED_PartingGiftBlock", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct"]
+"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_FlamesProc", "ED_PartingGiftBlock", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct", "ED_ActHealthPct"]

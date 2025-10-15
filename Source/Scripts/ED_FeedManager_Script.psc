@@ -228,6 +228,7 @@ function HandleBeastBite()
 			ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
 			ED_VampirePowers_Amaranth_Disintegrate_Spell.Cast(playerRef, FeedTarget)
 		endif
+		ED_Mechanics_Message_Diablerie.Show()
 	else
 		;age for 1 day, default amount for regular drain
 		float baseDrainValue = FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
@@ -556,6 +557,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 			ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
 			ED_VampirePowers_Amaranth_Disintegrate_Spell.Cast(playerRef, FeedTarget)
 		endif
+		ED_Mechanics_Message_Diablerie.Show()
 	else
 		float baseDrainValue = FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
 		float currentDrainPercent = FeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
@@ -972,6 +974,7 @@ function ApplyCombatFeedEffects()
 			ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
 			ED_VampirePowers_Amaranth_Disintegrate_Spell.Cast(playerRef, aFeedTarget)
 		endif
+		ED_Mechanics_Message_Diablerie.Show()
 	else
 		;age for 1 day, default amount for regular drain
 		float baseDrainValue = aFeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
@@ -1245,6 +1248,7 @@ message property ED_Mechanics_Message_DreamVisitor_RelationshipIncreased auto
 message property DLC1VampirePerkEarned auto
 message property ED_Mechanics_Message_LifebloodDrained auto
 message property ED_Mechanics_Message_CombatFeedFailed auto
+message property ED_Mechanics_Message_Diablerie auto
 
 globalvariable property ED_Mechanics_Global_MCM_CombatDrainAnim auto
 globalvariable property ED_Mechanics_Global_FeedType auto
