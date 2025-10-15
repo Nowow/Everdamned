@@ -103,8 +103,8 @@ function UpdateMeter()
 	;debug.Trace("Everdamned DEBUG: WidgetRoot: " + ExposureMeter.WidgetRoot)
 	;debug.Trace("Everdamned DEBUG: HUD_MENU: " + ExposureMeter.HUD_MENU)
 	
-	Int _primaryColor = 11141120
-	ExposureMeter.SetColors(_primaryColor, 3276800)
+	;Int _primaryColor = 11141120
+	;ExposureMeter.SetColors(_primaryColor, 3276800)
 
 	float fNewOpacity = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
 	if bShouldFadeWhenIdle

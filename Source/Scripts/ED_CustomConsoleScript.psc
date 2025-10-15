@@ -532,3 +532,20 @@ string function PlayAnImpactEffect(string editorId, string lenode) global
 	return __targetThing.PlayImpactEffect(aa, lenode, 0, 0, -1, 412, true, false)
 	
 endfunction
+
+string function MeterFlash(bool force) global
+	ED_BloodMeter leMeter = LookupSomeFormByEditorID("ED_BloodMeter_Quest") as ED_BloodMeter
+	leMeter.StartFlash(force)
+endfunction
+
+
+string function MeterColors(int a_primaryColor, int a_secondaryColor = -1, int a_flashColor = -1) global
+	ED_BloodMeter leMeter = LookupSomeFormByEditorID("ED_BloodMeter_Quest") as ED_BloodMeter
+	leMeter.SetColors(a_primaryColor, a_secondaryColor, a_flashColor)
+endfunction
+
+
+string function MeterTransColors(int a_primaryColor, int a_secondaryColor = -1, int a_flashColor = -1, int a_duration = 1000) global
+	ED_BloodMeter leMeter = LookupSomeFormByEditorID("ED_BloodMeter_Quest") as ED_BloodMeter
+	leMeter.TransitionColors(a_primaryColor, a_secondaryColor, a_flashColor, a_duration)
+endfunction

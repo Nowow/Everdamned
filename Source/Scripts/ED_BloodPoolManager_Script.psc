@@ -22,9 +22,9 @@ function ModBloodPoolMaximum(float _val)
 	
 	playerRef.SetActorValue("ED_BloodPool", playerRef.GetActorValue("ED_BloodPool") + _val)
 	if _val < 0
-		playerRef.RestoreAV("ED_BloodPool", _val)
+		playerRef.RestoreActorValue("ED_BloodPool", -_val)
 	else
-		playerRef.DamageAV("ED_BloodPool", _val)
+		playerRef.DamageActorValue("ED_BloodPool", _val)
 	endif
 	
 endfunction
@@ -42,9 +42,9 @@ function ReconstructBloodPoolAV()
 	
 	ED_Mechanics_BloodPool_Total.SetValue(__totalPool)
 
-	playerRef.SetAV("ED_BloodPool", __totalPool)
+	playerRef.SetActorValue("ED_BloodPool", __totalPool)
 	; top up, cant reconstruct keeping current value because not thread safe
-	playerRef.RestoreAV("ED_BloodPool", 9999.0)
+	playerRef.RestoreActorValue("ED_BloodPool", 9999.0)
 	
 endfunction
 
