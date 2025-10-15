@@ -281,8 +281,8 @@ state KnowsPotenceAndNF
 			if __hotkeyB_handled
 				__releaseGate = False
 				__hotkeyB_handled = false
-				debug.Trace("Everdamned WARNING: Hotkey B press event happened after release event done did it, returning")
 				__hotkeyBDown_lock = false
+				debug.Trace("Everdamned WARNING: Hotkey B press event happened after release event done did it, returning")
 				return
 			endif
 			
@@ -291,7 +291,6 @@ state KnowsPotenceAndNF
 				__releaseGate = False
 				__hotkeyB_handled = True
 				playerRef.DoCombatSpellApply(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell, None)
-				
 				__hotkeyBDown_lock = false
 				return
 			endif
@@ -345,7 +344,7 @@ state KnowsPotenceAndNF
 					; wait waits for menu mode to end
 					; releasing in menu mode doesnt work as intended
 					if __inMenuMode
-						utility.wait(0.01)
+						utility.wait(0.01) ; this waits for menu mode to end
 					endif
 					
 					ED_Art_Imod_ExtendedPerception_Out.Apply()
