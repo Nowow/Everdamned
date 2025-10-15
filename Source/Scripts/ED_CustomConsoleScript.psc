@@ -549,3 +549,38 @@ string function MeterTransColors(int a_primaryColor, int a_secondaryColor = -1, 
 	ED_BloodMeter leMeter = LookupSomeFormByEditorID("ED_BloodMeter_Quest") as ED_BloodMeter
 	leMeter.TransitionColors(a_primaryColor, a_secondaryColor, a_flashColor, a_duration)
 endfunction
+
+string function BlendSecondUIColor(float highShare, int highStandin, int lowStadin) global
+
+	colorform ED_Art_Color_UISecondColorHigh = LookupSomeFormByEditorID("ED_Art_Color_UISecondColorHigh") as colorform
+	colorform ED_Art_Color_UISecondColorLow = LookupSomeFormByEditorID("ED_Art_Color_UISecondColorLow") as colorform
+	
+	int startARBG
+	int endARGB
+	
+	debug.Trace("Everdamned DEBUG: highStandin " + highStandin)
+	debug.Trace("Everdamned DEBUG: lowStadin " + lowStadin)
+	
+	if lowStadin != -1	
+		ED_Art_Color_UISecondColorLow.SetColor(lowStadin)
+	else
+		
+	endif
+	if highStandin != -1
+		ED_Art_Color_UISecondColorHigh.SetColor(highStandin)
+	endif
+	
+	startARBG = ED_Art_Color_UISecondColorLow.GetColor()
+	endARGB = ED_Art_Color_UISecondColorHigh.GetColor()
+
+	endARGB = ColorComponent.SetRed(endARGB, (ED_Art_Color_UISecondColorHigh.GetRed()*highShare + ED_Art_Color_UISecondColorLow.GetRed()*(1.0-highShare)) as int)
+	endARGB = ColorComponent.SetGreen(endARGB, (ED_Art_Color_UISecondColorHigh.GetGreen()*highShare + ED_Art_Color_UISecondColorLow.GetGreen()*(1.0-highShare)) as int)
+	endARGB = ColorComponent.SetBlue(endARGB, (ED_Art_Color_UISecondColorHigh.GetBlue()*highShare + ED_Art_Color_UISecondColorLow.GetBlue()*(1.0-highShare)) as int)
+	
+	debug.Trace("Everdamned DEBUG: The COLOR ARBG: " + endARGB)
+	
+	ED_BloodMeter leMeter = LookupSomeFormByEditorID("ED_BloodMeter_Quest") as ED_BloodMeter
+	leMeter.SetColors(11141120, endARGB, endARGB)
+	
+	
+endfunction

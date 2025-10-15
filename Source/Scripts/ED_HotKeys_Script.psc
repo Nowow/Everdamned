@@ -161,12 +161,13 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		debug.Trace("Everdamned DEBUG: Current Mod value: " + pl.GetActorValue("ED_BloodPoolPermanent"))
+		Int color = 0x80FF8040 ; A=128, R=255, G=128, B=64
 		
-		pl.ModAV("ED_BloodPool",-1*pl.GetActorValue("ED_BloodPoolPermanent"))
+		Int shifted = Math.LeftShift(color, 8)       ; move RGB up, drop alpha
+		Int rgb =  Math.RightShift(shifted, 8)          ; shift back down to 0xRRGGBB
 		
-		debug.Trace("Everdamned DEBUG: Current Mod value: " + pl.GetActorValue("ED_BloodPoolPermanent"))
-	
+		debug.Trace("Everdamned DEBUG: RBG: " + rgb)
+		
 		;debug.Trace("Everdamned DEBUG: GetActorValue " + pl.GetActorValue("ED_BloodPool"))
 		;debug.Trace("Everdamned DEBUG: GetBaseActorValue" + pl.GetBaseActorValue("ED_BloodPool"))
 		;debug.Trace("Everdamned DEBUG: GetActorValueMax" + pl.GetActorValueMax("ED_BloodPool"))

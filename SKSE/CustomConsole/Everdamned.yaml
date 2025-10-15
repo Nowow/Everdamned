@@ -189,3 +189,16 @@ subs:
       - name: a_duration
         type: int
         default: 1000
+  - name: blendcolor
+    func: BlendSecondUIColor
+    args:
+      - name: highShare
+        type: float
+        default: 0.5
+      - name: highStandin
+        type: int
+        default: 11141120
+      - name: lowStadin
+        type: int
+        default: 3276800
+     

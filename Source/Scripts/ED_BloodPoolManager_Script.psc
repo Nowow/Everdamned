@@ -15,12 +15,28 @@ float threshold_okay
 float threshold_juicy
 float threshold_beefy
 
+int function BlendSecondaryColors(float highShare)
+	;int startARBG = 11416450
+	;int startARBG = 8726115
+	int startARBG = 4391001
+	int endARGB = 16752947
+
+	endARGB = ColorComponent.SetRed(endARGB, (ColorComponent.GetRed(endARGB)*highShare + ColorComponent.GetRed(startARBG)*(1.0-highShare)) as int)
+	endARGB = ColorComponent.SetGreen(endARGB, (ColorComponent.GetGreen(endARGB)*highShare + ColorComponent.GetGreen(startARBG)*(1.0-highShare)) as int)
+	endARGB = ColorComponent.SetBlue(endARGB, (ColorComponent.GetBlue(endARGB)*highShare + ColorComponent.GetBlue(startARBG)*(1.0-highShare)) as int)
+	
+	return endARGB
+endfunction
+
 function ModBloodPoolMaximum(float _val)
 
 	; adjusts Perma? AV instead of base, bad results
 	;playerRef.ModAV("ED_BloodPool", _val)
 	
-	playerRef.SetActorValue("ED_BloodPool", playerRef.GetActorValue("ED_BloodPool") + _val)
+	debug.Trace("Everdamned DEBUG: ModBloodPoolMaximum with val " + _val)
+	float __newTotal = ED_Mechanics_BloodPool_Total.GetValue() + _val
+	playerRef.SetActorValue("ED_BloodPool", __newTotal)
+	ED_Mechanics_BloodPool_Total.SetValue(__newTotal)
 	if _val < 0
 		playerRef.RestoreActorValue("ED_BloodPool", -_val)
 	else
@@ -174,7 +190,7 @@ state ProcessBonuses
 	endfunction
 
 	event OnBeginState()
-		debug.Trace("Everdamned DEBUG: Blood Pool Manager entered state ProcessBonuses")
+		debug.Trace("Everdamned DEBUG: Blood Pool Manager entered state ProcessBonuses, current Vitae: " + playerRef.GetActorValue("ED_BloodPool") )
 		float _incrementPermaBonus
 		float _decrementBonus
 		float __currentBonus = ED_Mechanics_BloodPool_MaxBonus.GetValue()
@@ -297,6 +313,11 @@ state PostPostprocess
 		if !__doStageOrAgeChange && !__doAfterFeed && !__doProcessBonus
 			; update cycle ended
 			; dont want to log because that is not thread safe external call
+			float __basePool = ED_Mechanics_BloodPool_Base.GetValue()
+			float __bonusPool = ED_Mechanics_BloodPool_MaxBonus.GetValue()
+			float __permaBonusPool = ED_Mechanics_BloodPool_MaxPermaBonus.GetValue()
+			float highShare = __bonusPool*2.0 / (__basePool + __permaBonusPool)
+			VitaeMeter.SetColors(11141120, BlendSecondaryColors(highShare))
 			GoToState("")
 			return
 		endif
@@ -321,3 +342,4 @@ message property ED_Mechanics_Message_FeedNourishment_Increased auto
 actor property playerRef auto
 
 playervampirequestscript property PlayerVampireQuest auto
+ED_BloodMeter property VitaeMeter auto
