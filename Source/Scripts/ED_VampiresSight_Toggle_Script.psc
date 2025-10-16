@@ -3,15 +3,15 @@ Scriptname ED_VampiresSight_Toggle_Script extends activemagiceffect
 
 int LShift = 0x2A
 
-function StartBloodSenseFX()
-	ED_Art_Imod_BloodSenseIntro.Apply()
-	utility.wait(1.5)
-	ED_Art_Imod_BloodSenseIntro.PopTo(ED_Art_Imod_BloodSenseLoop)
-endfunction
+;function StartBloodSenseFX()
+;	ED_Art_Imod_BloodSenseIntro.Apply()
+;	utility.wait(1.5)
+;	ED_Art_Imod_BloodSenseIntro.PopTo(ED_Art_Imod_BloodSenseLoop)
+;endfunction
 
-function StopBloodSenseFX()
-	ED_Art_Imod_BloodSenseLoop.PopTo(ED_Art_Imod_BloodSenseOutro)
-endfunction
+;function StopBloodSenseFX()
+;	ED_Art_Imod_BloodSenseLoop.PopTo(ED_Art_Imod_BloodSenseOutro)
+;endfunction
 
 
 Event OnEffectStart(Actor Target, Actor Caster)
@@ -28,7 +28,7 @@ Event OnEffectStart(Actor Target, Actor Caster)
 		if __hasPVME
 			debug.Trace("Everdamned DEBUG: Night Eye Actuator removes Blood Sense")
 			Caster.removespell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell)
-			StopBloodSenseFX()
+			;StopBloodSenseFX()
 		; add Predator Vision
 		else
 			;add sight if has no sight
@@ -38,7 +38,7 @@ Event OnEffectStart(Actor Target, Actor Caster)
 			endif
 			debug.Trace("Everdamned DEBUG: Night Eye Actuator adds Blood Sense")
 			Caster.addspell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell, false)
-			StartBloodSenseFX()
+			;StartBloodSenseFX()
 		endif
 
 	; regular Sight interation
@@ -49,7 +49,7 @@ Event OnEffectStart(Actor Target, Actor Caster)
 			if __hasPVME
 				debug.Trace("Everdamned DEBUG: Night Eye Actuator removes Blood Sense")
 				Caster.removespell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell)
-				StopBloodSenseFX()
+				;StopBloodSenseFX()
 			endif
 			
 		else
@@ -67,6 +67,6 @@ magiceffect property ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Effect auto
 
 globalvariable property ED_Mechanics_VampireAge auto
 
-imagespacemodifier property ED_Art_Imod_BloodSenseIntro auto
-imagespacemodifier property ED_Art_Imod_BloodSenseLoop auto
-imagespacemodifier property ED_Art_Imod_BloodSenseOutro auto
+;imagespacemodifier property ED_Art_Imod_BloodSenseIntro auto
+;imagespacemodifier property ED_Art_Imod_BloodSenseLoop auto
+;imagespacemodifier property ED_Art_Imod_BloodSenseOutro auto

@@ -486,11 +486,14 @@ bool Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 		return true
 		
 	else
-		if __relationshipRank <= 1
-			ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(1,2))
-		else
-			ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(3,4))
-		endif
+		;if __relationshipRank <= 1
+		;	ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(1,2))
+		;else
+		;	ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(3,4))
+		;endif
+		ED_Mechanics_FeedDialogue_NPCSequenceIndex.SetValue(utility.RandomInt(1,4))
+		
+		debug.Trace("Everdamned DEBUG: Feed Dialogue FAIL NPC animation sequence is: " + ED_Mechanics_FeedDialogue_NPCSequenceIndex.GetValue())
 		
 		ED_Mechanics_FeedDialogue_SeductionResult.SetValue(0)
 		debug.Trace("Everdamned DEBUG: Feed Dialogue animation sequence index is: " + ED_Mechanics_FeedDialogue_NPCSequenceIndex.GetValue())

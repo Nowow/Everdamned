@@ -241,7 +241,7 @@ function HandleBeastBite()
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
-	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
+	elseif !(ED_Mechanics_Hemomancy_Quest.IsStageDone(100))
 		; we ate, we try to learn new spells
 		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
@@ -278,7 +278,7 @@ function HandleBloodWine()
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
-	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
+	elseif !(ED_Mechanics_Hemomancy_Quest.IsStageDone(100))
 		; we ate, we try to learn new spells
 		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
@@ -389,7 +389,7 @@ function HandleDrainThrall(actor FeedTarget)
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
-	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
+	elseif !(ED_Mechanics_Hemomancy_Quest.IsStageDone(100))
 		; we ate, we try to learn new spells
 		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
@@ -569,7 +569,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
-	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
+	elseif !(ED_Mechanics_Hemomancy_Quest.IsStageDone(100))
 		; we ate, we try to learn new spells
 		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
@@ -907,7 +907,7 @@ function HandleDrainSleep(actor FeedTarget)
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
-	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
+	elseif !(ED_Mechanics_Hemomancy_Quest.IsStageDone(100))
 		; we ate, we try to learn new spells
 		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif
@@ -987,7 +987,7 @@ function ApplyCombatFeedEffects()
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
 		ED_Mechanics_Hemomancy_Quest.start()
-	elseif ED_Mechanics_Hemomancy_Quest.IsActive()
+	elseif !(ED_Mechanics_Hemomancy_Quest.IsStageDone(100))
 		; we ate, we try to learn new spells
 		ED_Mechanics_Hemomancy_Quest.SetCurrentStageID(80)
 	endif

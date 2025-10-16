@@ -52,8 +52,10 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	
 	SpentCache.Revert()
 	
+	debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate chooses a Good Message at effect start")
 	ChooseGoodMessage()
 	if !__showNext_Message
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate found no matching Good Message, choosing Bad Message and setting __stage to 1")
 		ChooseBadMessage()
 		__stage = 1
 	endif
@@ -62,9 +64,10 @@ endevent
 
 
 event OnUpdate()
-
+	debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate UPDATE event fired in stage: " + __stage)
+		
 	if __stage == 0
-		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 0")
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 0, showing established message and then ChooseBadMessage()")
 		
 		message.ResetHelpMessage("ed_ruminate_stage0")
 		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage0", 5.0, 1.0, 1)
@@ -74,9 +77,10 @@ event OnUpdate()
 		ChooseBadMessage()
 		
 		__stage = 1
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Proceeding to __stage " + __stage)
 		
 	elseif __stage == 1
-		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 1")
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 1, showing established message and then ChooseAdvice()")
 		
 		message.ResetHelpMessage("ed_ruminate_stage1")
 		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage1", 5.0, 1.0, 1)
@@ -87,15 +91,16 @@ event OnUpdate()
 		
 		if ConditionalsScript.LastScore_Category ==  4
 			__stage = 2
-			debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate found that you failed to bad last time, you'll get 2 advices")
+			debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate found that you failed too bad last time, you'll get 2 advices")
 		else
 			__stage = 3
 		endif
-			
+		
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Proceeding to __stage " + __stage)
 		
 		
 	elseif __stage == 2
-		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 2")
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 2, showing established message and then ChooseAdvice() once more")
 		
 		message.ResetHelpMessage("ed_ruminate_stage3")
 		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage3", 5.0, 1.0, 1)
@@ -106,8 +111,10 @@ event OnUpdate()
 		
 		__stage = 3
 		
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Proceeding to __stage " + __stage)
+		
 	else
-		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 3 - final")
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - Ruminate state 3 - final, showing established message and dispelling")
 		
 		message.ResetHelpMessage("ed_ruminate_stage3")
 		__showNext_Message.ShowAsHelpMessage("ed_ruminate_stage3", 5.0, 1.0, 1)
@@ -120,6 +127,9 @@ endevent
 
 
 function ChooseGoodMessage()
+	
+	debug.Trace("Everdamned DEBUG: Eyes of the Moon - choosing a Good Message!")
+	
 	MessageCache.Revert()
 	
 	__hasAllure = playerRef.HasPerk(Allure)
@@ -161,6 +171,9 @@ endfunction
 
 
 function ChooseBadMessage()
+	
+	debug.Trace("Everdamned DEBUG: Eyes of the Moon - choosing a Bad Message!")
+
 	MessageCache.Revert()
 		
 	__badClothes = !__hasNobleClothes
@@ -196,12 +209,17 @@ function ChooseBadMessage()
 	
 	if !__showNext_Message
 		__badNothing = true
+		
 		__showNext_Message = ED_Mechanics_FeedDialogue_Message_Bad_Nothing
+		debug.Trace("Everdamned DEBUG: Eyes of the Moon - ChooseBadMessage() found no bad message, displaying ED_Mechanics_FeedDialogue_Message_Bad_Nothing")
 	endif
 endfunction
 
 
 function ChooseAdvice()
+	
+	debug.Trace("Everdamned DEBUG: Eyes of the Moon - choosing an Advice!")
+	
 	MessageCache.Revert()
 		
 	__adviceThane = !(ConditionalsScript.Bonus_Thane)

@@ -106,7 +106,7 @@ state LearningAdept
 		if __xp < 1
 			__xp = 1
 		endif
-		debug.Trace("Everdamned DEBUG: Player gets " + __xp + " hemomancy XP")
+		debug.Trace("Everdamned DEBUG: XP needed: " + __HemomancyXPneededToAdvance + ", Player gets " + __xp + " hemomancy XP")
 		
 		__HemomancyXPneededToAdvance -= __xp
 		if __HemomancyXPneededToAdvance > 0
@@ -201,7 +201,7 @@ state LearningExpert
 		if __xp < 1
 			__xp = 1
 		endif
-		debug.Trace("Everdamned DEBUG: Player gets " + __xp + " hemomancy XP")
+		debug.Trace("Everdamned DEBUG: XP needed: " + __HemomancyXPneededToAdvance + ", Player gets " + __xp + " hemomancy XP")
 		
 		__HemomancyXPneededToAdvance -= __xp
 		if __HemomancyXPneededToAdvance > 0
@@ -299,7 +299,7 @@ state LearningMaster
 		if __xp < 1
 			__xp = 1
 		endif
-		debug.Trace("Everdamned DEBUG: Player gets " + __xp + " hemomancy XP")
+		debug.Trace("Everdamned DEBUG: XP needed: " + __HemomancyXPneededToAdvance + ", Player gets " + __xp + " hemomancy XP")
 		
 		__HemomancyXPneededToAdvance -= __xp
 		if __HemomancyXPneededToAdvance > 0
