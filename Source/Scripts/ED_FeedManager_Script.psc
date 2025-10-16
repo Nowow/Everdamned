@@ -1063,6 +1063,7 @@ function EstablishNextStaggerDrainType()
 	endif
 endfunction
 		
+bool __needReequip
 state CombatDrain
 	;handles should do nothing till state is released
 	function HandleFeedThrall(actor FeedTarget)
@@ -1200,14 +1201,17 @@ state CombatDrain
 		;debug.Notification("AI driven OFF")
 		; re-equipping necessary because otherwise player cant swing
 		; unless reequips manually
-		playerRef.EquipItemEx(RightWeaponIfAny, 1)
-		playerRef.EquipItemEx(LeftWeaponIfAny, 2)
-		playerRef.EquipItemEx(ShieldIfAny, 2)
-		playerRef.DrawWeapon()
-		Game.SetPlayerAIDriven(false)
-		RightWeaponIfAny = none
-		LeftWeaponIfAny = none
-		ShieldIfAny = none
+		if __needReequip
+			playerRef.EquipItemEx(RightWeaponIfAny, 1)
+			playerRef.EquipItemEx(LeftWeaponIfAny, 2)
+			playerRef.EquipItemEx(ShieldIfAny, 2)
+			playerRef.DrawWeapon()
+			Game.SetPlayerAIDriven(false)
+			RightWeaponIfAny = none
+			LeftWeaponIfAny = none
+			ShieldIfAny = none
+			__needReequip = false
+		endif
 		EstablishNextStaggerDrainType()
 		
 	endevent

@@ -38,8 +38,9 @@ endfunction
 state LearningAdept
 	event OnBeginState()
 		debug.Trace("Everdamned INFO: Started learning Adept Hemomancy")
+		AdeptHemomancyLearned = 0
 		__readyToProgress = false
-		__HemomancyXPneededToAdvance = 15
+		__HemomancyXPneededToAdvance = 5 + AdeptHemomancyLearned * 5
 	endevent
 	
 	function StartLearningHemomancy()
@@ -113,10 +114,12 @@ state LearningAdept
 			__learnLock = false
 			return
 		endif
+
 		__readyToProgress = true
+		debug.Trace("Everdamned DEBUG: Hemomancy Studies is __readyToProgress in state LearningAdept")
 		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
-		__HemomancyXPneededToAdvance = 15
+		__HemomancyXPneededToAdvance = 5 + AdeptHemomancyLearned * 5
 		
 		; now called from FeedManager, because actual hemomancy advancement 
 		; comes from feeding after getting enough exp
@@ -130,8 +133,9 @@ endstate
 state LearningExpert
 	event OnBeginState()
 		debug.Trace("Everdamned INFO: Started learning Expert Hemomancy")
+		ExpertHemomancyLearned = 0
 		__readyToProgress = false
-		__HemomancyXPneededToAdvance = 30
+		__HemomancyXPneededToAdvance = 20 + ExpertHemomancyLearned * 5
 	endevent
 	
 	function StartLearningHemomancy()
@@ -208,7 +212,9 @@ state LearningExpert
 			__learnLock = false
 			return
 		endif
+		
 		__readyToProgress = true
+		debug.Trace("Everdamned DEBUG: Hemomancy Studies is __readyToProgress in state LearningExpert")
 		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 30
@@ -226,8 +232,9 @@ state LearningMaster
 
 	event OnBeginState()
 		debug.Trace("Everdamned INFO: Started learning Master Hemomancy")
+		MasterHemomancyLearned = 0
 		__readyToProgress = false
-		__HemomancyXPneededToAdvance = 50
+		__HemomancyXPneededToAdvance = 30 + 5 * MasterHemomancyLearned
 	endevent
 	
 	function StartLearningHemomancy()
@@ -306,7 +313,9 @@ state LearningMaster
 			__learnLock = false
 			return
 		endif
+		
 		__readyToProgress = true
+		debug.Trace("Everdamned DEBUG: Hemomancy Studies is __readyToProgress in state LearningMaster")
 		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 50
