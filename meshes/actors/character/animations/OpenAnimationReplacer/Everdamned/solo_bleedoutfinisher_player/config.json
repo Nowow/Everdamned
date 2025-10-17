@@ -2,7 +2,6 @@
     "name": "solo_bleedoutfinisher_player",
     "description": "bleedout finisher feed player solo part",
     "priority": 4255748,
-    "disabled": true,
     "conditions": [
         {
             "condition": "IsInFaction",
@@ -10,6 +9,20 @@
             "Faction": {
                 "pluginName": "Skyrim.esm",
                 "formID": "DB1"
+            }
+        },
+        {
+            "condition": "CompareValues",
+            "requiredVersion": "1.0.0.0",
+            "Value A": {
+                "form": {
+                    "pluginName": "Everdamned.esp",
+                    "formID": "544D0F"
+                }
+            },
+            "Comparison": "==",
+            "Value B": {
+                "value": 1.0
             }
         }
     ]

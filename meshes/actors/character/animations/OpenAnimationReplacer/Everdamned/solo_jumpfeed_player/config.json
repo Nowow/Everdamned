@@ -2,7 +2,6 @@
     "name": "solo_jumpfeed_player",
     "description": "jumpfeed player solo part",
     "priority": 4255750,
-    "disabled": true,
     "conditions": [
         {
             "condition": "IsInFaction",
@@ -10,6 +9,34 @@
             "Faction": {
                 "pluginName": "Skyrim.esm",
                 "formID": "DB1"
+            }
+        },
+        {
+            "condition": "CompareValues",
+            "requiredVersion": "1.0.0.0",
+            "Value A": {
+                "form": {
+                    "pluginName": "Everdamned.esp",
+                    "formID": "544D0F"
+                }
+            },
+            "Comparison": "==",
+            "Value B": {
+                "value": 2.0
+            }
+        },
+        {
+            "condition": "CompareValues",
+            "requiredVersion": "1.0.0.0",
+            "Value A": {
+                "form": {
+                    "pluginName": "Everdamned.esp",
+                    "formID": "0D1CF3"
+                }
+            },
+            "Comparison": "==",
+            "Value B": {
+                "value": 1.0
             }
         }
     ]
