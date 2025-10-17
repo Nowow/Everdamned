@@ -196,13 +196,13 @@ s -a ed_seduction_flirt_nervousLookAround2 ed_seduction_nervous_lookaround.hkx
 ' ----------------- Feed killmoves solo  part ------------------
 
 ' feed killmove player solo part bleedout
-b -a,Ted_playsound_bleedoutrustle/0.0,Ted_sheatheweapons/0.01,TSoundPlay.NPCVampireLordFeed/1.933000,Ted_impact_bloodgush/2.867000,TSoundPlay.NPCKillGore/3.700000,Ted_feedkm_killvictim/4.3 ed_feedkms_player_solo_bleedout ed_feedkms_player_solo_bleedout.hkx
+b -a,Ted_playsound_bleedoutrustle/0.0,Ted_sheatheweapons/0.01,TSoundPlay.NPCVampireLordFeed/1.933000,Ted_impact_bloodgush/2.867000,TSoundPlay.NPCKillGore/3.700000,Ted_feedkm_killvictim/4.3,Ted_feedkm_finished/-0.1,TtailCombatLocomotion/-0.01,TtailCombatIdle/-0.01 ed_feedkms_player_solo_bleedout ed_feedkms_player_solo_bleedout.hkx
 
 ' feed killmove player solo part jump feed
-b -a,Ted_playsound_feeddoubletap/0.0,Ted_sheatheweapons/0.01,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.4,TKillShove/3.567000,Ted_feedkm_killvictim/3.6 ed_feedkms_player_solo_jumpfeed ed_feedkms_player_solo_jumpfeed.hkx
+b -a,Ted_playsound_feeddoubletap/0.0,Ted_sheatheweapons/0.01,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.4,TKillShove/3.567000,Ted_feedkm_killvictim/3.6,Ted_feedkm_finished/-0.1 ed_feedkms_player_solo_jumpfeed ed_feedkms_player_solo_jumpfeed.hkx
 
 ' feed killmove player solo part ground
-b -a,TSoundPlay.NPCKillStruggle/0.0,Ted_sheatheweapons/0.01,TSoundPlay.NPCKillBodyfall/0.9,TSoundPlay.NPCVampireLordFeed/1.466000,Ted_impact_bloodgush/2.4,Ted_feedkm_killvictim/4.0 ed_feedkms_player_solo_ground ed_feedkms_player_solo_ground.hkx
+b -a,TSoundPlay.NPCKillStruggle/0.0,Ted_sheatheweapons/0.01,TSoundPlay.NPCKillBodyfall/0.9,TSoundPlay.NPCVampireLordFeed/1.466000,Ted_impact_bloodgush/2.4,Ted_feedkm_killvictim/4.0,Ted_feedkm_finished/-0.1 ed_feedkms_player_solo_ground ed_feedkms_player_solo_ground.hkx
 
 ' feed paired player solo part social
 b -a,Ted_sheatheweapons/0.01,Ted_breathSounds/1.067,Ted_playsound_bleedoutrustle/2.5,TSoundPlay.NPCKillStruggle/3.033000,Ted_impact_bloodgushshort/5.233,Ted_socialfeedbite/5.233,Ted_breathSounds/7.767000,Ted_feedsatiation/9.570000,Ted_socialfeedsatiation/9.570000,Ted_playsound_bleedoutrustle/10.233000,Ted_socialfeedfinished/11.99 ed_feedkms_player_solo_social ed_feedkms_player_solo_social.hkx
@@ -231,7 +231,7 @@ km -ac,D8.000000,Ted_seduction_speakerBitten/2.0,TNPCSoundPlay.npcvampirelordfee
 km -ac,D4.1,Ted_playsound_feeddoubletap/0.0,Ted_sheatheweapons/0.01,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.500,Ted_socialfeedfinished/2.600,TNPCSoundPlay.NPCKillShove/3.567,T2_KillActor/3.8 KillMoveED_jumpfeedkm ed_jumpfeedkm.HKX
 
 ' not used, here to provide custom animevents
-km -ac,D5.344,Ted_playsound_bleedoutkillbite/0.0,Ted_playsound_vlfeed/0.0,Ted_feedkm_killvictim/0.0,Ted_playsound_bleedoutrustle/0.0,Ted_sheatheweapons/0.01,TNPCSoundPlay.npcvampirelordfeed/1.933,Ted_impact_bloodgush/2.867,TNPCSoundPlay.NPCKillGore/3.700,T2_KillActor/4.500 KillMoveED_bleedoutFinisher ed_bleedoutfinisher.hkx
+km -ac,D5.344,Ted_playsound_bleedoutkillbite/0.0,Ted_playsound_vlfeed/0.0,Ted_feedkm_killvictim/0.0,Ted_feedkm_finished/0.0,Ted_playsound_bleedoutrustle/0.0,Ted_sheatheweapons/0.01,TNPCSoundPlay.npcvampirelordfeed/1.933,Ted_impact_bloodgush/2.867,TNPCSoundPlay.NPCKillGore/3.700,T2_KillActor/4.500 KillMoveED_bleedoutFinisher ed_bleedoutfinisher.hkx
 
 ' not used, here to provide custom animevents for social feed
 km -ac,D13.266,Ted_breathSounds/1.067,Ted_impact_bloodgushshort/5.233,Ted_socialfeedbite/5.234,Ted_feedsatiation/11.367,Ted_socialfeedsatiation/11.367 ed_DummyPairdEvent1 ed_bleedoutfinisher.hkx

@@ -10,6 +10,7 @@ String property BreathSounds = "ed_breathSounds" auto
 string property SocialFeedSatiation = "ed_socialfeedsatiation" auto
 string property SocialFeedFinished = "ed_socialfeedfinished" auto
 string property FeedAnimKillVictim = "ed_feedkm_killvictim" auto
+string property FeedAnimFinished = "ed_feedkm_finished" auto
 String property SheatheWepons = "ed_sheatheweapons" auto
 
 ;float property CombatFeedFallbackUpdateDelay = 10.0 auto
@@ -101,6 +102,7 @@ Function RegisterFeedEvents()
 			RegisterForAnimationEvent(playerRef, SocialFeedSatiation)
 			RegisterForAnimationEvent(playerRef, SocialFeedFinished)
 			RegisterForAnimationEvent(playerRef, FeedAnimKillVictim)
+			RegisterForAnimationEvent(playerRef, FeedAnimFinished)
 			RegisterForAnimationEvent(playerRef, SheatheWepons)
 			
 		endif
@@ -132,6 +134,7 @@ function UnRegisterFeedEvents()
 		UnRegisterForAnimationEvent(playerRef, SocialFeedSatiation)
 		UnRegisterForAnimationEvent(playerRef, SocialFeedFinished)
 		UnRegisterForAnimationEvent(playerRef, FeedAnimKillVictim)
+		UnRegisterForAnimationEvent(playerRef, FeedAnimFinished)
 		UnRegisterForAnimationEvent(playerRef, SheatheWepons)
 	
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
@@ -152,9 +155,26 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		; ED_BeingVampire_VampireFeed_VictimMark_Spell
 		; .Kill() works through ghost
 		aFeedTarget.Kill(playerRef)
-		Game.SetPlayerAIDriven(false)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimKillVictim event!")
 	
+	elseif asEventName == FeedAnimFinished
+		if __needReequip
+			__needReequip = false
+			utility.wait(0.2) ; so anim is totally complete
+			playerRef.EquipItemEx(RightWeaponIfAny, 1)
+			playerRef.EquipItemEx(LeftWeaponIfAny, 2)
+			playerRef.EquipItemEx(ShieldIfAny, 2)
+			;playerRef.DrawWeapon()
+			debug.SendAnimationEvent(playerRef, "WeapEquip")
+			;debug.SendAnimationEvent(playerRef, "MagicForceEquipLeft")
+			;debug.SendAnimationEvent(playerRef, "MagicForceEquipRight")
+			Game.SetPlayerAIDriven(false)
+			RightWeaponIfAny = none
+			LeftWeaponIfAny = none
+			ShieldIfAny = none
+		endif
+		Game.SetPlayerAIDriven(false)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimFinished event!")
 	;its sfx, but here so i dont have to propagate victim race to alias script
 	;and timing is not critical so thread locks are not an issue
 	elseif asEventName == SheatheWepons
@@ -1092,7 +1112,7 @@ state CombatDrain
 		
 		; for OAR conditions and controls ghost and unconcious flags
 		; also sets ghost and restrained
-		
+		__needReequip = true
 		ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
 		Game.SetPlayerAIDriven(true)
 		playerRef.SheatheWeapon()
@@ -1130,7 +1150,7 @@ state CombatDrain
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
 		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
 		
-		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		;bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
 		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 		bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
@@ -1157,7 +1177,7 @@ state CombatDrain
 			playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), aFeedTarget.GetPositionZ())
 		endif
 				
-		__animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		;__animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
 		__playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 		__victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
@@ -1201,17 +1221,21 @@ state CombatDrain
 		;debug.Notification("AI driven OFF")
 		; re-equipping necessary because otherwise player cant swing
 		; unless reequips manually
+		
+		;MagicForceEquipRight/Left
 		if __needReequip
+			__needReequip = false
+			utility.wait(0.2) ; so anim is totally complete
 			playerRef.EquipItemEx(RightWeaponIfAny, 1)
 			playerRef.EquipItemEx(LeftWeaponIfAny, 2)
 			playerRef.EquipItemEx(ShieldIfAny, 2)
-			playerRef.DrawWeapon()
-			Game.SetPlayerAIDriven(false)
+			;playerRef.DrawWeapon()
+			debug.SendAnimationEvent(playerRef, "WeapEquip")
 			RightWeaponIfAny = none
 			LeftWeaponIfAny = none
 			ShieldIfAny = none
-			__needReequip = false
 		endif
+		Game.SetPlayerAIDriven(false)
 		EstablishNextStaggerDrainType()
 		
 	endevent
