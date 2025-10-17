@@ -3,8 +3,6 @@
     "description": "bleedout finisher feed player solo part",
     "priority": 4255748,
     "disabled": true,
-    "ignoreDontConvertAnnotationsToTriggersFlag": true,
-    "triggersFromAnnotationsOnly": true,
     "conditions": [
         {
             "condition": "IsInFaction",

@@ -2,7 +2,6 @@
     "name": "solo_groundfeed_player",
     "description": "ground feed player solo part",
     "priority": 4255752,
-    "disabled": true,
     "conditions": [
         {
             "condition": "IsInFaction",
