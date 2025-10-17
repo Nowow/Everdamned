@@ -77,6 +77,13 @@ Event OnUpdate()
 			;_target.SetCriticalStage(_target.CritStage_DisintegrateEnd)
 			
 			utility.wait(0.3)
+			ED_Art_VFX_AbsorbBloodExsanguinate.Play(_player, 5.0, _target)
+		
+			DLC1VampireBatsVFX.Play(_target,1.0,_player)
+			DLC1VampBatsEatenByBatsSkinFXS.Play(_target,5.0)
+			Utility.wait(0.4)
+			DecalSpray(_target,2)
+			
 			PlayerVampireQuest.EatThisActor(_target)
 			CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 		;else
@@ -105,12 +112,7 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 	;endif
 	
 	if _success
-		ED_Art_VFX_AbsorbBloodExsanguinate.Play(_player, 5.0, _target)
 		
-		DLC1VampireBatsVFX.Play(_target,1.0,Caster)
-		DLC1VampBatsEatenByBatsSkinFXS.Play(_target,5.0)
-		Utility.wait(0.4)
-		DecalSpray(_target,2)
 		
 	else
 		debug.Trace("Everdamned DEBUG: But no exsanguination took place")
