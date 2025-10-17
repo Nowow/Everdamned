@@ -1,27 +1,11 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 8
+;NEXT FRAGMENT INDEX 9
 Scriptname QF_ED_Mechanics_Hemomancy_Qu_054ACEEE Extends Quest Hidden
 
 ;BEGIN ALIAS PROPERTY ED_Player
 ;ALIAS PROPERTY TYPE ReferenceAlias
 ReferenceAlias Property Alias_ED_Player Auto
 ;END ALIAS PROPERTY
-
-;BEGIN FRAGMENT Fragment_6
-Function Fragment_6()
-;BEGIN CODE
-ED_HemomancyStudies_Script.AdvanceHemomancy()
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_4
-Function Fragment_4()
-;BEGIN CODE
-;all hemomancy learned
-;END CODE
-EndFunction
-;END FRAGMENT
 
 ;BEGIN FRAGMENT Fragment_0
 Function Fragment_0()
@@ -31,6 +15,34 @@ message.ResetHelpMessage("ed_hemomancy_first_drain")
 ED_Mechanics_Message_HemomancyFirstDrain.ShowAsHelpMessage("ed_hemomancy_first_drain", 5.0, 1.0, 1)
 ED_HemomancyStudies_Script.StartLearningHemomancy()
 SetStage(80)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_4
+Function Fragment_4()
+;BEGIN CODE
+;all hemomancy learned
+ED_HemomancyStudies_Script.RemoveAllDisplayAb()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_6
+Function Fragment_6()
+;BEGIN CODE
+ED_HemomancyStudies_Script.AdvanceHemomancy()
+ED_HemomancyStudies_Script.ManageDisplayAb()
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_8
+Function Fragment_8()
+;BEGIN CODE
+; for debug
+ED_HemomancyStudies_Script.AdvanceHemomancy(true)
+ED_HemomancyStudies_Script.ManageDisplayAb()
 ;END CODE
 EndFunction
 ;END FRAGMENT

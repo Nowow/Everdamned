@@ -14,6 +14,42 @@ bool __learnLock
 bool __readyToProgress
 int __HemomancyXPneededToAdvance
 
+function RemoveAllDisplayAb()
+	playerRef.RemoveSpell(ED_Mechanics_UnlockDisplayAb_HemomancyStudiesInProgress)
+	playerRef.RemoveSpell(ED_Mechanics_UnlockDisplayAb_HemomancyProgressReady)
+endfunction
+
+function ManageDisplayAb()
+	if __readyToProgress
+		playerRef.RemoveSpell(ED_Mechanics_UnlockDisplayAb_HemomancyStudiesInProgress)
+		playerRef.AddSpell(ED_Mechanics_UnlockDisplayAb_HemomancyProgressReady, false)
+		debug.Trace("Everdamned DEBUG: Hemomancy Studies gives Progress Ready display ability")
+		return
+	endif
+	
+	playerRef.RemoveSpell(ED_Mechanics_UnlockDisplayAb_HemomancyProgressReady)
+	
+	if  	playerRef.HasPerk(ED_PerkTree_BloodMagic_20_AdeptHemomancy) \
+			&& AdeptHemomancyLearned < AdeptHemomancySpells.Length
+		
+		playerRef.AddSpell(ED_Mechanics_UnlockDisplayAb_HemomancyStudiesInProgress, false)
+		debug.Trace("Everdamned DEBUG: Hemomancy Studies gives In Progress display ability for Adept")
+	
+	elseif  playerRef.HasPerk(ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk) \
+			&& ExpertHemomancyLearned < ExpertHemomancySpells.Length
+		
+		playerRef.AddSpell(ED_Mechanics_UnlockDisplayAb_HemomancyStudiesInProgress, false)
+		debug.Trace("Everdamned DEBUG: Hemomancy Studies gives In Progress display ability for Expert")
+	
+	elseif  playerRef.HasPerk(ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk) \
+			&& MasterHemomancyLearned < MasterHemomancySpells.Length
+	
+		playerRef.AddSpell(ED_Mechanics_UnlockDisplayAb_HemomancyStudiesInProgress, false)
+		debug.Trace("Everdamned DEBUG: Hemomancy Studies gives In Progress display ability for Master")
+		
+	endif
+	
+endfunction
 
 function StartLearningHemomancy()
 	if !__allHemomancyLearned
@@ -31,7 +67,7 @@ endfunction
 ;	endif
 ;endfunction
 
-function AdvanceHemomancy()
+function AdvanceHemomancy(bool force = false)
 	debug.Trace("Everdamned ERROR: AdvanceHemomancy was called in an empty state, should not have happened")
 endfunction
 
@@ -47,8 +83,8 @@ state LearningAdept
 		debug.Trace("Everdamned ERROR: StartLearningHemomancy was called in an non-empty state, should not have happened")
 	endfunction
 	
-	function AdvanceHemomancy()
-		if !__readyToProgress
+	function AdvanceHemomancy(bool force = false)
+		if !__readyToProgress && !force
 			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")
 			return
 		endif
@@ -58,9 +94,10 @@ state LearningAdept
 		
 		; total available spells of this tier
 		int spellListSize = AdeptHemomancySpells.Length
+		bool spellGranted
 		
 		; iterating over all of them
-		while AdeptHemomancyLearned < spellListSize
+		while !spellGranted && (AdeptHemomancyLearned < spellListSize)
 		
 			spell theSpell = AdeptHemomancySpells[AdeptHemomancyLearned]
 			; if player does not have this spell
@@ -69,7 +106,8 @@ state LearningAdept
 				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
 				playerRef.addspell(theSpell)
 				AdeptHemomancyLearned += 1
-				return
+				spellGranted = true
+				;return
 			else
 				; moving to try next spell
 				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
@@ -77,17 +115,34 @@ state LearningAdept
 			endif
 		endWhile
 		
-		; player know all spells of this tier, switching to next state and trying to advance there
-		debug.Trace("Everdamned INFO: Player seems to have learned all " + spellListSize +" Adept Hemomancy spells, goto state LearningExpert")
-		GoToState("LearningExpert")
+		if AdeptHemomancyLearned >= spellListSize
+			; player know all spells of this tier, switching to next state and trying to advance there
+			debug.Trace("Everdamned INFO: Player seems to have learned all " + spellListSize +" Adept Hemomancy spells, goto state LearningExpert")
+			GoToState("LearningExpert")
+			
+			if !spellGranted
+				bool hasNextPerk = playerRef.hasperk(ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk)
+				if hasNextPerk
+					debug.Trace("Everdamned INFO: And since no Hemomancy spell was granted, trying to award next tier spell immediately")
+					__readyToProgress = true
+					AdvanceHemomancy()
+				else
+					debug.Trace("Everdamned ERROR: No Hemomancy spell was granted during Advance, but no perk is available next. Why are we here??")
+				endif
+			endif
+			
+		endif
+		
+		
+		;GoToState("LearningExpert")
 		; if player does not have the next perk, getting XP and learning is halted until he does
 		
-		if playerRef.hasperk(ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk)
+		;if playerRef.hasperk(ED_PerkTree_BloodMagic_40_ExpertHemomancy_Perk)
 			; otherwise trying to advance again immediately
-			debug.Trace("Everdamned INFO: And calling Hemomancy Advance in new state because player has the perk")
-			__readyToProgress = true
-			AdvanceHemomancy()
-		endif
+		;	debug.Trace("Everdamned INFO: And calling Hemomancy Advance in new state because player has the perk")
+		;	__readyToProgress = true
+		;	AdvanceHemomancy()
+		;endif
 		
 	endfunction
 	
@@ -121,10 +176,6 @@ state LearningAdept
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 5 + AdeptHemomancyLearned * 5
 		
-		; now called from FeedManager, because actual hemomancy advancement 
-		; comes from feeding after getting enough exp
-		; stage 80 calls AdvanceHemomancy(), stage set from feed manager
-		
 		__learnLock = false
 	endevent
 	
@@ -143,8 +194,8 @@ state LearningExpert
 	endfunction
 	
 	
-	function AdvanceHemomancy()
-		if !__readyToProgress
+	function AdvanceHemomancy(bool force = false)
+		if !__readyToProgress && !force
 			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")
 			return
 		endif
@@ -154,9 +205,10 @@ state LearningExpert
 		
 		; total available spells of this tier
 		int spellListSize = ExpertHemomancySpells.Length
+		bool spellGranted
 		
 		; iterating over all of them
-		while ExpertHemomancyLearned < spellListSize
+		while !spellGranted && (ExpertHemomancyLearned < spellListSize)
 		
 			spell theSpell = ExpertHemomancySpells[ExpertHemomancyLearned]
 			; if player does not have this spell
@@ -165,7 +217,7 @@ state LearningExpert
 				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
 				playerRef.addspell(theSpell)
 				ExpertHemomancyLearned += 1
-				return
+				spellGranted = true
 			else
 				; moving to try next spell
 				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
@@ -173,19 +225,39 @@ state LearningExpert
 			endif
 		endWhile
 		
+		if ExpertHemomancyLearned >= spellListSize
+			; player know all spells of this tier, switching to next state and trying to advance there
+			debug.Trace("Everdamned INFO: Player seems to have learned all " + spellListSize +" Expert Hemomancy spells, goto state LearningMaster")
+			GoToState("LearningMaster")
+			
+			if !spellGranted
+				bool hasNextPerk = playerRef.hasperk(ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk)
+				if hasNextPerk
+					debug.Trace("Everdamned INFO: And since no Hemomancy spell was granted, trying to award next tier spell immediately")
+					__readyToProgress = true
+					AdvanceHemomancy()
+				else
+					debug.Trace("Everdamned ERROR: No Hemomancy spell was granted during Advance, but no perk is available next. Why are we here??")
+				endif
+			endif
+			
+		endif
+		
+		
+		
 		; player know all spells of this tier, switching to next state and trying to advance there
-		debug.Trace("Everdamned INFO: Player seems to have learned all " + spellListSize +" Expert Hemomancy spells, goto state LearningExpert")
-		GoToState("LearningMaster")
+		;debug.Trace("Everdamned INFO: Player seems to have learned all " + spellListSize +" Expert Hemomancy spells, goto state LearningExpert")
+		;GoToState("LearningMaster")
 		; if player does not have the next perk, getting XP and learning is halted until he does
 		
-		if playerRef.hasperk(ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk)
+		;if playerRef.hasperk(ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk)
 			; otherwise trying to advance again immediately
 			; because since we are here it means that we have not taught player
 			; a new spell yet
-			debug.Trace("Everdamned INFO: And calling Hemomancy Advance in new state because player has the perk")
-			__readyToProgress = true
-			AdvanceHemomancy()
-		endif
+		;	debug.Trace("Everdamned INFO: And calling Hemomancy Advance in new state because player has the perk")
+		;	__readyToProgress = true
+		;	AdvanceHemomancy()
+		;endif
 
 	endfunction
 	
@@ -217,7 +289,7 @@ state LearningExpert
 		debug.Trace("Everdamned DEBUG: Hemomancy Studies is __readyToProgress in state LearningExpert")
 		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
-		__HemomancyXPneededToAdvance = 30
+		__HemomancyXPneededToAdvance = 20 + ExpertHemomancyLearned * 5
 		
 		; now called from FeedManager, because actual hemomancy advancement 
 		; comes from feeding after getting enough exp
@@ -241,8 +313,8 @@ state LearningMaster
 		debug.Trace("Everdamned ERROR: StartLearningHemomancy was called in an non-empty state, should not have happened")
 	endfunction
 	
-	function AdvanceHemomancy()
-		if !__readyToProgress
+	function AdvanceHemomancy(bool force = false)
+		if !__readyToProgress && !force
 			debug.Trace("Everdamned DEBUG: Hemomancy Advance got called, but not ready yet, doing nothing")
 			return
 		endif
@@ -318,7 +390,7 @@ state LearningMaster
 		debug.Trace("Everdamned DEBUG: Hemomancy Studies is __readyToProgress in state LearningMaster")
 		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
-		__HemomancyXPneededToAdvance = 50
+		__HemomancyXPneededToAdvance = 30 + 5 * MasterHemomancyLearned
 		
 		; now called from FeedManager, because actual hemomancy advancement 
 		; comes from feeding after getting enough exp
@@ -342,3 +414,6 @@ message property ED_Mechanics_Message_HemomancyReadyToAdvance auto
 effectshader property ED_Art_Shader_NewHemomancyAvailable auto
 
 quest property ED_Mechanics_Hemomancy_Quest auto
+
+spell property ED_Mechanics_UnlockDisplayAb_HemomancyProgressReady auto
+spell property ED_Mechanics_UnlockDisplayAb_HemomancyStudiesInProgress auto

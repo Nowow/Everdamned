@@ -141,6 +141,7 @@ imagespacemodifier property ED_Art_Imod_NightVision_Transition_1to5 auto
 imagespacemodifier property ED_Art_Imod_NightVision_5 auto
 imagespacemodifier property ED_Art_Imod_NightVision_Transition_5to1 auto
 
+visualeffect property ED_Art_VFX_Halo_InwardToScreen auto
 
 spell property ED_Misc_DisarmFF_Spell auto
 
@@ -164,11 +165,13 @@ Event OnKeyDown(int keyCode)
 		
 		;ED_Misc_DisarmFF_Spell.cast(pl, __targetThing)
 		
-		bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "Calm")
-		bool __hasRally = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "Rally")
+		ED_Art_VFX_Halo_InwardToScreen.Play(pl)
 		
-		debug.Trace("Everdamned DEBUG: __hasCalm: " + __hasCalm)
-		debug.Trace("Everdamned DEBUG: __hasRally: " + __hasRally)
+		;bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "Calm")
+		;bool __hasRally = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "Rally")
+		
+		;debug.Trace("Everdamned DEBUG: __hasCalm: " + __hasCalm)
+		;debug.Trace("Everdamned DEBUG: __hasRally: " + __hasRally)
 		
 		
 		;debug.Trace("Everdamned DEBUG: GetActorValue " + pl.GetActorValue("ED_BloodPool"))

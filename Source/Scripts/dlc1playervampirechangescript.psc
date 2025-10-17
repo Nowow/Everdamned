@@ -373,7 +373,8 @@ function StartTracking()
 	
 	; adding here because it is attached to mortal vampire races, but not to VL
 	; consider adding it to VL to not do this
-	playerRef.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
+	; UPD: added to alias
+	;playerRef.AddSpell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell, false)
 	playerRef.AddSpell(DLC1Revert, false)
 	playerRef.AddSpell(DLC1VampireBats, false)
 	playerRef.EquipSpell((DialogueGenericVampire as vampirequestscript).LastPower, 2)
