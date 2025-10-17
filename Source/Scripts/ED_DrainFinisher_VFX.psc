@@ -45,6 +45,7 @@ Event OnUpdate()
 	
 	;stacking vfx
 	DLC1BatsEatenBloodSplats.Play(_target, _vfxDuration)
+	ED_Art_VFX_Halo_Outward.Play(_target, 1.0)
 	ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD.Apply(1.0 - 1.0/(1.0+_timeElapsed))
 	
 	currentSFX = PulseSound_Array[(_timeElapsed as int)/2].Play(_player)
@@ -116,22 +117,22 @@ Event OnEffectFinish(Actor Target, Actor Caster)
 		
 	else
 		debug.Trace("Everdamned DEBUG: But no exsanguination took place")
-		DLC1BatsAbsorbTargetVFX01.Stop(_target)
 		DLC1BatsEatenBloodSplats.Stop(_target)
 		
 		Sound.StopInstance(currentSFX)
 		ED_Art_SoundM_ExsanguinatePulse_Trail.Play(_player)
 	endif
 	
-
+	ED_Mechanics_Spell_GetUpWatcher.Cast(_player, _target)
 	
 	; VERY IMPORTANT WAIT
 	; OR CORPSES WILL RISE
-	utility.wait(1.0)
 	
-	if _target.GetActorValue("Health") <= 0.0
-		_target.kill(_player)
-	endif
+	utility.wait(0.3)
+	
+	;if _target.GetActorValue("Health") <= 0.0
+	;	_target.kill(_player)
+	;endif
 	;_target.placeatme(ED_Art_Explosion_Exsanguinate)
 	;_target.ApplyHavokImpulse(0.0, 0.0, 400.0, 100.0)
 	_target.EndDeferredKill()
@@ -163,6 +164,9 @@ VisualEffect Property DLC1BatsAbsorbTargetVFX01 auto
 VisualEffect Property ED_Art_VFX_AbsorbBloodExsanguinate auto
 visualeffect property DLC1VampireBatsVFX auto
 visualeffect property ED_Art_VFX_Flaywind auto
+visualeffect property ED_Art_VFX_Halo_Outward auto
+
+spell property ED_Mechanics_Spell_GetUpWatcher auto
 
 EffectShader Property DLC1BatsEatenBloodSplats Auto
 EffectShader Property DLC1VampBatsEatenByBatsSkinFXS Auto
