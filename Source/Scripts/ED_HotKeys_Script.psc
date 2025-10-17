@@ -164,8 +164,8 @@ Event OnKeyDown(int keyCode)
 		
 		;ED_Misc_DisarmFF_Spell.cast(pl, __targetThing)
 		
-		bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "6")
-		bool __hasRally = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "38")
+		bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "Calm")
+		bool __hasRally = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "Rally")
 		
 		debug.Trace("Everdamned DEBUG: __hasCalm: " + __hasCalm)
 		debug.Trace("Everdamned DEBUG: __hasRally: " + __hasRally)

@@ -19,13 +19,14 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 endevent
 
 Event OnEffectFinish(Actor akTarget, Actor akCaster)
+
+	if __wasNotGhost && __target
+		__target.SetGhost(false)
+	endif
 	
 	if __target && !(__target.IsDead())
-		debug.Trace("Everdamned DEBUG: Feed Victim Mark detects that target is not dead! WELP")
-	endif
-
-	if __wasNotGhost
-		__target.SetGhost(false)
+		debug.Trace("Everdamned DEBUG: Feed Victim Mark detects that target is not dead! WELP, killing")
+		akTarget.Kill(akCaster)
 	endif
 	
 	debug.Trace("Everdamned DEBUG: Feed Victim Mark effect finished!")

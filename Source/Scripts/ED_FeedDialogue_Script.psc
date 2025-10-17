@@ -175,8 +175,8 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 
 	; AI data
 	
-	bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(akSeduced, "6")
-	bool __hasRally = PO3_SKSEFunctions.HasMagicEffectWithArchetype(akSeduced, "38")
+	bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(akSeduced, "Calm")
+	bool __hasRally = PO3_SKSEFunctions.HasMagicEffectWithArchetype(akSeduced, "Rally")
 	
 	int __morality = akSeduced.GetAV("Morality") as int
 	int __aggression = akSeduced.GetAV("Aggression") as int
