@@ -164,19 +164,12 @@ Event OnKeyDown(int keyCode)
 		
 		;ED_Misc_DisarmFF_Spell.cast(pl, __targetThing)
 		
-		weapon LeftWeaponIfAny = __targetThing.GetEquippedWeapon(true)
-		armor ShieldIfAny
-		if !LeftWeaponIfAny
-			ShieldIfAny = __targetThing.GetEquippedShield()
-		endif
-		weapon RightWeaponIfAny = __targetThing.GetEquippedWeapon(false)
-		__targetThing.UnequipItemEx(LeftWeaponIfAny, 1)
-		__targetThing.UnequipItemEx(ShieldIfAny, 1)
-		__targetThing.UnequipItemEx(RightWeaponIfAny, 2)
+		bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "6")
+		bool __hasRally = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "38")
 		
-	
+		debug.Trace("Everdamned DEBUG: __hasCalm: " + __hasCalm)
+		debug.Trace("Everdamned DEBUG: __hasRally: " + __hasRally)
 		
-		debug.Trace("Everdamned DEBUG: test key wasasdsadadsdasda")
 		
 		;debug.Trace("Everdamned DEBUG: GetActorValue " + pl.GetActorValue("ED_BloodPool"))
 		;debug.Trace("Everdamned DEBUG: GetBaseActorValue" + pl.GetBaseActorValue("ED_BloodPool"))

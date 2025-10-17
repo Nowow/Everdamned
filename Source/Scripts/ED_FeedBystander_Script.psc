@@ -37,7 +37,13 @@ Function CheckBystandersSendAlarmAndStopQuest()
 		if DurationInRealTimeSeconds <= NoticeTime
 			Debug.Trace("Everdamned INFO: And its not too late")
 			__displayMessage = ED_Mechanics_Message_BystanderAlerted
-			VictimCrimeFaction.SendAssaultAlarm()
+			if VictimCrimeFaction
+				VictimCrimeFaction.SendAssaultAlarm()
+				debug.Trace("Everdamned DEBUG: Bystander check sends assault alarm for victim crime faction " + VictimCrimeFaction)
+			else
+				VictimRef.SendAssaultAlarm()
+				debug.Trace("Everdamned DEBUG: Bystander check sends assault alarm for victim itself in absence of crime fac")
+			endif
 		else
 			Debug.Trace("Everdamned INFO: But its too late!!! HA-HAA!")
 		endif

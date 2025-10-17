@@ -460,11 +460,11 @@ function HandleFeedMesmerized(actor FeedTarget)
 		;at 70+ light 30 meters 2000 unit
 		float __lightLevel = PlayerRef.GetLightLevel()
 		if __lightLevel <= 10.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 500.0
 		elseif __lightLevel >= 70.0
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 1000.0
 		else
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0 + (83.763*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 70.0)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 300.0 + (46.535*math.pow(2.718,0.041*(__lightLevel - 10.0)) - 50.0)
 		endif
 		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
@@ -540,11 +540,11 @@ function HandleDrainMesmerized(actor FeedTarget)
 		;at 70+ light 30 meters 2000 unit
 		float __lightLevel = PlayerRef.GetLightLevel()
 		if __lightLevel <= 10.0
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 500.0
 		elseif __lightLevel >= 70.0
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 1000.0
 		else
-			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 100.0 + (83.763*math.pow(2.718,0.0408*(__lightLevel - 10.0)) - 70.0)
+			ED_Mechanics_Global_VampireFeedBystanderRadius.value = 300.0 + (46.535*math.pow(2.718,0.041*(__lightLevel - 10.0)) - 50.0)
 		endif
 		if playerRef.HasSpell(ED_VampirePowers_Ab_Masquerade_Spell)
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
@@ -1152,7 +1152,7 @@ state CombatDrain
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
 		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
 		
-		;bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
 		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 		bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
@@ -1179,7 +1179,7 @@ state CombatDrain
 			playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), aFeedTarget.GetPositionZ())
 		endif
 				
-		;__animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		__animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
 		__playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 		__victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
