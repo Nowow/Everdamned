@@ -1114,8 +1114,10 @@ state CombatDrain
 		; also sets ghost and restrained
 		__needReequip = true
 		ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
+		ED_BeingVampire_VampireFeed_PlayerMark_Spell.Cast(playerRef, playerRef)
+		
 		Game.SetPlayerAIDriven(true)
-		playerRef.SheatheWeapon()
+		;playerRef.SheatheWeapon()
 		
 		; tell OAR the animation type
 		if aFeedTarget.IsBleedingOut()
@@ -1210,8 +1212,8 @@ state CombatDrain
 		playerRef.PlayIdle(ResetRoot)
 		aFeedTarget.PlayIdle(ResetRoot)
 
-		playerRef.PlayIdle(backupPlayerSoloIdleToPlay)
-		aFeedTarget.PlayIdle(backupVictimSoloIdleToPlay)
+		playerRef.PlayIdle(IdleReadElderScroll) ; IdleReadElderScroll because it doesnt break when weapons/magic are equipped
+		aFeedTarget.PlayIdle(IdleReadElderScroll)
 		ApplyCombatFeedEffects()
 	
 	endevent
@@ -1247,6 +1249,7 @@ Idle Property VampireLordLeftPairedFeedFront Auto
 Idle Property VampireLordLeftPairedFeedBack Auto
 idle property IdleVampireStandingFeedFront_Loose auto
 idle property IdleHandCut auto
+idle property IdleReadElderScroll auto
 idle property ED_Idle_FeedKM_Solo_Player_Ground auto
 idle property ED_Idle_FeedKM_Solo_Player_Bleedout auto
 idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
@@ -1258,6 +1261,8 @@ idle property ED_Idle_FeedKM_Solo_Victim_Jumpfeed auto
 
 idle property ResetRoot auto
 spell property ED_BeingVampire_VampireFeed_VictimMark_Spell auto
+spell property ED_BeingVampire_VampireFeed_PlayerMark_Spell auto
+spell property ED_Misc_DisarmFF_Spell auto
 spell property ED_Mechanics_Spell_SetDontMove auto
 
 spell property ED_FeralBeast_ApplyHasBeenEaten_Trigger_Spell auto

@@ -2,7 +2,6 @@
     "name": "solo_jumpfeed_victim",
     "description": "jumpfeed victim solo part",
     "priority": 4255749,
-    "disabled": true,
     "conditions": [
         {
             "condition": "IsInFaction",
@@ -24,7 +23,7 @@
             },
             "Comparison": "==",
             "Value B": {
-                "value": 4.0
+                "value": 2.0
             }
         },
         {

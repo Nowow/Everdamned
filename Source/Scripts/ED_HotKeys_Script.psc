@@ -142,6 +142,7 @@ imagespacemodifier property ED_Art_Imod_NightVision_5 auto
 imagespacemodifier property ED_Art_Imod_NightVision_Transition_5to1 auto
 
 
+spell property ED_Misc_DisarmFF_Spell auto
 
 int counter
 bool __switch
@@ -161,12 +162,21 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
-		Int color = 0x80FF8040 ; A=128, R=255, G=128, B=64
+		;ED_Misc_DisarmFF_Spell.cast(pl, __targetThing)
 		
-		Int shifted = Math.LeftShift(color, 8)       ; move RGB up, drop alpha
-		Int rgb =  Math.RightShift(shifted, 8)          ; shift back down to 0xRRGGBB
+		weapon LeftWeaponIfAny = __targetThing.GetEquippedWeapon(true)
+		armor ShieldIfAny
+		if !LeftWeaponIfAny
+			ShieldIfAny = __targetThing.GetEquippedShield()
+		endif
+		weapon RightWeaponIfAny = __targetThing.GetEquippedWeapon(false)
+		__targetThing.UnequipItemEx(LeftWeaponIfAny, 1)
+		__targetThing.UnequipItemEx(ShieldIfAny, 1)
+		__targetThing.UnequipItemEx(RightWeaponIfAny, 2)
 		
-		debug.Trace("Everdamned DEBUG: RBG: " + rgb)
+	
+		
+		debug.Trace("Everdamned DEBUG: test key wasasdsadadsdasda")
 		
 		;debug.Trace("Everdamned DEBUG: GetActorValue " + pl.GetActorValue("ED_BloodPool"))
 		;debug.Trace("Everdamned DEBUG: GetBaseActorValue" + pl.GetBaseActorValue("ED_BloodPool"))

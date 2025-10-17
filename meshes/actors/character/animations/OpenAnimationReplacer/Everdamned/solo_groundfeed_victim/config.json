@@ -2,7 +2,6 @@
     "name": "solo_groundfeed_victim",
     "description": "ground feed victim solo part",
     "priority": 4255751,
-    "disabled": true,
     "conditions": [
         {
             "condition": "IsInFaction",
