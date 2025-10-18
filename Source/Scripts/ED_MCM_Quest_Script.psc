@@ -23,6 +23,14 @@ int BloodMeter_Opacity
 float property Default_BloodMeter_Opacity auto
 GlobalVariable property ED_Mechanics_BloodMeter_Opacity_Global auto
 
+int BloodMeter_OpacityAtRest
+float property Default_BloodMeter_OpacityAtRest auto
+GlobalVariable property ED_Mechanics_BloodMeter_Opacity_Global_AtRest auto
+
+int BloodMeter_HideWhenFull
+float property Default_BloodMeter_HideWhenFull auto
+GlobalVariable property ED_Mechanics_BloodMeter_HideWhenAtRestFull_Global auto
+
 int BloodMeter_FillDirection
 int property Default_BloodMeter_FillDirection auto
 GlobalVariable property ED_Mechanics_BloodMeter_FillDirection_Global auto
@@ -162,19 +170,21 @@ function OnPageReset(String akPage)
 	Setting_NightSightMaxLevel = self.AddSliderOption("Strength max level", ED_Mechanics_Global_MCM_NightSightMaxLevel.GetValue())
 	Setting_NightSightMinLevel = self.AddSliderOption("Strength min level", ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue())
 	Setting_NightSightDisableAdaptive = self.AddToggleOption("Disable adaptive strength", ED_Mechanics_Global_MCM_NightSightDisableAdaptive.GetValue() as Bool)
-	Setting_NightSightStrengthMult = self.AddSliderOption("Strength %", ED_Mechanics_Global_MCM_NightSightStrengthMult.GetValue())
+	Setting_NightSightStrengthMult = self.AddSliderOption("Strength %", ED_Mechanics_Global_MCM_NightSightStrengthMult.GetValue() * 100.0)
 	
 	; ------------------------------------------------------------
 	; Blood Meter
 	self.AddEmptyOption()
-	self.AddHeaderOption("Blood Bar", 0)
-	BloodMeter_Enable = self.AddToggleOption("Enable blood pool bar", ED_Mechanics_BloodMeter_Enable_Global.GetValue() as Bool)
+	self.AddHeaderOption("Vitae Bar", 0)
+	;BloodMeter_Enable = self.AddToggleOption("Enable blood pool bar", ED_Mechanics_BloodMeter_Enable_Global.GetValue() as Bool)
 	
-	BloodMeter_X = self.AddSliderOption("Blood pool bar X coordinate", ED_Mechanics_BloodMeter_X_Global.GetValue())
-	BloodMeter_Y = self.AddSliderOption("Blood pool bar Y coordinate", ED_Mechanics_BloodMeter_Y_Global.GetValue())
-	BloodMeter_Scale = self.AddSliderOption("Blood pool bar scale", ED_Mechanics_BloodMeter_Scale_Global.GetValue())
-	BloodMeter_FillDirection = self.AddSliderOption("Blood pool bar fill direction", ED_Mechanics_BloodMeter_FillDirection_Global.GetValue())
-	BloodMeter_Opacity = self.AddSliderOption("Blood pool bar opacity", ED_Mechanics_BloodMeter_Opacity_Global.GetValue())
+	BloodMeter_X = self.AddSliderOption("Vitae bar X coordinate", ED_Mechanics_BloodMeter_X_Global.GetValue())
+	BloodMeter_Y = self.AddSliderOption("Vitae bar Y coordinate", ED_Mechanics_BloodMeter_Y_Global.GetValue())
+	BloodMeter_Scale = self.AddSliderOption("Vitae bar scale", ED_Mechanics_BloodMeter_Scale_Global.GetValue())
+	BloodMeter_FillDirection = self.AddSliderOption("Vitae bar fill direction", ED_Mechanics_BloodMeter_FillDirection_Global.GetValue())
+	BloodMeter_Opacity = self.AddSliderOption("Vitae bar opacity", ED_Mechanics_BloodMeter_Opacity_Global.GetValue())
+	BloodMeter_OpacityAtRest = self.AddSliderOption("Vitae bar inactive opacity ", ED_Mechanics_BloodMeter_Opacity_Global_AtRest.GetValue())
+	BloodMeter_HideWhenFull = self.AddToggleOption("Hide full inactive bar", ED_Mechanics_BloodMeter_HideWhenAtRestFull_Global.GetValue() as Bool)
 	BloodMeter_DisplayTime = self.AddSliderOption("Seconds to fade when incative", ED_Mechanics_BloodMeter_DisplayTime_Global.GetValue(), "{0} seconds")
 	
 	; ------------------------------------------------------------
@@ -236,13 +246,21 @@ function OnOptionDefault(Int akOp)
 		ED_Mechanics_BloodMeter_Opacity_Global.SetValue(Default_BloodMeter_Opacity as Float)
 		self.SetSliderOptionValue(BloodMeter_Opacity, Default_BloodMeter_Opacity)
 		
-	elseIf akOp == BloodMeter_Enable
-		ED_Mechanics_BloodMeter_Enable_Global.SetValue(Default_BloodMeter_Enable as Float)
-		self.SetToggleOptionValue(BloodMeter_Enable, Default_BloodMeter_Enable as bool)
+	elseIf akOp == BloodMeter_OpacityAtRest
+		ED_Mechanics_BloodMeter_Opacity_Global_AtRest.SetValue(Default_BloodMeter_OpacityAtRest as Float)
+		self.SetSliderOptionValue(BloodMeter_OpacityAtRest, Default_BloodMeter_OpacityAtRest)
 	
 	elseIf akOp == BloodMeter_DisplayTime
 		ED_Mechanics_BloodMeter_DisplayTime_Global.SetValue(Default_BloodMeter_DisplayTime as Float)
 		self.SetSliderOptionValue(BloodMeter_DisplayTime, Default_BloodMeter_DisplayTime as Float, "{0} seconds")
+		
+	elseIf akOp == BloodMeter_HideWhenFull
+		ED_Mechanics_BloodMeter_HideWhenAtRestFull_Global.SetValue(Default_BloodMeter_HideWhenFull as Float)
+		self.SetToggleOptionValue(BloodMeter_HideWhenFull, Default_BloodMeter_HideWhenFull as bool)
+		
+	elseIf akOp == BloodMeter_Enable
+		ED_Mechanics_BloodMeter_Enable_Global.SetValue(Default_BloodMeter_Enable as Float)
+		self.SetToggleOptionValue(BloodMeter_Enable, Default_BloodMeter_Enable as bool)
 	
 	; ------------------------------------------------------------
 	; Hotkeys
@@ -385,7 +403,13 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_Opacity_Global.GetValue())
 		self.SetSliderDialogDefaultValue(Default_BloodMeter_Opacity)
 		self.SetSliderDialogRange(0.000000, 100.0000)
-		self.SetSliderDialogInterval(2.00000)
+		self.SetSliderDialogInterval(1.00000)
+	
+	elseIf akOp == BloodMeter_OpacityAtRest
+		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_Opacity_Global_AtRest.GetValue())
+		self.SetSliderDialogDefaultValue(Default_BloodMeter_OpacityAtRest)
+		self.SetSliderDialogRange(0.000000, 100.0000)
+		self.SetSliderDialogInterval(1.00000)
 		
 	elseIf akOp == BloodMeter_DisplayTime
 		self.SetSliderDialogStartValue(ED_Mechanics_BloodMeter_DisplayTime_Global.GetValue())
@@ -447,6 +471,8 @@ function OnOptionSliderOpen(Int akOp)
 	; ------------------------------------------------------------
 	
 	endIf
+	
+	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
 endFunction
 
 function OnOptionSliderAccept(Int akOp, Float akValue)
@@ -472,6 +498,10 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 	elseIf akOp == BloodMeter_Opacity
 		ED_Mechanics_BloodMeter_Opacity_Global.SetValue(akValue)
 		self.SetSliderOptionValue(BloodMeter_Opacity, akValue)
+		
+	elseIf akOp == BloodMeter_OpacityAtRest
+		ED_Mechanics_BloodMeter_Opacity_Global_AtRest.SetValue(akValue)
+		self.SetSliderOptionValue(BloodMeter_OpacityAtRest, akValue)
 	
 	elseIf akOp == BloodMeter_DisplayTime
 		ED_Mechanics_BloodMeter_DisplayTime_Global.SetValue(akValue)
@@ -532,6 +562,10 @@ function OnOptionSelect(Int akOp)
 	if akOp == BloodMeter_Enable
 		ED_Mechanics_BloodMeter_Enable_Global.SetValue(1 as Float - ED_Mechanics_BloodMeter_Enable_Global.GetValue())
 		self.SetToggleOptionValue(BloodMeter_Enable, ED_Mechanics_BloodMeter_Enable_Global.GetValue() as Bool)
+		
+	elseif akOp == BloodMeter_HideWhenFull
+		ED_Mechanics_BloodMeter_HideWhenAtRestFull_Global.SetValue(1 as Float - ED_Mechanics_BloodMeter_HideWhenAtRestFull_Global.GetValue())
+		self.SetToggleOptionValue(BloodMeter_HideWhenFull, ED_Mechanics_BloodMeter_HideWhenAtRestFull_Global.GetValue() as Bool)
 		
 	; ------------------------------------------------------------
 	; settings
@@ -619,19 +653,23 @@ function OnOptionHighlight(Int akOp)
 	; ------------------------------------------------------------
 	; Blood Meter
 	If akOp == BloodMeter_X
-		self.SetInfoText("TEST: Intricate Description of X coordinate")
+		self.SetInfoText("X coordinate (vertical) of Vitae bar left bottom corner")
 	elseif akOp == BloodMeter_Y
-		self.SetInfoText("TEST: Intricate Description of Y coordinate")
+		self.SetInfoText("Y coordinate (vertical) of Vitae bar left bottom corner")
 	elseIf akOp == BloodMeter_Scale
-		self.SetInfoText("TEST: Intricate Description of meter scale")
+		self.SetInfoText("Scale of Vitae bar")
 	elseIf akOp == BloodMeter_FillDirection
 		self.SetInfoText("The position at which the meter fills from, 0 = right, 1 = center, 2 = left. Default: right")
 	elseIf akOp == BloodMeter_Opacity
-		self.SetInfoText("TEST: Intricate Description of opacity")
+		self.SetInfoText("How opaque is Vitae bar")
 	elseIf akOp == BloodMeter_Enable
-		self.SetInfoText("Enable blood bar")
+		self.SetInfoText("Enable Vitae bar")
 	elseIf akOp == BloodMeter_DisplayTime
 		self.SetInfoText("How much seconds before blood bar fades after displaying last change. Setting to 0 disables fading. May not be exact amount of seconds due to bar update rate")
+	elseIf akOp == BloodMeter_OpacityAtRest
+		self.SetInfoText("How opaque is Vitae bar when faded")
+	elseIf akOp == BloodMeter_HideWhenFull
+		self.SetInfoText("Hide Vitae bar completely (0 opacity) when faded while full")
 		
 	; ------------------------------------------------------------
 	; Hotkeys

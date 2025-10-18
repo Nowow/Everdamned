@@ -11,6 +11,9 @@ GlobalVariable property ED_Mechanics_BloodMeter_X_Global auto
 GlobalVariable property ED_Mechanics_BloodMeter_Y_Global auto
 GlobalVariable Property ED_Mechanics_BloodMeter_Scale_Global Auto
 GlobalVariable property ED_Mechanics_BloodMeter_Opacity_Global auto
+GlobalVariable property ED_Mechanics_BloodMeter_Opacity_Global_AtRest auto
+GlobalVariable property ED_Mechanics_BloodMeter_HideWhenAtRestFull_Global auto
+
 GlobalVariable property ED_Mechanics_BloodMeter_FillDirection_Global auto
 
 GlobalVariable property ED_Mechanics_BloodMeter_DisplayContextual_Global auto
@@ -32,8 +35,11 @@ float fLastMeterPercent
 string WidgetRoot
 
 bool bShouldFadeWhenIdle
+bool bShouldHideWhenIdleFull
 int iDisplayIterationsNeededUntilFade = 3
 int iDisplayIterationsRemaining
+float MeterOpacity
+float MeterOpacityAtRest
 
 
 
@@ -96,6 +102,7 @@ function UpdateMeter()
 	; for display effect
 	ED_Mechanics_BloodPool_Current.SetValue(fThisBloodPoolValue)
 	
+	
 	;fMaxBloodPoolValue = ED_Mechanics_BloodPool_Total.GetValue()
 	;fMeterPercent = ((fThisBloodPoolValue)/(fMaxBloodPoolValue))
 	
@@ -106,14 +113,18 @@ function UpdateMeter()
 	;Int _primaryColor = 11141120
 	;ExposureMeter.SetColors(_primaryColor, 3276800)
 
-	float fNewOpacity = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
+	float fNewOpacity = MeterOpacity
 	if bShouldFadeWhenIdle
 		if fLastMeterPercent == fMeterPercent
 		
 			if iDisplayIterationsRemaining > 0
 				iDisplayIterationsRemaining -= 1
 			else
-				fNewOpacity = fNewOpacity/2.0 ; 2 times less opaque
+				if bShouldHideWhenIdleFull && PlayerRef.GetActorValuePercentage("ED_BloodPool") >= 0.99
+					fNewOpacity = 0.0
+				else
+					fNewOpacity = MeterOpacityAtRest
+				endif
 			endif
 			
 		else
@@ -157,6 +168,7 @@ function UpdateMeterBasicSettings()
 	endif
 	
 	float DisplayTimeSeconds = ED_Mechanics_BloodMeter_DisplayTime_Global.GetValue()
+	bShouldHideWhenIdleFull = ED_Mechanics_BloodMeter_HideWhenAtRestFull_Global.GetValue() as bool
 	
 	if DisplayTimeSeconds > 0
 		bShouldFadeWhenIdle = true
@@ -164,7 +176,11 @@ function UpdateMeterBasicSettings()
 		iDisplayIterationsRemaining = iDisplayIterationsNeededUntilFade
 	else
 		bShouldFadeWhenIdle = false
-	endif
+		bShouldHideWhenIdleFull = false
+	endif	
+
+	MeterOpacity = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
+	MeterOpacityAtRest = ED_Mechanics_BloodMeter_Opacity_Global_AtRest.GetValue()
 	
 	fThisBloodPoolValue = PlayerRef.GetActorValue("ED_BloodPool")
 	fMaxBloodPoolValue = ED_Mechanics_BloodPool_Total.GetValue()
