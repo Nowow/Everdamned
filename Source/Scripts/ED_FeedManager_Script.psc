@@ -156,8 +156,6 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		; .Kill() works through ghost
 		aFeedTarget.Kill(playerRef)
 		
-		Game.SetCameraTarget(playerRef)
-		
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimKillVictim event!")
 	
 	elseif asEventName == FeedAnimFinished
@@ -1167,9 +1165,6 @@ state CombatDrain
 		
 		if __playerIsSynced && __victimIsSynced
 			; first try success
-			;if aFeedTarget.IsEnabled()
-			;	Game.SetCameraTarget(aFeedTarget)
-			;endif
 			ApplyCombatFeedEffects()
 			return
 		endif
@@ -1245,7 +1240,6 @@ state CombatDrain
 			LeftWeaponIfAny = none
 			ShieldIfAny = none
 		endif
-		Game.SetCameraTarget(playerRef)
 		Game.SetPlayerAIDriven(false)
 		EstablishNextStaggerDrainType()
 		

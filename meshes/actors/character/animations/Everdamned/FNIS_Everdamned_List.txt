@@ -224,6 +224,10 @@ b -a,AVbIdlePlaying ed_feedkms_victim_solo_ground ed_feedkms_victim_solo_ground.
 'Feed killmove with jump
 km -ac,D8.000000,Ted_seduction_speakerBitten/2.0,TNPCSoundPlay.npcvampirelordfeed/2.555 ed_km_vampirefeed_jump ed_km_vampirefeed_jump.HKX
 
+km -ac,D4.100000,Ted_playsound_feeddoubletap/0.0,Ted_sheatheweapons/0.01,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.4,TNPCKillShove/3.567000,Ted_feedkm_killvictim/3.6,Ted_feedkm_finished/4.1 ed_feedkm_jumpfeed ed_feedkm_jumpfeed.hkx
+
+km -D4.100000,Ted_playsound_feeddoubletap/0.0,Ted_sheatheweapons/0.01,Ted_impact_bloodgush/0.8,Ted_impact_bloodgush/2.4,TNPCKillShove/3.567000,Ted_feedkm_killvictim/3.6,Ted_feedkm_finished/4.1 ed_feedkm_jumpfeed_noac ed_feedkm_jumpfeed.hkx
+
 
 'km -ac,D4.065000,TNPCHumanVampireFeed/0.0,TNPCSoundPlay.npcvampirelordfeed/1.155,T2_KillActor/3.8 ed_groundfeedkm ed_groundfeedkm.HKX
 ' not used, here to provide custom animevents
