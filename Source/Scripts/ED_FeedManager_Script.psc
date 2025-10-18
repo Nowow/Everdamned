@@ -12,6 +12,7 @@ string property SocialFeedFinished = "ed_socialfeedfinished" auto
 string property FeedAnimKillVictim = "ed_feedkm_killvictim" auto
 string property FeedAnimFinished = "ed_feedkm_finished" auto
 String property SheatheWepons = "ed_sheatheweapons" auto
+String property ResetCam = "ed_feedkm_resetcam" auto
 
 ;float property CombatFeedFallbackUpdateDelay = 10.0 auto
 
@@ -104,6 +105,8 @@ Function RegisterFeedEvents()
 			RegisterForAnimationEvent(playerRef, FeedAnimKillVictim)
 			RegisterForAnimationEvent(playerRef, FeedAnimFinished)
 			RegisterForAnimationEvent(playerRef, SheatheWepons)
+			RegisterForAnimationEvent(playerRef, ResetCam)
+			
 			
 		endif
 
@@ -136,6 +139,7 @@ function UnRegisterFeedEvents()
 		UnRegisterForAnimationEvent(playerRef, FeedAnimKillVictim)
 		UnRegisterForAnimationEvent(playerRef, FeedAnimFinished)
 		UnRegisterForAnimationEvent(playerRef, SheatheWepons)
+		UnRegisterForAnimationEvent(playerRef, ResetCam)
 	
 		debug.Trace("Everdamned DEBUG: Feed Manager UnRegistred feed event for mortal race")
 	endif
@@ -155,8 +159,6 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		; ED_BeingVampire_VampireFeed_VictimMark_Spell
 		; .Kill() works through ghost
 		aFeedTarget.Kill(playerRef)
-		utility.wait(0.2)
-		Game.SetCameraTarget(playerRef)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimKillVictim event!")
 	
 	elseif asEventName == FeedAnimFinished
@@ -190,6 +192,11 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		playerRef.UnequipItemEx(RightWeaponIfAny, 2)
 		
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SheatheWepons event")
+		
+	elseif asEventName == ResetCam
+	
+		Game.SetCameraTarget(playerRef)
+		debug.Trace("Everdamned DEBUG: Feed Manager caught ResetCam event")
 		
 	elseif asEventName == BreathSounds
 	
@@ -1042,6 +1049,7 @@ float property backupAnimationVictimOffset = 52.0 auto
 float property havokForcetoApply = 52.0 auto
 idle property backupPlayerSoloIdleToPlay auto
 idle property backupVictimSoloIdleToPlay auto
+idle property pairedIdleToPlay auto
 
 function EstablishNextStaggerDrainType()
 	__animSetting = ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue() as int
@@ -1067,17 +1075,20 @@ function EstablishNextStaggerDrainType()
 			debug.Trace("Everdamned DEBUG: Setting !2, type now: " + __whichAnim)
 		endif
 	endif
+	
 
 	if __whichAnim == 0
-		backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Ground
-		backupVictimSoloIdleToPlay = ED_Idle_FeedKM_Solo_Victim_Ground
+		pairedIdleToPlay = ED_Idle_FeedKM_Paired_GroundFeed
+		;backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Ground
+		;backupVictimSoloIdleToPlay = ED_Idle_FeedKM_Solo_Victim_Ground
 		backupAnimationVictimOffset = 52.0
 		ED_Mechanics_Global_CombatFeedType.SetValue(0.0)
 		;ED_Mechanics_Global_FeedType.SetValue(2.0)
 		debug.Trace("Everdamned DEBUG: Ground feed!")
 	else
-		backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Jumpfeed
-		backupVictimSoloIdleToPlay = ED_Idle_FeedKM_Solo_Victim_Jumpfeed
+		pairedIdleToPlay = ED_Idle_FeedKM_Paired_JumpFeed
+		;backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Jumpfeed
+		;backupVictimSoloIdleToPlay = ED_Idle_FeedKM_Solo_Victim_Jumpfeed
 		backupAnimationVictimOffset = 65.0
 		ED_Mechanics_Global_CombatFeedType.SetValue(1.0)
 		;ED_Mechanics_Global_FeedType.SetValue(4.0)
@@ -1127,8 +1138,9 @@ state CombatDrain
 			; bleedout km
 			debug.Trace("Everdamned DEBUG: Feed Manager determined target IS bleeding out")
 			ED_Mechanics_Global_FeedType.SetValue(1.0)
-			backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Bleedout
-			backupVictimSoloIdleToPlay = ED_Idle_FeedKM_Solo_Victim_Bleedout
+			pairedIdleToPlay = ED_Idle_FeedKM_Paired_BleedoutFeed
+			;backupPlayerSoloIdleToPlay = ED_Idle_FeedKM_Solo_Player_Bleedout
+			;backupVictimSoloIdleToPlay = ED_Idle_FeedKM_Solo_Victim_Bleedout
 			backupAnimationVictimOffset = 60.0
 		else ;stagger 
 			;jump feed / ground feed
@@ -1152,6 +1164,8 @@ state CombatDrain
 		; to let slow
 		;utility.wait(0.1)
 		
+		ED_Art_Imod_FeedBlur.Apply()
+		
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
 		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
 		
@@ -1159,7 +1173,9 @@ state CombatDrain
 			Game.SetCameraTarget(aFeedTarget)
 		endif
 		
-		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		;bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		bool __animPlayed = playerRef.PlayIdleWithTarget(pairedIdleToPlay, aFeedTarget)
+		
 		
 		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 		bool __victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
@@ -1186,7 +1202,8 @@ state CombatDrain
 			playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), aFeedTarget.GetPositionZ())
 		endif
 				
-		__animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		;__animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		__animPlayed = playerRef.PlayIdleWithTarget(pairedIdleToPlay, aFeedTarget)
 		
 		__playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 		__victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
@@ -1266,6 +1283,10 @@ idle property ED_Idle_FeedKM_Solo_Victim_Social auto
 idle property ED_Idle_FeedKM_Solo_Victim_Bleedout auto
 idle property ED_Idle_FeedKM_Solo_Victim_Ground auto
 idle property ED_Idle_FeedKM_Solo_Victim_Jumpfeed auto
+idle property ED_Idle_FeedKM_Paired_BleedoutFeed auto
+idle property ED_Idle_FeedKM_Paired_GroundFeed auto
+idle property ED_Idle_FeedKM_Paired_JumpFeed auto
+imagespacemodifier property ED_Art_Imod_FeedBlur auto
 
 idle property ResetRoot auto
 spell property ED_BeingVampire_VampireFeed_VictimMark_Spell auto

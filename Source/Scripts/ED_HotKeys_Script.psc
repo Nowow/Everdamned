@@ -143,7 +143,7 @@ imagespacemodifier property ED_Art_Imod_NightVision_Transition_5to1 auto
 
 visualeffect property ED_Art_VFX_Halo_InwardToScreen auto
 
-spell property ED_Misc_DisarmFF_Spell auto
+;idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
 
 int counter
 bool __switch
@@ -166,7 +166,13 @@ Event OnKeyDown(int keyCode)
 		;ED_Misc_DisarmFF_Spell.cast(pl, __targetThing)
 		
 		
-		Game.SetCameraTarget(__targetThing)
+		;__animPlayed = pl.PlayIdleWithTarget(ED_Idle_FeedKM_Solo_Player_Jumpfeed, __targetThing)
+		;bool __playerIsSynced = pl.GetAnimationVariableBool("bIsSynced")
+		;bool __victimIsSynced = __targetThing.GetAnimationVariableBool("bIsSynced")
+		
+		;debug.Trace("Everdamned DEBUG: player bIsSynced: " + __playerIsSynced)
+		;debug.Trace("Everdamned DEBUG: victim bIsSynced: " + __victimIsSynced)
+		
 		
 		
 		;bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "Calm")
