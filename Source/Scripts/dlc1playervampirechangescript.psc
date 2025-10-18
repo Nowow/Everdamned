@@ -125,7 +125,7 @@ location property DLC1VampireCastleGuildhallLocation auto
 
 message property PlayerVampireExpirationWarning auto
 message property PlayerVampireFeedMessage auto
-message property ED_Mechanics_Message_LifebloodDrained auto
+message property DLC1BloodPointsMsg auto
 message property DLC1VampirePerkEarned auto
 
 formlist property DLC1VampireHateFactions auto
@@ -706,7 +706,7 @@ function OnAnimationEvent(objectreference akActor, String akEventName)
 		if akEventName == BiteStart
 			DLC1VampireBloodPoints.Mod(3.0)
 			if DLC1VampireTotalPerksEarned.value < DLC1VampireMaxPerks.value
-				ED_Mechanics_Message_LifebloodDrained.Show()
+				DLC1BloodPointsMsg.Show()
 				if DLC1VampireBloodPoints.value >= DLC1VampireNextPerk.value
 					
 					DLC1VampireBloodPoints.Mod(-DLC1VampireNextPerk.value)

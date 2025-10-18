@@ -131,6 +131,11 @@ function LvlUpAge()
 	ED_Mechanics_VampireAgeCurrentExp.value = 0.0
 	ED_Mechanics_VampireAgeCurrentLvlUpThreshold.value = CalculateNextLvlThreshold((ED_Mechanics_VampireAge.value) as int)
 	
+	ED_Mechanics_SkillTree_PerkPoints_Global.Mod(2.0)
+	ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.Mod(2.0)
+	DLC1VampirePerkPoints.Mod(2.0)
+	DLC1VampireTotalPerksEarned.Mod(2.0)
+	
 	SetUpAgeAppropriateRewards()
 	
 endfunction 
@@ -361,7 +366,6 @@ globalvariable property ED_Mechanics_SkillTree_DenominatorXP_Global auto
 message property ED_Mechanics_SkillTree_Message_MortalPerkPointGained auto
 message property ED_Mechanics_Message_Alchemy50RecipeUnlock auto
 
-globalvariable property DLC1VampirePerkPoints auto
 sound property ED_Art_SoundM_VampAgeAdvance auto
 
 perk property ED_Mechanics_Ab_ChainedBeast_Perk auto
@@ -382,6 +386,8 @@ globalvariable property ED_Mechanics_VampireAgeCurrentExp auto
 globalvariable property ED_Mechanics_VampireAgeCurrentLvlUpThreshold auto
 globalvariable property ED_Mechanics_VampireAgeLvlUpExpIncrement auto
 globalvariable property ED_Mechanics_Global_ChainedBeastAllowed auto
+globalvariable property DLC1VampirePerkPoints auto
+globalvariable property DLC1VampireTotalPerksEarned auto
 
 ED_HotKeys_Script property ED_Mechanics_HotKeys_Quest auto
 ED_BloodPoolManager_Script property ED_BloodPoolManager_Quest auto

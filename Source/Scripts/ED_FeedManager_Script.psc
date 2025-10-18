@@ -24,19 +24,21 @@ function SharedDrainEffects()
 	CustomSkills.AdvanceSkill("EverdamnedMain", math.pow(ED_Mechanics_SkillTree_Level_Global.GetValue(), 2.0) + 200.0 )
 	
 	; VL perks
-	DLC1VampireBloodPoints.Mod(3.0)
-	if DLC1VampireTotalPerksEarned.value < DLC1VampireMaxPerks.value
-		ED_Mechanics_Message_LifebloodDrained.Show()
-		if DLC1VampireBloodPoints.value >= DLC1VampireNextPerk.value
-			
-			DLC1VampireBloodPoints.Mod(-DLC1VampireNextPerk.value)
-			DLC1VampirePerkPoints.Mod(1.0)
-			DLC1VampireTotalPerksEarned.Mod(1.0)
-			DLC1VampireNextPerk.Mod(1.0)
-			DLC1VampirePerkEarned.Show()
-			
+	if playerRef.HasPerk(ED_PerkTreeVL_FountainOfLife_Perk)
+		DLC1VampireBloodPoints.Mod(3.0)
+		if DLC1VampireTotalPerksEarned.value < DLC1VampireMaxPerks.value
+			DLC1BloodPointsMsg.Show()
+			if DLC1VampireBloodPoints.value >= DLC1VampireNextPerk.value
+				
+				DLC1VampireBloodPoints.Mod(-DLC1VampireNextPerk.value)
+				DLC1VampirePerkPoints.Mod(1.0)
+				DLC1VampireTotalPerksEarned.Mod(1.0)
+				DLC1VampireNextPerk.Mod(1.0)
+				DLC1VampirePerkEarned.Show()
+				
+			endIf
 		endIf
-	endIf
+	endif
 
 	playerRef.SetActorValue("VampirePerks", DLC1VampireBloodPoints.value / DLC1VampireNextPerk.value * 100 as Float)
 			
@@ -1308,7 +1310,7 @@ effectshader property ED_Art_Shader_DreamVisitor auto
 
 message property ED_Mechanics_Message_DreamVisitor_RelationshipIncreased auto
 message property DLC1VampirePerkEarned auto
-message property ED_Mechanics_Message_LifebloodDrained auto
+message property DLC1BloodPointsMsg auto
 message property ED_Mechanics_Message_CombatFeedFailed auto
 message property ED_Mechanics_Message_Diablerie auto
 
@@ -1325,6 +1327,7 @@ globalvariable property DLC1VampireMaxPerks auto
 
 perk property ED_PerkTreeVL_Amaranth_Perk auto
 perk property ED_PerkTree_Deception_65_DreamVisitor_Perk auto
+perk property ED_PerkTreeVL_FountainOfLife_Perk auto
 
 spell property ED_VampirePowers_Amaranth_Spell auto
 spell property ED_VampirePowers_Amaranth_Disintegrate_Spell auto
