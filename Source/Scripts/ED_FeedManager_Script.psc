@@ -155,7 +155,8 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		; ED_BeingVampire_VampireFeed_VictimMark_Spell
 		; .Kill() works through ghost
 		aFeedTarget.Kill(playerRef)
-		
+		utility.wait(0.2)
+		Game.SetCameraTarget(playerRef)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimKillVictim event!")
 	
 	elseif asEventName == FeedAnimFinished
@@ -1154,6 +1155,9 @@ state CombatDrain
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
 		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
 		
+		if aFeedTarget.IsEnabled()
+			Game.SetCameraTarget(aFeedTarget)
+		endif
 		
 		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
@@ -1240,6 +1244,7 @@ state CombatDrain
 			LeftWeaponIfAny = none
 			ShieldIfAny = none
 		endif
+		Game.SetCameraTarget(playerRef)
 		Game.SetPlayerAIDriven(false)
 		EstablishNextStaggerDrainType()
 		
