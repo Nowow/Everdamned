@@ -165,7 +165,9 @@ Event OnKeyDown(int keyCode)
 		
 		;ED_Misc_DisarmFF_Spell.cast(pl, __targetThing)
 		
-		ED_Art_VFX_Halo_InwardToScreen.Play(pl)
+		
+		Game.SetCameraTarget(__targetThing)
+		
 		
 		;bool __hasCalm = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "Calm")
 		;bool __hasRally = PO3_SKSEFunctions.HasMagicEffectWithArchetype(__targetThing, "Rally")

@@ -9,7 +9,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	Caster = akCaster
 	Caster.AddSpell(DrainCloakSpell, false)
 	RegisterForSingleUpdate(1)
-	
+	debug.Trace("Everdamned DEBUG: Vamp drain effect started!")
 Endevent
 
 ; when rapidly switching drain targets cloak might get dispelled by old effect
@@ -27,7 +27,7 @@ Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	
 	__finished = true
 	Caster.RemoveSpell(DrainCloakSpell)
-	
+	debug.Trace("Everdamned DEBUG: Vamp drain effect finished!")
 Endevent
 
 SPELL Property DrainCloakSpell Auto

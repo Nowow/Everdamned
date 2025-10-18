@@ -155,6 +155,9 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		; ED_BeingVampire_VampireFeed_VictimMark_Spell
 		; .Kill() works through ghost
 		aFeedTarget.Kill(playerRef)
+		
+		Game.SetCameraTarget(playerRef)
+		
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimKillVictim event!")
 	
 	elseif asEventName == FeedAnimFinished
@@ -1112,6 +1115,7 @@ state CombatDrain
 		
 		; for OAR conditions and controls ghost and unconcious flags
 		; also sets ghost and restrained
+		
 		__needReequip = true
 		ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
 		ED_BeingVampire_VampireFeed_PlayerMark_Spell.Cast(playerRef, playerRef)
@@ -1152,6 +1156,7 @@ state CombatDrain
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
 		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
 		
+		
 		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
 		
 		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
@@ -1162,6 +1167,9 @@ state CombatDrain
 		
 		if __playerIsSynced && __victimIsSynced
 			; first try success
+			;if aFeedTarget.IsEnabled()
+			;	Game.SetCameraTarget(aFeedTarget)
+			;endif
 			ApplyCombatFeedEffects()
 			return
 		endif
@@ -1237,6 +1245,7 @@ state CombatDrain
 			LeftWeaponIfAny = none
 			ShieldIfAny = none
 		endif
+		Game.SetCameraTarget(playerRef)
 		Game.SetPlayerAIDriven(false)
 		EstablishNextStaggerDrainType()
 		
