@@ -89,6 +89,14 @@ Int Setting_NightSightStrengthMult
 float property Default_Setting_NightSightStrengthMult auto
 GlobalVariable Property ED_Mechanics_Global_MCM_NightSightStrengthMult Auto
 
+Int Setting_VampireSkillExpMult
+float property Default_Setting_VampireSkillExpMult auto
+GlobalVariable Property ED_Mechanics_SkillTree_XPMult_Global Auto
+
+Int Setting_VampireAgeMult
+float property Default_Setting_VampireAgeMult auto
+GlobalVariable Property ED_Mechanics_VampireAgeExpMult Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -144,6 +152,8 @@ function OnPageReset(String akPage)
 	Setting_LevelXPDenominator = self.AddSliderOption("Level XP gain lower", ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue(), "{0} times")
 	Setting_DisableBloodstarvedTint = self.AddToggleOption("No red tint when Blood Starved ", ED_Mechanics_Global_MCM_DisableBloodstarvedTint.GetValue() as Bool)
 	Setting_DisableDisintegrate = self.AddToggleOption("No disintegrate on death ", ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue() as Bool)
+	Setting_VampireSkillExpMult = self.AddSliderOption("Vampire skill XP mult", ED_Mechanics_SkillTree_XPMult_Global.GetValue())
+	Setting_VampireAgeMult = self.AddSliderOption("Vampire aging mult", ED_Mechanics_VampireAgeExpMult.GetValue())
 	
 	; ------------------------------------------------------------
 	; Night Sight
@@ -288,6 +298,14 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Setting_NightSightStrengthMult
 		ED_Mechanics_Global_MCM_NightSightStrengthMult.SetValue(Default_Setting_NightSightStrengthMult as Float)
 		self.SetSliderOptionValue(Setting_NightSightStrengthMult, Default_Setting_NightSightStrengthMult * 100.0)
+	
+	elseIf akOp == Setting_VampireSkillExpMult
+		ED_Mechanics_SkillTree_XPMult_Global.SetValue(Default_Setting_VampireSkillExpMult as Float)
+		self.SetSliderOptionValue(Setting_VampireSkillExpMult, Default_Setting_VampireSkillExpMult)
+	
+	elseIf akOp == Setting_VampireAgeMult
+		ED_Mechanics_VampireAgeExpMult.SetValue(Default_Setting_VampireAgeMult as Float)
+		self.SetSliderOptionValue(Setting_VampireAgeMult, Default_Setting_VampireAgeMult)
 
 	; ------------------------------------------------------------
 	; cheats
@@ -413,6 +431,18 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogDefaultValue(Default_Setting_NightSightStrengthMult * 100.0)
 		self.SetSliderDialogRange(50, 200)
 		self.SetSliderDialogInterval(1)
+		
+	elseIf akOp == Setting_VampireSkillExpMult
+		self.SetSliderDialogStartValue(ED_Mechanics_SkillTree_XPMult_Global.GetValue())
+		self.SetSliderDialogDefaultValue(Default_Setting_VampireSkillExpMult)
+		self.SetSliderDialogRange(0.1, 5.0)
+		self.SetSliderDialogInterval(0.1)
+		
+	elseIf akOp == Setting_VampireAgeMult
+		self.SetSliderDialogStartValue(ED_Mechanics_VampireAgeExpMult.GetValue())
+		self.SetSliderDialogDefaultValue(Default_Setting_VampireAgeMult)
+		self.SetSliderDialogRange(0.1, 5.0)
+		self.SetSliderDialogInterval(0.1)
 	
 	; ------------------------------------------------------------
 	
@@ -480,6 +510,14 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 		akValue = akValue / 100.0
 		ED_Mechanics_Global_MCM_NightSightStrengthMult.SetValue(akValue)
 		self.SetSliderOptionValue(Setting_NightSightStrengthMult, akValue)
+	
+	elseIf akOp == Setting_VampireSkillExpMult
+		ED_Mechanics_SkillTree_XPMult_Global.SetValue(akValue)
+		self.SetSliderOptionValue(Setting_VampireSkillExpMult, akValue)
+	
+	elseIf akOp == Setting_VampireAgeMult
+		ED_Mechanics_VampireAgeExpMult.SetValue(akValue)
+		self.SetSliderOptionValue(Setting_VampireAgeMult, akValue)
 	
 	; ------------------------------------------------------------
 	
@@ -624,6 +662,10 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Disable Vampire's Sight night vision adaptive strength. Use if your lightning mods make it behave improperly. If disabled, maximum strength setting will be used at all times. Takes effect on next cast.")
 	elseIf akOp == Setting_NightSightStrengthMult
 		self.SetInfoText("Vampire's Sight night vision overral effectiveness.")
+	elseIf akOp == Setting_VampireSkillExpMult
+		self.SetInfoText("Vampire skill tree experience gain multiplicator. Does not work retroactively.")
+	elseIf akOp == Setting_VampireSkillExpMult
+		self.SetInfoText("Vampire ageing multiplicator. Does not work retroactively.")
 	
 	; ------------------------------------------------------------
 	; cheats

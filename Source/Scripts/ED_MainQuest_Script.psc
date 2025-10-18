@@ -89,7 +89,7 @@ function GainAgeExpirience(float amountToAge = 0.0)
 		RegisterforSingleUpdateGameTime(ED_Mechanics_VampireAgeRate.value)
 	endif
 	if amountToAge > 0.0
-		ED_Mechanics_VampireAgeCurrentExp.Mod(amountToAge)
+		ED_Mechanics_VampireAgeCurrentExp.Mod(amountToAge*ED_Mechanics_VampireAgeExpMult.GetValue())
 		if ED_Mechanics_VampireAgeCurrentExp.value >= ED_Mechanics_VampireAgeCurrentLvlUpThreshold.value
 			if !HasShownAgeMessage
 				debug.Trace("Everdamned INFO: Player vampire just hit aging threshold on current age of " + ED_Mechanics_VampireAge.value + ", waiting for sleep to do lvlup")
@@ -382,6 +382,7 @@ formlist property ED_Mechanics_FormList_SpellCleanup auto
 
 globalvariable property ED_Mechanics_VampireAge auto
 globalvariable property ED_Mechanics_VampireAgeRate auto
+globalvariable property ED_Mechanics_VampireAgeExpMult auto
 globalvariable property ED_Mechanics_VampireAgeCurrentExp auto
 globalvariable property ED_Mechanics_VampireAgeCurrentLvlUpThreshold auto
 globalvariable property ED_Mechanics_VampireAgeLvlUpExpIncrement auto

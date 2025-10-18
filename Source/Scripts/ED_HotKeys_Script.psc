@@ -163,6 +163,8 @@ Event OnKeyDown(int keyCode)
 		
 		actor pl = Game.GetPlayer()
 		
+		CustomSkills.AdvanceSkill("EverdamnedMain", 300.0)
+		
 		;ED_Misc_DisarmFF_Spell.cast(pl, __targetThing)
 		
 		

@@ -1,6 +1,7 @@
 [Properties]
 
 playerVampireSkill = "Object: Everdamned.esp::0x1D7A9E"
+vampireXPMult = "Object: Everdamned.esp::0x137177"
 
 [ED_VampireSkill]
 type = "Functional"
@@ -63,21 +64,10 @@ type = "Functional"
 alias = "OneHandedSkillAdvance"
 get = "GetActorValue('Health', All) / GetActorValue('Health', Max)"
 
-[ED_BloodPoolMax]
+[ED_VampireXPMult]
 type = "Functional"
-get = "GetActorValue('ED_BloodPool', Max)"
-
-[ED_BloodPoolDamage]
-type = "Functional"
-get = "GetActorValue('ED_BloodPool', Damage)"
-
-[ED_BloodPoolTemporary]
-type = "Functional"
-get = "GetActorValue('ED_BloodPool', Temporary)"
-
-[ED_BloodPoolPermanent]
-type = "Functional"
-get = "GetActorValue('ED_BloodPool', Permanent)"
+alias = "PickPocketSkillAdvance"
+get = "(GetKeywordString('PlayerKeyword') != 0) * GetGlobalValueParam(vampireXPMult)"
 
 [Include]
-"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill1p", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_FlamesProc", "ED_PartingGiftBlock", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct", "ED_ActHealthPct"]
+"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill1p", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_FlamesProc", "ED_PartingGiftBlock", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct", "ED_ActHealthPct", "ED_VampireXPMult"]
