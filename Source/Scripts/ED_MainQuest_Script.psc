@@ -93,7 +93,7 @@ function GainAgeExpirience(float amountToAge = 0.0)
 		if ED_Mechanics_VampireAgeCurrentExp.value >= ED_Mechanics_VampireAgeCurrentLvlUpThreshold.value
 			if !HasShownAgeMessage
 				debug.Trace("Everdamned INFO: Player vampire just hit aging threshold on current age of " + ED_Mechanics_VampireAge.value + ", waiting for sleep to do lvlup")
-				ED_Art_SoundM_VampAgeAdvance.Play(playerRef)
+				ED_Art_SoundM_AdvanceAge.Play(playerRef)
 				ED_Mechanics_Message_AgeLvlUpNotification.Show()
 				HasShownAgeMessage = true
 			endif
@@ -317,6 +317,7 @@ Event OnCustomSkillIncrease(string asSkillId)
 	debug.Trace("Everdamned DEBUG: Main Quest __perkPointsToGive: " + __perkPointsToGive)
 	
 	if __perkPointsToGive > 0
+		ED_Art_SoundM_Advance.Play(playerRef)
 		ED_Mechanics_SkillTree_PerkPoints_Global.Mod(__perkPointsToGive)
 		ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.Mod(__perkPointsToGive)
 		ED_Mechanics_SkillTree_Message_MortalPerkPointGained.Show()
@@ -366,7 +367,8 @@ globalvariable property ED_Mechanics_SkillTree_DenominatorXP_Global auto
 message property ED_Mechanics_SkillTree_Message_MortalPerkPointGained auto
 message property ED_Mechanics_Message_Alchemy50RecipeUnlock auto
 
-sound property ED_Art_SoundM_VampAgeAdvance auto
+sound property ED_Art_SoundM_Advance auto
+sound property ED_Art_SoundM_AdvanceAge auto
 
 perk property ED_Mechanics_Ab_ChainedBeast_Perk auto
 perk property ED_Mechanics_Ab_ChainedBeast_EmbraceTheBeast_Perk auto

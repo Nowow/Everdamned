@@ -1219,8 +1219,10 @@ state CombatDrain
 			return
 		endif
 		
-		debug.SendAnimationEvent("staggerStart")
-		debug.Notification("Your grip slipped due to uneven terrain...")
+		utility.wait(0.2)
+		Game.SetCameraTarget(playerRef)
+		debug.SendAnimationEvent(playerRef, "staggerStart")
+		ED_Mechanics_Message_CombatFeedGripSlipped.Show()
 		GoToState("")
 		
 		return ; not trying third time
@@ -1320,6 +1322,7 @@ message property DLC1VampirePerkEarned auto
 message property DLC1BloodPointsMsg auto
 message property ED_Mechanics_Message_CombatFeedFailed auto
 message property ED_Mechanics_Message_Diablerie auto
+message property ED_Mechanics_Message_CombatFeedGripSlipped auto
 
 globalvariable property ED_Mechanics_Global_MCM_CombatDrainAnim auto
 globalvariable property ED_Mechanics_Global_FeedType auto

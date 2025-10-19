@@ -1,9 +1,8 @@
 {
-    "name": "test_paired_feed",
-    "description": "test some paired stuff",
+    "name": "fnis_pairedfeed_replacers",
+    "description": "this is here to make use of track annotations",
     "priority": 4855515,
     "ignoreDontConvertAnnotationsToTriggersFlag": true,
-    "triggersFromAnnotationsOnly": true,
     "conditions": [],
     "pairedConditions": []
 }

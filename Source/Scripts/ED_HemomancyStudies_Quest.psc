@@ -107,6 +107,7 @@ state LearningAdept
 				playerRef.addspell(theSpell)
 				AdeptHemomancyLearned += 1
 				spellGranted = true
+				ED_Mechanics_Message_HemomancySpellAwarded.Show()
 				;return
 			else
 				; moving to try next spell
@@ -218,6 +219,7 @@ state LearningExpert
 				playerRef.addspell(theSpell)
 				ExpertHemomancyLearned += 1
 				spellGranted = true
+				ED_Mechanics_Message_HemomancySpellAwarded.Show()
 			else
 				; moving to try next spell
 				debug.Trace("Everdamned DEBUG: Player DOES know Hemomancy spell " + theSpell + ", skipping")
@@ -335,6 +337,7 @@ state LearningMaster
 				debug.Trace("Everdamned DEBUG: Player does not know Hemomancy spell " + theSpell + ", teaching it")
 				playerRef.addspell(theSpell)
 				MasterHemomancyLearned += 1
+				ED_Mechanics_Message_HemomancySpellAwarded.Show()
 				
 				;special case, concluding all education
 				if MasterHemomancyLearned == spellListSize
@@ -411,6 +414,7 @@ perk property ED_PerkTree_BloodMagic_60_MasterHemomancy_Perk auto
 formlist property ED_Mechanics_FormList_HemomancyRewards auto
 
 message property ED_Mechanics_Message_HemomancyReadyToAdvance auto
+message property ED_Mechanics_Message_HemomancySpellAwarded auto
 effectshader property ED_Art_Shader_NewHemomancyAvailable auto
 
 quest property ED_Mechanics_Hemomancy_Quest auto

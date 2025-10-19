@@ -25,8 +25,7 @@ Event OnEffectFinish(Actor akTarget, Actor akCaster)
 	endif
 	
 	if __target && !(__target.IsDead())
-		debug.Trace("Everdamned DEBUG: Feed Victim Mark detects that target is not dead! WELP, killing")
-		akTarget.Kill(akCaster)
+		debug.Trace("Everdamned DEBUG: Feed Victim Mark detects that target is not dead! WELP")
 	endif
 	
 	debug.Trace("Everdamned DEBUG: Feed Victim Mark effect finished!")
