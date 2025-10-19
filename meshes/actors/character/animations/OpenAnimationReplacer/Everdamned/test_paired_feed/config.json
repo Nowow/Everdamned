@@ -2,7 +2,6 @@
     "name": "test_paired_feed",
     "description": "test some paired stuff",
     "priority": 4855515,
-    "disabled": true,
     "ignoreDontConvertAnnotationsToTriggersFlag": true,
     "triggersFromAnnotationsOnly": true,
     "conditions": [],
