@@ -106,6 +106,8 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 
 	int __playerSeductionScore =  akSeducer.GetAV("Speechcraft") as int
 	
+	Debug.Trace("Everdamned INFO: Feed Score: Speechcraft:  " + __playerSeductionScore)
+	
 	; -110 if aquaintance, 0 if lover
 	int __relationshipRank = akSeducer.GetRelationshipRank(akSeduced)
 	

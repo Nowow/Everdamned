@@ -2,6 +2,7 @@
 
 playerVampireSkill = "Object: Everdamned.esp::0x1D7A9E"
 vampireXPMult = "Object: Everdamned.esp::0x137177"
+playerVampireAge = "Object: Everdamned.esp::0x039702"
 
 [ED_VampireSkill]
 type = "Functional"
@@ -69,5 +70,10 @@ type = "Functional"
 alias = "PickPocketSkillAdvance"
 get = "GetGlobalValueParam(vampireXPMult)"
 
+[ED_VigorMortisMagnitude]
+type = "Functional"
+alias = "DestructionSkillAdvance"
+get = "(GetActorValue('Health', Base) * 0.01) * (1.5 + (GetGlobalValueParam(playerVampireAge) * 0.15))"
+
 [Include]
-"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill1p", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_FlamesProc", "ED_PartingGiftBlock", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct", "ED_ActHealthPct", "ED_VampireXPMult"]
+"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill1p", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_FlamesProc", "ED_PartingGiftBlock", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct", "ED_ActHealthPct", "ED_VampireXPMult", "ED_VigorMortisMagnitude"]

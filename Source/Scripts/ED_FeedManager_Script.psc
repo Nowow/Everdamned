@@ -661,7 +661,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	
 	
 	bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
-
+	utility.wait(0.1)
 	bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 	bool __victimIsSynced = FeedTarget.GetAnimationVariableBool("bIsSynced")
 	
