@@ -49,7 +49,7 @@ float MeterOpacityAtRest
 
 Event OnInit()
 	utility.wait(1.0)
-	ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
+	ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot)
 	StartUpdating()
 endEvent
 
@@ -58,7 +58,7 @@ Event OnGameReload()
 	utility.wait(1.0)
 	widgetRoot = ExposureMeter.WidgetRoot
 	debug.Trace("Everdamned DEBUG: " + widgetRoot)
-	ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(widgetRoot + ".setPercent")
+	ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(widgetRoot)
 	StartUpdating()
 endEvent
 
@@ -93,7 +93,7 @@ function UpdateMeter()
 	
 	string currentWidgetRoot = ExposureMeter.WidgetRoot
 	if currentWidgetRoot != WidgetRoot
-		ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
+		ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(currentWidgetRoot)
 		debug.Trace("Everdamned DEBUG: Widget root changed from: " + WidgetRoot + " to " + currentWidgetRoot)
 		WidgetRoot = currentWidgetRoot
 	endif
@@ -112,15 +112,20 @@ function UpdateMeter()
 	
 	;Int _primaryColor = 11141120
 	;ExposureMeter.SetColors(_primaryColor, 3276800)
+	
+	
 
 	float fNewOpacity = MeterOpacity
+	fMeterPercent = PlayerRef.GetActorValuePercentage("ED_BloodPool")
+	
 	if bShouldFadeWhenIdle
+		
 		if fLastMeterPercent == fMeterPercent
 		
 			if iDisplayIterationsRemaining > 0
 				iDisplayIterationsRemaining -= 1
 			else
-				if bShouldHideWhenIdleFull && PlayerRef.GetActorValuePercentage("ED_BloodPool") >= 0.99
+				if bShouldHideWhenIdleFull && fMeterPercent >= 0.99
 					fNewOpacity = 0.0
 				else
 					fNewOpacity = MeterOpacityAtRest
@@ -132,7 +137,7 @@ function UpdateMeter()
 		endif
 	endif
 	
-	ExposureMeter.FadeTo(fNewOpacity, 1.0)
+	ExposureMeter.FadeTo(fNewOpacity, 0.5)
 	
 	fLastMeterPercent = fMeterPercent
 	
@@ -197,7 +202,7 @@ function UpdateMeterBasicSettings()
 		UnregisterForUpdate()
 	else
 		ExposureMeter.Alpha = ED_Mechanics_BloodMeter_Opacity_Global.GetValue()
-		ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot + ".setPercent")
+		ED_SKSEnativebindings.CommunicateCurrentWidgetRoot(ExposureMeter.WidgetRoot)
 		ED_SKSEnativebindings.ToggleBloodPoolUpdateLoop(true)
 		RegisterForSingleUpdate(BloodMeter_UpdateRate)
 	endif

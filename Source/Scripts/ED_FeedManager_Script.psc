@@ -1166,7 +1166,7 @@ state CombatDrain
 		; to let slow
 		;utility.wait(0.1)
 		
-		ED_Art_Imod_FeedBlur.Apply()
+		;ED_Art_Imod_FeedBlur.Apply()
 		
 		float zOffset = aFeedTarget.GetHeadingAngle(playerRef)
 		aFeedTarget.SetAngle(aFeedTarget.GetAngleX(), aFeedTarget.GetAngleY(), aFeedTarget.GetAngleZ() + zOffset)
@@ -1218,6 +1218,13 @@ state CombatDrain
 			ApplyCombatFeedEffects()
 			return
 		endif
+		
+		debug.SendAnimationEvent("staggerStart")
+		debug.Notification("Your grip slipped due to uneven terrain...")
+		GoToState("")
+		
+		return ; not trying third time
+		
 		
 		; third attempt, solo anims
 		debug.Trace("Everdamned WARNING: Feed Manager does not detect paired feed km playing, using backup solo anims")
