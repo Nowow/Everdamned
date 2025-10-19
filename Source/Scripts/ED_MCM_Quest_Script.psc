@@ -105,6 +105,10 @@ Int Setting_VampireAgeMult
 float property Default_Setting_VampireAgeMult auto
 GlobalVariable Property ED_Mechanics_VampireAgeExpMult Auto
 
+Int Setting_EnableShadowRegen
+float property Default_Setting_EnableShadowRegen auto
+GlobalVariable Property ED_Mechanics_Global_EnableShadowRegen Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -162,6 +166,7 @@ function OnPageReset(String akPage)
 	Setting_DisableDisintegrate = self.AddToggleOption("No disintegrate on death ", ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue() as Bool)
 	Setting_VampireSkillExpMult = self.AddSliderOption("Vampire skill XP mult", ED_Mechanics_SkillTree_XPMult_Global.GetValue())
 	Setting_VampireAgeMult = self.AddSliderOption("Vampire aging mult", ED_Mechanics_VampireAgeExpMult.GetValue())
+	Setting_EnableShadowRegen = self.AddToggleOption("Light level based Sun Weakness", ED_Mechanics_Global_EnableShadowRegen.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	; Night Sight
@@ -324,6 +329,10 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Setting_VampireAgeMult
 		ED_Mechanics_VampireAgeExpMult.SetValue(Default_Setting_VampireAgeMult as Float)
 		self.SetSliderOptionValue(Setting_VampireAgeMult, Default_Setting_VampireAgeMult)
+	
+	elseIf akOp == Setting_EnableShadowRegen
+		ED_Mechanics_Global_EnableShadowRegen.SetValue(Default_Setting_EnableShadowRegen as Float)
+		self.SetSliderOptionValue(Setting_EnableShadowRegen, Default_Setting_EnableShadowRegen)
 
 	; ------------------------------------------------------------
 	; cheats
@@ -584,6 +593,10 @@ function OnOptionSelect(Int akOp)
 	elseif akOp == Setting_NightSightDisableAdaptive
 		ED_Mechanics_Global_MCM_NightSightDisableAdaptive.SetValue(1 as Float - ED_Mechanics_Global_MCM_NightSightDisableAdaptive.GetValue())
 		SetToggleOptionValue(Setting_NightSightDisableAdaptive, ED_Mechanics_Global_MCM_NightSightDisableAdaptive.GetValue() as bool)
+		
+	elseif akOp == Setting_EnableShadowRegen
+		ED_Mechanics_Global_EnableShadowRegen.SetValue(1 as Float - ED_Mechanics_Global_EnableShadowRegen.GetValue())
+		SetToggleOptionValue(Setting_EnableShadowRegen, ED_Mechanics_Global_EnableShadowRegen.GetValue() as bool)
 	
 	; ------------------------------------------------------------
 	; cheats
@@ -704,6 +717,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Vampire skill tree experience gain multiplicator. Does not work retroactively.")
 	elseIf akOp == Setting_VampireSkillExpMult
 		self.SetInfoText("Vampire ageing multiplicator. Does not work retroactively.")
+	elseIf akOp == Setting_VampireSkillExpMult
+		self.SetInfoText("When this is ON, stainding in a shadow (light level < 50) disables Sun Weakness effects other than attribute loss. Actual behavior depends on your lightning mods, so disable if ruins immersion")
 	
 	; ------------------------------------------------------------
 	; cheats
