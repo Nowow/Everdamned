@@ -20,6 +20,10 @@ int function BlendSecondaryColors(float highShare)
 	;int startARBG = 8726115
 	int startARBG = 4391001
 	int endARGB = 16752947
+	
+	if highShare > 1.0
+		highShare = 1.0
+	endif
 
 	endARGB = ColorComponent.SetRed(endARGB, (ColorComponent.GetRed(endARGB)*highShare + ColorComponent.GetRed(startARBG)*(1.0-highShare)) as int)
 	endARGB = ColorComponent.SetGreen(endARGB, (ColorComponent.GetGreen(endARGB)*highShare + ColorComponent.GetGreen(startARBG)*(1.0-highShare)) as int)
@@ -232,10 +236,19 @@ state ProcessBonuses
 			threshold_baseline = 0
 		endif
 		
-		threshold_minimal = threshold_baseline / 0.5
+		ED_Mechanics_BloodPool_MaxBonus
+		
+		float threshold_baseline_bonus = ED_Mechanics_BloodPool_MaxBonus.GetValue()
+		
+		threshold_minimal = threshold_baseline_bonus / 0.5
 		threshold_okay = threshold_baseline / 0.35
 		threshold_juicy = threshold_baseline / 0.2
 		threshold_beefy = threshold_juicy * 2
+		
+		;threshold_minimal = threshold_baseline / 0.5
+		;threshold_okay = threshold_baseline / 0.35
+		;threshold_juicy = threshold_baseline / 0.2
+		;threshold_beefy = threshold_juicy * 2
 		
 		ED_Mechanics_BloodPool_BloodSenseThreshold_Minimal.SetValue(threshold_minimal)
 		ED_Mechanics_BloodPool_BloodSenseThreshold_Okay.SetValue(threshold_okay)
@@ -316,7 +329,7 @@ state PostPostprocess
 			float __basePool = ED_Mechanics_BloodPool_Base.GetValue()
 			float __bonusPool = ED_Mechanics_BloodPool_MaxBonus.GetValue()
 			float __permaBonusPool = ED_Mechanics_BloodPool_MaxPermaBonus.GetValue()
-			float highShare = __bonusPool*2.0 / (__basePool + __permaBonusPool)
+			float highShare = __bonusPool*4.0 / (__basePool + __permaBonusPool)
 			VitaeMeter.SetColors(11141120, BlendSecondaryColors(highShare))
 			GoToState("")
 			return
