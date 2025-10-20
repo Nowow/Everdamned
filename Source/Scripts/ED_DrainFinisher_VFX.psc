@@ -79,6 +79,7 @@ Event OnUpdate()
 			
 			utility.wait(0.3)
 			ED_Art_VFX_AbsorbBloodExsanguinate.Play(_player, 5.0, _target)
+			ED_VampirePowers_ExsanguinateAbsorb.Play(_player, 10.0)
 		
 			DLC1VampireBatsVFX.Play(_target,1.0,_player)
 			DLC1VampBatsEatenByBatsSkinFXS.Play(_target,5.0)
@@ -156,36 +157,21 @@ function DecalSpray(Actor BleedingActor, int xTimes)
 endfunction
 
 
-referencealias property ED_ExsanguinateTarget auto
-
-activator property ED_Art_Ashpile_RedGoo auto
-
-VisualEffect Property DLC1BatsAbsorbTargetVFX01 auto
 VisualEffect Property ED_Art_VFX_AbsorbBloodExsanguinate auto
 visualeffect property DLC1VampireBatsVFX auto
-visualeffect property ED_Art_VFX_Flaywind auto
 visualeffect property ED_Art_VFX_Halo_Outward auto
-
-spell property ED_Mechanics_Spell_GetUpWatcher auto
 
 EffectShader Property DLC1BatsEatenBloodSplats Auto
 EffectShader Property DLC1VampBatsEatenByBatsSkinFXS Auto
-EffectShader Property DLC1VampireChangeFXS Auto
-
+effectshader property ED_VampirePowers_ExsanguinateAbsorb auto
 
 sound property ED_Art_SoundM_Exsanguinate_Intro auto
-sound property QSTAlduinDeathExplosionA auto
-sound property ED_Art_SoundM_HellsBells auto
-sound property ED_Art_SoundM_SuperFleshyBurst auto
-sound property ED_Art_SoundM_ExsanguinateBuildup auto
 sound property ED_Art_SoundM_ExsanguinatePulse_Trail auto
 sound[] property PulseSound_Array auto
 
-explosion property ED_Art_Explosion_BloodStorm auto
 Explosion property ED_Art_Explosion_Exsanguinate Auto
-
 impactdataset property BloodSprayBleedImpactSetRed auto
-
 imagespacemodifier property ED_Mechanics_FeedDialogue_HeartbeatSFX_IMAD auto
+spell property ED_Mechanics_Spell_GetUpWatcher auto
 
 PlayerVampireQuestScript property PlayerVampireQuest auto
