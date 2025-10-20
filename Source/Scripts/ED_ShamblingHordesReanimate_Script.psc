@@ -32,7 +32,7 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	endif
 	
 	CustomSkills.AdvanceSkill("EverdamnedMain", 300.0)
-	Game.AdvanceSkill("Conjuration", 200.0)
+	Game.AdvanceSkill("Conjuration", 100.0)
 	
 endFunction
 

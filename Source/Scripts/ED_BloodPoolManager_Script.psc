@@ -329,7 +329,7 @@ state PostPostprocess
 			float __basePool = ED_Mechanics_BloodPool_Base.GetValue()
 			float __bonusPool = ED_Mechanics_BloodPool_MaxBonus.GetValue()
 			float __permaBonusPool = ED_Mechanics_BloodPool_MaxPermaBonus.GetValue()
-			float highShare = __bonusPool*4.0 / (__basePool + __permaBonusPool)
+			float highShare = __bonusPool*3.0 / (__basePool + __permaBonusPool)
 			VitaeMeter.SetColors(11141120, BlendSecondaryColors(highShare))
 			GoToState("")
 			return
