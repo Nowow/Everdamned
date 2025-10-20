@@ -120,18 +120,19 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		Debug.Trace("Everdamned INFO: Feed Score: Bonus for INN; " + __playerSeductionScore)
 	endif
 	
+	
 	if __relationshipRank > 0 || __isInn
 		__playerSeductionScore += (__relationshipRank * 20) - 80
 		if __relationshipRank > 3
 			ConditionalsScript.Bonus_HighRelationship = true
 		endif
-		
+		Debug.Trace("Everdamned INFO: Feed Score: friendly+ or in INN")
 	;becomes -110
 	else
 		; you are unaquainted, really hard to seduce. separate fail responses
-		Debug.Trace("Everdamned INFO: Feed Score: unaquainted, not INN")
 		__playerSeductionScore += -30
 		ConditionalsScript.Penalty_LowRelationship = true
+		Debug.Trace("Everdamned INFO: Feed Score: unaquainted, not INN")
 	endif
 	
 	Debug.Trace("Everdamned INFO: Feed Score: Relationship factored in; " + __playerSeductionScore)
@@ -187,6 +188,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	int __AIscore
 	
 	if __hasCalm
+		ConditionalsScript.Bonus_IllusionCalm = true
 		ConditionalsScript.Bonus_IllusionMood = true
 		__AIscore += -2  * __morality
 		Debug.Trace("Everdamned INFO: Feed Score: Target under calm; ")
@@ -198,11 +200,13 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	
 	if __hasRally
 		__AIscore += 20
+		ConditionalsScript.Bonus_IllusionRally = true
 		ConditionalsScript.Bonus_IllusionMood = true
 		Debug.Trace("Everdamned INFO: Feed Score: target under Rally; ")
 	elseif __confidence == 0
 		; cowardly
 		__AIscore += -20
+		ConditionalsScript.Penalty_Cowardly = true
 		Debug.Trace("Everdamned INFO: Feed Score: Target is cowardly; ")
 	endif
 	
@@ -242,6 +246,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		Debug.Trace("Everdamned INFO: Feed Score: Player got RICH clothes; " + __playerSeductionScore)
 	elseif akSeducer.WornHasKeyword(ClothingPoor)
 		__playerSeductionScore += -20
+		ConditionalsScript.Penalty_Clothes = true
 		Debug.Trace("Everdamned INFO: Feed Score: Player got TRASH clothes; " + __playerSeductionScore)
 	endif
 	
@@ -251,6 +256,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		Debug.Trace("Everdamned INFO: Feed Score: SEDUCED got RICH clothes; " + __playerSeductionScore)
 	elseif akSeduced.WornHasKeyword(ClothingPoor)
 		__playerSeductionScore += 20
+		ConditionalsScript.Penalty_Clothes = false
 		Debug.Trace("Everdamned INFO: Feed Score: SEDUCED got TRASH clothes; " + __playerSeductionScore)
 	endif
 	
@@ -271,7 +277,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	if playerRace != seducedRace
 		Debug.Trace("Everdamned INFO: Feed Score: Different race, oops; ")
 		if HasDibellasBlessing
-			ConditionalsScript.Bonus_Dibella = true
+			ConditionalsScript.Bonus_DibellaBlessing = true
 		else
 			__playerSeductionScore += -10
 			Debug.Trace("Everdamned INFO: Feed Score: And no Dibellas blessing; " + __playerSeductionScore)
@@ -290,7 +296,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		; agent of dibella
 		if akSeducer.HasMagicEffect(PerkT01Dibella)
 			__playerSeductionScore += 20
-			ConditionalsScript.Bonus_Dibella = true
+			ConditionalsScript.Bonus_DibellaAgent = true
 			Debug.Trace("Everdamned INFO: Feed Score: Wooing chosen sex with AGENT OF DIBELLA; " + __playerSeductionScore)
 		endif
 		if akSeducer.HasPerk(Allure)
@@ -360,7 +366,7 @@ function CalculateFactionDifficulty(Actor akSeducer, Actor akSeduced)
 	;--------------------------------------------------
 	;jobs
 	
-	elseif akSeduced.IsInFaction(JobBardFaction)
+	elseif akSeduced.IsInFaction(JobBardFaction) || akSeduced.IsInFaction(SolitudeBardsCollegeFaction)
 	
 		SeductionFactionScore += 20
 	
@@ -429,7 +435,8 @@ bool Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	
 	debug.Trace("Everdamned DEBUG: Feed Dialogue LastScore: " + ConditionalsScript.LastScore)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue LastScore_Category: " + ConditionalsScript.LastScore_Category)
-	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Dibella: " + ConditionalsScript.Bonus_Dibella)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_DibellaBlessing: " + ConditionalsScript.Bonus_DibellaBlessing)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_DibellaAgent: " + ConditionalsScript.Bonus_DibellaAgent)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_DibellaAmulet: " + ConditionalsScript.Bonus_DibellaAmulet)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Clothes: " + ConditionalsScript.Bonus_Clothes)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_Thane: " + ConditionalsScript.Bonus_Thane)
@@ -442,6 +449,11 @@ bool Function RollFeedDialogueChecks(Actor akSeducer, Actor akSeduced)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_IllusionMood: " + ConditionalsScript.Bonus_IllusionMood)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_SpeechPerks: " + ConditionalsScript.Bonus_SpeechPerks)
 	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_AIData: " + ConditionalsScript.Penalty_AIData)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_Cowardly: " + ConditionalsScript.Penalty_Cowardly)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Penalty_Clothes: " + ConditionalsScript.Penalty_Clothes)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_IllusionCalm: " + ConditionalsScript.Bonus_IllusionCalm)
+	debug.Trace("Everdamned DEBUG: Feed Dialogue Bonus_IllusionRally: " + ConditionalsScript.Bonus_IllusionRally)
+	
 	
 	;if ED_Mechanics_FeedDialogue_CalculateScoreOverride.GetValue() == 1
 	;	debug.trace("Everdamned INFO: Feed dialogue score override engaged, not actually changing results")
@@ -664,7 +676,7 @@ Faction Property JobJarlFaction Auto
 Faction Property CompanionsFaction Auto
 Faction Property CompanionsCirclePlusKodlak Auto
 Faction property JobBardFaction auto
-
+Faction property SolitudeBardsCollegeFaction auto
 
 
 FormList Property ED_Mechanics_OrcRace_List Auto
