@@ -371,6 +371,8 @@ function StartTracking()
 	playerRef.AddSpell(LeveledAbility, false)
 	playerRef.AddSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage, false)
 	
+	playerRef.addperk(ED_Mechanics_Perk_VLVampiresSightCrutch)
+	
 	; adding here because it is attached to mortal vampire races, but not to VL
 	; consider adding it to VL to not do this
 	; UPD: added to alias
@@ -639,6 +641,10 @@ function ActuallyShiftBackIfNecessary()
 	playerRef.RemoveSpell(DLC1Revert)
 	
 	playerRef.RemoveSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage)
+	
+	; here because of mortal races that do not have
+	; vamp sight by default and are also given it by script
+	playerRef.RemovePerk(ED_Mechanics_Perk_VLVampiresSightCrutch)
 
 	playerRef.RemoveSpell(ED_VampireSpellsVL_Maelstrom_Spell)
 	playerRef.RemoveSpell(ED_VampireSpellsVL_FlamesOfColdharbour_Spell)
@@ -766,4 +772,4 @@ endFunction
 actor property playerRef auto
 
 perk property ED_PerkTreeVL_UndyingLoyalty_Perk auto
-
+perk property ED_Mechanics_Perk_VLVampiresSightCrutch auto
