@@ -17,18 +17,14 @@ function RegisterHotkey()
 	bool __hasPotence = playerRef.HasSpell(ED_VampirePowers_Power_DeadlyStrengthTog)
 	bool __hasNF = playerRef.HasSpell(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell)
 	
-	debug.Trace("Everdamned DEBUG: Hotkey B Manager CRUTCH GOES TO KnowsOnlyPotence")
-	GoToState("KnowsOnlyPotence")
-	RegisterForKey(__currentHotkeyB)
-	RegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
-	return
-	
 	if __hasPotence && __hasNF
 		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has both Potence and Necrotic Flesh")
+		RegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
 		GoToState("KnowsPotenceAndNF")
 		RegisterForKey(__currentHotkeyB)
 	elseif __hasPotence
 		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has Potence, but not Necrotic Flesh")
+		RegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
 		GoToState("KnowsOnlyPotence")
 		RegisterForKey(__currentHotkeyB)
 	elseif __hasNF
@@ -44,6 +40,7 @@ endfunction
 function UnregisterHotkey()
 	GoToState("")
 	UnRegisterForKey(__currentHotkeyB)
+	UnRegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
 	__currentHotkeyB = 0
 endfunction
 
@@ -83,26 +80,6 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
 	
 	debug.Trace("Everdamned DEBUG: Hotkey B Animation Event: was caught: " + asEventName)
-	
-	return
-	;;;;;
-	if !__hotkeyB_handled
-		__releaseGate = False
-		__hotkeyB_handled = true
-		
-		;charge release sound
-		;dispel
-		Sound.StopInstance(chargeSoundInstance)
-		ED_Art_Imod_ExtendedPerception_Out.Apply()
-		playerRef.placeatme(__hazardToPlaceOnJump)
-		ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
-	endif
-	
-	debug.Trace("Everdamned DEBUG: Animation event was caught: " + asEventName)
-		
-	;cant unregister in this event handler if dont wait
-	utility.wait(0.1)
-	UnRegisterForAnimationEvent(playerRef, "JumpUp")
 
 endevent
 
@@ -121,12 +98,12 @@ state KnowsOnlyPotence
 			__hotkeyBDown_lock = True
 			__chargeJumpFlag = False
 			
-			debug.Trace("Everdamned DEBUG: Hotkey B was pressed in KnowsOnlyPotence state! ---------------------------------------------")
+			debug.Trace("Everdamned DEBUG: Hotkey B Press Event: was pressed in KnowsOnlyPotence state! ---------------------------------------------")
 
 			if __hotkeyB_handled
 				__releaseGate = False
 				__hotkeyB_handled = false
-				debug.Trace("Everdamned WARNING: Hotkey B press event happened after release event done did it, returning")
+				debug.Trace("Everdamned WARNING: Hotkey B Press Event: happened after release event done did it, returning")
 				__hotkeyBDown_lock = false
 				return
 			endif
@@ -135,20 +112,16 @@ state KnowsOnlyPotence
 			
 			if !__hotkeyB_handled
 				__jumpBonusLevel = 0
-				__hazardToPlaceOnJump = None
-				;RegisterForAnimationEvent(playerRef, "JumpUp")
+				__hazardToPlaceOnJump = JumpBonusHazardArray[0]
 				__chargeJumpFlag = true
 				
 				;losing thread
-				;Sound.StopInstance(chargeSoundInstance)  ;if was left hanging from previous?
-				;chargeSoundInstance = ED_Art_SoundM_JumpCharge.Play(playerRef)
-				__hazardToPlaceOnJump = JumpBonusHazardArray[0]
 				ED_Mechanics_PotenceJumpBonus1_Spell.Cast(playerRef)
 				RegisterForSingleUpdate(JumpChargeUpdateRate)
 				debug.Trace("Everdamned DEBUG: Hotkey B Press Event: was handling long tap to start Charged Jump")
 			else
 				; Deadly Strength was toggled at release
-				;UnRegisterForAnimationEvent(playerRef, "JumpUp")
+				; probably redundant
 				__releaseGate = False
 				debug.Trace("Everdamned DEBUG: Hotkey B Press Event: found out that it was already handled")
 			endif
@@ -286,7 +259,7 @@ state KnowsPotenceAndNF
 				__releaseGate = False
 				__hotkeyB_handled = false
 				__hotkeyBDown_lock = false
-				debug.Trace("Everdamned WARNING: Hotkey B press event happened after release event done did it, returning")
+				debug.Trace("Everdamned WARNING: Hotkey B Press Event: happened after release event done did it, returning")
 				return
 			endif
 			
@@ -301,24 +274,20 @@ state KnowsPotenceAndNF
 			
 			utility.wait(TapMaxLength)
 			
-			__jumpBonusLevel = 0
-			__hazardToPlaceOnJump = None
-			RegisterForAnimationEvent(playerRef, "JumpUp")
-
-			; pressing long enough to start charging jump
 			if !__hotkeyB_handled
-				debug.Trace("Everdamned DEBUG: setting __chargeJumpFlag to true")
+				__jumpBonusLevel = 0
+				__hazardToPlaceOnJump = JumpBonusHazardArray[0]
 				__chargeJumpFlag = true
 				
-				chargeSoundInstance = ED_Art_SoundM_JumpCharge.Play(playerRef)
+				;losing thread
 				ED_Mechanics_PotenceJumpBonus1_Spell.Cast(playerRef)
 				RegisterForSingleUpdate(JumpChargeUpdateRate)
-			
-			; work is already done, invalidate
+				debug.Trace("Everdamned DEBUG: Hotkey B Press Event: was handling long tap to start Charged Jump")
 			else
-				UnRegisterForAnimationEvent(playerRef, "JumpUp")
+				; Deadly Strength was toggled at release
+				; probably redundant
 				__releaseGate = False
-				__hotkeyB_handled = false
+				debug.Trace("Everdamned DEBUG: Hotkey B Press Event: found out that it was already handled")
 			endif
 			
 			__hotkeyBDown_lock = false
@@ -328,13 +297,9 @@ state KnowsPotenceAndNF
 
 
 	Event OnKeyUp(Int KeyCode, Float HoldTime)
-		bool __inMenuMode = Utility.IsInMenuMode()
-		if !__chargeJumpFlag && __inMenuMode
-			return
-		endif
 		if __releaseGate && keyCode == __currentHotkeyB 
 			__releaseGate = False
-			debug.Trace("Everdamned DEBUG: Hotkey B got released!")
+			debug.Trace("Everdamned DEBUG: Hotkey B Release Event: fired")
 			if !__hotkeyB_handled
 				
 				__hotkeyB_handled = true
@@ -343,30 +308,20 @@ state KnowsPotenceAndNF
 				
 				; jump
 				if __chargeJumpFlag
-					debug.Trace("Everdamned DEBUG: Hotkey B release taps jump key")
-					
-					; wait waits for menu mode to end
-					; releasing in menu mode doesnt work as intended
-					if __inMenuMode
-						utility.wait(0.01) ; this waits for menu mode to end
-					endif
-					
-					ED_Art_Imod_ExtendedPerception_Out.Apply()
-					TapKey(SpacebarKey)
-					Sound.StopInstance(chargeSoundInstance)
-					playerRef.placeatme(__hazardToPlaceOnJump)
-					utility.wait(0.1)
-					
-					ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
+								
+					; update event would trip over __hotkeyB_handled = true
 					UnRegisterForUpdate()
+					;Sound.StopInstance(chargeSoundInstance)
+								
+					debug.Trace("Everdamned DEBUG: Hotkey B Release Event: Stops jump charging")
 					
 				elseif __isLShiftPressed
 					playerRef.DoCombatSpellApply(ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell, None)
-					debug.Trace("Everdamned DEBUG: Hotkey B release applies Necrotic Flesh! Unlikely event, but ok")
+					debug.Trace("Everdamned DEBUG: Hotkey B Release Event: applies Necrotic Flesh! Unlikely event, but ok")
 				; toggle Deadly Strength	
 				else
 					playerRef.DoCombatSpellApply(ED_VampirePowers_Power_DeadlyStrengthTog, None)
-					debug.Trace("Everdamned DEBUG: Hotkey B release toggles deadly strength")
+					debug.Trace("Everdamned DEBUG: Hotkey B Release Event: toggles deadly strength")
 				endif
 			
 			endif
@@ -385,9 +340,8 @@ spell[] property JumpBonusSpellArray auto
 spell property ED_Mechanics_PotenceJumpBonus1_Spell auto
 spell property ED_Mechanics_PotenceJumpBonusCleanser_Spell auto
 spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
-hazard[] property JumpBonusHazardArray auto
 
-sound property ED_Art_SoundM_JumpCharge auto
+hazard[] property JumpBonusHazardArray auto
 imagespacemodifier property ED_Art_Imod_ExtendedPerception_Out auto
 
 actor property playerRef auto
