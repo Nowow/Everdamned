@@ -236,29 +236,6 @@ state ProcessBonuses
 			threshold_baseline = 0
 		endif
 		
-		ED_Mechanics_BloodPool_MaxBonus
-		
-		float threshold_baseline_bonus = ED_Mechanics_BloodPool_MaxBonus.GetValue()
-		
-		threshold_minimal = threshold_baseline_bonus / 0.5
-		threshold_okay = threshold_baseline / 0.35
-		threshold_juicy = threshold_baseline / 0.2
-		threshold_beefy = threshold_juicy * 2
-		
-		;threshold_minimal = threshold_baseline / 0.5
-		;threshold_okay = threshold_baseline / 0.35
-		;threshold_juicy = threshold_baseline / 0.2
-		;threshold_beefy = threshold_juicy * 2
-		
-		ED_Mechanics_BloodPool_BloodSenseThreshold_Minimal.SetValue(threshold_minimal)
-		ED_Mechanics_BloodPool_BloodSenseThreshold_Okay.SetValue(threshold_okay)
-		ED_Mechanics_BloodPool_BloodSenseThreshold_Juicy.SetValue(threshold_juicy)
-		ED_Mechanics_BloodPool_BloodSenseThreshold_Beefy.SetValue(threshold_beefy)
-		
-		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Minimal: " + threshold_minimal)
-		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Okay: " + threshold_okay)
-		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Juicy: " + threshold_juicy)
-		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Beefy: " + threshold_beefy)
 		GoToState("PostPostprocess")
 	endevent
 	
@@ -322,15 +299,37 @@ state PostPostprocess
 	endfunction
 	
 	event OnBeginState()
+
+		float __basePool = ED_Mechanics_BloodPool_Base.GetValue()
+		float __bonusPool = ED_Mechanics_BloodPool_MaxBonus.GetValue()
+		float __permaBonusPool = ED_Mechanics_BloodPool_MaxPermaBonus.GetValue()
+		float highShare = __bonusPool*3.0 / (__basePool + __permaBonusPool)
+		VitaeMeter.SetColors(11141120, BlendSecondaryColors(highShare))
+		
+		threshold_minimal = __bonusPool / 0.5
+		threshold_okay = __bonusPool / 0.35
+		threshold_juicy = __bonusPool / 0.2
+		threshold_beefy = threshold_juicy * 2
+		
+		;threshold_minimal = threshold_baseline / 0.5
+		;threshold_okay = threshold_baseline / 0.35
+		;threshold_juicy = threshold_baseline / 0.2
+		;threshold_beefy = threshold_juicy * 2
+		
+		ED_Mechanics_BloodPool_BloodSenseThreshold_Minimal.SetValue(threshold_minimal)
+		ED_Mechanics_BloodPool_BloodSenseThreshold_Okay.SetValue(threshold_okay)
+		ED_Mechanics_BloodPool_BloodSenseThreshold_Juicy.SetValue(threshold_juicy)
+		ED_Mechanics_BloodPool_BloodSenseThreshold_Beefy.SetValue(threshold_beefy)
+		
+		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Minimal: " + threshold_minimal)
+		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Okay: " + threshold_okay)
+		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Juicy: " + threshold_juicy)
+		Debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated new Blood Sense threshold - Beefy: " + threshold_beefy)
+
 		utility.wait(0.2) ; for good measure
 		if !__doStageOrAgeChange && !__doAfterFeed && !__doProcessBonus
 			; update cycle ended
 			; dont want to log because that is not thread safe external call
-			float __basePool = ED_Mechanics_BloodPool_Base.GetValue()
-			float __bonusPool = ED_Mechanics_BloodPool_MaxBonus.GetValue()
-			float __permaBonusPool = ED_Mechanics_BloodPool_MaxPermaBonus.GetValue()
-			float highShare = __bonusPool*3.0 / (__basePool + __permaBonusPool)
-			VitaeMeter.SetColors(11141120, BlendSecondaryColors(highShare))
 			GoToState("")
 			return
 		endif
