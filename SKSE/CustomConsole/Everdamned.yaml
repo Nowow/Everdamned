@@ -159,9 +159,9 @@ subs:
   - name: meterflash
     func: MeterFlash
     args:
-      - name: force
-        type: bool
-        default: false
+      - name: color
+        type: int
+        default: 2463422
   - name: metercolors
     func: MeterColors
     args:

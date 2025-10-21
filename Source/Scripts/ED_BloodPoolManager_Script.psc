@@ -15,6 +15,8 @@ float threshold_okay
 float threshold_juicy
 float threshold_beefy
 
+bool __needToFlash
+
 int function BlendSecondaryColors(float highShare)
 	;int startARBG = 11416450
 	;int startARBG = 8726115
@@ -159,7 +161,9 @@ state AfterFeed
 		if __calculatedBonus > __currentBonus
 			debug.Trace("Everdamned DEBUG: Setting new blood pool bonus!")
 			;__currentBonus = __calculatedBonus
+			
 			ED_Mechanics_BloodPool_MaxBonus.SetValue(__calculatedBonus)
+			__needToFlash = true
 			
 			if __calculatedBonus < threshold_baseline
 				Message.ResetHelpMessage("ed_feedwillnotabsorb")
@@ -304,7 +308,13 @@ state PostPostprocess
 		float __bonusPool = ED_Mechanics_BloodPool_MaxBonus.GetValue()
 		float __permaBonusPool = ED_Mechanics_BloodPool_MaxPermaBonus.GetValue()
 		float highShare = __bonusPool*3.0 / (__basePool + __permaBonusPool)
-		VitaeMeter.SetColors(11141120, BlendSecondaryColors(highShare))
+		int blendColor = BlendSecondaryColors(highShare)
+		if __needToFlash
+			__needToFlash = false
+			VitaeMeter.FlashColor = blendColor
+			VitaeMeter.StartFlash()
+		endif
+		VitaeMeter.SetColors(11141120, blendColor)
 		
 		threshold_minimal = __bonusPool / 0.5
 		threshold_okay = __bonusPool / 0.35

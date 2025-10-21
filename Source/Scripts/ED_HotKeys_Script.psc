@@ -29,121 +29,7 @@ Function RegisterHotkeys()
 	InitializeHotkeys()
 endfunction
 
-spell property ED_VampirePowers_Power_DeadlyStrengthTog auto
-spell property ED_VampirePowers_Power_Celerity auto
-spell property ED_VampirePowers_Power_ExtendedPerceptionTog auto
-spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
-effectshader property ed_Test_Art_Shader_MagicArmorEbonyFleshFXS auto
-keyword property ED_Mechanics_Keyword_NecroticFleshCIF auto
-effectshader property ED_TestShader2_empty auto
 
-
-textureset property ED_TEST_Art_TextureSet_Stoneskin_SkinBodyFemale auto
-
-spell property ED_VampireSpells_BloodSeed_Spell auto
-
-idle property pa_HugA auto
-idle property ED_testidle auto
-idle property pa_KillMoveDLC02RipHeartOut auto
-idle property IdleVampireStandingFeedFront_Loose auto
-
-idle property ED_KM_JumpFeed auto
-idle property pa_KillMoveED_bleedoutFinisher auto
-spell property ED_Art_Spell_MouthMuzzleFlash auto
-
-visualeffect property ED_Art_VFX_VampireTransform_Begin auto
-visualeffect property ED_Art_VFX_VampireTransform_End auto
-hazard property ED_Art_Hazard_VampireTransformBats auto
-idle property ED_Idle_Seduction_Blowkiss auto
-
-message property ED_Mechanics_FeedDialogue_Message_SomeTestM auto
-topic property ED_HelloTopic_FeedDialogue auto
-topic property ED_CommentOnResult_PostMortem_FeedDialogue_Topic auto
-topic property ED_Recommendation_PostMortem_FeedDialogue_Topic auto
-activator property FXEmptyActivator auto
-
-idle property ED_Idle_Seduction_TouchHairPlayful auto
-idle property ResetRoot auto
-idle property ED_Idle_Seduction_NPCSequenceStart auto
-
-referencealias property ED_FeedDialogue_Target auto
-scene property ED_ForceGreetIntoFeedDialogue_FeedDialogue_Scene auto
-
-keyword property ED_Mechanics_Keyword_RollFeedDialogueScore auto
-
-visualeffect property ED_TEST_VfxTargeted auto
-visualeffect property ED_Art_VFX_ExsanguinateBuildup auto
-
-hazard property ED_Art_Hazard_BloodVortex auto
-spell property ED_VampireSpells_BloodVortex_Spell_SpawnHazard auto
-spell property Flames auto
-
-ED_BloodVortexQuest_Script Property ED_Mechanics_Quest_BloodVortex Auto
-
-sound property ED_Art_SoundM_FlameInglitesSwoosh auto
-
-projectile property ED_Art_Projectile_InfluenceShockwave  auto
-spell property ED_VampirePowers_Pw_Dominate_Spell_ProjectileVFX auto
-
-idle property IdleHandCut auto
-idle property ED_Idle_FeedKM_Solo_Player_Ground auto
-idle property ED_Idle_FeedKM_Solo_Player_Bleedout auto
-idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
-idle property ED_Idle_FeedKM_Solo_Player_Social auto
-idle property ED_Idle_FeedKM_Solo_Victim_Social auto
-
-globalvariable property ED_Test_testglobal auto
-globalvariable property ED_Mechanics_Global_FeedType auto
-
-spell property ED_Art_Spell_BackwardsShockwave auto
-
-visualeffect property ED_Art_VFX_AbsorbBloodPool auto
-sound property ED_Art_SoundM_PartingGiftBuildup auto
-
-
-activator property ED_Art_Activator_HavokDummy auto
-explosion property ED_Art_Explosion_Exsanguinate auto
-spell property ED_VampireSpellsVL_IcyWinds_Release_Spell auto
-
-hazard property ED_Art_Hazard_ColdFlamePyre auto
-visualeffect property ED_Art_VFX_ColdFlameBanishFX auto
-
-referencealias property undyingservant auto
-
-keyword property ED_Mechanics_Keyword_UndyingLoyaltyLaunch auto
-
-armor property DLC1ClothesVampireLordRoyalArmor auto
-armor property ArmorDragonplateCuirass auto
-
-race property DLC1VampireBeastRace auto
-
-globalvariable property ED_Test_testglobalX auto
-globalvariable property ED_Test_testglobalY auto
-globalvariable property ED_Test_testglobalZ auto
-
-message property ED_Mechanics_Message_AgeLvlUp_1to2 auto
-message property ED_Mechanics_Message_AgeLvlUp_2to3 auto
-message property ED_Mechanics_Message_AgeLvlUp_3to4 auto
-message property ED_Mechanics_Message_AgeLvlUp_4to5 auto
-message property ED_Mechanics_Message_AgeLvlUp_5to6 auto
-
-activator property ED_Art_Activator_BloodTentacle auto
-keyword property ED_Mechanics_Keyword_TentacleHitStart auto
-hazard property ED_Art_Hazard_BloodSpill2 auto
-
-spell property ED_TEST_VoiceFireBreath3 auto
-spell property ED_Mechanics_Spell_BloodTentacleHit_Level1 auto
-
-miscobject property DA04Extractor auto
-
-imagespacemodifier property ED_Art_Imod_NightVision_1 auto
-imagespacemodifier property ED_Art_Imod_NightVision_Transition_1to5 auto
-imagespacemodifier property ED_Art_Imod_NightVision_5 auto
-imagespacemodifier property ED_Art_Imod_NightVision_Transition_5to1 auto
-
-visualeffect property ED_Art_VFX_Halo_InwardToScreen auto
-
-;idle property ED_Idle_FeedKM_Solo_Player_Jumpfeed auto
 
 int counter
 bool __switch
@@ -162,8 +48,7 @@ Event OnKeyDown(int keyCode)
 		actor __targetThing = Game.GetCurrentConsoleRef() as actor
 		
 		actor pl = Game.GetPlayer()
-		
-		CustomSkills.AdvanceSkill("EverdamnedMain", 300.0)
+
 		
 		;ED_Misc_DisarmFF_Spell.cast(pl, __targetThing)
 		

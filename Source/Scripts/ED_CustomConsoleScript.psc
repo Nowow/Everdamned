@@ -533,9 +533,10 @@ string function PlayAnImpactEffect(string editorId, string lenode) global
 	
 endfunction
 
-string function MeterFlash(bool force) global
+string function MeterFlash(int color = 2463422) global
 	ED_BloodMeter leMeter = LookupSomeFormByEditorID("ED_BloodMeter_Quest") as ED_BloodMeter
-	leMeter.StartFlash(force)
+	leMeter.FlashColor = color
+	leMeter.StartFlash()
 endfunction
 
 
@@ -552,6 +553,8 @@ endfunction
 
 string function BlendSecondUIColor(float highShare, int highStandin, int lowStadin) global
 
+	;bright purple to bright orange
+	;11416450 -> 16752947
 	colorform ED_Art_Color_UISecondColorHigh = LookupSomeFormByEditorID("ED_Art_Color_UISecondColorHigh") as colorform
 	colorform ED_Art_Color_UISecondColorLow = LookupSomeFormByEditorID("ED_Art_Color_UISecondColorLow") as colorform
 	

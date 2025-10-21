@@ -220,7 +220,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	
 	; PERKS
 	
-	if akSeducer.HasPerk(Persuasion)
+	if akSeducer.HasPerk(Persuasion) || ED_Mechanics_Global_MCM_PersuasionToggle.GetValue()
 		__playerSeductionScore += 10
 		ConditionalsScript.Bonus_SpeechPerks = true
 		Debug.Trace("Everdamned INFO: Feed Score: Player has Persuasion; " + __playerSeductionScore)
@@ -299,7 +299,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 			ConditionalsScript.Bonus_DibellaAgent = true
 			Debug.Trace("Everdamned INFO: Feed Score: Wooing chosen sex with AGENT OF DIBELLA; " + __playerSeductionScore)
 		endif
-		if akSeducer.HasPerk(Allure)
+		if akSeducer.HasPerk(Allure) || ED_Mechanics_Global_MCM_AllureToggle.GetValue() == 1.0
 			__playerSeductionScore += 15
 			ConditionalsScript.Bonus_SpeechPerks = true
 			Debug.Trace("Everdamned INFO: Feed Score: Wooing chosen sex with Allure; " + __playerSeductionScore)
@@ -619,7 +619,9 @@ magiceffect property FortifyPersuasionFFSelf auto
 magiceffect property PerkT01Dibella auto
 
 Perk Property Allure Auto
+globalvariable property ED_Mechanics_Global_MCM_AllureToggle auto
 Perk Property Persuasion Auto
+globalvariable property ED_Mechanics_Global_MCM_PersuasionToggle auto
 Perk Property HypnoticGaze Auto
 Perk Property Intimidation Auto
 Perk Property MasterOfTheMind Auto

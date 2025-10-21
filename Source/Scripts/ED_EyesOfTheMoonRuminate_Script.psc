@@ -132,8 +132,8 @@ function ChooseGoodMessage()
 	
 	MessageCache.Revert()
 	
-	__hasAllure = playerRef.HasPerk(Allure)
-	__hasPersuasion = playerRef.HasPerk(Persuasion)
+	__hasAllure = playerRef.HasPerk(Allure) || ED_Mechanics_Global_MCM_AllureToggle.GetValue() == 1.0
+	__hasPersuasion = playerRef.HasPerk(Persuasion) || ED_Mechanics_Global_MCM_PersuasionToggle.GetValue() == 1.0
 	__hasNobleClothes = playerRef.WornHasKeyword(ClothingRich)
 	__goodSpeech = playerRef.GetActorValue("Speechcraft") >= 60.0 && ConditionalsScript.LastScore_Category < 3
 	__dibellaBlessing = playerRef.HasMagicEffect(FortifyPersuasionFFSelf)
@@ -345,8 +345,10 @@ message property ED_Mechanics_FeedDialogue_Message_Advice_Dibella auto
 message property ED_Mechanics_FeedDialogue_Message_Advice_BloodDoll auto
 
 
-perk property Allure auto
-perk property Persuasion auto
+Perk Property Allure Auto
+globalvariable property ED_Mechanics_Global_MCM_AllureToggle auto
+Perk Property Persuasion Auto
+globalvariable property ED_Mechanics_Global_MCM_PersuasionToggle auto
 keyword property ClothingRich auto
 magiceffect property PerkT01Dibella auto ; agent of dibella
 magiceffect property FortifyPersuasionFFSelf auto  ; dibella's blessing

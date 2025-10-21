@@ -148,6 +148,14 @@ Int Cheats_ToggleExtractor
 float property Default_Cheats_ToggleExtractor auto
 GlobalVariable Property ED_Mechanics_Global_MCM_ExtractorToggle Auto
 
+Int Cheats_AllureToggle
+float property Default_Cheats_AllureToggle auto
+GlobalVariable Property ED_Mechanics_Global_MCM_AllureToggle Auto
+
+Int Cheats_PersuasionToggle
+float property Default_Cheats_PersuasionToggle auto
+GlobalVariable Property ED_Mechanics_Global_MCM_PersuasionToggle Auto
+
 
 function OnPageReset(String akPage)
 
@@ -210,6 +218,8 @@ function OnPageReset(String akPage)
 	self.AddHeaderOption("Hotkeys", 0)
 	
 	Cheats_NecromageToggle = self.AddToggleOption("Disable Restoration healing penalty", ED_Mechanics_Global_MCM_NecromageToggle.GetValue() as Bool)
+	Cheats_AllureToggle = self.AddToggleOption("Assume Allure perk", ED_Mechanics_Global_MCM_AllureToggle.GetValue() as Bool)
+	Cheats_PersuasionToggle = self.AddToggleOption("Assume Persuasion perk", ED_Mechanics_Global_MCM_PersuasionToggle.GetValue() as Bool)
 	Cheats_MasterOfTheMindToggle = self.AddToggleOption("Mimic Master of the Mind", ED_Mechanics_Global_MCM_MasterOfTheMindToggle.GetValue() as Bool)
 	Cheats_DisableHate = self.AddToggleOption("Disable hate when Blood Starved", ED_Mechanics_Global_MCM_DisableHate.GetValue() as Bool)
 	Cheats_DisableScorchingSun = self.AddToggleOption("Disable Sun burning", ED_Mechanics_Global_MCM_DisableScorchingSun.GetValue() as Bool)
@@ -340,6 +350,14 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Cheats_NecromageToggle
 		ED_Mechanics_Global_MCM_NecromageToggle.SetValue(Default_Cheats_NecromageToggle)
 		SetToggleOptionValue(Cheats_NecromageToggle, Default_Cheats_NecromageToggle as bool)
+		
+	elseIf akOp == Cheats_AllureToggle
+		ED_Mechanics_Global_MCM_AllureToggle.SetValue(Default_Cheats_AllureToggle)
+		SetToggleOptionValue(Cheats_AllureToggle, Default_Cheats_AllureToggle as bool)
+		
+	elseIf akOp == Cheats_PersuasionToggle
+		ED_Mechanics_Global_MCM_PersuasionToggle.SetValue(Default_Cheats_PersuasionToggle)
+		SetToggleOptionValue(Cheats_PersuasionToggle, Default_Cheats_PersuasionToggle as bool)
 	
 	elseIf akOp == Cheats_MasterOfTheMindToggle
 		ED_Mechanics_Global_MCM_MasterOfTheMindToggle.SetValue(Default_Cheats_MasterOfTheMindToggle)
@@ -603,6 +621,14 @@ function OnOptionSelect(Int akOp)
 	elseif akOp == Cheats_NecromageToggle
 		ED_Mechanics_Global_MCM_NecromageToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_NecromageToggle.GetValue())
 		SetToggleOptionValue(Cheats_NecromageToggle, ED_Mechanics_Global_MCM_NecromageToggle.GetValue() as bool)
+		
+	elseif akOp == Cheats_AllureToggle
+		ED_Mechanics_Global_MCM_AllureToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_AllureToggle.GetValue())
+		SetToggleOptionValue(Cheats_AllureToggle, ED_Mechanics_Global_MCM_AllureToggle.GetValue() as bool)
+	
+	elseif akOp == Cheats_PersuasionToggle
+		ED_Mechanics_Global_MCM_PersuasionToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_PersuasionToggle.GetValue())
+		SetToggleOptionValue(Cheats_PersuasionToggle, ED_Mechanics_Global_MCM_PersuasionToggle.GetValue() as bool)
 		
 	elseif akOp == Cheats_MasterOfTheMindToggle
 		ED_Mechanics_Global_MCM_MasterOfTheMindToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_MasterOfTheMindToggle.GetValue())
