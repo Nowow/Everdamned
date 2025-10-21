@@ -2,6 +2,7 @@
     "name": "charged_jumps",
     "description": "jump animation when charged",
     "priority": 4955515,
+    "ignoreDontConvertAnnotationsToTriggersFlag": true,
     "conditions": [
         {
             "condition": "HasMagicEffectWithKeyword",
@@ -13,6 +14,11 @@
                 }
             },
             "Active effects only": false
+        },
+        {
+            "condition": "IsInAir",
+            "requiredVersion": "1.0.0.0",
+            "negated": true
         }
     ]
 }

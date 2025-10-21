@@ -6,7 +6,7 @@ int SpacebarKey = 0x39
 int LShift = 0x2A
 
 float property TapMaxLength = 0.3 auto
-
+float property JumpChargeUpdateRate = 0.45 auto
 
 int chargeSoundInstance
 
@@ -20,6 +20,7 @@ function RegisterHotkey()
 	debug.Trace("Everdamned DEBUG: Hotkey B Manager CRUTCH GOES TO KnowsOnlyPotence")
 	GoToState("KnowsOnlyPotence")
 	RegisterForKey(__currentHotkeyB)
+	RegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
 	return
 	
 	if __hasPotence && __hasNF
@@ -69,7 +70,7 @@ event OnUpdate()
 		
 		__hazardToPlaceOnJump = JumpBonusHazardArray[__jumpBonusLevel]
 		JumpBonusSpellArray[__jumpBonusLevel].Cast(playerRef)
-		RegisterForSingleUpdate(0.3)
+		RegisterForSingleUpdate(JumpChargeUpdateRate)
 	endif	
 	
 endevent
@@ -77,6 +78,14 @@ endevent
 
 Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	
+	ED_Art_Imod_ExtendedPerception_Out.Apply()
+	playerRef.placeatme(__hazardToPlaceOnJump)
+	ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(playerRef)
+	
+	debug.Trace("Everdamned DEBUG: Hotkey B Animation Event: was caught: " + asEventName)
+	
+	return
+	;;;;;
 	if !__hotkeyB_handled
 		__releaseGate = False
 		__hotkeyB_handled = true
@@ -127,18 +136,19 @@ state KnowsOnlyPotence
 			if !__hotkeyB_handled
 				__jumpBonusLevel = 0
 				__hazardToPlaceOnJump = None
-				RegisterForAnimationEvent(playerRef, "JumpUp")
+				;RegisterForAnimationEvent(playerRef, "JumpUp")
 				__chargeJumpFlag = true
 				
 				;losing thread
-				Sound.StopInstance(chargeSoundInstance)  ;if was left hanging from previous?
+				;Sound.StopInstance(chargeSoundInstance)  ;if was left hanging from previous?
 				;chargeSoundInstance = ED_Art_SoundM_JumpCharge.Play(playerRef)
+				__hazardToPlaceOnJump = JumpBonusHazardArray[0]
 				ED_Mechanics_PotenceJumpBonus1_Spell.Cast(playerRef)
-				RegisterForSingleUpdate(0.3)
+				RegisterForSingleUpdate(JumpChargeUpdateRate)
 				debug.Trace("Everdamned DEBUG: Hotkey B Press Event: was handling long tap to start Charged Jump")
 			else
 				; Deadly Strength was toggled at release
-				UnRegisterForAnimationEvent(playerRef, "JumpUp")
+				;UnRegisterForAnimationEvent(playerRef, "JumpUp")
 				__releaseGate = False
 				debug.Trace("Everdamned DEBUG: Hotkey B Press Event: found out that it was already handled")
 			endif
@@ -167,7 +177,7 @@ state KnowsOnlyPotence
 								
 					; update event would trip over __hotkeyB_handled = true
 					UnRegisterForUpdate()
-					Sound.StopInstance(chargeSoundInstance)
+					;Sound.StopInstance(chargeSoundInstance)
 								
 					debug.Trace("Everdamned DEBUG: Hotkey B Release Event: Stops jump charging")
 
@@ -302,7 +312,7 @@ state KnowsPotenceAndNF
 				
 				chargeSoundInstance = ED_Art_SoundM_JumpCharge.Play(playerRef)
 				ED_Mechanics_PotenceJumpBonus1_Spell.Cast(playerRef)
-				RegisterForSingleUpdate(0.3)
+				RegisterForSingleUpdate(JumpChargeUpdateRate)
 			
 			; work is already done, invalidate
 			else

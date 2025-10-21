@@ -11,6 +11,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 		endif
 		CleanerSpell.cast(akTarget, akTarget)
 		ED_Mechanics_Quest_NecroticFlesh.Stop()
+		ED_Mechanics_PotenceJumpBonusCleanser_Spell.Cast(akTarget)
 		Game.ShakeCamera(akTarget)
 	
 Endevent
@@ -21,6 +22,7 @@ Endevent
 
 
 SPELL Property CleanerSpell Auto
+SPELL Property ED_Mechanics_PotenceJumpBonusCleanser_Spell Auto
 message property ED_Mechanics_BloodCost_Message_PowersFizzleOut auto
 sound property CleanerSound auto
 imagespacemodifier property ED_Art_Imod_DrainCleaner_DesaturatedLonger auto
