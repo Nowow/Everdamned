@@ -104,7 +104,7 @@ endfunction
 
 int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 
-	int __playerSeductionScore =  akSeducer.GetAV("Speechcraft") as int
+	int __playerSeductionScore =  akSeducer.GetActorValue("Speechcraft") as int
 	
 	Debug.Trace("Everdamned INFO: Feed Score: Speechcraft:  " + __playerSeductionScore)
 	
@@ -131,6 +131,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	else
 		; you are unaquainted, really hard to seduce. separate fail responses
 		__playerSeductionScore += -30
+		__playerSeductionScore += (__relationshipRank * 20) - 80
 		ConditionalsScript.Penalty_LowRelationship = true
 		Debug.Trace("Everdamned INFO: Feed Score: unaquainted, not INN")
 	endif
@@ -193,7 +194,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		__AIscore += -2  * __morality
 		Debug.Trace("Everdamned INFO: Feed Score: Target under calm; ")
 	else
-		__AIscore += -10 * __aggression
+		__AIscore += -5 * __aggression
 		__AIscore += -5  * __morality
 	endif
 
@@ -240,7 +241,8 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	;endif
 	
 	;CLOTHING
-	if akSeducer.WornHasKeyword(ClothingRich)
+	bool playerDripGood = akSeducer.WornHasKeyword(ClothingRich)
+	if playerDripGood
 		__playerSeductionScore += 20
 		ConditionalsScript.Bonus_Clothes = true
 		Debug.Trace("Everdamned INFO: Feed Score: Player got RICH clothes; " + __playerSeductionScore)
@@ -250,7 +252,7 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 		Debug.Trace("Everdamned INFO: Feed Score: Player got TRASH clothes; " + __playerSeductionScore)
 	endif
 	
-	if akSeduced.WornHasKeyword(ClothingRich)
+	if akSeduced.WornHasKeyword(ClothingRich) && !playerDripGood
 		__playerSeductionScore -= 20
 		ConditionalsScript.Bonus_Clothes = false
 		Debug.Trace("Everdamned INFO: Feed Score: SEDUCED got RICH clothes; " + __playerSeductionScore)

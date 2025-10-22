@@ -1175,8 +1175,8 @@ state CombatDrain
 			Game.SetCameraTarget(aFeedTarget)
 		endif
 		
-		;bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
-		bool __animPlayed = playerRef.PlayIdleWithTarget(pairedIdleToPlay, aFeedTarget)
+		bool __animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		;bool __animPlayed = playerRef.PlayIdleWithTarget(pairedIdleToPlay, aFeedTarget)
 		
 		
 		bool __playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
@@ -1204,8 +1204,8 @@ state CombatDrain
 			playerRef.SetPosition(playerRef.GetPositionX(), playerRef.GetPositionY(), aFeedTarget.GetPositionZ())
 		endif
 				
-		;__animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
-		__animPlayed = playerRef.PlayIdleWithTarget(pairedIdleToPlay, aFeedTarget)
+		__animPlayed = playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, aFeedTarget)
+		;__animPlayed = playerRef.PlayIdleWithTarget(pairedIdleToPlay, aFeedTarget)
 		
 		__playerIsSynced = playerRef.GetAnimationVariableBool("bIsSynced")
 		__victimIsSynced = aFeedTarget.GetAnimationVariableBool("bIsSynced")
@@ -1222,6 +1222,8 @@ state CombatDrain
 		utility.wait(0.2)
 		Game.SetCameraTarget(playerRef)
 		debug.SendAnimationEvent(playerRef, "staggerStart")
+		aFeedTarget.DispelSpell(ED_BeingVampire_VampireFeed_VictimMark_Spell)
+		debug.SendAnimationEvent(aFeedTarget, "staggerStart")
 		ED_Mechanics_Message_CombatFeedGripSlipped.Show()
 		GoToState("")
 		

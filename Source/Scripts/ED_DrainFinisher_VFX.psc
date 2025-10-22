@@ -86,7 +86,8 @@ Event OnUpdate()
 			Utility.wait(0.4)
 			DecalSpray(_target,2)
 			
-			PlayerVampireQuest.EatThisActor(_target)
+			; 0 bonus vitae gain 
+			PlayerVampireQuest.DineAlone()
 			CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
 		;else
 		;	debug.trace("Everdamned DEBUG: Exsanguinate alias was NOT filled with this target" + _target + ", doing nothing ")

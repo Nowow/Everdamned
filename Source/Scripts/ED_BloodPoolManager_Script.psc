@@ -156,23 +156,29 @@ state AfterFeed
 		
 		; % HP to be eaten gets applied at EatThisActor
 		__calculatedBonus = PlayerVampireQuest.GetHPtoBeEaten()
-		__currentBonus = ED_Mechanics_BloodPool_MaxBonus.GetValue()
-		debug.Trace("Everdamned DEBUG: current blood pool bonus: " + __currentBonus + ", HPtoBeEaten bonus: " + __calculatedBonus)
-		if __calculatedBonus > __currentBonus
-			debug.Trace("Everdamned DEBUG: Setting new blood pool bonus!")
-			;__currentBonus = __calculatedBonus
-			
-			ED_Mechanics_BloodPool_MaxBonus.SetValue(__calculatedBonus)
-			__needToFlash = true
-			
-			if __calculatedBonus < threshold_baseline
-				Message.ResetHelpMessage("ed_feedwillnotabsorb")
-				ED_Mechanics_Message_FeedNourishment_Worthless.ShowAsHelpMessage("ed_feedwillnotabsorb", 3.0, 5.0, 1)
-			elseif __calculatedBonus >= __currentBonus * 1.3
-				Message.ResetHelpMessage("ed_bloodbonusincreased")
-				ED_Mechanics_Message_FeedNourishment_Increased.ShowAsHelpMessage("ed_bloodbonusincreased", 3.0, 5.0, 1)
+		
+		if __calculatedBonus > 0.0
+		
+			__currentBonus = ED_Mechanics_BloodPool_MaxBonus.GetValue()
+			debug.Trace("Everdamned DEBUG: current blood pool bonus: " + __currentBonus + ", HPtoBeEaten bonus: " + __calculatedBonus)
+			if __calculatedBonus > __currentBonus
+				debug.Trace("Everdamned DEBUG: Setting new blood pool bonus!")
+				;__currentBonus = __calculatedBonus
+				
+				ED_Mechanics_BloodPool_MaxBonus.SetValue(__calculatedBonus)
+				__needToFlash = true
+				
+				if __calculatedBonus < threshold_baseline
+					Message.ResetHelpMessage("ed_feedwillnotabsorb")
+					ED_Mechanics_Message_FeedNourishment_Worthless.ShowAsHelpMessage("ed_feedwillnotabsorb", 3.0, 5.0, 1)
+				elseif __calculatedBonus >= __currentBonus * 1.3
+					Message.ResetHelpMessage("ed_bloodbonusincreased")
+					ED_Mechanics_Message_FeedNourishment_Increased.ShowAsHelpMessage("ed_bloodbonusincreased", 3.0, 5.0, 1)
+				endif
+				
 			endif
-			
+		else
+			debug.Trace("Everdamned DEBUG: Blood Pool Manager does not set any bonus after feed because calc value was 0")
 		endif
 		
 		GoToState("Postprocess")
