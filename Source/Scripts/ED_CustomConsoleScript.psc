@@ -587,3 +587,12 @@ string function BlendSecondUIColor(float highShare, int highStandin, int lowStad
 	
 	
 endfunction
+
+string function TestStuff() global
+	actor player = Game.GetPlayer()
+	
+	debug.Trace("Everdamned DEBUG: bIsRiding: " + player.GetAnimationVariableBool("bIsRiding"))
+	debug.Trace("Everdamned DEBUG: bAttached" + player.GetAnimationVariableBool("bAttached"))
+	debug.Trace("Everdamned DEBUG: bAllowRotation" + player.GetAnimationVariableBool("bAllowRotation"))
+	;debug.Trace("Everdamned DEBUG: ")
+endfunction

@@ -341,8 +341,8 @@ function OnOptionDefault(Int akOp)
 		self.SetSliderOptionValue(Setting_VampireAgeMult, Default_Setting_VampireAgeMult)
 	
 	elseIf akOp == Setting_EnableShadowRegen
-		ED_Mechanics_Global_EnableShadowRegen.SetValue(Default_Setting_EnableShadowRegen as Float)
-		self.SetSliderOptionValue(Setting_EnableShadowRegen, Default_Setting_EnableShadowRegen)
+		ED_Mechanics_Global_EnableShadowRegen.SetValue(Default_Setting_EnableShadowRegen as float)
+		self.SetToggleOptionValue(Setting_EnableShadowRegen, Default_Setting_EnableShadowRegen as bool)
 
 	; ------------------------------------------------------------
 	; cheats

@@ -201,4 +201,6 @@ subs:
       - name: lowStadin
         type: int
         default: 3276800
+  - name: teststuff
+    func: TestStuff
      
