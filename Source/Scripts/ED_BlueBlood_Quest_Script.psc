@@ -4,7 +4,7 @@ Scriptname ED_BlueBlood_Quest_Script extends Quest
 int property Reward_ChainedBeast = 2 auto
 int property Reward_EmbraceTheBeast = 8 auto
 int property Reward_PerkPoints = 10 auto
-int property ThatMuchPerkPoints = 4 auto
+int property ThatMuchPerkPoints = 3 auto
 
 globalvariable property ED_Mechanics_BlueBlood_Global_VIPsTasted auto
 
