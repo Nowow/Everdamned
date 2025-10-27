@@ -15,7 +15,7 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 	playerRef.DoCombatSpellApply(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell, akTarget)
 	
 	CustomSkills.AdvanceSkill("EverdamnedMain", 200.0)
-	
+	debug.Trace("Everdamned DEBUG: Vampires Seduction was applied to: " + akTarget)
 	self.Dispel()
 endevent
 
