@@ -69,9 +69,9 @@ Int Setting_SeductionDialogueXPCooldownHours
 float property Default_Setting_SeductionDialogueXPCooldownHours auto
 GlobalVariable Property ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours Auto
 
-Int Setting_LevelXPDenominator
-float property Default_Setting_LevelXPDenominator auto
-GlobalVariable Property ED_Mechanics_SkillTree_DenominatorXP_Global Auto
+Int Setting_LevelXPMult
+float property Default_Setting_LevelXPMult auto
+GlobalVariable Property ED_Mechanics_SkillTree_LevelXPMult_Global Auto
 
 Int Setting_DisableBloodstarvedTint
 float property Default_Setting_DisableBloodstarvedTint auto
@@ -169,7 +169,7 @@ function OnPageReset(String akPage)
 	Setting_SameSexPreference = self.AddToggleOption("Same sex preference for seduction", ED_Mechanics_Global_MCM_SameSexPreference.GetValue() as Bool)
 	Setting_CombatDrainAnim = self.AddSliderOption("Combat Drain type", ED_Mechanics_Global_MCM_CombatDrainAnim.GetValue(), "Type {0}")
 	Setting_SeductionDialogueXPCooldownHours = self.AddSliderOption("Speech XP Seduction cooldown", ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.GetValue(), "{0} hours")
-	Setting_LevelXPDenominator = self.AddSliderOption("Level XP gain lower", ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue(), "{0} times")
+	Setting_LevelXPMult = self.AddSliderOption("Level XP gain mult", ED_Mechanics_SkillTree_LevelXPMult_Global.GetValue(), "{0} times")
 	Setting_DisableBloodstarvedTint = self.AddToggleOption("No red tint when Blood Starved ", ED_Mechanics_Global_MCM_DisableBloodstarvedTint.GetValue() as Bool)
 	Setting_DisableDisintegrate = self.AddToggleOption("No disintegrate on death ", ED_Mechanics_Global_MCM_DisableDisintegrate.GetValue() as Bool)
 	Setting_VampireSkillExpMult = self.AddSliderOption("Vampire skill XP mult", ED_Mechanics_SkillTree_XPMult_Global.GetValue())
@@ -304,9 +304,9 @@ function OnOptionDefault(Int akOp)
 		ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.SetValue(Default_Setting_SeductionDialogueXPCooldownHours as Float)
 		self.SetSliderOptionValue(Setting_SeductionDialogueXPCooldownHours, Default_Setting_SeductionDialogueXPCooldownHours, "{0} hours")
 	
-	elseIf akOp == Setting_LevelXPDenominator
-		ED_Mechanics_SkillTree_DenominatorXP_Global.SetValue(Default_Setting_LevelXPDenominator as Float)
-		self.SetSliderOptionValue(Setting_LevelXPDenominator, Default_Setting_LevelXPDenominator, "{0} times")
+	elseIf akOp == Setting_LevelXPMult
+		ED_Mechanics_SkillTree_LevelXPMult_Global.SetValue(Default_Setting_LevelXPMult as Float)
+		self.SetSliderOptionValue(Setting_LevelXPMult, Default_Setting_LevelXPMult, "{0} times")
 		
 	elseIf akOp == Setting_DisableBloodstarvedTint
 		ED_Mechanics_Global_MCM_SameSexPreference.SetValue(Default_Setting_DisableBloodstarvedTint)
@@ -459,10 +459,10 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogRange(0.000000, 24.0000)
 		self.SetSliderDialogInterval(1.00000)
 		
-	elseIf akOp == Setting_LevelXPDenominator
-		self.SetSliderDialogStartValue(ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue())
-		self.SetSliderDialogDefaultValue(Default_Setting_LevelXPDenominator)
-		self.SetSliderDialogRange(0.500000, 4.0000)
+	elseIf akOp == Setting_LevelXPMult
+		self.SetSliderDialogStartValue(ED_Mechanics_SkillTree_LevelXPMult_Global.GetValue())
+		self.SetSliderDialogDefaultValue(Default_Setting_LevelXPMult)
+		self.SetSliderDialogRange(0.000000, 4.0000)
 		self.SetSliderDialogInterval(0.10000)
 		
 	elseIf akOp == Setting_NightSightMaxLevel
@@ -545,9 +545,9 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 		ED_Mechanics_FeedDialogue_Seduction_XPCooldownHours.SetValue(akValue)
 		self.SetSliderOptionValue(Setting_SeductionDialogueXPCooldownHours, akValue, "{0} hours")
 		
-	elseIf akOp == Setting_LevelXPDenominator
-		ED_Mechanics_SkillTree_DenominatorXP_Global.SetValue(akValue)
-		self.SetSliderOptionValue(Setting_LevelXPDenominator, akValue, "{0} times")
+	elseIf akOp == Setting_LevelXPMult
+		ED_Mechanics_SkillTree_LevelXPMult_Global.SetValue(akValue)
+		self.SetSliderOptionValue(Setting_LevelXPMult, akValue, "{0} times")
 		
 	elseIf akOp == Setting_NightSightMaxLevel
 		if akValue < ED_Mechanics_Global_MCM_NightSightMinLevel.GetValue()
@@ -745,6 +745,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Vampire ageing multiplicator. Does not work retroactively.")
 	elseIf akOp == Setting_VampireSkillExpMult
 		self.SetInfoText("When this is ON, stainding in a shadow (light level < 50) disables Sun Weakness effects other than attribute loss. Actual behavior depends on your lightning mods, so disable if ruins immersion")
+	elseIf akOp == Setting_LevelXPMult
+		self.SetInfoText("How much Vampirism skill contributes to player level progression, relative to regular skills. As damaging vampiric powers do not contribute to any player skill directly AND do not use regular perk points, 0 by default.")
 	
 	; ------------------------------------------------------------
 	; cheats

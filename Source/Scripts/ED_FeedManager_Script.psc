@@ -339,7 +339,7 @@ function HandleFeedThrall(actor FeedTarget)
 	endif
 	
 	; for vampire converting sidequest
-	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
+	if (DLC1VQ03VampireDexion && DLC1VQ03VampireDexion.GetActorReference() == FeedTarget) || (FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False)
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
 	endif
 	
@@ -1282,6 +1282,8 @@ state CombatDrain
 	
 endstate
 
+
+ReferenceAlias Property DLC1VQ03VampireDexion auto
 
 Idle Property VampireLordLeftPairedFeedFront Auto
 Idle Property VampireLordLeftPairedFeedBack Auto

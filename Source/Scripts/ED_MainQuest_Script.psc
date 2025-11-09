@@ -280,11 +280,11 @@ Event OnCustomSkillIncrease(string asSkillId)
 	; is a race condition, but do not know of another way to do this
 	; adding XP directly, even here, INSIDE papyrus skill increment event
 	; will actually show up on HUD message and properly proc levelup and rest
-	int __everyNthLevelXP = ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue() as int
+	int __levelXPMult = ED_Mechanics_SkillTree_DenominatorXP_Global.GetValue() as int
 	int __newSkillLevel = ED_Mechanics_SkillTree_Level_Global.GetValue() as int
-	debug.Trace("Everdamned DEBUG: Main Quest __everyNthLevelXP: " + __everyNthLevelXP + ", __newSkillLevel: " + __newSkillLevel)
-	ED_SKSEnativebindings.AddThisMuchXP(__newSkillLevel/__everyNthLevelXP)
-	debug.Trace("Everdamned DEBUG: Main Quest adds level XP at skill lvlup: " + __newSkillLevel/__everyNthLevelXP)
+	debug.Trace("Everdamned DEBUG: Main Quest levep xp mult: " + __levelXPMult + ", __newSkillLevel: " + __newSkillLevel)
+	ED_SKSEnativebindings.AddThisMuchXP(__newSkillLevel*__levelXPMult)
+	debug.Trace("Everdamned DEBUG: Main Quest adds level XP at skill lvlup: " + __newSkillLevel*__levelXPMult)
 	
 	
 	int cntr
