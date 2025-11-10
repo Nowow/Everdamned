@@ -54,6 +54,10 @@ int Hotkeys_HotkeyB
 int property Default_Hotkeys_HotkeyB auto
 GlobalVariable Property ED_Mechanics_Hotkeys_HotkeyB Auto
 
+int Hotkeys_HotkeyModifier
+int property Default_Hotkeys_HotkeyModifier auto
+GlobalVariable Property ED_Mechanics_Hotkeys_HotkeyModifier Auto
+
 ; ------------------------------------------------------------
 ; Settings
 
@@ -212,9 +216,9 @@ function OnPageReset(String akPage)
 	self.SetCursorPosition(1)
 	self.AddHeaderOption("Compatibility/Cheats", 0)
 	
-	Hotkeys_HotkeyA = AddKeyMapOption("Celerity Hotkey", ED_Mechanics_Hotkeys_HotkeyA.GetValue() as int)
-	Hotkeys_HotkeyB = AddKeyMapOption("Potence Hotkey", ED_Mechanics_Hotkeys_HotkeyB.GetValue() as int)
-	
+	Hotkeys_HotkeyA = AddKeyMapOption("Hotkey A", ED_Mechanics_Hotkeys_HotkeyA.GetValue() as int)
+	Hotkeys_HotkeyB = AddKeyMapOption("Hotkey B", ED_Mechanics_Hotkeys_HotkeyB.GetValue() as int)
+	Hotkeys_HotkeyModifier = AddKeyMapOption("Modifier Key", ED_Mechanics_Hotkeys_HotkeyModifier.GetValue() as int)
 	
 	; ------------------------------------------------------------
 	; cheats/compatibility
@@ -294,6 +298,9 @@ function OnOptionDefault(Int akOp)
 		
 	elseIf akOp == Hotkeys_HotkeyB
 		AssignKey(ED_Mechanics_Hotkeys_HotkeyB, Hotkeys_HotkeyB, Default_Hotkeys_HotkeyB, "", "")
+	
+	elseIf akOp == Hotkeys_HotkeyModifier
+		AssignKey(ED_Mechanics_Hotkeys_HotkeyModifier, Hotkeys_HotkeyModifier, Default_Hotkeys_HotkeyModifier, "", "")
 
 	; ------------------------------------------------------------
 	; settings
@@ -695,6 +702,9 @@ Event OnOptionKeyMapChange(int option, int keyCode, string conflictControl, stri
 	elseif option == Hotkeys_HotkeyB
 		AssignKey(ED_Mechanics_Hotkeys_HotkeyB, option, keyCode, conflictControl, conflictName)
 	
+	elseif option == Hotkeys_HotkeyModifier
+		AssignKey(ED_Mechanics_Hotkeys_HotkeyModifier, option, keyCode, conflictControl, conflictName)
+	
 	endIf
 endEvent
 
@@ -732,6 +742,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Hold: Cast Extended Perception or Dispel it or Celerity ; Tap: Celerity; Tap when Celerity is active: Wicked Wind")
 	elseIf akOp == Hotkeys_HotkeyB
 		self.SetInfoText("Tap: Toggle Deadly Strength, Hold: charge next jump heigth")
+	elseIf akOp == Hotkeys_HotkeyModifier
+		self.SetInfoText("Modifier key, remap if you to use something other than LShift")
 		
 	; ------------------------------------------------------------
 	; settings
