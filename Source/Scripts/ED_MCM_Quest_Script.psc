@@ -156,6 +156,11 @@ Int Cheats_PersuasionToggle
 float property Default_Cheats_PersuasionToggle auto
 GlobalVariable Property ED_Mechanics_Global_MCM_PersuasionToggle Auto
 
+Int Cheats_DoubleDrainToggle
+float property Default_Cheats_DoubleDrainToggle auto
+GlobalVariable Property ED_Mechanics_Global_MCM_DoubleDrainToggle Auto
+
+
 
 function OnPageReset(String akPage)
 
@@ -223,11 +228,12 @@ function OnPageReset(String akPage)
 	Cheats_MasterOfTheMindToggle = self.AddToggleOption("Mimic Master of the Mind", ED_Mechanics_Global_MCM_MasterOfTheMindToggle.GetValue() as Bool)
 	Cheats_DisableHate = self.AddToggleOption("Disable hate when Blood Starved", ED_Mechanics_Global_MCM_DisableHate.GetValue() as Bool)
 	Cheats_DisableScorchingSun = self.AddToggleOption("Disable Sun burning", ED_Mechanics_Global_MCM_DisableScorchingSun.GetValue() as Bool)
-	Cheats_DisableAlchemyPenalty = self.AddToggleOption("Disable penalty to Health restoring potions", ED_Mechanics_Global_MCM_DisableAlchemyPenalty.GetValue() as Bool)
+	;Cheats_DisableAlchemyPenalty = self.AddToggleOption("Disable penalty to Health restoring potions", ED_Mechanics_Global_MCM_DisableAlchemyPenalty.GetValue() as Bool)
 	Cheats_DisableChainedBeast = self.AddToggleOption("Disable Fortitude transformation", ED_Mechanics_Global_MCM_DisableChainedBeast.GetValue() as Bool)
 	Cheats_ToggleArmorWatcherVL = self.AddToggleOption("Toggle Equip Watcher for VL", ED_Mechanics_Global_MCM_ToggleArmorWatcherVL.GetValue() as Bool)
 	Cheats_DisableFortitude = self.AddToggleOption("Toggle Fortitude", ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() as Bool)
 	Cheats_ToggleExtractor = self.AddToggleOption("Force have blood extractor", ED_Mechanics_Global_MCM_ExtractorToggle.GetValue() as Bool)
+	Cheats_DoubleDrainToggle = self.AddToggleOption("Allow Double Drain cast", ED_Mechanics_Global_MCM_DoubleDrainToggle.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	
@@ -390,7 +396,11 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Cheats_ToggleExtractor
 		ED_Mechanics_Global_MCM_ExtractorToggle.SetValue(Default_Cheats_ToggleExtractor)
 		SetToggleOptionValue(Cheats_ToggleExtractor, Default_Cheats_ToggleExtractor as bool)
-		
+	
+	elseIf akOp == Cheats_DoubleDrainToggle
+		ED_Mechanics_Global_MCM_DoubleDrainToggle.SetValue(Default_Cheats_DoubleDrainToggle)
+		SetToggleOptionValue(Cheats_DoubleDrainToggle, Default_Cheats_DoubleDrainToggle as bool)
+	
 	endif
 	
 	
@@ -665,6 +675,10 @@ function OnOptionSelect(Int akOp)
 		ED_Mechanics_Global_MCM_ExtractorToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_ExtractorToggle.GetValue())
 		SetToggleOptionValue(Cheats_ToggleExtractor, ED_Mechanics_Global_MCM_ExtractorToggle.GetValue() as bool)
 	
+	elseif akOp == Cheats_DoubleDrainToggle
+		ED_Mechanics_Global_MCM_DoubleDrainToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_DoubleDrainToggle.GetValue())
+		SetToggleOptionValue(Cheats_DoubleDrainToggle, ED_Mechanics_Global_MCM_DoubleDrainToggle.GetValue() as bool)
+
 	; ------------------------------------------------------------
 	endif
 	ED_BloodMeter_Quest.UpdateMeterBasicSettings()
@@ -768,6 +782,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Disable Fortitude and Chained Beast mechanics altogether. Embrace the Beast perk only gives you the change spell.")
 	elseIf akOp == Cheats_ToggleExtractor
 		self.SetInfoText("Allow extracting Blood Potions from Blood Dolls (victims of seduction through dialogue several times) without having Septimus essense extractor")
+	elseIf akOp == Cheats_DoubleDrainToggle
+		self.SetInfoText("Allow casting Vampiric Drain from both hands while not dual casting. Disabled in Everdamned by default for balance.")
 	
 	; ------------------------------------------------------------
 	endif
