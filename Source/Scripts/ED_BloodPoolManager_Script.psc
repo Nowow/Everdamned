@@ -20,8 +20,8 @@ bool __needToFlash
 int function BlendSecondaryColors(float highShare)
 	;int startARBG = 11416450
 	;int startARBG = 8726115
-	int startARBG = 4391001
-	int endARGB = 16752947
+	int startARBG = ED_Mechanics_BloodMeter_LowBonusColor_Global.GetValue() as int
+	int endARGB = ED_Mechanics_BloodMeter_HighBonusColor_Global.GetValue() as int
 	
 	if highShare > 1.0
 		highShare = 1.0
@@ -120,8 +120,17 @@ state StageOrAgeChange
 		; each age adds 150 to pool? maybe should add more?
 		_calcMaxAv = 125.0 + 175.0* (VampireAge as float)
 		debug.Trace("Everdamned DEBUG: Blood Pool Manager calculated " + _calcMaxAv + " pool based on Age")
-		; Base pool values for progression, full for Sated, half for Starved
-		_calcMaxAv = _calcMaxAv - ((_calcMaxAv / 6.0) * ((VampireStatus - 1) as float))
+		; Base pool values for progression
+		if VampireStatus == 2
+			_calcMaxAv = _calcMaxAv*0.7
+			VitaeMeter.StartFlash()
+		elseif VampireStatus == 3
+			VitaeMeter.StartFlash()
+			_calcMaxAv = _calcMaxAv*0.5
+		elseif VampireStatus == 4
+			_calcMaxAv = _calcMaxAv*0.4
+			VitaeMeter.StartFlash()
+		endif
 		debug.Trace("Everdamned DEBUG: Blood Pool Manager modified pool to " + _calcMaxAv + " based on Stage")
 	
 		ED_Mechanics_BloodPool_Base.SetValue(_calcMaxAv)
@@ -358,6 +367,8 @@ GlobalVariable Property ED_Mechanics_BloodPool_Total Auto
 GlobalVariable Property ED_Mechanics_BloodPool_MaxBonus Auto
 GlobalVariable Property ED_Mechanics_BloodPool_MaxPermaBonus Auto
 GlobalVariable Property ED_Mechanics_VampireAge Auto
+GlobalVariable Property ED_Mechanics_BloodMeter_HighBonusColor_Global Auto
+GlobalVariable Property ED_Mechanics_BloodMeter_LowBonusColor_Global Auto
 
 GlobalVariable property ED_Mechanics_BloodPool_BloodSenseThreshold_Minimal auto
 GlobalVariable property ED_Mechanics_BloodPool_BloodSenseThreshold_Okay auto

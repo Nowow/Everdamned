@@ -211,7 +211,12 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 	
 	elseif asEventName == SocialFeedSatiation
 		aFeedTarget.DamageActorValue("ED_HpDrainedTimer", aFeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.7)
-		PlayerVampireQuest.EatThisActor(aFeedTarget, 0.35)
+		int __seducedRank = aFeedTarget.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac)
+		if __seducedRank < 0
+			__seducedRank = 0
+		endif
+		float __shareToEat = 0.30 + __seducedRank*0.1
+		PlayerVampireQuest.EatThisActor(aFeedTarget, __shareToEat)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedSatiation event, processed target: " + aFeedTarget)\
 
 	elseif asEventName == SocialFeedFinished
@@ -700,7 +705,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	else
 	
 		debug.Trace("Everdamned INFO: Feed Manager got these boundaries for dialogue Seduction handling; lower: " + LowRadius + ", higher: " + HighRadius)
-	
+		
 		float __lightLevel = PlayerRef.GetLightLevel()
 		if __lightLevel <= 10.0
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = LowRadius
@@ -1313,7 +1318,8 @@ spell property ED_FeralBeast_ApplyHasBeenEaten_Trigger_Spell auto
 Race Property VampireGarkainBeastRace auto
 Race Property DLC1VampireBeastRace auto
 faction Property DLC1PotentialVampireFaction auto
-Faction Property DLC1PlayerTurnedVampire auto	
+Faction Property DLC1PlayerTurnedVampire auto
+faction Property ED_Mechanics_FeedDialogue_Seduced_Fac auto
 globalvariable property DLC1VampireFeedStartTime auto
 GlobalVariable Property PlayerIsVampire  Auto
 sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
