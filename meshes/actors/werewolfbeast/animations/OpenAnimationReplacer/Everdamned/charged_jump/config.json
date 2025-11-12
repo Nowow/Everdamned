@@ -1,0 +1,24 @@
+{
+    "name": "charged_jumps",
+    "description": "jump animation with event when charged",
+    "priority": 4955514,
+    "ignoreDontConvertAnnotationsToTriggersFlag": true,
+    "conditions": [
+        {
+            "condition": "HasMagicEffectWithKeyword",
+            "requiredVersion": "1.0.0.0",
+            "Keyword": {
+                "form": {
+                    "pluginName": "Everdamned.esp",
+                    "formID": "7FA7F3"
+                }
+            },
+            "Active effects only": false
+        },
+        {
+            "condition": "IsInAir",
+            "requiredVersion": "1.0.0.0",
+            "negated": true
+        }
+    ]
+}

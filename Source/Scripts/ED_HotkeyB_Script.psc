@@ -10,6 +10,31 @@ float property JumpChargeUpdateRate = 0.45 auto
 
 int chargeSoundInstance
 
+; using existing events for VL and WW skeletons because dont want to
+; go through the pain of adding new events to non-humanoid skeletons
+function RegisterAnimationEvents()
+	race __currentPlayerRace = playerRef.GetRace()
+	if     __currentPlayerRace == DLC1VampireBeastRace
+		RegisterForAnimationEvent(playerRef, "SpecialFeeding")
+		debug.Trace("Everdamned INFO: Hotkey B Manager registers animations for VL")
+		
+	elseif __currentPlayerRace == ED_FeralBeast_Fleder_Race
+		RegisterForAnimationEvent(playerRef, "Event00")
+		debug.Trace("Everdamned INFO: Hotkey B Manager registers animations for Fleder")
+		
+	else
+		RegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
+		debug.Trace("Everdamned INFO: Hotkey B Manager registers animations for mortal")
+	endif
+
+endfunction
+
+function UnregisterAnimationEvents()
+	UnRegisterForAnimationEvent(playerRef, "SpecialFeeding")
+	UnRegisterForAnimationEvent(playerRef, "Event00")
+	UnRegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
+endfunction
+
 int __currentHotkeyB
 function RegisterHotkey()
 	__currentHotkeyB = ED_Mechanics_Hotkeys_HotkeyB.GetValue() as int
@@ -19,12 +44,14 @@ function RegisterHotkey()
 	
 	if __hasPotence && __hasNF
 		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has both Potence and Necrotic Flesh")
-		RegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
+		RegisterAnimationEvents()
+		;Event00 ww
+		;SpecialFeeding VL
 		GoToState("KnowsPotenceAndNF")
 		RegisterForKey(__currentHotkeyB)
 	elseif __hasPotence
 		debug.Trace("Everdamned INFO: Hotkey B Manager determined player has Potence, but not Necrotic Flesh")
-		RegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
+		RegisterAnimationEvents()
 		GoToState("KnowsOnlyPotence")
 		RegisterForKey(__currentHotkeyB)
 	elseif __hasNF
@@ -40,7 +67,7 @@ endfunction
 function UnregisterHotkey()
 	GoToState("")
 	UnRegisterForKey(__currentHotkeyB)
-	UnRegisterForAnimationEvent(playerRef, "ed_chargedjumpstart")
+	UnregisterAnimationEvents()
 	__currentHotkeyB = 0
 endfunction
 
@@ -340,6 +367,9 @@ spell[] property JumpBonusSpellArray auto
 spell property ED_Mechanics_PotenceJumpBonus1_Spell auto
 spell property ED_Mechanics_PotenceJumpBonusCleanser_Spell auto
 spell property ED_VampirePowers_Pw_NecroticFlesh_Tog_Spell auto
+
+race property DLC1VampireBeastRace auto
+race property ED_FeralBeast_Fleder_Race auto
 
 hazard[] property JumpBonusHazardArray auto
 imagespacemodifier property ED_Art_Imod_ExtendedPerception_Out auto

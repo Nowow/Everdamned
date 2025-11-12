@@ -39,11 +39,17 @@ endfunction
 Event OnPlayerLoadGame()
 	Debug.Trace("Everdamned INFO: Feed Manager player alias OnPlayerLoadGame() called ")
 	StartListening()
+	if !(ED_Mechanics_HotKeys_Quest.IsStopped())
+		ED_Mechanics_HotKeys_Quest.RegisterAnimationEvents()
+	endif
 EndEvent
 
 Event OnRaceSwitchComplete()
  	Debug.Trace("Everdamned INFO: Feed Manager player alias OnRaceSwitchComplete() called ")
 	StartListening()
+	if !(ED_Mechanics_HotKeys_Quest.IsStopped())
+		ED_Mechanics_HotKeys_Quest.RegisterAnimationEvents()
+	endif
 EndEvent
 
 event OnVampirismStateChanged(bool abIsVampire)
@@ -124,6 +130,7 @@ endevent
 
 
 ED_FeedManager_Script property ED_FeedManager_Quest auto
+ED_HotkeyB_Script property ED_Mechanics_HotKeys_Quest auto
 
 sound property ED_Art_SoundM_FeedDoubletapJumping auto
 sound property ED_Art_SoundM_BleedoutFinishRustle auto
