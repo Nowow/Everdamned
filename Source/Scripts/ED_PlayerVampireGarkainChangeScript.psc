@@ -187,12 +187,9 @@ Function StartTracking()
 		pDLC1nVampireNecklaceGargoyle.SetValue(1 as Float)
 	endIf 
 	
-	if playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)
-		debug.Trace("Everdamned DEBUG: player has EmbraceTheBeast perk, changing default objects to allow perk menu and power selection")
-		kDefObjMan.SetForm("RIVR", ED_VampireGarkainBeastRace)
-		kDefObjMan.SetForm("RIVS", ED_VampirePowers_GarkainBeast_Powers_List)
-	endif
-
+	kDefObjMan.SetForm("RIVR", ED_VampireGarkainBeastRace)
+	kDefObjMan.SetForm("RIVS", ED_VampirePowers_GarkainBeast_Powers_List)
+	
     playerRef.UnequipAll()
 	
 	if ED_Mechanics_Global_DisableHate.GetValue() == 0 as Float
@@ -217,7 +214,13 @@ Function StartTracking()
 	playerRef.AddSpell(ED_BeingVampireVL_Vanilla_Ab_SunDamage, false)
 	
 	playerRef.DispelSpell(ED_VampirePowers_GarkainBeast_Change)
-	playerRef.AddSpell(ED_VampirePowers_GarkainBeast_Revert, false)
+	
+	if playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)
+		debug.Trace("Everdamned DEBUG: Vampire Beast has determined that player has EmbraceTheBeast perk, adding revert spell")
+		playerRef.AddSpell(ED_VampirePowers_GarkainBeast_Revert, false)
+		; revert spell removed in revert ME
+	endif
+
 
     ; unequip magic
     Spell left = playerRef.GetEquippedSpell(0)
