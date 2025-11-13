@@ -6,3 +6,4 @@ Event OnEffectStart(Actor akTarget, Actor akCaster)
 Endevent
 
 message property ED_Mechanics_Message_PowerCantBeUsed auto
+sound property MAGFail auto

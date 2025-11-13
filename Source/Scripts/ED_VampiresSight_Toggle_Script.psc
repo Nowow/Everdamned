@@ -25,7 +25,7 @@ Event OnEffectStart(Actor Target, Actor Caster)
 	if __HasPV && __isLShiftPressed
 		
 		; turn off Predator Vision, keep Sight
-		if __hasPVME
+		if __hasPVME 
 			debug.Trace("Everdamned DEBUG: Night Eye Actuator removes Blood Sense")
 			Caster.removespell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell)
 			;StopBloodSenseFX()
@@ -36,9 +36,14 @@ Event OnEffectStart(Actor Target, Actor Caster)
 				debug.Trace("Everdamned DEBUG: Night Eye Actuator adds Night Vision")
 				Caster.addspell(ED_BeingVampire_Vanilla_Pw_VampiresSight_Spell_Actual, false)
 			endif
-			debug.Trace("Everdamned DEBUG: Night Eye Actuator adds Blood Sense")
-			Caster.addspell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell, false)
-			;StartBloodSenseFX()
+			if Caster.GetActorValue("ED_BloodPool") > 1.0
+				debug.Trace("Everdamned DEBUG: Night Eye Actuator adds Blood Sense")
+				Caster.addspell(ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Spell, false)
+			else
+				MAGFail.Play(Target)
+				ED_Mechanics_Message_PowerCantBeUsed.Show()
+			endif
+			
 		endif
 
 	; regular Sight interation
@@ -67,6 +72,5 @@ magiceffect property ED_BeingVampire_Vanilla_Pw_PredatorVision_Cloak_Effect auto
 
 globalvariable property ED_Mechanics_VampireAge auto
 
-;imagespacemodifier property ED_Art_Imod_BloodSenseIntro auto
-;imagespacemodifier property ED_Art_Imod_BloodSenseLoop auto
-;imagespacemodifier property ED_Art_Imod_BloodSenseOutro auto
+sound property MAGFail auto
+message property ED_Mechanics_Message_PowerCantBeUsed auto

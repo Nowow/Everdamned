@@ -216,6 +216,9 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 			__seducedRank = 0
 		endif
 		float __shareToEat = 0.30 + __seducedRank*0.1
+		if aFeedTarget.IsInFaction(PlayerMarriedFaction)
+			__shareToEat = 0.50
+		endif
 		PlayerVampireQuest.EatThisActor(aFeedTarget, __shareToEat)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedSatiation event, processed target: " + aFeedTarget)\
 
@@ -1320,6 +1323,7 @@ Race Property DLC1VampireBeastRace auto
 faction Property DLC1PotentialVampireFaction auto
 Faction Property DLC1PlayerTurnedVampire auto
 faction Property ED_Mechanics_FeedDialogue_Seduced_Fac auto
+faction Property PlayerMarriedFaction auto
 globalvariable property DLC1VampireFeedStartTime auto
 GlobalVariable Property PlayerIsVampire  Auto
 sound property ED_Art_Sound_NPCHumanVampireFeed_Marker auto
