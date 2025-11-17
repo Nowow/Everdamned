@@ -99,7 +99,7 @@ In **Everdamned**, there are different ways to sate the thirst:
 * **Thralls**: Volkihar castle maintains a stable of thralls. Feeding on them temporarily boosts **Vitae** by **20%** of victim's **Health**.
 * **Sleeping**: Sneak into someone's domicile to feed on them in their sleep. Temporarily boosts **Vitae** by **30%** of victim's **Health.**
 * **Charm (Eyes of the Moon perk)**: With a little touch of vampiric charm, seduce your way to victim's throat through conversation. A large number of factors determines the likelihood of a success.  Temporarily boosts **Vitae** by **30%** (first success) to **50%** (Blood Doll) of victim's **Health**, depending on how many times they were successfully seduced.
-* **Drain**: If your bite was lethal, temporarily boosts **Vitae **by** 50%** of victim's **Health. **Act of draining another **Vampire** is called **Diablerie**, and is only possible through combat at first.
+* **Drain**: If your bite was lethal, temporarily boosts **Vitae **by** 50%** of victim's **Health**. Act of draining another **Vampire** is called **Diablerie**, and is only possible through combat at first.
 
 
 After feeding, victims need time to replenish the vital liquid. Recuperation period depends on how large was the **%** of **Health** used for **Vitae** boost. **Draining** is still possible regardless.
