@@ -55,7 +55,7 @@ There is a number of baseline characteristics and powers that all vampires share
 **Vampiric Rank (Age)**
 
 A newborn fledgling, even one sired by a member of royal bloodline, takes on the full brunt of Molag's curse, yet enjoys little of its benefits. As the unlife goes on, it adapts to the vampiric condition - an experienced hunter, older vampire is certainly a force not to be trifled with. 
-A dexterous night hunter, vampire moves **5% (Fledgling) - 25% (Nightmaster)** faster, and effective Sneak skill is **10 - 40** points higher. Several acquired powers and abilities also improve with age.
+A dexterous night hunter, vampire moves **5% (Fledgling) - 25% (Nightmaster)** faster, and effective Sneak skill is **10 - 40** points higher. Some powers and abilities improve with age, usually their description will reflect that.
 
 
 * **Fledgling**: the beginning of an eternal journey.
@@ -297,9 +297,9 @@ Can you feel the power of the ancient blood coursing through your veins yet? Acq
 
 **Compatibility**
 
-**Hard incompatibility**: other vampirism overhauls, like Sacrosanct, Vampiric Thirst ports, Better Vampires etc. They are meant to modify same gameplay elements and would break each other.
-**Compatible**: mods that change vampire appearance, like DVA, Vampire Lord Overhaul etc. Everdamned does not edit any vanilla race or NPC records to keep it as compatible with such mods as possible.
-**Partially Compatible**: other mods, related to feeding, like Vampire Feeding Tweaks or Vampire Animations. Everdamned already covers feeding mechanics extensively, and in vanilla feeding the game does not have info about the victim, so it is not possible to calculate Vitae bonus and etc. Compatibility patches will have to be made, feel free to request some/ask about compatibility in the posts tab. A general compatibility patch with all of them is planned.
+**Hard incompatibility**: other vampirism overhauls, like Sacrosanct, Vampiric Thirst ports, Better Vampires etc. They are meant to modify same gameplay elements and would break each other.  
+**Compatible**: mods that change vampire appearance, like DVA, Vampire Lord Overhaul etc. Everdamned does not edit any vanilla race or NPC records to keep it as compatible with such mods as possible.  
+**Partially Compatible**: other mods, related to feeding, like Vampire Feeding Tweaks or Vampire Animations. Everdamned already covers feeding mechanics extensively, and in vanilla feeding the game does not have info about the victim, so it is not possible to calculate Vitae bonus and etc. Compatibility patches will have to be made, feel free to request some/ask about compatibility in the posts tab. A general compatibility patch with all of them is planned.  
 **Not Recommended:** These mods will not irreparably break the game if installed with Everdamned, but some bad interactions are known to happen, so hence this list:
 
 * [**Wheeler**](https://www.nexusmods.com/skyrimspecialedition/mods/97345) - it has a bug that breaks the game timescale, if you open Wheeler menu during a Slow Time effect. It is a bug of a wheeler and cannot be fixed on Everdamned side, and Everdamned features time slow effects, so that might become an issue. But, the problem fixes itself once the Time Slow effect ends, so Wheeler still can be used, albeit with caution.
@@ -309,27 +309,25 @@ Can you feel the power of the ancient blood coursing through your veins yet? Acq
 
 **Installation**
 
-1) install all of the requirements flagged as Mandatory, and preferably the rest as well
+1) install all of the requirements flagged as Mandatory, and preferably the rest as well  
 2) install this mod with your preferred mod manager as regular, or copy the contents of the mod's archive into Skyrim Special Edition Data folder for manual installation (not recommended).
 
 **Credits**
 
 All assets are either made by me from vanilla assets or come from mods with open permission (or i asked for permission directly). In latter case, they can be found in a dedicated *_imported folder in /meshes/Everdamned or /textures/Everdamned. Important to note, 90% of them are not copied as is, but modified by me to some degree, sometimes they are not recognizable anymore, but I decided to leave them where they are for convenience.
 
-MissLeeches - it was her mod that awakened the interest for vampiric media in me, that still holds to this day and led to the creation of this mod. also shamelessly stole some cool strings
-EnaiSiaion - assets from Sacrosanct, Apocalypse and Ordinator. thanks for all the amazing mods of Enairim as well as Sacrosanct, how do I get off Ordinator, its just so good, someone please help me.
-MihailMods - used Fleder from his Vampire Beasts mod and Foglings from Foglings mod. hid mods are a staple of my load order and also seems like a very pleasant guy
-KittyTail - learned most of VFX that I can do with NIFs from dissecting their numerous mods of insane quality, also used some assets
-noptasis - Arcanum is my favorite spell mod and a huge inspiration, also used some assets
-Aipex8 - used his Cold-Flame textures and gradients, also like Coldharbour Resummoned very much
-juhaaa - crouch idle from Sky Idles 
-iRetrospect - sprinting jump animation
-JaySepra - breathing SFX
-Shepiao - Tasha's Hideous Laughter laugh tracks
-steelfeathers' Lost Grimoire - psychic explosion mesh
-r/skyrimmods discord - for help with mod development
-
-
+MissLeeches - it was her mod that awakened the interest for vampiric media in me, that still holds to this day and led to the creation of this mod  
+EnaiSiaion - assets from Sacrosanct, Apocalypse and Ordinator. thanks for all the amazing mods of Enairim as well as Sacrosanct, how do I get off Ordinator, its just so good, someone please help me  
+MihailMods - used Fleder from his Vampire Beasts mod and Foglings from Foglings mod. hid mods are a staple of my load order and also seems like a swell guy  
+KittyTail - learned most of VFX that I can do with NIFs from dissecting their numerous mods of insane quality, also used some assets  
+noptasis - Arcanum is my favorite spell mod and a huge inspiration, also used some assets  
+Aipex8 - used his Cold-Flame textures and gradients, also like Coldharbour Resummoned very much  
+juhaaa - crouch idle from Sky Idles  
+iRetrospect - sprinting jump animation  
+JaySepra - breathing SFX  
+Shepiao - Tasha's Hideous Laughter laugh tracks  
+steelfeathers' Lost Grimoire - psychic explosion mesh  
+r/skyrimmods discord - for help with mod development  
 
 FAQ
 
