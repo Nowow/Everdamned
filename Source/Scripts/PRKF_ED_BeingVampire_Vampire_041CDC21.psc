@@ -1,19 +1,11 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 44
+;NEXT FRAGMENT INDEX 45
 Scriptname PRKF_ED_BeingVampire_Vampire_041CDC21 Extends Perk Hidden
 
 ;BEGIN FRAGMENT Fragment_4
 Function Fragment_4(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
 ED_FeedManager_Quest.HandleDrainThrall(akTargetRef as actor)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0(ObjectReference akTargetRef, Actor akActor)
-;BEGIN CODE
-ED_FeedManager_Quest.HandleCombatDrain(akTargetRef as actor)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -26,18 +18,10 @@ ED_FeedManager_Quest.HandleFeedThrall(akTargetRef as actor)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_41
-Function Fragment_41(ObjectReference akTargetRef, Actor akActor)
+;BEGIN FRAGMENT Fragment_8
+Function Fragment_8(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
-ED_FeedManager_Quest.HandleFeedThrall(akTargetRef as actor)
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_38
-Function Fragment_38(ObjectReference akTargetRef, Actor akActor)
-;BEGIN CODE
-ED_FeedManager_Quest.HandleCombatDrain(akTargetRef as actor)
+ED_FeedManager_Quest.HandleDrainMesmerized(akTargetRef as actor)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -58,10 +42,27 @@ ED_FeedManager_Quest.HandleDrainSleep(akTargetRef as actor)
 EndFunction
 ;END FRAGMENT
 
-;BEGIN FRAGMENT Fragment_8
-Function Fragment_8(ObjectReference akTargetRef, Actor akActor)
+;BEGIN FRAGMENT Fragment_38
+Function Fragment_38(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
-ED_FeedManager_Quest.HandleDrainMesmerized(akTargetRef as actor)
+ED_FeedManager_Quest.HandleCombatDrain(akTargetRef as actor)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0(ObjectReference akTargetRef, Actor akActor)
+;BEGIN CODE
+ED_FeedManager_Quest.HandleCombatDrain(akTargetRef as actor)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_41
+Function Fragment_41(ObjectReference akTargetRef, Actor akActor)
+;BEGIN CODE
+ED_FeedManager_Quest.HandleFeedThrall(akTargetRef as actor)
+debug.Trace("Everdamned DEBUG: Dexion is bitten!!! perk")
 ;END CODE
 EndFunction
 ;END FRAGMENT

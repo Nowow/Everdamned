@@ -348,6 +348,7 @@ function HandleFeedThrall(actor FeedTarget)
 	
 	; for vampire converting sidequest
 	if (DLC1VQ03VampireDexion && DLC1VQ03VampireDexion.GetActorReference() == FeedTarget) || (FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False)
+		debug.Trace("Everdamned DEBUG: Dexion is bitten!!!")
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
 	endif
 	
