@@ -350,6 +350,7 @@ function HandleFeedThrall(actor FeedTarget)
 	if (DLC1VQ03VampireDexion && DLC1VQ03VampireDexion.GetActorReference() == FeedTarget) || (FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False)
 		debug.Trace("Everdamned DEBUG: Dexion is bitten!!!")
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+		FeedTarget.DispelSpell(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell)
 	endif
 	
 	;sfx, maybe should bake into animation?
@@ -1130,6 +1131,8 @@ state CombatDrain
 	endfunction
 	function HandleBeastBite()
 	endfunction
+	function HandleEnthrallDexion(actor FeedTarget)
+	endfunction
 	
 	event OnBeginState()
 		debug.Trace("Everdamned DEBUG: Feed Manager entered CombatDrain state")
@@ -1291,6 +1294,38 @@ state CombatDrain
 	
 endstate
 
+function HandleEnthrallDexion(actor FeedTarget)
+	debug.Trace("Everdamned DEBUG: Dexion is bitten!!!")
+	
+	; tell OAR that ist vanilla feed animation
+	ED_Mechanics_Global_FeedType.SetValue(0.0)
+	
+	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
+		
+	DLC1VampireTurn.PlayerBitesMe(FeedTarget)
+	FeedTarget.DispelSpell(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell)
+	
+	
+	;sfx, maybe should bake into animation?
+	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
+
+	;adjust status bloodpool etc
+	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.4)
+	PlayerVampireQuest.EatThisActor(FeedTarget, 0.2)
+	
+	;age for 2h
+	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
+	
+	;Blue Blood
+	if !(ED_BlueBlood_Quest_quest.IsStopped())
+		; startup stage 10
+		ED_BlueBlood_Quest_quest.Start()
+	endif
+
+	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
+
+endfunction
+
 
 ReferenceAlias Property DLC1VQ03VampireDexion auto
 
@@ -1317,6 +1352,7 @@ spell property ED_BeingVampire_VampireFeed_VictimMark_Spell auto
 spell property ED_BeingVampire_VampireFeed_PlayerMark_Spell auto
 spell property ED_Misc_DisarmFF_Spell auto
 spell property ED_Mechanics_Spell_SetDontMove auto
+spell property ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell auto
 
 spell property ED_FeralBeast_ApplyHasBeenEaten_Trigger_Spell auto
 Race Property VampireGarkainBeastRace auto

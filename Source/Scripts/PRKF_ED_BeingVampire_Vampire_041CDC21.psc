@@ -1,5 +1,5 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 45
+;NEXT FRAGMENT INDEX 52
 Scriptname PRKF_ED_BeingVampire_Vampire_041CDC21 Extends Perk Hidden
 
 ;BEGIN FRAGMENT Fragment_4
@@ -14,6 +14,15 @@ EndFunction
 Function Fragment_25(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
 ED_FeedManager_Quest.HandleFeedThrall(akTargetRef as actor)
+;END CODE
+EndFunction
+;END FRAGMENT
+
+;BEGIN FRAGMENT Fragment_45
+Function Fragment_45(ObjectReference akTargetRef, Actor akActor)
+;BEGIN CODE
+ED_Art_VFX_VampiresSeduction_CasterPoint.Play(playerRef, 5.0)
+playerRef.DoCombatSpellApply(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell, akTargetRef)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -61,7 +70,7 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_41
 Function Fragment_41(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
-ED_FeedManager_Quest.HandleFeedThrall(akTargetRef as actor)
+ED_FeedManager_Quest.HandleEnthrallDexion(akTargetRef as actor)
 debug.Trace("Everdamned DEBUG: Dexion is bitten!!! perk")
 ;END CODE
 EndFunction
@@ -78,3 +87,9 @@ EndFunction
 ;END FRAGMENT CODE - Do not edit anything between this and the begin comment
 
 ED_FeedManager_Script property ED_FeedManager_Quest auto
+
+SPELL Property ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell  Auto  
+
+VisualEffect Property ED_Art_VFX_VampiresSeduction_CasterPoint  Auto  
+
+Actor Property PlayerRef  Auto  
