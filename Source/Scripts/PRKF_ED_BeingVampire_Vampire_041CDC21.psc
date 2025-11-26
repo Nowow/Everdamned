@@ -1,5 +1,5 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 52
+;NEXT FRAGMENT INDEX 53
 Scriptname PRKF_ED_BeingVampire_Vampire_041CDC21 Extends Perk Hidden
 
 ;BEGIN FRAGMENT Fragment_4
@@ -70,8 +70,8 @@ EndFunction
 ;BEGIN FRAGMENT Fragment_41
 Function Fragment_41(ObjectReference akTargetRef, Actor akActor)
 ;BEGIN CODE
-ED_FeedManager_Quest.HandleEnthrallDexion(akTargetRef as actor)
 debug.Trace("Everdamned DEBUG: Dexion is bitten!!! perk")
+ED_FeedManager_Quest.HandleEnthrallDexion(akTargetRef as actor)
 ;END CODE
 EndFunction
 ;END FRAGMENT
