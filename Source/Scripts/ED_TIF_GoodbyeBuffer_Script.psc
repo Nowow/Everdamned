@@ -31,6 +31,7 @@ Function Fragment_1(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
 ;BEGIN CODE
 ThisTopicFinished = true
+playerRef.PlayIdle(ResetRoot)
 ;END CODE
 EndFunction
 ;END FRAGMENT
@@ -42,3 +43,5 @@ Bool Property ThisTopicFinished  Auto
 actor property playerRef auto
 
 Idle Property ED_Idle_Seduction_PlayerSequenceEnd  Auto  
+
+Idle Property ResetRoot  Auto  
