@@ -79,5 +79,14 @@ get = "(GetActorValue('Health', Base) * 0.01) * (1.5 + (GetGlobalValueParam(play
 type = "Adaptive"
 alias = "Fame"
 
+[ED_BloodBlossom]
+type = "Adaptive"
+alias = "RestorationSkillAdvance"
+default.formula = "6"
+default.type = "Constant"
+regen.rate = "100"
+regen.delay = "0.5"
+regen.fixed = true
+
 [Include]
-"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill1p", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_FlamesProc", "ED_PartingGiftBlock", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct", "ED_ActHealthPct", "ED_VampireXPMult", "ED_VigorMortisMagnitude", "ED_SafeSink"]
+"Everdamned.esp" = ["ED_VampireSkill", "ED_VampireSkill1p", "ED_VampireSkill40p", "ED_IcyWindsSelf", "ED_FlamesProc", "ED_PartingGiftBlock", "ED_BloodPool", "ED_HpDrainedTimer", "ED_VampireSkillExpBuffer", "ED_PlayerHP1pct", "ED_ActHealthPct", "ED_VampireXPMult", "ED_VigorMortisMagnitude", "ED_SafeSink", "ED_BloodBlossom"]
