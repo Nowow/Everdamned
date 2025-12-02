@@ -224,12 +224,11 @@
       "Class": "Everdamned_BloodBlossomProc",
       "Filters": {
     "Conditions": ["Everdamned.esp:0x1E349C"],
-    "WeaponsType": ["OneHandSword", "TwoHandSword", "OneHandAxe", "TwoHandAxe", "OneHandMace", "TwoHandMace", "Dagger", "HandToHand", "Beast"],
     "Blocked": ["No"],
     "Attacks": ["Power"]
       },
       "Modifiers": {
-    "Spells": ["Everdamned.esp:0x1E3498"]
+    "Spells": ["Everdamned.esp:0x20BA87"]
       }
     }
   ]
