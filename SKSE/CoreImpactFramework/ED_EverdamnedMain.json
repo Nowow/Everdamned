@@ -217,19 +217,6 @@
 		"ExtraImpactData": ["Everdamned.esp:0xDF3993"],
 		"Spells": ["Everdamned.esp:0xDF3996"]
       }
-    },
-    {
-      "Comment": "Blood Bloossom explosion from powerattack",
-      "Priority": 3,
-      "Class": "Everdamned_BloodBlossomProc",
-      "Filters": {
-    "Conditions": ["Everdamned.esp:0x1E349C"],
-    "Blocked": ["No"],
-    "Attacks": ["Power"]
-      },
-      "Modifiers": {
-    "Spells": ["Everdamned.esp:0x20BA87"]
-      }
     }
   ]
 }
