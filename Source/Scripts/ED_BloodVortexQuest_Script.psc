@@ -1,7 +1,7 @@
 Scriptname ED_BloodVortexQuest_Script extends Quest  
 
 float property OrbHeight = 170.0 auto
-float property VortexLifetime = 30.0 auto
+float property VortexLifetime = 60.0 auto
 int property VictimsNeededToTransform = 4 auto
 
 float property ExtraDuration auto
@@ -175,8 +175,10 @@ function IncrementActorsDied(actor AbsorbedActor)
 		TheAnchor.Delete()
 		
 	else
-		ExtraDuration += 10.0
+		ExtraDuration += 20.0
 		sound SoundToPlay = AbsorbSounds[ActorsDied]
+		
+		TheOrbRef.PlaceAtMe(ED_Art_Explosion_BloodVortex_FlareSecondary)
 		ED_Art_VFX_BloodVortex_AbsorbCrown.Play(TheOrbRef)
 		SoundToPlay.Play(TheOrbRef)
 		ED_Art_SoundM_BloodVortex_Initial2.Play(TheOrbRef)
