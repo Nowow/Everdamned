@@ -3,6 +3,7 @@ Scriptname ED_ProfanedSun_Script extends activemagiceffect
 float property XPgained auto
 
 ObjectReference TheSun
+actor _target
 
 function OnEffectFinish(Actor akTarget, Actor akCaster)
 
@@ -15,12 +16,22 @@ function OnEffectFinish(Actor akTarget, Actor akCaster)
 endFunction
 
 function OnUpdate()
-	actor _target = ED_LastBloodBrandedActor.GetReference() as actor
-	debug.Trace("Everdamned DEBUG: Profaned Sun target: " + _target)
-	if _target != none
+	;actor _target = ED_LastBloodBrandedActor.GetReference() as actor
+	;debug.Trace("Everdamned DEBUG: Profaned Sun target: " + _target)
+	
+	if _target && !(_target.IsDead()) && !(_target.IsHostileToActor(playerRef))
 		TheSun.TranslateTo(_target.X, _target.Y, _target.Z + 170.0, 0.0, 0.0, 0.0, 200.0, 0.0)
-		if _target.IsDead()
-			ED_LastBloodBrandedActor.Clear()
+	else
+		ED_Mechanics_Quest_ProfanedSunTargeter.Start()
+		_target = ED_Target.GetReference() as actor
+		ED_Mechanics_Quest_ProfanedSunTargeter.Stop()
+		
+		if _target
+			
+			TheSun.TranslateTo(_target.X, _target.Y, _target.Z + 170.0, 0.0, 0.0, 0.0, 200.0, 0.0)
+			debug.Trace("Everdamned DEBUG: Profaned Sun takes aim at: " + _target)
+			;TheSun.TranslateToRef(_target, 200.0, 0.000000)
+
 		endif
 	endif
 	RegisterForSingleUpdate(1.0)
@@ -47,14 +58,17 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 	ED_Art_VFX_BloodVortex_ProfanedSunCloak.Play(TheSun)
 	RegisterForSingleUpdate(1.0)
 	
-	actor _target = ED_LastBloodBrandedActor.GetReference() as actor
-	if _target != none
-		if _target.IsDead()
-			ED_LastBloodBrandedActor.Clear()
-		else
-			TheSun.TranslateTo(_target.X, _target.Y, _target.Z + 170.0, 0.0, 0.0, 0.0, 200.0, 0.0)
-			;TheSun.TranslateToRef(_target, 200.0, 0.000000)
-		endif
+	ED_Mechanics_Quest_ProfanedSunTargeter.Start()
+	_target = ED_Target.GetReference() as actor
+	ED_Mechanics_Quest_ProfanedSunTargeter.Stop()
+	
+	;actor _target = ED_LastBloodBrandedActor.GetReference() as actor
+	if _target
+		
+		TheSun.TranslateTo(_target.X, _target.Y, _target.Z + 170.0, 0.0, 0.0, 0.0, 200.0, 0.0)
+		debug.Trace("Everdamned DEBUG: Profaned Sun takes aim at: " + _target)
+		;TheSun.TranslateToRef(_target, 200.0, 0.000000)
+		
 	endif
 	
 	CustomSkills.AdvanceSkill("EverdamnedMain", XPgained)
@@ -62,7 +76,9 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 endFunction
 
 quest property ED_Mechanics_Quest_BloodVortex auto
+quest property ED_Mechanics_Quest_ProfanedSunTargeter auto
 referencealias property TheOrb auto
+referencealias property ED_Target auto
 
 Spell property ED_VampireSpells_ProfanedSun_Cloak_Spell auto
 light property ED_Art_Light_ProfanedSun_Projectile auto
