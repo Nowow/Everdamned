@@ -2,7 +2,7 @@ Scriptname ED_BloodVortexQuest_Script extends Quest
 
 float property OrbHeight = 170.0 auto
 float property VortexLifetime = 60.0 auto
-int property VictimsNeededToTransform = 4 auto
+int property VictimsNeededToTransform = 3 auto
 
 float property ExtraDuration auto
 

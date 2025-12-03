@@ -18,7 +18,7 @@ function OnUpdate()
 	actor _target = ED_LastBloodBrandedActor.GetReference() as actor
 	debug.Trace("Everdamned DEBUG: Profaned Sun target: " + _target)
 	if _target != none
-		TheSun.TranslateToRef(_target, 200.0, 0.000000)
+		TheSun.TranslateTo(_target.X, _target.Y, _target.Z + 170.0, 0.0, 0.0, 0.0, 200.0, 0.0)
 		if _target.IsDead()
 			ED_LastBloodBrandedActor.Clear()
 		endif
@@ -52,7 +52,8 @@ function OnEffectStart(Actor akTarget, Actor akCaster)
 		if _target.IsDead()
 			ED_LastBloodBrandedActor.Clear()
 		else
-			TheSun.TranslateToRef(_target, 200.0, 0.000000)
+			TheSun.TranslateTo(_target.X, _target.Y, _target.Z + 170.0, 0.0, 0.0, 0.0, 200.0, 0.0)
+			;TheSun.TranslateToRef(_target, 200.0, 0.000000)
 		endif
 	endif
 	
