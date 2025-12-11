@@ -1141,11 +1141,7 @@ state CombatDrain
 		; also sets ghost and restrained
 		
 		__needReequip = true
-		ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
-		ED_BeingVampire_VampireFeed_PlayerMark_Spell.Cast(playerRef, playerRef)
 		
-		Game.SetPlayerAIDriven(true)
-		;playerRef.SheatheWeapon()
 		
 		; tell OAR the animation type
 		if aFeedTarget.IsBleedingOut()
@@ -1163,6 +1159,12 @@ state CombatDrain
 			; type and settings are predetermined in EstablishNextStaggerDrainType()
 			
 		endif
+		
+		ED_BeingVampire_VampireFeed_VictimMark_Spell.Cast(playerRef, aFeedTarget)
+		ED_BeingVampire_VampireFeed_PlayerMark_Spell.Cast(playerRef, playerRef)
+		
+		Game.SetPlayerAIDriven(true)
+		;playerRef.SheatheWeapon()
 		
 		debug.Trace("Everdamned DEBUG: Feed Manager commands combat feeding animation")
 		
