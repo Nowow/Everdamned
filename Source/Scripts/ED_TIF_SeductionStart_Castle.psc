@@ -2,6 +2,30 @@
 ;NEXT FRAGMENT INDEX 10
 Scriptname ED_TIF_SeductionStart_Castle Extends TopicInfo Hidden
 
+;BEGIN FRAGMENT Fragment_9
+Function Fragment_9(ObjectReference akSpeakerRef)
+Actor akSpeaker = akSpeakerRef as Actor
+;BEGIN CODE
+ThisTopicFinished = true
+
+if !(akSpeaker.IsInDialogueWithPlayer())
+	playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceEnd)
+endif
+
+while !(ED_Mechanics_Quest_RollFeedDialogueScore.IsStopped())
+	utility.wait(0.1)
+endwhile
+
+; success stage
+if ED_Mechanics_Quest_RollFeedDialogueScore.IsStageDone(100)
+	debug.Trace("Everdamned INFO: Feed Dialogue determined Score Roll was successful")
+else
+	debug.Trace("Everdamned ERROR: Feed Dialogue determined Score Roll was FAILED")
+endif
+;END CODE
+EndFunction
+;END FRAGMENT
+
 ;BEGIN FRAGMENT Fragment_8
 Function Fragment_8(ObjectReference akSpeakerRef)
 Actor akSpeaker = akSpeakerRef as Actor
@@ -22,36 +46,12 @@ endif
 
 ED_Controller_FeedDialogue_Scene.Start()
 
-ED_Mechanics_FeedDialogue_DarkRadius.SetValue(35.0)
-ED_Mechanics_FeedDialogue_LightRadius.SetValue(350.0)
+ED_Mechanics_FeedDialogue_DarkRadius.SetValue(150.0)
+ED_Mechanics_FeedDialogue_LightRadius.SetValue(600.0)
 
 utility.wait(4.0)
 if !ThisTopicFinished  && akSpeaker.IsInDialogueWithPlayer()
 	input.TapKey(input.GetMappedKey("Activate"))
-endif
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_9
-Function Fragment_9(ObjectReference akSpeakerRef)
-Actor akSpeaker = akSpeakerRef as Actor
-;BEGIN CODE
-ThisTopicFinished = true
-
-if !(akSpeaker.IsInDialogueWithPlayer())
-	playerRef.PlayIdle(ED_Idle_Seduction_PlayerSequenceEnd)
-endif
-
-while !(ED_Mechanics_Quest_RollFeedDialogueScore.IsStopped())
-	utility.wait(0.1)
-endwhile
-
-; success stage
-if ED_Mechanics_Quest_RollFeedDialogueScore.IsStageDone(100)
-	debug.Trace("Everdamned INFO: Feed Dialogue determined Score Roll was successful")
-else
-	debug.Trace("Everdamned ERROR: Feed Dialogue determined Score Roll was FAILED")
 endif
 ;END CODE
 EndFunction

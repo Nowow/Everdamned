@@ -726,7 +726,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 			ED_Mechanics_Global_VampireFeedBystanderRadius.value = ED_Mechanics_Global_VampireFeedBystanderRadius.value / 3.0
 			debug.Trace("Everdamned DEBUG: Feed Manager detected Masquerade perk, cutting radius by a third")
 		endif
-		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value)
+		debug.Trace("Everdamned DEBUG: Feed Manager launched Bystander quest, radius: " + ED_Mechanics_Global_VampireFeedBystanderRadius.value + ", light level: " +__lightLevel)
 		DLC1VampireFeedStartTime.SetValue(utility.GetCurrentGameTime())
 		
 	endif
