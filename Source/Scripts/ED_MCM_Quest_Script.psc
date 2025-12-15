@@ -113,6 +113,10 @@ Int Setting_EnableShadowRegen
 float property Default_Setting_EnableShadowRegen auto
 GlobalVariable Property ED_Mechanics_Global_EnableShadowRegen Auto
 
+Int Setting_TotalReverseProgression
+float property Default_Setting_TotalReverseProgression auto
+GlobalVariable Property ED_Mechanics_Global_TotalReverseProgression Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -214,7 +218,7 @@ function OnPageReset(String akPage)
 	
 	self.AddEmptyOption()
 	self.SetCursorPosition(1)
-	self.AddHeaderOption("Compatibility/Cheats", 0)
+	self.AddHeaderOption("Hotkeys", 0)
 	
 	Hotkeys_HotkeyA = AddKeyMapOption("Hotkey A", ED_Mechanics_Hotkeys_HotkeyA.GetValue() as int)
 	Hotkeys_HotkeyB = AddKeyMapOption("Hotkey B", ED_Mechanics_Hotkeys_HotkeyB.GetValue() as int)
@@ -224,7 +228,7 @@ function OnPageReset(String akPage)
 	; cheats/compatibility
 	
 	self.AddEmptyOption()
-	self.AddHeaderOption("Hotkeys", 0)
+	self.AddHeaderOption("Compatibility/Cheats", 0)
 	
 	Cheats_NecromageToggle = self.AddToggleOption("Disable Restoration healing penalty", ED_Mechanics_Global_MCM_NecromageToggle.GetValue() as Bool)
 	Cheats_AllureToggle = self.AddToggleOption("Assume Allure perk", ED_Mechanics_Global_MCM_AllureToggle.GetValue() as Bool)
@@ -238,6 +242,7 @@ function OnPageReset(String akPage)
 	Cheats_DisableFortitude = self.AddToggleOption("Toggle Fortitude", ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() as Bool)
 	Cheats_ToggleExtractor = self.AddToggleOption("Force have blood extractor", ED_Mechanics_Global_MCM_ExtractorToggle.GetValue() as Bool)
 	Cheats_DoubleDrainToggle = self.AddToggleOption("Allow Double Drain cast", ED_Mechanics_Global_MCM_DoubleDrainToggle.GetValue() as Bool)
+	Setting_TotalReverseProgression = self.AddToggleOption("Full Reverse Progression", ED_Mechanics_Global_TotalReverseProgression.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	
@@ -356,6 +361,11 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Setting_EnableShadowRegen
 		ED_Mechanics_Global_EnableShadowRegen.SetValue(Default_Setting_EnableShadowRegen as float)
 		self.SetToggleOptionValue(Setting_EnableShadowRegen, Default_Setting_EnableShadowRegen as bool)
+		
+	elseIf akOp == Setting_TotalReverseProgression
+		ED_Mechanics_Global_TotalReverseProgression.SetValue(Default_Setting_TotalReverseProgression as float)
+		self.SetToggleOptionValue(Setting_TotalReverseProgression, Default_Setting_TotalReverseProgression as bool)
+
 
 	; ------------------------------------------------------------
 	; cheats
@@ -685,6 +695,11 @@ function OnOptionSelect(Int akOp)
 	elseif akOp == Cheats_DoubleDrainToggle
 		ED_Mechanics_Global_MCM_DoubleDrainToggle.SetValue(1 as Float - ED_Mechanics_Global_MCM_DoubleDrainToggle.GetValue())
 		SetToggleOptionValue(Cheats_DoubleDrainToggle, ED_Mechanics_Global_MCM_DoubleDrainToggle.GetValue() as bool)
+		
+	elseif akOp == Setting_TotalReverseProgression
+		ED_Mechanics_Global_TotalReverseProgression.SetValue(1 as Float - ED_Mechanics_Global_TotalReverseProgression.GetValue())
+		SetToggleOptionValue(Setting_TotalReverseProgression, ED_Mechanics_Global_TotalReverseProgression.GetValue() as bool)
+
 
 	; ------------------------------------------------------------
 	endif
@@ -773,6 +788,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("When this is ON, stainding in a shadow (light level < 50) disables Sun Weakness effects other than attribute loss. Actual behavior depends on your lightning mods, so disable if ruins immersion")
 	elseIf akOp == Setting_LevelXPMult
 		self.SetInfoText("How much Vampirism skill contributes to player level progression, relative to regular skills. As damaging vampiric powers do not contribute to any player skill directly AND do not use regular perk points, 0 by default.")
+	elseIf akOp == Setting_TotalReverseProgression
+		self.SetInfoText("Disbles Vampiric Drain scale with Hunger. It will stay same on each stage of Hunger")
 	
 	; ------------------------------------------------------------
 	; cheats
