@@ -41,7 +41,7 @@
 				<hkcstring>IdleOffsetStop</hkcstring>
 				<hkcstring>OffsetStop</hkcstring>
 				<hkcstring>SneakSprintStartRoll</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>

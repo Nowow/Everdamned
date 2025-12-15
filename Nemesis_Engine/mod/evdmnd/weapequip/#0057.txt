@@ -30,7 +30,7 @@
 				<hkcstring>tailCombatIdle</hkcstring>
 				<hkcstring>SoundPlay.WPNLeftHandDraw</hkcstring>
 				<hkcstring>arrowAttach</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>

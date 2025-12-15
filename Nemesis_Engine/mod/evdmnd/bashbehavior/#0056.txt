@@ -21,7 +21,7 @@
 				<hkcstring>tailCombatIdle</hkcstring>
 				<hkcstring>tailSneakIdle</hkcstring>
 				<hkcstring>SoundPlay</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>

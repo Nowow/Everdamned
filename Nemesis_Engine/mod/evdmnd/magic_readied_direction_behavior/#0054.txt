@@ -9,7 +9,7 @@
 				<hkcstring>moveStart</hkcstring>
 				<hkcstring>moveStop</hkcstring>
 				<hkcstring>tailCombatLocomotion</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>

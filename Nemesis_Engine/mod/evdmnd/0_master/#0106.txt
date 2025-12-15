@@ -1217,7 +1217,7 @@
 				<hkcstring>NPCSoundPlay.NPCKillDLC2HeartStone</hkcstring>
 				<hkcstring>NPCKillDLC2HeartStone</hkcstring>
 				<hkcstring>SoundPlay.NPCKillDLC2HeartStone</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>

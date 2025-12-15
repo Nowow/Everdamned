@@ -1088,7 +1088,7 @@
 				<hkobject>
 					<hkparam name="flags">0</hkparam>
 				</hkobject>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkobject>
 					<hkparam name="flags">0</hkparam>
 				</hkobject>

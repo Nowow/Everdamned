@@ -931,7 +931,7 @@
 				<hkcstring>QSTStornDeathIntro</hkcstring>
 				<hkcstring>QSTStornDeathLP</hkcstring>
 				<hkcstring>SoundStop</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>

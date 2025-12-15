@@ -212,7 +212,7 @@
 				<hkcstring>Reload</hkcstring>
 				<hkcstring>ReloadFast</hkcstring>
 				<hkcstring>reloadStart</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>

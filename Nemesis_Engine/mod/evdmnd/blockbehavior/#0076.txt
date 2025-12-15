@@ -39,7 +39,7 @@
 				<hkcstring>BlockBashSprint</hkcstring>
 				<hkcstring>SoundPlay</hkcstring>
 				<hkcstring>blockStopInstant</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>

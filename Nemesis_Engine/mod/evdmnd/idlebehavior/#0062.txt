@@ -44,7 +44,7 @@
 				<hkcstring>MotionDrivenDialogueNextClip</hkcstring>
 				<hkcstring>MotionDrivenDialogueGeneric</hkcstring>
 				<hkcstring>MotionDrivenDialogueAngry</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>

@@ -461,7 +461,7 @@
 				<hkcstring>pa_KillMove2HWDwarvenBallistaSlash</hkcstring>
 				<hkcstring>StartAnimatedCamera</hkcstring>
 				<hkcstring>EndAnimatedCamera</hkcstring>
-<!-- MOD_CODE ~evfmgo~ OPEN -->
+<!-- MOD_CODE ~evdmnd~ OPEN -->
 				<hkcstring>PIE</hkcstring>
 <!-- CLOSE -->
 			</hkparam>
