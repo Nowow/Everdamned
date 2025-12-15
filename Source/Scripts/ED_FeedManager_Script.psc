@@ -261,7 +261,7 @@ function HandleBeastBite()
 	if FeedTarget.HasKeyword(Vampire)
 		float __ageMult = math.pow((FeedTarget.GetLevel() / playerRef.GetLevel()), 1.5)
 		debug.Trace("Everdamned INFO: Feed Manager detects diablerie, aging with mult: " + __ageMult)
-		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * __ageMult)
+		ED_Mechanics_Main_Quest.GainAgeExpirience(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue() * __ageMult)
 		
 		if playerRef.HasPerk(ED_PerkTreeVL_Amaranth_Perk)
 			ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
@@ -272,7 +272,7 @@ function HandleBeastBite()
 		;age for 1 day, default amount for regular drain
 		float baseDrainValue = FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
 		float currentDrainPercent = FeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
-		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
+		ED_Mechanics_Main_Quest.GainAgeExpirience(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue() * currentDrainPercent)
 	endif
 	
 	SharedDrainEffects()
@@ -312,7 +312,7 @@ function HandleBloodWine()
 	PlayerVampireQuest.DineAlone()
 	
 	;age for 2h
-	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0)
+	ED_Mechanics_Main_Quest.GainAgeExpirience(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue())
 	
 	;hemomancy
 	if !(ED_Mechanics_Hemomancy_Quest.IsStageDone(0))
@@ -422,7 +422,7 @@ function HandleDrainThrall(actor FeedTarget)
 	; age
 	float baseDrainValue = FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
 	float currentDrainPercent = FeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
-	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
+	ED_Mechanics_Main_Quest.GainAgeExpirience(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue() * currentDrainPercent)
 	
 	; kill, redo for killmove
 	FeedTarget.KillSilent(playerRef)
@@ -592,7 +592,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 	if FeedTarget.HasKeyword(Vampire)
 		float __ageMult = math.pow((FeedTarget.GetLevel() / playerRef.GetLevel()), 1.5)
 		debug.Trace("Everdamned INFO: Feed Manager detects diablerie, aging with mult: " + __ageMult)
-		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * __ageMult)
+		ED_Mechanics_Main_Quest.GainAgeExpirience(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue() * __ageMult)
 		
 		if playerRef.HasPerk(ED_PerkTreeVL_Amaranth_Perk)
 			ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
@@ -602,7 +602,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 	else
 		float baseDrainValue = FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
 		float currentDrainPercent = FeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
-		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
+		ED_Mechanics_Main_Quest.GainAgeExpirience(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue() * currentDrainPercent)
 	endif
 	
 	SharedDrainEffects()
@@ -737,7 +737,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	aFeedTarget = FeedTarget
 	
 	;age for 8h
-	ED_Mechanics_Main_Quest.GainAgeExpirience(8.0)
+	ED_Mechanics_Main_Quest.GainAgeExpirience(6.0)
 
 	;Blue Blood
 	if !(ED_BlueBlood_Quest_quest.IsStopped())
@@ -937,7 +937,7 @@ function HandleDrainSleep(actor FeedTarget)
 	;age for 1 day, default amount for regular drain
 	float baseDrainValue = FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
 	float currentDrainPercent = FeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
-	ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
+	ED_Mechanics_Main_Quest.GainAgeExpirience(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue() * currentDrainPercent)
 
 	; kill, redo for killmove
 	; silent because detection handled by bystander quest
@@ -1009,7 +1009,7 @@ function ApplyCombatFeedEffects()
 	if aFeedTarget.HasKeyword(Vampire)
 		float __ageMult = math.pow((aFeedTarget.GetLevel() / playerRef.GetLevel()), 1.5)
 		debug.Trace("Everdamned INFO: Feed Manager detects diablerie, aging with mult: " + __ageMult)
-		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * __ageMult)
+		ED_Mechanics_Main_Quest.GainAgeExpirience(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue() * __ageMult)
 		
 		if playerRef.HasPerk(ED_PerkTreeVL_Amaranth_Perk)
 			ED_VampirePowers_Amaranth_Spell.Cast(playerRef)
@@ -1020,7 +1020,7 @@ function ApplyCombatFeedEffects()
 		;age for 1 day, default amount for regular drain
 		float baseDrainValue = aFeedTarget.GetBaseActorValue("ED_HpDrainedTimer") 
 		float currentDrainPercent = aFeedTarget.GetActorValue("ED_HpDrainedTimer") / baseDrainValue
-		ED_Mechanics_Main_Quest.GainAgeExpirience(24.0 * currentDrainPercent)
+		ED_Mechanics_Main_Quest.GainAgeExpirience(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue() * currentDrainPercent)
 	endif
 	
 	SharedDrainEffects()
@@ -1377,6 +1377,7 @@ message property ED_Mechanics_Message_CombatFeedFailed auto
 message property ED_Mechanics_Message_Diablerie auto
 message property ED_Mechanics_Message_CombatFeedGripSlipped auto
 
+globalvariable property ED_Mechanics_Global_MCM_AgeExpPerDrain auto
 globalvariable property ED_Mechanics_Global_MCM_CombatDrainAnim auto
 globalvariable property ED_Mechanics_Global_FeedType auto
 globalvariable property ED_Mechanics_Global_CombatFeedType auto

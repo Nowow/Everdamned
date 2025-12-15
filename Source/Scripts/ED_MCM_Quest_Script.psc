@@ -117,6 +117,10 @@ Int Setting_TotalReverseProgression
 float property Default_Setting_TotalReverseProgression auto
 GlobalVariable Property ED_Mechanics_Global_TotalReverseProgression Auto
 
+Int Setting_AgeExpPerDrain
+float property Default_Setting_AgeExpPerDrain auto
+GlobalVariable Property ED_Mechanics_Global_MCM_AgeExpPerDrain Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -188,6 +192,8 @@ function OnPageReset(String akPage)
 	Setting_VampireSkillExpMult = self.AddSliderOption("Vampire skill XP mult", ED_Mechanics_SkillTree_XPMult_Global.GetValue())
 	Setting_VampireAgeMult = self.AddSliderOption("Vampire aging mult", ED_Mechanics_VampireAgeExpMult.GetValue())
 	Setting_EnableShadowRegen = self.AddToggleOption("Light level based Sun Weakness", ED_Mechanics_Global_EnableShadowRegen.GetValue() as Bool)
+	Setting_TotalReverseProgression = self.AddToggleOption("Full Reverse Progression", ED_Mechanics_Global_TotalReverseProgression.GetValue() as Bool)
+	Setting_AgeExpPerDrain = self.AddSliderOption("Age XP gain per drain", ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue(), "{0} hours")
 	
 	; ------------------------------------------------------------
 	; Night Sight
@@ -242,7 +248,6 @@ function OnPageReset(String akPage)
 	Cheats_DisableFortitude = self.AddToggleOption("Toggle Fortitude", ED_Mechanics_Global_MCM_DisableFortitudeRevive.GetValue() as Bool)
 	Cheats_ToggleExtractor = self.AddToggleOption("Force have blood extractor", ED_Mechanics_Global_MCM_ExtractorToggle.GetValue() as Bool)
 	Cheats_DoubleDrainToggle = self.AddToggleOption("Allow Double Drain cast", ED_Mechanics_Global_MCM_DoubleDrainToggle.GetValue() as Bool)
-	Setting_TotalReverseProgression = self.AddToggleOption("Full Reverse Progression", ED_Mechanics_Global_TotalReverseProgression.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	
@@ -366,6 +371,9 @@ function OnOptionDefault(Int akOp)
 		ED_Mechanics_Global_TotalReverseProgression.SetValue(Default_Setting_TotalReverseProgression as float)
 		self.SetToggleOptionValue(Setting_TotalReverseProgression, Default_Setting_TotalReverseProgression as bool)
 
+	elseIf akOp == Setting_AgeExpPerDrain
+		ED_Mechanics_Global_MCM_AgeExpPerDrain.SetValue(Default_Setting_AgeExpPerDrain as Float)
+		self.SetSliderOptionValue(Setting_AgeExpPerDrain, Default_Setting_AgeExpPerDrain)
 
 	; ------------------------------------------------------------
 	; cheats
@@ -522,6 +530,12 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogRange(0.1, 5.0)
 		self.SetSliderDialogInterval(0.1)
 	
+		elseIf akOp == Setting_AgeExpPerDrain
+		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue())
+		self.SetSliderDialogDefaultValue(Default_Setting_AgeExpPerDrain)
+		self.SetSliderDialogRange(1.0, 48.0)
+		self.SetSliderDialogInterval(1.0)
+	
 	; ------------------------------------------------------------
 	
 	endIf
@@ -602,6 +616,10 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 	elseIf akOp == Setting_VampireAgeMult
 		ED_Mechanics_VampireAgeExpMult.SetValue(akValue)
 		self.SetSliderOptionValue(Setting_VampireAgeMult, akValue)
+		
+	elseIf akOp == Setting_AgeExpPerDrain
+		ED_Mechanics_Global_MCM_AgeExpPerDrain.SetValue(akValue)
+		self.SetSliderOptionValue(Setting_AgeExpPerDrain, akValue, "{0} hours")
 	
 	; ------------------------------------------------------------
 	
@@ -790,6 +808,8 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("How much Vampirism skill contributes to player level progression, relative to regular skills. As damaging vampiric powers do not contribute to any player skill directly AND do not use regular perk points, 0 by default.")
 	elseIf akOp == Setting_TotalReverseProgression
 		self.SetInfoText("Disbles Vampiric Drain scale with Hunger. It will stay same on each stage of Hunger")
+	elseIf akOp == Setting_TotalReverseProgression
+		self.SetInfoText("How many bonus hours of ageing will player gain when draining live targets")
 	
 	; ------------------------------------------------------------
 	; cheats
