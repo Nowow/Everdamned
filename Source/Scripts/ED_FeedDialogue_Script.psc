@@ -111,6 +111,12 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	; -110 if aquaintance, 0 if lover
 	int __relationshipRank = akSeducer.GetRelationshipRank(akSeduced)
 	
+	bool __dreamVisited = akSeduced.IsInFaction(ED_Mechanics_DreamVisited_Fac)
+	if __dreamVisited
+		__playerSeductionScore += 20
+		Debug.Trace("Everdamned INFO: Feed Score: Dream Visited:  " + __playerSeductionScore)
+	endif
+	
 	; from -80 to 0
 	
 	bool __isInn = akSeduced.GetCurrentLocation().HasKeyword(LocTypeInn)
@@ -121,12 +127,12 @@ int Function CalculateScore(Actor akSeducer, Actor akSeduced)
 	endif
 	
 	
-	if __relationshipRank > 0 || __isInn
+	if __relationshipRank > 0 || __isInn || __dreamVisited
 		__playerSeductionScore += (__relationshipRank * 20) - 80
 		if __relationshipRank > 3
 			ConditionalsScript.Bonus_HighRelationship = true
 		endif
-		Debug.Trace("Everdamned INFO: Feed Score: friendly+ or in INN")
+		Debug.Trace("Everdamned INFO: Feed Score: friendly+ or in INN or dream visited")
 	;becomes -110
 	else
 		; you are unaquainted, really hard to seduce. separate fail responses
@@ -594,6 +600,8 @@ endfunction
 ;
 ;endfunction
 
+
+faction property ED_Mechanics_DreamVisited_Fac auto
 
 referencealias property ED_Seducer auto
 referencealias property ED_Seduced auto

@@ -887,7 +887,7 @@ function HandleFeedSleep(actor FeedTarget)
 		FeedTarget
 		if currentRelationship >= 0
 			ED_Art_Shader_DreamVisitor.Play(FeedTarget, 10.0)
-			FeedTarget.SetRelationshipRank(playerRef, currentRelationship + 1)
+			;FeedTarget.SetRelationshipRank(playerRef, currentRelationship + 1)
 			FeedTarget.AddToFaction(ED_Mechanics_DreamVisited_Fac)
 			ED_Mechanics_Message_DreamVisitor_RelationshipIncreased.Show()
 		endif
