@@ -118,9 +118,8 @@ Function PrepShift()
     ;    count += 1
     ;endwhile
 
-
-    Game.DisablePlayerControls(abMovement = false, abFighting = false, abCamSwitch = true, abMenu = false, abActivate = false, abJournalTabs = false, aiDisablePOVType = 1)
-    Game.ForceThirdPerson()
+	Game.ForceThirdPerson()
+    Game.DisablePlayerControls(abMovement = false, abFighting = false, abCamSwitch = false, abMenu = false, abActivate = false, abJournalTabs = false, aiDisablePOVType = 1)
     Game.ShowFirstPersonGeometry(false)
 EndFunction
 
