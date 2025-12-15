@@ -1,0 +1,28 @@
+		<hkobject name="#0054" class="hkbBehaviorGraphStringData" signature="0xc713064e">
+			<hkparam name="eventNames" numelements="9">
+				<hkcstring>FootLeft</hkcstring>
+				<hkcstring>FootRight</hkcstring>
+				<hkcstring>CyclicFreeze</hkcstring>
+				<hkcstring>CyclicCrossBlend</hkcstring>
+				<hkcstring>SpeedSample_MagicLocomotion</hkcstring>
+				<hkcstring>SpeedSample_MagicCastLocomotion</hkcstring>
+				<hkcstring>moveStart</hkcstring>
+				<hkcstring>moveStop</hkcstring>
+				<hkcstring>tailCombatLocomotion</hkcstring>
+<!-- MOD_CODE ~evfmgo~ OPEN -->
+				<hkcstring>PIE</hkcstring>
+<!-- CLOSE -->
+			</hkparam>
+			<hkparam name="attributeNames" numelements="0"></hkparam>
+			<hkparam name="variableNames" numelements="8">
+				<hkcstring>Direction</hkcstring>
+				<hkcstring>SpeedSampled</hkcstring>
+				<hkcstring>IsInCastStateDamped</hkcstring>
+				<hkcstring>iLeftHandType</hkcstring>
+				<hkcstring>iRightHandType</hkcstring>
+				<hkcstring>iSyncIdleLocomotion</hkcstring>
+				<hkcstring>IsInCastState</hkcstring>
+				<hkcstring>IsCastingDual</hkcstring>
+			</hkparam>
+			<hkparam name="characterPropertyNames" numelements="0"></hkparam>
+		</hkobject>

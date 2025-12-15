@@ -1,0 +1,62 @@
+		<hkobject name="#0062" class="hkbBehaviorGraphStringData" signature="0xc713064e">
+			<hkparam name="eventNames" numelements="44">
+				<hkcstring>IdlePlayer</hkcstring>
+				<hkcstring>IdleStop</hkcstring>
+				<hkcstring>PickNewIdle</hkcstring>
+				<hkcstring>IdleHHRight</hkcstring>
+				<hkcstring>IdleAngry</hkcstring>
+				<hkcstring>IdleHHLeft</hkcstring>
+				<hkcstring>IdleAngryLeft</hkcstring>
+				<hkcstring>StartIdleAnimationDriven</hkcstring>
+				<hkcstring>IdleStopInstant</hkcstring>
+				<hkcstring>00NextClip</hkcstring>
+				<hkcstring>InitiateStart</hkcstring>
+				<hkcstring>InitiateEnd</hkcstring>
+				<hkcstring>00PreviousClip</hkcstring>
+				<hkcstring>DialogueNeutral</hkcstring>
+				<hkcstring>DialogueHappy</hkcstring>
+				<hkcstring>DialogueAngry</hkcstring>
+				<hkcstring>DialogueGeneric</hkcstring>
+				<hkcstring>CountDownTick</hkcstring>
+				<hkcstring>IdleOffsetStop</hkcstring>
+				<hkcstring>OffsetArmsCrossedStart</hkcstring>
+				<hkcstring>IdleDialogueLock</hkcstring>
+				<hkcstring>IdleDialogueUnlock</hkcstring>
+				<hkcstring>IdleCartExitInstant</hkcstring>
+				<hkcstring>ExitCartBegin</hkcstring>
+				<hkcstring>ExitCartEnd</hkcstring>
+				<hkcstring>IdleDialogueStart</hkcstring>
+				<hkcstring>MotionDrivenIdle</hkcstring>
+				<hkcstring>IdleDialogueHappyStart</hkcstring>
+				<hkcstring>IdleDialogueAngryStart</hkcstring>
+				<hkcstring>LooseDialogueResponseNegative</hkcstring>
+				<hkcstring>IdleDialogueExpressiveStart</hkcstring>
+				<hkcstring>LooseDialogueResponsePositive</hkcstring>
+				<hkcstring>IdleListenStart</hkcstring>
+				<hkcstring>IdleListenStartAngry</hkcstring>
+				<hkcstring>IdleHDRight</hkcstring>
+				<hkcstring>IdleHDLeft</hkcstring>
+				<hkcstring>IdleHDLeftAngry</hkcstring>
+				<hkcstring>IdleHDRightAngry</hkcstring>
+				<hkcstring>HeadTrackingOff</hkcstring>
+				<hkcstring>HeadTrackingOn</hkcstring>
+				<hkcstring>ArmsCrossedIdle</hkcstring>
+				<hkcstring>MotionDrivenDialogueNextClip</hkcstring>
+				<hkcstring>MotionDrivenDialogueGeneric</hkcstring>
+				<hkcstring>MotionDrivenDialogueAngry</hkcstring>
+<!-- MOD_CODE ~evfmgo~ OPEN -->
+				<hkcstring>PIE</hkcstring>
+<!-- CLOSE -->
+			</hkparam>
+			<hkparam name="attributeNames" numelements="0"></hkparam>
+			<hkparam name="variableNames" numelements="7">
+				<hkcstring>bHeadTrackSpine</hkcstring>
+				<hkcstring>bIdleBeforeConversation</hkcstring>
+				<hkcstring>bForceIdleStop</hkcstring>
+				<hkcstring>bAnimationDriven</hkcstring>
+				<hkcstring>bAnimationDrivenDialogue</hkcstring>
+				<hkcstring>bBlendOutSlow</hkcstring>
+				<hkcstring>bMotionDrivenDialogue</hkcstring>
+			</hkparam>
+			<hkparam name="characterPropertyNames" numelements="0"></hkparam>
+		</hkobject>
