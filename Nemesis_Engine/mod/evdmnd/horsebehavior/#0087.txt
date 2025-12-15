@@ -213,7 +213,25 @@
 				<hkcstring>ReloadFast</hkcstring>
 				<hkcstring>reloadStart</hkcstring>
 <!-- MOD_CODE ~evdmnd~ OPEN -->
-				<hkcstring>PIE</hkcstring>
+				<hkcstring>ed_seduction_touchHair_trigger</hkcstring>
+				<hkcstring>ed_chargedjumpstart</hkcstring>
+				<hkcstring>ed_feedkm_resetcam</hkcstring>
+				<hkcstring>ed_playsound_feeddoubletap</hkcstring>
+				<hkcstring>ed_feedkm_killvictim</hkcstring>
+				<hkcstring>ed_socialfeedfinished</hkcstring>
+				<hkcstring>ed_feedsatiation</hkcstring>
+				<hkcstring>ed_breathSounds</hkcstring>
+				<hkcstring>ed_socialfeedsatiation</hkcstring>
+				<hkcstring>ed_socialfeedbite</hkcstring>
+				<hkcstring>ed_impact_bloodgush</hkcstring>
+				<hkcstring>ed_feedkm_finished</hkcstring>
+				<hkcstring>ed_playsound_bleedoutkillbite</hkcstring>
+				<hkcstring>ed_seduction_customAnimFin</hkcstring>
+				<hkcstring>ed_playsound_vlfeed</hkcstring>
+				<hkcstring>ed_impact_bloodgushshort</hkcstring>
+				<hkcstring>ed_sheatheweapons</hkcstring>
+				<hkcstring>ed_playsound_bleedoutrustle</hkcstring>
+				<hkcstring>ed_seduction_speakerBitten</hkcstring>
 <!-- CLOSE -->
 			</hkparam>
 			<hkparam name="attributeNames" numelements="0"></hkparam>
