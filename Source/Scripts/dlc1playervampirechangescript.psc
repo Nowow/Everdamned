@@ -179,6 +179,14 @@ Bool __prepped = false
 Bool __shiftingBack = false
 Bool __shuttingDown = false
 
+Bool function TestIntegrity()
+	debug.Trace("Everdamned DEBUG: DLC1PlayerVampireChangeScript integrity tested!")
+    return true
+endFunction
+Bool function TestIntegrityEverdamned()
+	debug.Trace("Everdamned DEBUG: DLC1PlayerVampireChangeScript Everdamned integrity tested!")
+    return true
+endFunction
 
 
 function OnUpdate()
@@ -293,11 +301,6 @@ function RegisterForEvents()
 	;maybe dont need to call here, just rely on OnRaceSwitchComplete in ED_FeedManager_PlayerAlias script
 	ED_FeedManager_Quest.RegisterFeedEvents()
 	
-endFunction
-
-Bool function TestIntegrity()
-
-	return true
 endFunction
 
 Float function RealTimeSecondsToGameTimeDays(Float realtime)

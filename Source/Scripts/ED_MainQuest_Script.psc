@@ -20,6 +20,28 @@ perk[] property Age_Scaling_Perk_List auto
 message property ED_Mechanics_Message_AgeLvlUpNotification auto
 message[] property Age_Message_List auto
 
+event OnInit()
+	debug.Trace("Everdamned DEBUG: Main Quest init got called, checking integrity of scripts!")
+	bool __firstResult = PlayerVampireQuest.TestIntegrity()
+	bool __secondResult = PlayerVampireQuest.TestIntegrityEverdamned()
+	debug.Trace("Everdamned DEBUG: Test integrity result: " + __firstResult + ", second test: " + __secondResult)
+	
+	if !__firstResult || !__secondResult
+		debug.Trace("Everdamned ERROR: Integrity check failed, something messed up PlayerVampireQuestScript")
+		debug.Notification("Everdamned integrity test FAILED")
+	endif
+	
+	__firstResult= DLC1PlayerVampireQuest.TestIntegrity()
+	__secondResult = DLC1PlayerVampireQuest.TestIntegrityEverdamned()
+	debug.Trace("Everdamned DEBUG: Test integrity VL quest result: " + __firstResult + ", second test: " + __secondResult)
+	
+	if !__firstResult || !__secondResult
+		debug.Trace("Everdamned ERROR: VL Quest Integrity check failed, something messed up DLC1PlayerVampireQuestScript")
+		debug.Notification("Everdamned VL integrity test FAILED")
+	endif
+endevent
+
+
 float __currentExpBuffer
 event OnUpdate()
 	__currentExpBuffer =  playerRef.GetActorValue("ED_VampireSkillExpBuffer")
@@ -394,5 +416,7 @@ globalvariable property DLC1VampireTotalPerksEarned auto
 
 ED_HotKeys_Script property ED_Mechanics_HotKeys_Quest auto
 ED_BloodPoolManager_Script property ED_BloodPoolManager_Quest auto
+playervampirequestscript property PlayerVampireQuest auto
+DLC1PlayerVampireChangeScript property DLC1PlayerVampireQuest auto
 
 actor property playerRef auto

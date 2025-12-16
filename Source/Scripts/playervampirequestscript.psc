@@ -207,12 +207,23 @@ function VampireFeedBedRoll()
 endFunction
 
 Bool function TestIntegrity()
+	debug.Trace("Everdamned DEBUG: PlayerVampireQuestScript integrity tested!")
+    return true
+endFunction
+Bool function TestIntegrityEverdamned()
+	debug.Trace("Everdamned DEBUG: PlayerVampireQuestScript Everdamned integrity tested!")
     return true
 endFunction
 
-
 function VampireChange(actor Target)
 
+	debug.Trace("Everdamned DEBUG: Changing player into a Vampire, target: !" + Target)
+	
+	if Target == none
+		Target = playerRef
+		debug.Trace("Everdamned DEBUG: No actor was passed to VampireChange() function")
+	endif
+	
     game.DisablePlayerControls(true, true, false, false, false, true, true, false, 0)
     VampireChangeFX.play(Target as objectreference, -1.00000)
     VampireTransformIncreaseISMD.applyCrossFade(2.00000)
@@ -227,10 +238,12 @@ function VampireChange(actor Target)
     imagespacemodifier.removeCrossFade(1.00000)
     VampireChangeFX.stop(Target as objectreference)
     race PlayerRace = Target.GetActorBase().GetRace()
+	debug.Trace("Everdamned DEBUG: Target race before changing: " + PlayerRace)
     CureRace = PlayerRace
     Int RaceID = ED_Races.Find(PlayerRace as form)
     if RaceID >= 0
         Target.SetRace(ED_RacesVampire.GetAt(RaceID) as race)
+		debug.Trace("Everdamned DEBUG: Target race ID after changing: " + RaceID)
     else
         ED_Mechanics_Message_RaceBroken.Show()
         Target.SetRace(NordRaceVampire)
