@@ -84,7 +84,19 @@ Event OnPlayerLoadGame()
 	PO3_SKSEFunctions.RemoveMagicEffectFromSpell(FavorJobsBeggarsAbility, ED_Mechanics_Spell_GiftOfCharityTracker_Effect, 0, 0, 3600, 0.0)
 	string[] __condList
 	PO3_SKSEFunctions.AddMagicEffectToSpell(FavorJobsBeggarsAbility, ED_Mechanics_Spell_GiftOfCharityTracker_Effect, 0, 0, 3600, 0.0, __condList)
-		
+	
+	
+	quest DVA_Controller = Game.GetFormFromFile(0x00000830, "DVA - Dynamic Vampire Appearance.esp") As Quest
+	if DVA_Controller
+		debug.Trace("Everdamned INFO: DVA compatibility: Dynamic Vampire Appearance detected! " +  DVA_Controller)
+		DVA1_Controller DVA_Controller_Script = DVA_Controller.GetAlias(0) as DVA1_Controller
+		DVA_Controller_Script.AddNVEffect(ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect)
+		DVA_Controller_Script.AddNVEffect(ED_BeingVampire_Vanilla_Pw_BloodSense_Cloak_Effect_Far)
+	else
+		debug.Trace("Everdamned INFO: DVA compatibility: Dynamic Vampire Appearance NOT detected " +  DVA_Controller)
+	endif
+	
+	;Debug.Trace("Everdamned DEBUG: Main Quest script just used updated event code on an existing save!")
 endevent
 
 
@@ -116,3 +128,7 @@ ED_BloodCostDeducter_Script property ED_Mechanics_Helper_Quest auto
 
 spell property FavorJobsBeggarsAbility auto
 magiceffect property ED_Mechanics_Spell_GiftOfCharityTracker_Effect auto
+
+magiceffect property ED_BeingVampire_Vanilla_Pw_VampiresSight_Effect auto
+magiceffect property ED_BeingVampire_Vanilla_Pw_BloodSense_Cloak_Effect_Far auto
+
