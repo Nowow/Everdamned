@@ -1,6 +1,6 @@
 {
     "name": "seduction_social",
-    "priority": 4255513,
+    "priority": 4355513,
     "ignoreDontConvertAnnotationsToTriggersFlag": true,
     "conditions": [
         {

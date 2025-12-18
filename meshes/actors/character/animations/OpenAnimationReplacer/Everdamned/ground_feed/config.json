@@ -1,7 +1,7 @@
 {
     "name": "ground_feed",
     "description": "cobmat bite killmove when target is staggered for male.",
-    "priority": 4255514,
+    "priority": 4355514,
     "ignoreDontConvertAnnotationsToTriggersFlag": true,
     "triggersFromAnnotationsOnly": true,
     "conditions": [
