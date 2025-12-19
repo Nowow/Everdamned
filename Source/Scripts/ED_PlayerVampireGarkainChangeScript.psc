@@ -101,6 +101,7 @@ Function PrepShift()
     
 
     ; sets up the UI restrictions
+	game.SetInCharGen(true, true, false)
     Game.SetBeastForm(True)
     Game.EnableFastTravel(False)
 
@@ -119,7 +120,7 @@ Function PrepShift()
     ;endwhile
 
 	Game.ForceThirdPerson()
-    Game.DisablePlayerControls(abMovement = false, abFighting = false, abCamSwitch = false, abMenu = false, abActivate = false, abJournalTabs = false, aiDisablePOVType = 1)
+    Game.DisablePlayerControls(abMovement = false, abFighting = false, abCamSwitch = true, abMenu = false, abActivate = false, abJournalTabs = false, aiDisablePOVType = 1)
     Game.ShowFirstPersonGeometry(false)
 EndFunction
 
@@ -274,6 +275,7 @@ Function StartTracking()
 	; maybe dont need to call here, just rely on OnRaceSwitchComplete in ED_FeedManager_PlayerAlias script
 	ED_FeedManager_Quest.RegisterFeedEvents()
 	
+	Game.SetInCharGen(false, false, false)
     SetStage(10) ; we're done with the transformation handling
 EndFunction
 
@@ -282,16 +284,12 @@ Function Feed(Actor victim)
 ;     Debug.Trace("EVERDAMNED: GARKAIN:start newShiftTime = " + GameTimeDaysToRealTimeSeconds(PlayerWerewolfShiftBackTime.GetValue()) + ", __feedExtensionTime = " + GameTimeDaysToRealTimeSeconds(__feedExtensionTime))
     
 ;     Debug.Trace("EVERDAMNED: GARKAIN:default newShiftTime = " + GameTimeDaysToRealTimeSeconds(newShiftTime) + ", __feedExtensionTime = " + GameTimeDaysToRealTimeSeconds(__feedExtensionTime))
-    Debug.Trace("EVERDAMNED: GARKAIN: FEEEEEEEED")
+    Debug.Trace("Everdamned DEBUG: Garkain fed on a corpse")
     playerRef.PlayIdle(SpecialFeeding)
     
     ;This is for adding a spell that simulates bleeding
     BleedingFXSpell.Cast(victim,victim)
-	Debug.Notification("This is FEED func from quest!")
-    
-	;PlayerWerewolfFeedMessage.Show()
-	;FeedBoost.Cast(Game.GetPlayer())
-	; victim.SetActorValue("ED_BloodPool", 100)
+
 	if !(playerRef.hasperk(ED_PerkTree_General_40_EmbraceTheBeast_Perk)) && GetStage() < 80
 		debug.Trace("Everdamned INFO: Untamed Garkain just fed on corpse, reverting to mortal when out of combat")
 		Message.ResetHelpMessage("ed_garkain_thirstquenched")
