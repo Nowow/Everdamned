@@ -121,6 +121,11 @@ Int Setting_AgeExpPerDrain
 float property Default_Setting_AgeExpPerDrain auto
 GlobalVariable Property ED_Mechanics_Global_MCM_AgeExpPerDrain Auto
 
+Int Setting_VitaeEvaporationFXHealthPct
+float property Default_Setting_VitaeEvaporationFXHealthPct auto
+GlobalVariable Property ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct Auto
+
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -194,6 +199,7 @@ function OnPageReset(String akPage)
 	Setting_EnableShadowRegen = self.AddToggleOption("Light level based Sun Weakness", ED_Mechanics_Global_EnableShadowRegen.GetValue() as Bool)
 	Setting_TotalReverseProgression = self.AddToggleOption("Full Reverse Progression", ED_Mechanics_Global_TotalReverseProgression.GetValue() as Bool)
 	Setting_AgeExpPerDrain = self.AddSliderOption("Age XP gain per drain", ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue(), "{0} hours")
+	Setting_VitaeEvaporationFXHealthPct = self.AddSliderOption("Vitae Evaporation FX HP%", ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct.GetValue(), "{0}%")
 	
 	; ------------------------------------------------------------
 	; Night Sight
@@ -374,6 +380,11 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Setting_AgeExpPerDrain
 		ED_Mechanics_Global_MCM_AgeExpPerDrain.SetValue(Default_Setting_AgeExpPerDrain as Float)
 		self.SetSliderOptionValue(Setting_AgeExpPerDrain, Default_Setting_AgeExpPerDrain)
+		
+	elseIf akOp == Setting_VitaeEvaporationFXHealthPct
+		ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct.SetValue(Default_Setting_VitaeEvaporationFXHealthPct as Float)
+		self.SetSliderOptionValue(Setting_VitaeEvaporationFXHealthPct, Default_Setting_VitaeEvaporationFXHealthPct)
+
 
 	; ------------------------------------------------------------
 	; cheats
@@ -513,7 +524,7 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogInterval(1.0)
 	
 	elseIf akOp == Setting_NightSightStrengthMult
-		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_NightSightStrengthMult.GetValue())
+		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_NightSightStrengthMult.GetValue()*100.0)
 		self.SetSliderDialogDefaultValue(Default_Setting_NightSightStrengthMult * 100.0)
 		self.SetSliderDialogRange(50, 200)
 		self.SetSliderDialogInterval(1)
@@ -530,10 +541,16 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogRange(0.1, 5.0)
 		self.SetSliderDialogInterval(0.1)
 	
-		elseIf akOp == Setting_AgeExpPerDrain
+	elseIf akOp == Setting_AgeExpPerDrain
 		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue())
 		self.SetSliderDialogDefaultValue(Default_Setting_AgeExpPerDrain)
 		self.SetSliderDialogRange(1.0, 48.0)
+		self.SetSliderDialogInterval(1.0)
+		
+	elseIf akOp == Setting_VitaeEvaporationFXHealthPct
+		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct.GetValue()*100.0)
+		self.SetSliderDialogDefaultValue(Default_Setting_VitaeEvaporationFXHealthPct * 100.0)
+		self.SetSliderDialogRange(0.0, 100.0)
 		self.SetSliderDialogInterval(1.0)
 	
 	; ------------------------------------------------------------
@@ -620,6 +637,10 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 	elseIf akOp == Setting_AgeExpPerDrain
 		ED_Mechanics_Global_MCM_AgeExpPerDrain.SetValue(akValue)
 		self.SetSliderOptionValue(Setting_AgeExpPerDrain, akValue, "{0} hours")
+	
+	elseIf akOp == Setting_VitaeEvaporationFXHealthPct
+		ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct.SetValue(akValue / 100.0)
+		self.SetSliderOptionValue(Setting_VitaeEvaporationFXHealthPct, akValue, "{0}%")
 	
 	; ------------------------------------------------------------
 	
@@ -810,6 +831,9 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Disbles Vampiric Drain scale with Hunger. It will stay same on each stage of Hunger")
 	elseIf akOp == Setting_TotalReverseProgression
 		self.SetInfoText("How many bonus hours of ageing will player gain when draining live targets")
+	elseIf akOp == Setting_VitaeEvaporationFXHealthPct
+		self.SetInfoText("At which Health % will continious Vitae evaporation in direct sunlight speciall effects play. Set to 0, if you don't like them, but be warned that you might find yourself with 0 Vitae unexpectedly")
+	
 	
 	; ------------------------------------------------------------
 	; cheats
