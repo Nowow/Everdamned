@@ -749,9 +749,9 @@ function OnOptionHighlight(Int akOp)
 	; ------------------------------------------------------------
 	; Blood Meter
 	If akOp == BloodMeter_X
-		self.SetInfoText("X coordinate of Vitae bar left bottom corner")
+		self.SetInfoText("X coordinate (horizontal) of Vitae bar left bottom corner")
 	elseif akOp == BloodMeter_Y
-		self.SetInfoText("Y coordinate of Vitae bar left bottom corner")
+		self.SetInfoText("Y coordinate (vertical) of Vitae bar left bottom corner")
 	elseIf akOp == BloodMeter_Scale
 		self.SetInfoText("Scale of Vitae bar")
 	elseIf akOp == BloodMeter_FillDirection

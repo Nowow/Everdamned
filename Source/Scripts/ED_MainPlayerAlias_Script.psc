@@ -34,10 +34,10 @@ Event OnRaceSwitchComplete()
 	
 	if playerRef.HasPerk(ED_PerkTreeVL_UnearthlyWill_Perk)
 		if __raceSwitchedTo == DLC1VampireBeastRace 
-			Debug.Trace("Everdamned DEBUG: Player has Unearthly Will and switched TO VL, halving the blood costs")
+			Debug.Trace("Everdamned DEBUG: Player has Unearthly Will and switched TO VL, halving the blood costs.")
 			ED_Mechanics_Helper_Quest.GoToState("UnearthlyWill")
 		else
-			Debug.Trace("Everdamned DEBUG: Player has Unearthly Will and switched FROM VL, full blood costs")
+			Debug.Trace("Everdamned DEBUG: Player has Unearthly Will and switched FROM VL, full blood costs.")
 			ED_Mechanics_Helper_Quest.GoToState("")
 		endif		
 	endif
@@ -77,7 +77,13 @@ Event OnDying(Actor akKiller)
 	
 endevent
 
-Event OnPlayerLoadGame()
+bool __startupIsInProcess
+function DoOnStartup()
+	if __startupIsInProcess
+		Debug.Trace("Everdamned INFO: Main Quest Alias wanted to do startup, but its alread underway")
+		return
+	endif
+	__startupIsInProcess = true
 	Debug.Trace("Everdamned INFO: Main Quest modifies FavorJobsBeggarsAbility to be able to distinguish it from Alchemy LOL")
 	Debug.Trace("Everdamned WARNING: RemoveMagicEffectFromSpell MAY FAIL, that OK")
 	; it may fail from time to time, thats ok
@@ -96,7 +102,18 @@ Event OnPlayerLoadGame()
 		debug.Trace("Everdamned INFO: DVA compatibility: Dynamic Vampire Appearance NOT detected " +  DVA_Controller)
 	endif
 	
-	;Debug.Trace("Everdamned DEBUG: Main Quest script just used updated event code on an existing save!")
+	__startupIsInProcess = false
+endfunction
+
+
+Event OnPlayerLoadGame()
+	Debug.Trace("Everdamned DEBUG: Main Quest Alias OnPlayerLoadGame() called")
+	DoOnStartup()
+endevent
+
+event OnInit()
+	Debug.Trace("Everdamned DEBUG: Main Quest Alias OnInit() called")
+	DoOnStartup()
 endevent
 
 
@@ -125,6 +142,7 @@ ReferenceAlias Property ED_UndyingLoyaltyServant1  Auto
 
 perk property ED_PerkTreeVL_UnearthlyWill_Perk auto
 ED_BloodCostDeducter_Script property ED_Mechanics_Helper_Quest auto
+
 
 spell property FavorJobsBeggarsAbility auto
 magiceffect property ED_Mechanics_Spell_GiftOfCharityTracker_Effect auto
