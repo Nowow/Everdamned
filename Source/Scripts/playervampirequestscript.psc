@@ -23,7 +23,8 @@ function OnUpdateGameTime()
     FeedTimer = (GameDaysPassed.value - LastFeedTime) * 24.0100 / ED_Mechanics_Global_DelayBetweenStages.GetValue()
 	
 	; using keyword instead of !playerRef.HasMagicEffect(DLC1VampireChangeEffect) && !playerRef.HasMagicEffect(DLC1VampireChangeFXEffect)
-    if game.IsMovementControlsEnabled() && game.IsFightingControlsEnabled() && playerRef.GetCombatState() == 0 && playerRef.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_BlockHungerAdvance)
+    if game.IsMovementControlsEnabled() && game.IsFightingControlsEnabled() && playerRef.GetCombatState() == 0 && !(playerRef.HasMagicEffectWithKeyword(ED_Mechanics_Keyword_BlockHungerAdvance))
+		debug.Trace("Everdamned DEBUG: Player Vampire Quest check if should devolve")
         Float Chance
         if playerRef.HasSpell(ED_BeingVampire_Ab_HungerDelay_Spell as form)
             Chance = ED_HungerChance
