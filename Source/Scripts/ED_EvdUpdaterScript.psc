@@ -1,4 +1,4 @@
-Scriptname ED_EvdUpdaterScript   
+Scriptname ED_EvdUpdaterScript extends ReferenceAlias
 
 
 Event OnPlayerLoadGame()
