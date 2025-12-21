@@ -1,6 +1,20 @@
 ;BEGIN FRAGMENT CODE - Do not edit anything between this and the end comment
-;NEXT FRAGMENT INDEX 27
+;NEXT FRAGMENT INDEX 28
 Scriptname SF_ED_SeductionDialogueContr_0560A490 Extends Scene Hidden
+
+;BEGIN FRAGMENT Fragment_0
+Function Fragment_0()
+;BEGIN CODE
+debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene ended")
+sceneTarget.ClearLookAt()
+
+objectreference packageStartMarker = ED_FeedDialogue_StartLocMarker.GetReference()
+ED_FeedDialogue_StartLocMarker.Clear()
+packageStartMarker.Disable()
+packageStartMarker.Delete()
+;END CODE
+EndFunction
+;END FRAGMENT
 
 ;BEGIN FRAGMENT Fragment_1
 Function Fragment_1()
@@ -95,8 +109,8 @@ else
 			int currentFactionRank = sceneTarget.GetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac)
 			if currentFactionRank < 0
 				if sceneTarget.GetRelationshipRank(playerRef) == 0
-					debug.trace("Everdamned INFO: Seduction Controller Scene determined First Time Seduced was an Aquaintance, setting to Friendly")
-					sceneTarget.SetRelationshipRank(playerRef, 1)
+					;debug.trace("Everdamned INFO: Seduction Controller Scene determined First Time Seduced was an Aquaintance, setting to Friendly")
+					;sceneTarget.SetRelationshipRank(playerRef, 1)
 				endif
 				sceneTarget.SetFactionRank(ED_Mechanics_FeedDialogue_Seduced_Fac, 0)
 				playerRef.placeatme(ED_Misc_Activator_FeedDialogueSuccessLines)
@@ -109,20 +123,6 @@ else
 	endif
 		
 endif
-;END CODE
-EndFunction
-;END FRAGMENT
-
-;BEGIN FRAGMENT Fragment_0
-Function Fragment_0()
-;BEGIN CODE
-debug.Trace("Everdamned DEBUG: Feed Dialogue Controller scene ended")
-sceneTarget.ClearLookAt()
-
-objectreference packageStartMarker = ED_FeedDialogue_StartLocMarker.GetReference()
-ED_FeedDialogue_StartLocMarker.Clear()
-packageStartMarker.Disable()
-packageStartMarker.Delete()
 ;END CODE
 EndFunction
 ;END FRAGMENT
