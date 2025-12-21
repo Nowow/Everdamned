@@ -286,9 +286,8 @@ function HandleBeastBite()
 	endif
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -364,9 +363,8 @@ function HandleFeedThrall(actor FeedTarget)
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -438,9 +436,8 @@ function HandleDrainThrall(actor FeedTarget)
 	SharedDrainEffects()
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -507,9 +504,8 @@ function HandleFeedMesmerized(actor FeedTarget)
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
 
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -616,9 +612,8 @@ function HandleDrainMesmerized(actor FeedTarget)
 	endif
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -740,9 +735,8 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	ED_Mechanics_Main_Quest.GainAgeExpirience(6.0)
 
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -802,9 +796,8 @@ function HandleDialogueIntimidation(actor FeedTarget)
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
 
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -862,9 +855,8 @@ function HandleFeedSleep(actor FeedTarget)
 	
 
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 	
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -955,9 +947,8 @@ function HandleDrainSleep(actor FeedTarget)
 	
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 			
 	if FeedTarget.HasKeyword(ED_Mechanics_Keyword_BlueBlood_VIP)
@@ -1319,9 +1310,8 @@ function HandleEnthrallDexion(actor FeedTarget)
 	ED_Mechanics_Main_Quest.GainAgeExpirience(2.0)
 	
 	;Blue Blood
-	if !(ED_BlueBlood_Quest_quest.IsStopped())
-		; startup stage 10
-		ED_BlueBlood_Quest_quest.Start()
+	if !(ED_BlueBlood_Quest_quest.IsStageDone(10))
+		ED_BlueBlood_Quest_quest.SetCurrentStageID(10)
 	endif
 
 	ED_Mechanics_Keyword_PsychicVampireStart.SendStoryEvent(akRef1 = FeedTarget)
