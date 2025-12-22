@@ -329,10 +329,12 @@ Event OnCustomSkillIncrease(string asSkillId)
 	endif
 	__lastUpdateSkillLevel = __newSkillLevel
 	
-	debug.Trace("Everdamned INFO: Vampire skill just leveld up! new skill level: " + __newSkillLevel)
+	int __currentAge = ED_Mechanics_VampireAge.GetValue() as int - 1
+	
+	debug.Trace("Everdamned INFO: Vampire skill just leveld up! new skill level: " + __newSkillLevel + ", current age: " + __currentAge)
 	
 	int __alreadyGrantedPerkPoints = ED_Mechanics_SkillTree_PerkPointsGrantedTotal_Global.GetValue() as int
-	int __perkPointsForThisSkillLevel = __newSkillLevel / 5
+	int __perkPointsForThisSkillLevel = __newSkillLevel / 5 + (__currentAge * 2)
 	int __perkPointsToGive = __perkPointsForThisSkillLevel - __alreadyGrantedPerkPoints
 	debug.Trace("Everdamned DEBUG: Main Quest __alreadyGrantedPerkPoints: " + __alreadyGrantedPerkPoints)
 	debug.Trace("Everdamned DEBUG: Main Quest __perkPointsForThisSkillLevel: " + __perkPointsForThisSkillLevel)

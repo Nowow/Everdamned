@@ -35,10 +35,10 @@ Event OnRaceSwitchComplete()
 	if playerRef.HasPerk(ED_PerkTreeVL_UnearthlyWill_Perk)
 		if __raceSwitchedTo == DLC1VampireBeastRace 
 			Debug.Trace("Everdamned DEBUG: Player has Unearthly Will and switched TO VL, halving the blood costs.")
-			ED_Mechanics_Helper_Quest.GoToState("UnearthlyWill")
+			(ED_HelperAlias as ED_BloodCostDeducter_Script).GoToState("UnearthlyWill")
 		else
 			Debug.Trace("Everdamned DEBUG: Player has Unearthly Will and switched FROM VL, full blood costs.")
-			ED_Mechanics_Helper_Quest.GoToState("")
+			(ED_HelperAlias as ED_BloodCostDeducter_Script).GoToState("")
 		endif		
 	endif
 	
@@ -139,9 +139,10 @@ sound property ED_Art_SoundM_LolUDied auto
 sound property ED_Art_SoundM_DeathSounds auto
 
 ReferenceAlias Property ED_UndyingLoyaltyServant1  Auto  
+ReferenceAlias Property ED_HelperAlias Auto  
 
 perk property ED_PerkTreeVL_UnearthlyWill_Perk auto
-ED_BloodCostDeducter_Script property ED_Mechanics_Helper_Quest auto
+quest property ED_Mechanics_Helper_Quest auto
 
 
 spell property FavorJobsBeggarsAbility auto
