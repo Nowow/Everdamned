@@ -176,6 +176,7 @@ state LearningAdept
 		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 5 + AdeptHemomancyLearned * 5
+		ManageDisplayAb()
 		
 		__learnLock = false
 	endevent
@@ -296,7 +297,7 @@ state LearningExpert
 		; now called from FeedManager, because actual hemomancy advancement 
 		; comes from feeding after getting enough exp
 		;AdvanceHemomancy()
-		
+		ManageDisplayAb()
 		__learnLock = false
 	endevent
 	
@@ -394,7 +395,7 @@ state LearningMaster
 		ED_Art_Shader_NewHemomancyAvailable.Play(playerRef, 7.0)
 		ED_Mechanics_Message_HemomancyReadyToAdvance.Show()
 		__HemomancyXPneededToAdvance = 30 + 5 * MasterHemomancyLearned
-		
+		ManageDisplayAb()
 		; now called from FeedManager, because actual hemomancy advancement 
 		; comes from feeding after getting enough exp
 		;AdvanceHemomancy()
