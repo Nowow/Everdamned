@@ -31,9 +31,9 @@ function OnUpdateGameTime()
         else
             Chance = ED_HungerChanceSlower
         endIf
-        if utility.RandomFloat(0.000000, 1.00000) < Chance
-            ; TODO: think if you need to show help message for the first time
-            ;SCS_Help_HungerStage2.ShowAsHelpMessage("SCS_HungerStage2Event", 5.00000, 0 as Float, 1)
+		float DiceRoll = utility.RandomFloat(0.000000, 1.00000)
+		debug.Trace("Everdamned DEBUG: Player Vampire Quest devolve chance: " + Chance + ", Dice Roll: " + DiceRoll)
+        if DiceRoll < Chance
             self.Devolve(false)
         endIf
     endIf
