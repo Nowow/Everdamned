@@ -125,6 +125,13 @@ Int Setting_VitaeEvaporationFXHealthPct
 float property Default_Setting_VitaeEvaporationFXHealthPct auto
 GlobalVariable Property ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct Auto
 
+Int Setting_HoodsProtectFromSun
+float property Default_Setting_HoodsProtectFromSun auto
+GlobalVariable Property ED_Mechanics_Global_MCM_HoodsProtectFromSun Auto
+
+Int Setting_CloudyWeatherProtectsFromSun
+float property Default_Setting_CloudyWeatherProtectsFromSun auto
+GlobalVariable Property ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun Auto
 
 ; ------------------------------------------------------------
 ; Rest
@@ -200,6 +207,8 @@ function OnPageReset(String akPage)
 	Setting_TotalReverseProgression = self.AddToggleOption("Full Reverse Progression", ED_Mechanics_Global_TotalReverseProgression.GetValue() as Bool)
 	Setting_AgeExpPerDrain = self.AddSliderOption("Age XP gain per drain", ED_Mechanics_Global_MCM_AgeExpPerDrain.GetValue(), "{0} hours")
 	Setting_VitaeEvaporationFXHealthPct = self.AddSliderOption("Vitae Evaporation FX HP%", ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct.GetValue(), "{0}%")
+	Setting_HoodsProtectFromSun = self.AddToggleOption("Hoods protects from direct sun", ED_Mechanics_Global_MCM_HoodsProtectFromSun.GetValue() as Bool)
+	Setting_CloudyWeatherProtectsFromSun = self.AddToggleOption("Cloudy weather protects from direct sun", ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.GetValue() as Bool)
 	
 	; ------------------------------------------------------------
 	; Night Sight
@@ -384,6 +393,14 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Setting_VitaeEvaporationFXHealthPct
 		ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct.SetValue(Default_Setting_VitaeEvaporationFXHealthPct as Float)
 		self.SetSliderOptionValue(Setting_VitaeEvaporationFXHealthPct, Default_Setting_VitaeEvaporationFXHealthPct)
+	
+	elseIf akOp == Setting_HoodsProtectFromSun
+		ED_Mechanics_Global_MCM_HoodsProtectFromSun.SetValue(Default_Setting_HoodsProtectFromSun as float)
+		self.SetToggleOptionValue(Setting_HoodsProtectFromSun, Default_Setting_HoodsProtectFromSun as bool)
+
+	elseIf akOp == Setting_CloudyWeatherProtectsFromSun
+		ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.SetValue(Default_Setting_CloudyWeatherProtectsFromSun as float)
+		self.SetToggleOptionValue(Setting_CloudyWeatherProtectsFromSun, Default_Setting_CloudyWeatherProtectsFromSun as bool)
 
 
 	; ------------------------------------------------------------
@@ -682,6 +699,15 @@ function OnOptionSelect(Int akOp)
 		ED_Mechanics_Global_EnableShadowRegen.SetValue(1 as Float - ED_Mechanics_Global_EnableShadowRegen.GetValue())
 		SetToggleOptionValue(Setting_EnableShadowRegen, ED_Mechanics_Global_EnableShadowRegen.GetValue() as bool)
 	
+	elseif akOp == Setting_HoodsProtectFromSun
+		ED_Mechanics_Global_MCM_HoodsProtectFromSun.SetValue(1 as Float - ED_Mechanics_Global_MCM_HoodsProtectFromSun.GetValue())
+		SetToggleOptionValue(Setting_HoodsProtectFromSun, ED_Mechanics_Global_MCM_HoodsProtectFromSun.GetValue() as bool)
+	
+	elseif akOp == Setting_CloudyWeatherProtectsFromSun
+		ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.SetValue(1 as Float - ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.GetValue())
+		SetToggleOptionValue(Setting_CloudyWeatherProtectsFromSun, ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.GetValue() as bool)
+	
+	
 	; ------------------------------------------------------------
 	; cheats
 	elseif akOp == Cheats_NecromageToggle
@@ -833,6 +859,10 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("How many bonus hours of ageing will player gain when draining live targets")
 	elseIf akOp == Setting_VitaeEvaporationFXHealthPct
 		self.SetInfoText("At which Health % will continious Vitae evaporation in direct sunlight speciall effects play. Set to 0, if you don't like them, but be warned that you might find yourself with 0 Vitae unexpectedly")
+	elseIf akOp == Setting_HoodsProtectFromSun
+		self.SetInfoText("Headwear with ClothingHead or ArmorHelmet keywords would protect you form direct sun at all times. Other sun effects (decreased attributes) are still applied.")
+	elseIf akOp == Setting_CloudyWeatherProtectsFromSun
+		self.SetInfoText("Cloudy weather protects you from direct sunlight.")
 	
 	
 	; ------------------------------------------------------------
