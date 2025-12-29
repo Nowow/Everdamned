@@ -133,6 +133,14 @@ Int Setting_CloudyWeatherProtectsFromSun
 float property Default_Setting_CloudyWeatherProtectsFromSun auto
 GlobalVariable Property ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun Auto
 
+Int Setting_HungerDisableChance
+float property Default_Setting_HungerDisableChance auto
+GlobalVariable Property ED_Mechanics_Global_MCM_HungerDisableChance Auto
+
+Int Setting_HungerDelayBetweenStages
+float property Default_Setting_HungerDelayBetweenStages auto
+GlobalVariable Property ED_Mechanics_Global_MCM_HungerDelayBetweenStages Auto
+
 ; ------------------------------------------------------------
 ; Rest
 
@@ -209,6 +217,8 @@ function OnPageReset(String akPage)
 	Setting_VitaeEvaporationFXHealthPct = self.AddSliderOption("Vitae Evaporation FX HP%", ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct.GetValue(), "{0}%")
 	Setting_HoodsProtectFromSun = self.AddToggleOption("Hoods protects from direct sun", ED_Mechanics_Global_MCM_HoodsProtectFromSun.GetValue() as Bool)
 	Setting_CloudyWeatherProtectsFromSun = self.AddToggleOption("Cloudy weather protects from direct sun", ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.GetValue() as Bool)
+	Setting_HungerDisableChance = self.AddToggleOption("No random in Hunger progression", ED_Mechanics_Global_MCM_HungerDisableChance.GetValue() as Bool)
+	Setting_HungerDelayBetweenStages = self.AddSliderOption("Hunger delay between stages", ED_Mechanics_Global_MCM_HungerDelayBetweenStages.GetValue(), "{0} Hours")
 	
 	; ------------------------------------------------------------
 	; Night Sight
@@ -401,7 +411,15 @@ function OnOptionDefault(Int akOp)
 	elseIf akOp == Setting_CloudyWeatherProtectsFromSun
 		ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.SetValue(Default_Setting_CloudyWeatherProtectsFromSun as float)
 		self.SetToggleOptionValue(Setting_CloudyWeatherProtectsFromSun, Default_Setting_CloudyWeatherProtectsFromSun as bool)
-
+	
+	elseIf akOp == Setting_HungerDisableChance
+		ED_Mechanics_Global_MCM_HungerDisableChance.SetValue(Default_Setting_HungerDisableChance as float)
+		self.SetToggleOptionValue(Setting_HungerDisableChance, Default_Setting_HungerDisableChance as bool)
+	
+	elseIf akOp == Setting_HungerDelayBetweenStages
+		ED_Mechanics_Global_MCM_HungerDelayBetweenStages.SetValue(Default_Setting_HungerDelayBetweenStages as Float)
+		self.SetSliderOptionValue(Setting_HungerDelayBetweenStages, Default_Setting_HungerDelayBetweenStages)
+	
 
 	; ------------------------------------------------------------
 	; cheats
@@ -570,6 +588,12 @@ function OnOptionSliderOpen(Int akOp)
 		self.SetSliderDialogRange(0.0, 100.0)
 		self.SetSliderDialogInterval(1.0)
 	
+	elseIf akOp == Setting_HungerDelayBetweenStages
+		self.SetSliderDialogStartValue(ED_Mechanics_Global_MCM_HungerDelayBetweenStages.GetValue())
+		self.SetSliderDialogDefaultValue(Default_Setting_HungerDelayBetweenStages)
+		self.SetSliderDialogRange(3.0, 48.0)
+		self.SetSliderDialogInterval(3.0)
+	
 	; ------------------------------------------------------------
 	
 	endIf
@@ -659,6 +683,10 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 		ED_Mechanics_Global_MCM_VitaeEvaporationFXHealthPct.SetValue(akValue / 100.0)
 		self.SetSliderOptionValue(Setting_VitaeEvaporationFXHealthPct, akValue, "{0}%")
 	
+	elseIf akOp == Setting_HungerDelayBetweenStages
+		ED_Mechanics_Global_MCM_HungerDelayBetweenStages.SetValue(akValue)
+		self.SetSliderOptionValue(Setting_HungerDelayBetweenStages, akValue, "{0} Hours")
+	
 	; ------------------------------------------------------------
 	
 	endif
@@ -706,6 +734,10 @@ function OnOptionSelect(Int akOp)
 	elseif akOp == Setting_CloudyWeatherProtectsFromSun
 		ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.SetValue(1 as Float - ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.GetValue())
 		SetToggleOptionValue(Setting_CloudyWeatherProtectsFromSun, ED_Mechanics_Global_MCM_CloudyWeatherProtectsFromSun.GetValue() as bool)
+	
+	elseif akOp == Setting_HungerDisableChance
+		ED_Mechanics_Global_MCM_HungerDisableChance.SetValue(1 as Float - ED_Mechanics_Global_MCM_HungerDisableChance.GetValue())
+		SetToggleOptionValue(Setting_HungerDisableChance, ED_Mechanics_Global_MCM_HungerDisableChance.GetValue() as bool)
 	
 	
 	; ------------------------------------------------------------
@@ -863,6 +895,10 @@ function OnOptionHighlight(Int akOp)
 		self.SetInfoText("Headwear with ClothingHead or ArmorHelmet keywords would protect you form direct sun at all times. Other sun effects (decreased attributes) are still applied.")
 	elseIf akOp == Setting_CloudyWeatherProtectsFromSun
 		self.SetInfoText("Cloudy weather protects you from direct sunlight.")
+	elseIf akOp == Setting_HungerDisableChance
+		self.SetInfoText("By default, Hunger has a 75% (25% at Nightlord) chance to progress every 3 hours after 24 hours without feed. This setting makes it 100%")
+	elseIf akOp == Setting_HungerDelayBetweenStages
+		self.SetInfoText("By default, Hunger progresses no earlier than 24 hours after feed. Check is done no faster than every 3 hours.")
 	
 	
 	; ------------------------------------------------------------

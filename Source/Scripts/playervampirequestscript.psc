@@ -31,6 +31,11 @@ function OnUpdateGameTime()
         else
             Chance = ED_HungerChanceSlower
         endIf
+		
+		if ED_Mechanics_Global_MCM_HungerDisableChance.GetValue() == 1.0
+			Chance = 0.0
+		endif
+		
 		float DiceRoll = utility.RandomFloat(0.000000, 1.00000)
 		debug.Trace("Everdamned DEBUG: Player Vampire Quest devolve chance: " + Chance + ", Dice Roll: " + DiceRoll)
         if DiceRoll < Chance
@@ -618,5 +623,7 @@ race property NordRaceVampire auto
 race property NordRace auto
 race property CureRace auto
 race property KhajiitRace auto
+
+globalvariable property ED_Mechanics_Global_MCM_HungerDisableChance auto
 
 actor property playerRef auto
