@@ -31,6 +31,7 @@ function RegisterHotkey()
 		debug.Trace("Everdamned INFO: Hotkey A Manager determined player only has Extended Perception")		
 	elseif __hasDash
 		GoToState("KnowsOnlyDash")
+		RegisterForKey(__currentHotkeyA)
 		debug.Trace("Everdamned INFO: Hotkey A Manager determined player only has Dash")		
 	else
 		debug.Trace("Everdamned INFO: Hotkey A Manager determined player has no Celerity skills, not registering")		

@@ -172,7 +172,7 @@ function SetUpAgeAppropriateRewards()
 	int _maxIndex = MaxAge - 1
 	
 	int i = 0
-	while i < _maxIndex
+	while i <= _maxIndex
 	
 		;display ability spells are attached to perk
 		perk _agePerk = Age_Scaling_Perk_List[i]
@@ -221,7 +221,7 @@ function TearDownRewards()
 	
 	int _maxIndex = MaxAge - 1
 	int i = 0
-	while i < _maxIndex
+	while i <= _maxIndex
 		perk _agePerk = Age_Scaling_Perk_List[i]	
 		playerRef.removeperk(_agePerk)
 		i += 1
