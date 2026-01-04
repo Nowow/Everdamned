@@ -37,6 +37,7 @@ event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		if !(asEventName == "tailSneakIdle" || asEventName == "tailSneakLocomotion")	
 			__sneaking = false
 			__target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
+			ED_VampirePowers_Pw_Obfuscate_Spell_InvisCleaner.cast(__target)
 		endif
 	endif
 	
@@ -54,12 +55,15 @@ event OnHit(ObjectReference akAggressor, Form akSource, Projectile akProjectile,
 	
 	__target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
 	self.dispel()
+	ED_VampirePowers_Pw_Obfuscate_Spell_InvisCleaner.cast(__target)
 endevent
 
 Event OnEffectFinish(Actor Target, Actor Caster)
 	__target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
+	ED_VampirePowers_Pw_Obfuscate_Spell_InvisCleaner.cast(__target)
 endevent
 
 float property XPgained auto
 spell property ED_VampirePowers_Pw_Obfuscate_Insiv_Spell auto
+spell property ED_VampirePowers_Pw_Obfuscate_Spell_InvisCleaner auto
 globalvariable property ED_Mechanics_VampireAge auto
