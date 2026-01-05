@@ -55,7 +55,7 @@ event OnUpdate()
 	
 	__currentVitaeBuffer = playerRef.GetActorValue("ED_BloodPool")
 	if __currentVitaeBuffer < -10.0
-		playerRef.RestoreActorValue("ED_BloodPool", -__currentVitaeBuffer)
+		playerRef.RestoreActorValue("ED_BloodPool", -__currentVitaeBuffer - 10.0)
 	endif
 	
 	if isAging
