@@ -56,9 +56,14 @@ event OnHit(ObjectReference akAggressor, Form akSource, Projectile akProjectile,
 	__target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
 	self.dispel()
 	ED_VampirePowers_Pw_Obfuscate_Spell_InvisCleaner.cast(__target)
+	debug.Trace("Everdamned DEBUG: Obfuscate Controller dispelled from hit")
 endevent
 
 Event OnEffectFinish(Actor Target, Actor Caster)
+	utility.wait(0.5)
+	if __target.HasMagicEffect(ED_VampirePowers_Pw_Obfuscate_Effect)
+		return
+	endif
 	__target.dispelspell(ED_VampirePowers_Pw_Obfuscate_Insiv_Spell)
 	ED_VampirePowers_Pw_Obfuscate_Spell_InvisCleaner.cast(__target)
 endevent
@@ -66,4 +71,5 @@ endevent
 float property XPgained auto
 spell property ED_VampirePowers_Pw_Obfuscate_Insiv_Spell auto
 spell property ED_VampirePowers_Pw_Obfuscate_Spell_InvisCleaner auto
+magiceffect property ED_VampirePowers_Pw_Obfuscate_Effect auto
 globalvariable property ED_Mechanics_VampireAge auto

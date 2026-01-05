@@ -43,6 +43,7 @@ endevent
 
 
 float __currentExpBuffer
+float __currentVitaeBuffer
 event OnUpdate()
 	__currentExpBuffer =  playerRef.GetActorValue("ED_VampireSkillExpBuffer")
 	
@@ -50,6 +51,11 @@ event OnUpdate()
 		CustomSkills.AdvanceSkill("EverdamnedMain", __currentExpBuffer)
 		playerRef.DamageAV("ED_VampireSkillExpBuffer", __currentExpBuffer)
 		debug.Trace("Everdamned DEBUG: Player had this much XP to absorb: " + __currentExpBuffer)
+	endif
+	
+	__currentVitaeBuffer = playerRef.GetActorValue("ED_BloodPool")
+	if __currentVitaeBuffer < -10.0
+		playerRef.RestoreActorValue("ED_BloodPool", -__currentVitaeBuffer)
 	endif
 	
 	if isAging
