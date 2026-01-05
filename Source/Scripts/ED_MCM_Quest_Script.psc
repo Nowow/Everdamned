@@ -663,9 +663,9 @@ function OnOptionSliderAccept(Int akOp, Float akValue)
 		self.SetSliderOptionValue(Setting_NightSightMinLevel, akValue)
 		
 	elseIf akOp == Setting_NightSightStrengthMult
+		self.SetSliderOptionValue(Setting_NightSightStrengthMult, akValue)
 		akValue = akValue / 100.0
 		ED_Mechanics_Global_MCM_NightSightStrengthMult.SetValue(akValue)
-		self.SetSliderOptionValue(Setting_NightSightStrengthMult, akValue)
 	
 	elseIf akOp == Setting_VampireSkillExpMult
 		ED_Mechanics_SkillTree_XPMult_Global.SetValue(akValue)
