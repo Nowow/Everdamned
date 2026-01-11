@@ -51,7 +51,27 @@ Event OnPlayerLoadGame()
 			debug.Trace("Everdamned INFO: Everdamned Updater restarted ED_NPCVampire_Vanilla_Ab_SunDamage_Spell")
 		endif
 		
-	ED_Mechanics_Message_UpdaterFinishedUpdate.Show()
+		int currentVampireAge = ED_Mechanics_VampireAge.GetValue() as int
+		int maxVampireAge = ED_Mechanics_Main_Quest.MaxAge
+		debug.Trace("Everdamned INFO: Everdamned Updater sees current age as: " + currentVampireAge)
+		
+		if currentVampireAge > maxVampireAge
+			debug.Trace("Everdamned INFO: Everdamned Updater detects that Vampire Age is out of upper bound of " + maxVampireAge)
+				
+			; simulating LvlUpAge
+			ED_Mechanics_VampireAge.SetValue(maxVampireAge)
+			; in previous version of StopAge we unregistred
+			; since age is not 1, assuming player is still vampire
+			ED_Mechanics_Main_Quest.RegisterForSleep()  
+			
+			ED_Mechanics_Main_Quest.SetUpAgeAppropriateRewards()
+			ED_Mechanics_Main_Quest.StopAge()
+			ED_BloodPoolManager_Quest.AtStageOrAgeChange()
+			
+		endif
+		
+		
+		ED_Mechanics_Message_UpdaterFinishedUpdate.Show()
 	endif
 endevent
 
@@ -64,8 +84,11 @@ spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage3_Spell auto
 spell property ED_BeingVampire_Vanilla_Ab_SunDamage_Stage4_Spell auto
 spell property ED_NPCVampire_Vanilla_Ab_SunDamage_Spell auto
 
-
 message property ED_Mechanics_Message_UpdaterStartedUpdate auto
 message property ED_Mechanics_Message_UpdaterFinishedUpdate auto
+
+globalvariable property ED_Mechanics_VampireAge auto
+ED_MainQuest_Script property ED_Mechanics_Main_Quest auto
+ED_BloodPoolManager_Script property ED_BloodPoolManager_Quest auto
 
 actor property playerRef auto

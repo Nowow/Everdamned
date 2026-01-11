@@ -47,7 +47,7 @@ float __currentVitaeBuffer
 event OnUpdate()
 	__currentExpBuffer =  playerRef.GetActorValue("ED_VampireSkillExpBuffer")
 	
-	if __currentExpBuffer > 0
+	if __currentExpBuffer > 0 && isAging
 		CustomSkills.AdvanceSkill("EverdamnedMain", __currentExpBuffer)
 		playerRef.DamageAV("ED_VampireSkillExpBuffer", __currentExpBuffer)
 		debug.Trace("Everdamned DEBUG: Player had this much XP to absorb: " + __currentExpBuffer)
@@ -58,13 +58,24 @@ event OnUpdate()
 		playerRef.RestoreActorValue("ED_BloodPool", -__currentVitaeBuffer - 10.0)
 	endif
 	
-	if isAging
-		RegisterForUpdate(2.0)
-	endif
+	;RegisterForUpdate(2.0)
+	
 endevent
 
 function PlayerBecameVampire()
-	GainAgeExpirience(0.0)
+	
+	; called for first time since becoming vamp (again)
+	; giving Fledgling stuff
+	debug.Trace("Everdamned INFO: Player vampire starts aging, current age is " + ED_Mechanics_VampireAge.value + ", max age is " + MaxAge)
+	ED_Mechanics_VampireAgeCurrentExp.value = 0.0
+	ED_Mechanics_VampireAgeCurrentLvlUpThreshold.value = ED_Mechanics_VampireAgeLvlUpExpIncrement.value
+	isAging = true
+	HasShownAgeMessage = false
+	SetUpAgeAppropriateRewards()
+	
+	RegisterForSleep()
+	RegisterforSingleUpdateGameTime(ED_Mechanics_VampireAgeRate.value)
+	
 	RewardBlueBloodRewardsIfNeeded()
 	
 	; initial skill level
@@ -107,14 +118,7 @@ endfunction
 function GainAgeExpirience(float amountToAge = 0.0)
 	
 	if !isAging
-		; called for first time since becoming vamp (again)
-		; giving Fledgling stuff
-		debug.Trace("Everdamned INFO: Player vampire starts aging, current age is " + ED_Mechanics_VampireAge.value + ", max age is " + MaxAge)
-		SetUpAgeAppropriateRewards()
-		isAging = true
-		; give
-		RegisterForSleep()
-		RegisterforSingleUpdateGameTime(ED_Mechanics_VampireAgeRate.value)
+		return
 	endif
 	if amountToAge > 0.0
 		ED_Mechanics_VampireAgeCurrentExp.Mod(amountToAge*ED_Mechanics_VampireAgeExpMult.GetValue())
@@ -133,13 +137,17 @@ event OnSleepStop(Bool abInterrupted)
 	
 	ED_Mechanics_Global_ChainedBeastAllowed.SetValue(1.0)
 	
-	if abInterrupted || !HasShownAgeMessage
+	if abInterrupted || !HasShownAgeMessage || !isAging
 		return
 	endif
 	
-	debug.Trace("Everdamned INFO: Player vampire is aging upon waking up from current age of " + ED_Mechanics_VampireAge.value)
+	int ageBeforeLvlUpAge = ED_Mechanics_VampireAge.GetValue() as int
+	
+	debug.Trace("Everdamned INFO: Player vampire is aging upon waking up from current age of " + ageBeforeLvlUpAge)
+	int messageIndex = ageBeforeLvlUpAge - 1
 	LvlUpAge()
-	Age_Message_List[NextMessageIndex].Show()
+	
+	Age_Message_List[messageIndex].Show()
 	ED_BloodPoolManager_Quest.AtStageOrAgeChange()
 	
 	if ED_Mechanics_VampireAge.value >= MaxAge
@@ -148,7 +156,7 @@ event OnSleepStop(Bool abInterrupted)
 		return
 	endif
 	
-	NextMessageIndex += 1
+	;NextMessageIndex += 1
 	HasShownAgeMessage = false
 	debug.Trace("Everdamned INFO: Player vampire has aged to current age of " + ED_Mechanics_VampireAge.value)
 endevent
@@ -204,11 +212,13 @@ endfunction
 
 function StopAge()
 
-	UnregisterForSleep()
 	UnregisterForUpdateGameTime()
 	IsAging = false
 	HasShownAgeMessage = false
-	NextMessageIndex = 0
+	;NextMessageIndex = 0
+	
+	ED_Mechanics_VampireAgeCurrentExp.value = 0.0
+	ED_Mechanics_VampireAgeCurrentLvlUpThreshold.value = 0.0
 	
 	debug.Trace("Everdamned INFO: Player vampire has stopped aging")
 endFunction
@@ -219,6 +229,9 @@ function TearDownRewards()
 	; age stuff
 	
 	StopAge()
+	UnregisterForUpdate()  ; no need to adjust Vitae anymore
+	UnregisterForSleep()   ; no need to refresh Chained Beast now
+	ED_Mechanics_Global_ChainedBeastAllowed.SetValue(1.0)
 	
 	ED_Mechanics_VampireAge.value = 1
 	
