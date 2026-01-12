@@ -55,7 +55,7 @@ Event OnPlayerLoadGame()
 		int maxVampireAge = ED_Mechanics_Main_Quest.MaxAge
 		debug.Trace("Everdamned INFO: Everdamned Updater sees current age as: " + currentVampireAge)
 		
-		if currentVampireAge > maxVampireAge
+		if currentVampireAge >= maxVampireAge
 			debug.Trace("Everdamned INFO: Everdamned Updater detects that Vampire Age is out of upper bound of " + maxVampireAge)
 				
 			; simulating LvlUpAge
