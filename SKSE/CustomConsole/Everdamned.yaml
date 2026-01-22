@@ -203,4 +203,5 @@ subs:
         default: 3276800
   - name: teststuff
     func: TestStuff
-     
+  - name: applyheelfix
+    func: ApplyHeelFix

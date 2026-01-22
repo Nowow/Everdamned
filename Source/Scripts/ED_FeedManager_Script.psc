@@ -164,6 +164,9 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimKillVictim event!")
 	
 	elseif asEventName == FeedAnimFinished
+		aFeedTarget.DispelSpell(ED_BeingVampire_VampireFeed_HHAdjust_Spell)
+		aFeedTarget.DispelSpell(ED_BeingVampire_VampireFeed_VictimMark_Spell)
+
 		if __needReequip
 			__needReequip = false
 			utility.wait(0.2) ; so anim is totally complete
@@ -180,6 +183,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 			ShieldIfAny = none
 		endif
 		Game.SetPlayerAIDriven(false)
+		
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimFinished event!")
 	;its sfx, but here so i dont have to propagate victim race to alias script
 	;and timing is not critical so thread locks are not an issue
@@ -192,6 +196,8 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		playerRef.UnequipItemEx(LeftWeaponIfAny, 1)
 		playerRef.UnequipItemEx(ShieldIfAny, 1)
 		playerRef.UnequipItemEx(RightWeaponIfAny, 2)
+	
+		ED_BeingVampire_VampireFeed_HHAdjust_Spell.Cast(playerRef, aFeedTarget)
 		
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SheatheWepons event")
 		
@@ -223,6 +229,8 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedSatiation event, processed target: " + aFeedTarget)\
 
 	elseif asEventName == SocialFeedFinished
+	
+		aFeedTarget.DispelSpell(ED_BeingVampire_VampireFeed_HHAdjust_Spell)
 		bool __bystanderQuestStarted = ED_Mechanics_Keyword_BystanderStart.SendStoryEventAndWait(akRef1 = aFeedTarget)
 		;SendModEvent("feedDialogue_SocialFeedFinished")
 		debug.Trace("Everdamned DEBUG: Feed Manager caught SocialFeedFinished event, Bystander quest started")
@@ -636,6 +644,7 @@ sound BreathSoundsToPlayOnTrigger
 function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float HighRadius = 300.0)
 	debug.Trace("Everdamned DEBUG: Feed Manager recieved Dialogue Seduction call on target " + FeedTarget)
 	
+	aFeedTarget = FeedTarget
 	
 	ED_Mechanics_Global_FeedType.SetValue(3.0)
 	
@@ -698,6 +707,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 		playerRef.PlayIdle(ED_Idle_FeedKM_Solo_Player_Social)
 		FeedTarget.PlayIdle(ED_Idle_FeedKM_Solo_Victim_Social)
 	endif
+
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -729,7 +739,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 	;adjust status bloodpool etc
 	;damage bloodpool available on target
 	; MOVED TO animation event
-	aFeedTarget = FeedTarget
+
 	
 	;age for 8h
 	ED_Mechanics_Main_Quest.GainAgeExpirience(6.0)
@@ -1342,6 +1352,7 @@ imagespacemodifier property ED_Art_Imod_FeedBlur auto
 idle property ResetRoot auto
 spell property ED_BeingVampire_VampireFeed_VictimMark_Spell auto
 spell property ED_BeingVampire_VampireFeed_PlayerMark_Spell auto
+spell property ED_BeingVampire_VampireFeed_HHAdjust_Spell auto
 spell property ED_Misc_DisarmFF_Spell auto
 spell property ED_Mechanics_Spell_SetDontMove auto
 spell property ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell auto

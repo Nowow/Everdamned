@@ -596,3 +596,40 @@ string function TestStuff() global
 	debug.Trace("Everdamned DEBUG: bAllowRotation" + player.GetAnimationVariableBool("bAllowRotation"))
 	;debug.Trace("Everdamned DEBUG: ")
 endfunction
+
+
+string function ApplyHeelFix() global
+	actor playerRef = Game.GetPlayer()
+	bool playerIsFemale = playerRef.GetActorBase().GetSex()
+	
+	Int NIOVERRIDE_SCRIPT_VERSION = 6
+	String NINODE_ROOT = "NPC"
+	String RACEMENUHH_KEY = "RaceMenuHH.esp"
+	String INTERNAL_KEY = "internal" 
+	
+	bool playerHasTransform = NiOverride.HasNodeTransformPosition(playerRef, False, playerIsFemale, NINODE_ROOT, INTERNAL_KEY)
+	debug.Trace("Everdamned DEBUG: player has transform position: " + playerHasTransform)
+
+	Float[] playerPos = NiOverride.GetNodeTransformPosition(playerRef, False, playerIsFemale, NINODE_ROOT, INTERNAL_KEY)
+	playerPos[0] = -playerPos[0]
+	playerPos[1] = -playerPos[1]
+	playerPos[2] = -playerPos[2]
+	
+	debug.Trace("Everdamned DEBUG: player pos " + playerPos[0] + " " + playerPos[1] + " " + playerPos[2])
+	
+	Float[] playerPos1 = NiOverride.GetNodeTransformPosition(playerRef, False, playerIsFemale, NINODE_ROOT, RACEMENUHH_KEY)
+	debug.Trace("Everdamned DEBUG: player pos 1 " + playerPos1[0] + " " + playerPos1[1] + " " + playerPos1[2])
+	
+	
+	NiOverride.AddNodeTransformPosition(playerRef, False, playerIsFemale, NINODE_ROOT, RACEMENUHH_KEY, playerPos)
+	NiOverride.UpdateNodeTransform(playerRef, False, playerIsFemale, NINODE_ROOT)
+	
+	Float[] playerPos2 = NiOverride.GetNodeTransformPosition(playerRef, False, playerIsFemale, NINODE_ROOT, INTERNAL_KEY)
+	debug.Trace("Everdamned DEBUG: player pos 2 " + playerPos2[0] + " " + playerPos2[1] + " " + playerPos2[2])
+	
+	Float[] playerPos3 = NiOverride.GetNodeTransformPosition(playerRef, False, playerIsFemale, NINODE_ROOT, RACEMENUHH_KEY)
+	debug.Trace("Everdamned DEBUG: player pos 2 " + playerPos3[0] + " " + playerPos3[1] + " " + playerPos3[2])
+	
+	
+endfunction
+
