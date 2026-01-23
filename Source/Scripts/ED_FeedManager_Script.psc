@@ -14,6 +14,8 @@ string property FeedAnimFinished = "ed_feedkm_finished" auto
 String property SheatheWepons = "ed_sheatheweapons" auto
 String property ResetCam = "ed_feedkm_resetcam" auto
 
+string property PlayerVampireJustFedEvent = "ed_playervampirejustfed" auto
+
 ;float property CombatFeedFallbackUpdateDelay = 10.0 auto
 
 ;---------- helper functions ---------------
@@ -250,6 +252,7 @@ function HandleBeastBite()
 	__killmoveStarted = true
 	
 	ED_Mechanics_DrainAttributeRestore_Spell.Cast(playerRef)
+	SendModEvent(PlayerVampireJustFedEvent)
 	
 	;retrieving actor
 	;latent function, would wait for quest to start and fill the alias
@@ -353,6 +356,8 @@ function HandleFeedThrall(actor FeedTarget)
 		PlayerRef.StartVampireFeed(FeedTarget)
 	endif
 	
+	SendModEvent(PlayerVampireJustFedEvent)
+	
 	; for vampire converting sidequest
 	if (DLC1VQ03VampireDexion && DLC1VQ03VampireDexion.GetActorReference() == FeedTarget) || (FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False)
 		debug.Trace("Everdamned DEBUG: Dexion is bitten!!!")
@@ -412,6 +417,9 @@ function HandleDrainThrall(actor FeedTarget)
 	else
 		PlayerRef.StartVampireFeed(FeedTarget)
 	endif
+	
+	SendModEvent(PlayerVampireJustFedEvent)
+	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
 		DLC1VampireTurn.PlayerBitesMe(FeedTarget)
@@ -501,6 +509,8 @@ function HandleFeedMesmerized(actor FeedTarget)
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
+	SendModEvent(PlayerVampireJustFedEvent)
+	
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
 
@@ -555,6 +565,8 @@ function HandleDrainMesmerized(actor FeedTarget)
 	else
 		PlayerRef.StartVampireFeed(FeedTarget)
 	endif
+	
+	SendModEvent(PlayerVampireJustFedEvent)
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -708,6 +720,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 		FeedTarget.PlayIdle(ED_Idle_FeedKM_Solo_Victim_Social)
 	endif
 
+	SendModEvent(PlayerVampireJustFedEvent)
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -773,6 +786,8 @@ function HandleDialogueIntimidation(actor FeedTarget)
 	
 	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
+	
+	SendModEvent(PlayerVampireJustFedEvent)
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -856,6 +871,8 @@ function HandleFeedSleep(actor FeedTarget)
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
+	SendModEvent(PlayerVampireJustFedEvent)
+	
 	;adjust status bloodpool etc
 	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.6)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.3)
@@ -927,6 +944,8 @@ function HandleDrainSleep(actor FeedTarget)
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
+	SendModEvent(PlayerVampireJustFedEvent)
+	
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
 
@@ -992,6 +1011,8 @@ endfunction
 function ApplyCombatFeedEffects()
 
 	debug.Trace("Everdamned DEBUG: Feed trigger animevent was caught, processing")
+	
+	SendModEvent(PlayerVampireJustFedEvent)
 	
 	; for vampire converting sidequest
 	if aFeedTarget.IsInFaction(DLC1PotentialVampireFaction) && aFeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -1304,6 +1325,8 @@ function HandleEnthrallDexion(actor FeedTarget)
 	ED_Mechanics_Global_FeedType.SetValue(0.0)
 	
 	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
+	
+	SendModEvent(PlayerVampireJustFedEvent)
 		
 	DLC1VampireTurn.PlayerBitesMe(FeedTarget)
 	FeedTarget.DispelSpell(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell)
