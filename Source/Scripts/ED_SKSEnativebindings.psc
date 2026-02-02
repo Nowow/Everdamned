@@ -27,6 +27,8 @@ function CommunicateCurrentWidgetRoot(string widget_root) global native
 
 function ToggleBloodPoolUpdateLoop(bool toggleOn) global native
 
+function RelayOnVampireFeed(actor feedInitiator, actor feedTarget) global native
+
 
 function StopAllShadersExceptThis(effectshader a_effectShader, keyword someKeyword, effectshader ED_TestShader2_empty) global native
 

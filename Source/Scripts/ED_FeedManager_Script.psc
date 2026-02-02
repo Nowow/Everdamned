@@ -252,7 +252,7 @@ function HandleBeastBite()
 	__killmoveStarted = true
 	
 	ED_Mechanics_DrainAttributeRestore_Spell.Cast(playerRef)
-	SendModEvent(PlayerVampireJustFedEvent)
+	
 	
 	;retrieving actor
 	;latent function, would wait for quest to start and fill the alias
@@ -262,6 +262,8 @@ function HandleBeastBite()
 	ED_Mechanics_Quest_BeastFeedVictimFinder.Stop()
 	
 	ED_FeralBeast_ApplyHasBeenEaten_Trigger_Spell.Cast(playerRef, FeedTarget)
+	
+	ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, FeedTarget)
 
 	;adjust status bloodpool etc
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.5)
@@ -356,7 +358,9 @@ function HandleFeedThrall(actor FeedTarget)
 		PlayerRef.StartVampireFeed(FeedTarget)
 	endif
 	
-	SendModEvent(PlayerVampireJustFedEvent)
+	; not using cause StartVampireFeed is used
+	; ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, FeedTarget) 
+	;SendModEvent(PlayerVampireJustFedEvent)
 	
 	; for vampire converting sidequest
 	if (DLC1VQ03VampireDexion && DLC1VQ03VampireDexion.GetActorReference() == FeedTarget) || (FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False)
@@ -418,7 +422,9 @@ function HandleDrainThrall(actor FeedTarget)
 		PlayerRef.StartVampireFeed(FeedTarget)
 	endif
 	
-	SendModEvent(PlayerVampireJustFedEvent)
+	; not using cause StartVampireFeed is used
+	; ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, FeedTarget) 
+	;SendModEvent(PlayerVampireJustFedEvent)
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -509,7 +515,7 @@ function HandleFeedMesmerized(actor FeedTarget)
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
-	SendModEvent(PlayerVampireJustFedEvent)
+	ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, FeedTarget)
 	
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
@@ -566,7 +572,7 @@ function HandleDrainMesmerized(actor FeedTarget)
 		PlayerRef.StartVampireFeed(FeedTarget)
 	endif
 	
-	SendModEvent(PlayerVampireJustFedEvent)
+	ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, FeedTarget)
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -720,7 +726,7 @@ function HandleDialogueSeduction(actor FeedTarget, float LowRadius = 35.0, float
 		FeedTarget.PlayIdle(ED_Idle_FeedKM_Solo_Victim_Social)
 	endif
 
-	SendModEvent(PlayerVampireJustFedEvent)
+	ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, FeedTarget)
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -787,7 +793,7 @@ function HandleDialogueIntimidation(actor FeedTarget)
 	;start actual feed animation
 	PlayerRef.StartVampireFeed(FeedTarget)
 	
-	SendModEvent(PlayerVampireJustFedEvent)
+	ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, FeedTarget)
 	
 	; for vampire converting sidequest
 	if FeedTarget.IsInFaction(DLC1PotentialVampireFaction) && FeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -871,8 +877,6 @@ function HandleFeedSleep(actor FeedTarget)
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
-	SendModEvent(PlayerVampireJustFedEvent)
-	
 	;adjust status bloodpool etc
 	FeedTarget.DamageActorValue("ED_HpDrainedTimer", FeedTarget.GetBaseActorValue("ED_HpDrainedTimer") * 0.6)
 	PlayerVampireQuest.EatThisActor(FeedTarget, 0.3)
@@ -944,7 +948,7 @@ function HandleDrainSleep(actor FeedTarget)
 		ED_Mechanics_Keyword_BystanderStart.SendStoryEvent(akRef1 = FeedTarget)
 	endif
 	
-	SendModEvent(PlayerVampireJustFedEvent)
+	;SendModEvent(PlayerVampireJustFedEvent)
 	
 	;sfx, maybe should bake into animation?
 	ED_Art_Sound_NPCHumanVampireFeed_Marker.Play(FeedTarget as objectreference)
@@ -1012,7 +1016,8 @@ function ApplyCombatFeedEffects()
 
 	debug.Trace("Everdamned DEBUG: Feed trigger animevent was caught, processing")
 	
-	SendModEvent(PlayerVampireJustFedEvent)
+	;SendModEvent(PlayerVampireJustFedEvent)
+	ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, aFeedTarget)
 	
 	; for vampire converting sidequest
 	if aFeedTarget.IsInFaction(DLC1PotentialVampireFaction) && aFeedTarget.IsInFaction(DLC1PlayerTurnedVampire) == False
@@ -1326,7 +1331,8 @@ function HandleEnthrallDexion(actor FeedTarget)
 	
 	playerRef.PlayIdleWithTarget(IdleVampireStandingFeedFront_Loose, FeedTarget)
 	
-	SendModEvent(PlayerVampireJustFedEvent)
+	;SendModEvent(PlayerVampireJustFedEvent)
+	ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, FeedTarget)
 		
 	DLC1VampireTurn.PlayerBitesMe(FeedTarget)
 	FeedTarget.DispelSpell(ED_VampirePowers_Vanilla_Pw_VampiresSeductionTA_Spell)
