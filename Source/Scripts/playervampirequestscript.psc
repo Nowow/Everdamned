@@ -27,18 +27,18 @@ function OnUpdateGameTime()
 		debug.Trace("Everdamned DEBUG: Player Vampire Quest check if should devolve")
         Float Chance
         if playerRef.HasSpell(ED_BeingVampire_Ab_HungerDelay_Spell as form)
-            Chance = ED_HungerChance
-        else
             Chance = ED_HungerChanceSlower
+        else
+            Chance = ED_HungerChance
         endIf
 		
 		if ED_Mechanics_Global_MCM_HungerDisableChance.GetValue() == 1.0
-			Chance = 0.0
+			Chance = 1.0
 		endif
 		
 		float DiceRoll = utility.RandomFloat(0.000000, 1.00000)
 		debug.Trace("Everdamned DEBUG: Player Vampire Quest devolve chance: " + Chance + ", Dice Roll: " + DiceRoll)
-        if DiceRoll < Chance
+        if DiceRoll <= Chance
             self.Devolve(false)
         endIf
     endIf
