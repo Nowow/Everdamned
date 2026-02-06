@@ -1,9 +1,0 @@
-{
-    "name": "ED_KillmoveFeeds",
-    "priority": 4255511,
-    "disabled": true,
-    "ignoreDontConvertAnnotationsToTriggersFlag": true,
-    "triggersFromAnnotationsOnly": true,
-    "conditions": [],
-    "pairedConditions": []
-}
