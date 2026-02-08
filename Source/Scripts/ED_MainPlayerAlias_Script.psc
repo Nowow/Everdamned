@@ -102,6 +102,16 @@ function DoOnStartup()
 		debug.Trace("Everdamned INFO: DVA compatibility: Dynamic Vampire Appearance NOT detected " +  DVA_Controller)
 	endif
 	
+	bool TDM_installed
+	TDM_installed = Game.GetFormFromFile(0x000804, "TrueDirectionalMovement.esp") != None
+	if TDM_installed
+		ED_Mechanics_Global_TDMDetected.SetValue(1)
+		debug.Trace("Everdamned INFO: TDM compatibility: TDM detected!")
+	else
+		ED_Mechanics_Global_TDMDetected.SetValue(0)
+		debug.Trace("Everdamned INFO: TDM compatibility: TDM NOT detected!")
+	endif
+	
 	__startupIsInProcess = false
 endfunction
 
@@ -118,6 +128,7 @@ endevent
 
 
 globalvariable property PlayerIsVampire auto
+globalvariable property ED_Mechanics_Global_TDMDetected auto
 
 race property DLC1VampireBeastRace auto
 actor property playerRef auto

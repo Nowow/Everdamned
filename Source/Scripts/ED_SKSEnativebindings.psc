@@ -29,6 +29,8 @@ function ToggleBloodPoolUpdateLoop(bool toggleOn) global native
 
 function RelayOnVampireFeed(actor feedInitiator, actor feedTarget) global native
 
+int function GetTDMtargetLockKey() global native
+
 
 function StopAllShadersExceptThis(effectshader a_effectShader, keyword someKeyword, effectshader ED_TestShader2_empty) global native
 

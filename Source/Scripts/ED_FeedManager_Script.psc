@@ -166,6 +166,7 @@ Event OnAnimationEvent(ObjectReference akSource, string asEventName)
 		debug.Trace("Everdamned DEBUG: Feed Manager caught FeedAnimKillVictim event!")
 	
 	elseif asEventName == FeedAnimFinished
+		;TrueDirectionalMovement.ToggleDisableDirectionalMovement("Everdamned", false)
 		aFeedTarget.DispelSpell(ED_BeingVampire_VampireFeed_HHAdjust_Spell)
 		aFeedTarget.DispelSpell(ED_BeingVampire_VampireFeed_VictimMark_Spell)
 
@@ -1016,6 +1017,16 @@ function ApplyCombatFeedEffects()
 
 	debug.Trace("Everdamned DEBUG: Feed trigger animevent was caught, processing")
 	
+	if ED_Mechanics_Global_TDMDetected.GetValue() == 1.0
+		int TDM_lock_key = ED_SKSEnativebindings.GetTDMtargetLockKey()
+		debug.Trace("Everdamned DEBUG: TDM lock key is: " + TDM_lock_key)
+		
+		if TDM_lock_key > 0 && TrueDirectionalMovement.GetTargetLockState()
+			debug.Trace("Everdamned DEBUG: Tapped TDM lock key!")
+			input.TapKey(TDM_lock_key)
+		endif
+	endif
+	
 	;SendModEvent(PlayerVampireJustFedEvent)
 	ED_SKSEnativebindings.RelayOnVampireFeed(playerRef, aFeedTarget)
 	
@@ -1318,7 +1329,7 @@ state CombatDrain
 		Game.SetCameraTarget(playerRef)
 		Game.SetPlayerAIDriven(false)
 		EstablishNextStaggerDrainType()
-		
+		;TrueDirectionalMovement.ToggleDisableDirectionalMovement("Everdamned", false)
 	endevent
 	
 endstate
@@ -1457,5 +1468,7 @@ Race Property KhajiitRace Auto
 Race Property KhajiitRaceVampire Auto 
 Race Property OrcRace Auto 
 Race Property OrcRaceVampire Auto
+
+globalvariable property ED_Mechanics_Global_TDMDetected auto
 
 actor property playerRef auto
