@@ -51,7 +51,7 @@ endFunction
 ; Skipped compiler generated GetState
 
 function OnEffectStart(Actor akTarget, Actor akCaster)
-	_healthThresholdSetting = ED_Mechanics_Global_Gutwrench_HealthPerSecond.GetValue() as Int
+	_healthThresholdSetting = (ED_Mechanics_Global_Gutwrench_HealthPerSecond.GetValue() * (1.0 + akCaster.GetActorValue("ED_VampireSkill1p")) ) as Int
 	if !akTarget.IsDead()
 		TheTarget = akTarget
 		TheCaster = akCaster
